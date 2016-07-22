@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: indigo
+theme: indigo-modified
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -71,3 +71,23 @@ deploy:
   type: git
   repo: https://github.com/SSARCandy/ssarcandy.github.io
   branch: master
+
+criticalcss:
+  critical:
+    minify: true
+
+math:
+  engine: 'mathjax' # or 'katex'
+  mathjax:
+    src: custom_mathjax_source
+    config:
+      # MathJax config
+  katex:
+    css: custom_css_source
+    js: custom_js_source # not used
+    config:
+      # KaTeX config
+
+medium_image_plugin:
+    image_path: 'img'
+    max_width: 680 

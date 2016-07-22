@@ -4,6 +4,8 @@ date: 2016-07-23 00:46:45
 tags: cmake
 ---
 
+### Build OpenCV
+
 1. Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)
 2. Build opencv with cmake
  ![image](https://cloud.githubusercontent.com/assets/6803791/15509036/8ce63dfa-2204-11e6-8f7a-1fc2fa6d7faf.png)
