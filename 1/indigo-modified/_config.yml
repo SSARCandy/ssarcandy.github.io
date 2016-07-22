@@ -1,0 +1,70 @@
+# hexo-theme-indigo
+# https://github.com/yscoder/hexo-theme-indigo
+
+#添加新菜单项遵循以下规则
+# menu:
+#  link:               fontawesome图标，省略前缀，本主题前缀为 icon-，必须
+#    text: About       菜单显示的文字，如果省略即默认与图标一致，首字母会转大写
+#    url: /about       链接，绝对或相对路径，必须。
+#    target: _blank    是否跳出，省略则在当前页面打开
+menu:
+  user:
+    text: about
+    url: /about
+  file-text:
+    text: posts
+    url: /
+  archives:
+    url: /archives
+  code:
+    text: works
+    url: /works
+  tags:
+    url: /tags
+  github:
+    url: https://github.com/SSARCandy
+    target: _blank
+
+rss: /atom.xml
+
+#你的头像url
+avatar: /img/logo.jpg
+
+# email
+email: ssarcandy@gmail.com
+
+# 设置 Android L Chrome 浏览器状态栏颜色
+color: '#3F51B5'
+
+# Content
+tags:
+  title: 標籤
+
+excerpt_link: more
+mathjax: false
+archive_yearly: true
+
+#是否开启分享
+share: false
+
+#是否开启搜索
+search: true
+
+#是否大屏幕下文章页隐藏导航
+hideMenu: false
+
+#是否开启toc
+#toc: false
+toc:
+  list_number: false  # 是否显示数字排序
+
+
+# Miscellaneous
+google_analytics: 'UA-81178870-1'
+favicon: /img/favicon.ico
+
+# less
+less:
+  paths:
+    - source/css/style.less
+
