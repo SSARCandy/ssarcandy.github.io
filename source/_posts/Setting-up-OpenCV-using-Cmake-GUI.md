@@ -8,7 +8,7 @@ tags: cmake
 
 1. Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)
 2. Build opencv with cmake
- ![image](https://cloud.githubusercontent.com/assets/6803791/15509036/8ce63dfa-2204-11e6-8f7a-1fc2fa6d7faf.png)
+ ![image](/img/2016-07-23/1.png)
  - Press `configure`, choose `visual studio 2015`, finish
  - Then press `generate`
 
@@ -16,13 +16,13 @@ tags: cmake
 
 3. Open `OpenCV.sln` under `build/`
 4. Build it using `Debug`, `Release`
-  ![image](https://cloud.githubusercontent.com/assets/6803791/15509134/03aa71ae-2205-11e6-94be-a1a73a4cd7fe.png)  
+  ![image](/img/2016-07-23/2.png)
   - right click > build
   - switch to `Release` mode and build again
 
 5. [Windows] Setting up environment variable
   - add `<opencv>/bin` into `PATH`
-  ![image](https://cloud.githubusercontent.com/assets/6803791/15631796/21429442-25ae-11e6-8022-9e5f6fa8eca0.png)
+  ![image](/img/2016-07-23/3.png)
   - add new env named `OpenCV_DIR`, value as `<opencv>/build` 
   - it may need logout to apply setting, you can check it by `echo %PATH%`, `echo %OpenCV_DIR%`
 
@@ -33,7 +33,7 @@ tags: cmake
 1. In step `2. Build opencv with cmake`, press `configure`
 2. Set up `OPENCV_EXTRA_MODULES_PATH` to proper path(`<opencv_contrib>/modules`)
 
-![image](https://cloud.githubusercontent.com/assets/6803791/15631765/86d41f4e-25ac-11e6-8e1a-4966d8d42a17.png)
+![image](/img/2016-07-23/4.png)
 
 3. Press `configure` again, then `generate`
 
@@ -45,7 +45,7 @@ To see more details instructions, see [opencv_contrib](https://github.com/Itseez
 
 ### Travis.yml example
 
-```
+```bash title: travis.yml
 language:
   - cpp
  

@@ -41,7 +41,7 @@ highlight:
   enable: true
   line_number: true
   auto_detect: false
-  tab_replace:
+  tab_replace: true
 
 # Category & Tag
 default_category: uncategorized
@@ -72,9 +72,9 @@ deploy:
   repo: https://github.com/SSARCandy/ssarcandy.github.io
   branch: master
 
-criticalcss:
-  critical:
-    minify: true
+# criticalcss:
+#   critical:
+#     minify: true
 
 math:
   engine: 'mathjax' # or 'katex'
@@ -87,7 +87,3 @@ math:
     js: custom_js_source # not used
     config:
       # KaTeX config
-
-medium_image_plugin:
-    image_path: 'img'
-    max_width: 680 
