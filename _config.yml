@@ -72,9 +72,9 @@ deploy:
   repo: https://github.com/SSARCandy/ssarcandy.github.io
   branch: master
 
-# criticalcss:
-#   critical:
-#     minify: true
+criticalcss:
+  critical:
+    minify: true
 
 math:
   engine: 'mathjax' # or 'katex'
@@ -87,3 +87,8 @@ math:
     js: custom_js_source # not used
     config:
       # KaTeX config
+
+# add caption for iamges
+image_caption:
+  enable: true  # false to disable
+  class_name: image-caption #if you wanna customize the style for the caption, you can assign a class name, default is 'image-caption'

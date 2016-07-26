@@ -4,23 +4,16 @@
         <%- partial('post/tag') %>
     </div>
     <div class="post-body">
-        <aside class="post-widget" id="post-widget">
-
-            <% if(theme.share){ %>
-            <%- partial('post/share', {
-                className: 'post-share'
-            }) %>
-            <% } %>
-
-            <% if(theme.toc){ %>
-            <nav class="post-toc-wrap" id="post-toc">
-            <%- toc(post.content, {
-                class: 'post-toc',
-                list_number: theme.toc.list_number
-                }) %>
-            </nav>
-            <% } %>
-        </aside>
+        <% if(theme.toc){ %>
+            <aside class="post-widget" id="post-widget">
+                <nav class="post-toc-wrap" id="post-toc">
+                <%- toc(post.content, {
+                    class: 'post-toc',
+                    list_number: theme.toc.list_number
+                    }) %>
+                </nav>
+            </aside>
+        <% } %>
 
         <div class="post-main">
 

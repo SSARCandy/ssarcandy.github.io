@@ -54,9 +54,9 @@ search: true
 hideMenu: false
 
 #是否开启toc
-#toc: false
-toc:
-  list_number: false  # 是否显示数字排序
+toc: false
+# toc:
+#   list_number: false  # 是否显示数字排序
 
 
 # Miscellaneous
