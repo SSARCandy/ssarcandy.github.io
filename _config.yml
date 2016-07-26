@@ -92,3 +92,6 @@ math:
 image_caption:
   enable: true  # false to disable
   class_name: image-caption #if you wanna customize the style for the caption, you can assign a class name, default is 'image-caption'
+
+sitemap:
+  path: sitemap.xml
