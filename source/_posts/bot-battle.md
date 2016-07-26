@@ -7,6 +7,7 @@ tags: trashtalk
 原本其實只是要做個 [Slack bot](https://api.slack.com/bot-users)，
 因為我懶得每天都上 [APOD](http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html) 官網看...
 乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～
+<!-- more -->
 ![自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。](/img/2016-07-27/1.PNG)
 
 不過除了我是自己以外好像都沒什麼人捧場，幾乎都被無視 QQ
@@ -25,7 +26,7 @@ _David老師_ 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 �
 即使 Slack 上都沒人要鳥我，
 我還是秉持著推廣基礎天文教育的偉大理念，認為優質的每日天文圖的不應該被埋沒，要讓這樣優質的內容給更多人接觸到！
 最後突然想到：「不然乾脆發在 Dcard 廢版好了，那邊最多人在看了而且不受版規限制」
-懶人如我是不可能每天上去po文的，所以又寫了個 bot 戳 Dcard API 每天中午發優質天文圖(廢文？
+懶人如我是不可能每天上去 Po 文的，所以又寫了個 bot 每天中午戳 Dcard API，發優質天文圖到廢版(廢文？
 ![發廢文到廢版](/img/2016-07-27/3.PNG)
 
 結果意外反應還不錯？
@@ -37,4 +38,4 @@ _David老師_ 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 �
 --
 最後自己推銷一下，由於 APOD 只有 NASA 有提供官方 [API](https://api.nasa.gov/)，除了英文以外其他語言的子站(像是中文版)都沒辦法簡單的取得內容，所以我寫了一個 npm 套件，專門處理取得指定日期、指定語言的 APOD 內容。
 Github: [https://github.com/SSARCandy/node-apod](https://github.com/SSARCandy/node-apod)
-Demo: [http://ssarcandy.tw/node-apod/](http://ssarcandy.tw/node-apod/)
+Demo: [http://ssarcandy.tw/node-apod/demo.html](http://ssarcandy.tw/node-apod/demo.html)
