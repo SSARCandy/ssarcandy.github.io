@@ -9,15 +9,15 @@
 #    target: _blank    是否跳出，省略则在当前页面打开
 menu:
   user:
-    text: about
+    text: About
     url: /about
   file-text:
-    text: posts
+    text: Posts
     url: /
   archives:
     url: /archives
   code:
-    text: works
+    text: Works
     url: /works
   tags:
     url: /tags
