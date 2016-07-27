@@ -1,4 +1,6 @@
 ---
-title: about
-date: 2016-07-23 00:37:07
+title: About
+layout: aboutMe
+noDate: true
+comments: false
 ---
