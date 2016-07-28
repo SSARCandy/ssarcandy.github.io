@@ -1,30 +1,20 @@
 language: node_js
 node_js:
-  - 4.4.7
-
+- 4.4.7
 before_install:
-  # Decrypt the private key
-  - openssl aes-256-cbc -K $encrypted_8ed18e05a049_key -iv $encrypted_8ed18e05a049_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d
-  # Set the permission of the key
-  - chmod 600 ~/.ssh/id_rsa
-  # Start SSH agent
-  - eval $(ssh-agent)
-  # Add the private key to the system
-  - ssh-add ~/.ssh/id_rsa
-  # Copy SSH config
-  - cp .travis/ssh_config ~/.ssh/config
-  # Set Git config
-  - git config --global user.name "SSARCandy"
-  - git config --global user.email ssarcandy@gmail.com
-  # Install Hexo
-  - npm install hexo -g
-  # Clone the repository
-  - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy
-
+- openssl aes-256-cbc -K $encrypted_d7634ff77415_key -iv $encrypted_d7634ff77415_iv
+  -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- eval $(ssh-agent)
+- ssh-add ~/.ssh/id_rsa
+- cp .travis/ssh_config ~/.ssh/config
+- git config --global user.name "SSARCandy"
+- git config --global user.email ssarcandy@gmail.com
+- npm install hexo -g
+- git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy
 script:
-  - hexo generate
-  - hexo deploy
-
+- hexo generate
+- hexo deploy
 branches:
   only:
-    - develop
+  - develop
