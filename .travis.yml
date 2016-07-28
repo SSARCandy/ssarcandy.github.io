@@ -5,7 +5,7 @@ node_js:
 before_install:
   - echo $SSH_KEY | base64 --decode > ~/.ssh/id_rsa
   - chmod 0600 ~/.ssh/id_rsa
-  - echo $SSH_PUBLIC_KEY | base64 --decode > ~/.ssh/id_rsa.pub
+  - echo $SSH_PUB_KEY | base64 --decode > ~/.ssh/id_rsa.pub
   - chmod 0644 ~/.ssh/id_rsa.pub
 
 install:
@@ -19,8 +19,6 @@ before_script:
 # command to run tests
 script:
   - hexo generate
-
-after_success:
   - hexo deploy
 
 branches:
