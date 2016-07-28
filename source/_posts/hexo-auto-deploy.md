@@ -38,23 +38,16 @@ tags:
     branch: master
   ```
 
-## PROTECTED BRANCH
-  Protected branches 是 GitHub 的一個貼心功能，防止被保護的 branch 被刪除或被強制更新(forced-update)。
-  ![repository > setting > branches 可以設定 Protected branches](/img/2016-07-29/1.PNG) 
-  我這個網站結構如下:
-  
-  > [develop] -> default branch，我在這條 branch 新增文章、修改樣式等等
-  > [master]  -> 放 static-files，也就是 hexo generate 出來的東東
-  
-  讓 Travis 自動部屬時，Clone 的是 `develop` branch， 經過`hexo generate`後推到`master` branch 上，而這會是 forced-update。
-  雖然這可能是因為我沒有拆成兩個repo吧?
-  反正不要 protect `master` 就好了 XD
-  缺點是`master`上就會一直 force-update...
+## SETTING UP .travis.yml
 
-----
+我這個網站結構如下:
+> [develop] -> default branch，我在這條 branch 新增文章、修改樣式等等
+> [master]  -> 放 static-files，也就是 hexo generate 出來的東東
+  
+讓 Travis 自動部屬時，Clone 的是 `develop` branch， 經過`hexo generate`後推到`master` branch 上，為了避免 forced-update，在`.travis.yml`中需要再設定一下。
 
 附上我的 `.travis.yml`，基本上跟 TC 那篇 87% 像啦...
-```title: .travis.yml
+```bash title: .travis.yml
 language: node_js
 node_js:
   - "4"
@@ -76,7 +69,10 @@ before_install:
   # Install Hexo
   - npm install hexo -g
   # Clone the repository
-  - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy
+  - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
+  # My static-files store on master branch
+  - cd .deploy_git && git checkout master
+  - cd ..
  
 script:
   - hexo generate
@@ -86,3 +82,13 @@ branches:
   only:
   - develop
 ```
+
+比較需要解說的是這段
+```bash
+  # Clone the repository
+  - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
+  - cd .deploy_git && git checkout master
+  - cd ..
+```
+`.deploy_git`是 hexo 會產生的資料夾，用於紀錄 git history，不過由於每次 clone 都是全新的，所以每次`.deploy_git`也都會是新的，這會導致每次更新都會是 forced-update。
+所以，複製一份 repo (at `master` branch)，並改名叫`.deploy_git`就是為了讓新產生出的靜態檔案可以有之前的 git history，就可以避免 forced-update。
