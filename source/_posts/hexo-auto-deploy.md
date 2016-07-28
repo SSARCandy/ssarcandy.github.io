@@ -46,8 +46,10 @@ tags:
   > [develop] -> default branch，我在這條 branch 新增文章、修改樣式等等
   > [master]  -> 放 static-files，也就是 hexo generate 出來的東東
   
-  讓 Travis 自動部屬時，Clone 的是 `develop` branch， 經過`hexo generate`後推到`master` branch 上，而這會是 forced-update (第一次)。
-  簡單來說就是不要 protect `master` XD
+  讓 Travis 自動部屬時，Clone 的是 `develop` branch， 經過`hexo generate`後推到`master` branch 上，而這會是 forced-update。
+  雖然這可能是因為我沒有拆成兩個repo吧?
+  反正不要 protect `master` 就好了 XD
+  缺點是`master`上就會一直 force-update...
 
 ----
 
