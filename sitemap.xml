@@ -2,44 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://ssarcandy.tw/works/index.html</loc>
-    
-    <lastmod>2016-07-28T18:55:57.018Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/tags/index.html</loc>
     
-    <lastmod>2016-07-28T18:55:57.014Z</lastmod>
+    <lastmod>2016-07-28T19:02:46.241Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</loc>
+    <loc>https://ssarcandy.tw/works/index.html</loc>
     
-    <lastmod>2016-07-28T18:55:57.010Z</lastmod>
+    <lastmod>2016-07-28T19:02:46.241Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/2016/07/26/bot-battle/</loc>
     
-    <lastmod>2016-07-28T18:55:57.010Z</lastmod>
+    <lastmod>2016-07-28T19:02:46.237Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
     
-    <lastmod>2016-07-28T18:55:57.010Z</lastmod>
+    <lastmod>2016-07-28T19:02:46.237Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/about/index.html</loc>
     
-    <lastmod>2016-07-28T18:55:57.010Z</lastmod>
+    <lastmod>2016-07-28T19:02:46.237Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</loc>
+    
+    <lastmod>2016-07-28T19:02:46.233Z</lastmod>
     
   </url>
   
