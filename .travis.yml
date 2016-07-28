@@ -1,20 +1,26 @@
 language: node_js
 node_js:
-  - 4.4.7
+  - "4"
 
 before_install:
   - echo $SSH_KEY | base64 --decode > ~/.ssh/id_rsa
   - chmod 0600 ~/.ssh/id_rsa
-  - echo $SSH_PUB_KEY | base64 --decode > ~/.ssh/id_rsa.pub
+  - echo $SSH_PUBLIC_KEY | base64 --decode > ~/.ssh/id_rsa.pub
   - chmod 0644 ~/.ssh/id_rsa.pub
-  - cp .travis/ssh_config ~/.ssh/config
-  - git config --global user.name "SSARCandy"
-  - git config --global user.email ssarcandy@gmail.com
-  - npm install hexo -g
-  - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy
 
+install:
+  - npm install -g hexo-cli
+  - npm install
+
+before_script:
+  - git config --global user.name 'Travis CI'
+  - git config --global user.email 'travis-ci@travis-ci.org'
+
+# command to run tests
 script:
   - hexo generate
+
+after_success:
   - hexo deploy
 
 branches:
