@@ -20,6 +20,8 @@ before_install:
   - npm install hexo -g
   # Clone the repository
   - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy
+  - cd .deploy && git checkout master
+  - cd ..
 
 script:
   - hexo generate
