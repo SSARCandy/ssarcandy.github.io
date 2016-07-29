@@ -68,4 +68,4 @@ less:
   paths:
     - source/css/style.less
 
-# disqus_shortname: ssarcandy
+disqus_shortname: ssarcandy
