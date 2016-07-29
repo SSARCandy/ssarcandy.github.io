@@ -67,5 +67,3 @@ favicon: /img/favicon.ico
 less:
   paths:
     - source/css/style.less
-
-disqus_shortname: ssarcandy

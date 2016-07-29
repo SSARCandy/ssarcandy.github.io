@@ -83,3 +83,5 @@ image_caption:
 
 sitemap:
   path: sitemap.xml
+
+disqus_shortname: ssarcandy
