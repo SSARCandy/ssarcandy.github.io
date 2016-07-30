@@ -23,7 +23,7 @@
   github: https://github.com/SSARCandy/nccu30
   preview: http://139.162.49.112:3210/home
   tags:
-    - Responsive Web
+    - Responsive_Web
 
 - name: ExchangeWorld
   title: ExchangeWorld
@@ -31,7 +31,7 @@
   github: https://github.com/ExchangeWorld/ExchangeWorld
   preview: http://exwd.csie.org/
   tags:
-    - Responsive Web
+    - Responsive_Web
     - Angularjs
 
 - name: Ultimate-Shooting-Flappy-Bird
@@ -62,7 +62,7 @@
   tags:
     - C++
     - OpenCV
-    - Computer Vision
+    - Computer_Vision
 
 - name: Coherent-Line-Drawing
   title: Coherent Line Drawing
@@ -80,7 +80,7 @@
   github: https://github.com/SSARCandy/slack-for-APOD
   preview: http://ssarcandy.tw/slack-for-APOD/
   tags:
-    - Node.js
+    - Nodejs
 
 - name: node-apod
   title: node-apod
@@ -89,7 +89,7 @@
   preview: http://ssarcandy.tw/node-apod/demo.html
   npm: https://www.npmjs.com/package/node-apod
   tags:
-    - Node.js
+    - Nodejs
 
 - name: Side-Scroll-Tower-Defense-Game
   title: Side Scroll Tower Defense Game
