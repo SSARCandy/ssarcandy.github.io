@@ -1,0 +1,28 @@
+<article class="article project-item" itemprop="blogPost">
+    <div class="project-img-container">
+        <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" class="preview">
+    </div>
+
+    <div class="project-item-details">
+        <%- partial('works/project-title') %>
+        <%- partial('works/project-links') %>
+
+        <div class="post-content project-description" id="post-content" itemprop="postContent">        
+            <% if (project.npm) { %>
+                npm-package: <a href="<%- project.npm %>" target="_blank">npm-site</a>
+                <br/>
+            <% } %>
+
+            <%- project.description %>
+        </div>
+        <div class="project-meta">
+            <ul class="article-tag-list">
+                <% for (var i in project.tags) { %>
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link waves-effect waves-button" href="#<%-project.tags[i]%>"><%- project.tags[i] %></a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</article>

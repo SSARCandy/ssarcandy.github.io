@@ -19,8 +19,6 @@ menu:
   code:
     text: Works
     url: /works
-  tags:
-    url: /tags
   github:
     url: https://github.com/SSARCandy
     target: _blank

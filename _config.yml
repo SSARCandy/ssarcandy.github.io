@@ -4,8 +4,8 @@
 
 # Site
 title: SSARCandy
-subtitle: SSARCandy's website
-description:
+subtitle: ''
+description: ''
 author: 許書軒
 language: zh_tw
 timezone: Asia/Taipei
@@ -71,10 +71,6 @@ deploy:
   type: git
   repo: git@github.com:SSARCandy/ssarcandy.github.io.git
   branch: master
-
-criticalcss:
-  critical:
-    minify: true
 
 # add caption for iamges
 image_caption:

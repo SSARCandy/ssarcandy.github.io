@@ -1,3 +1,16 @@
 <ul class="post-list">
-l;tgf'yhtf
+  <input type="search" id="plugin-search-input" placeholder="Search">
+
+  <% for (i in site.data.works) { %>
+    <li class="project-list-item plugin on">
+        <%- partial('_partial/work-item', {
+            project: site.data.works[i]
+        }) %>
+    </li>
+  <% } %>
+
 </ul>
+
+<script>
+window.SEARCH_INDEX = <%- lunr_index(site.data.works) %>;
+</script>

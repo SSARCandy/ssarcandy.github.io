@@ -1,0 +1,9 @@
+<%
+ var link = project.preview || project.github;
+%>
+
+<h3 itemprop="name">
+    <a class="post-title-link" href="<%- url_for(link) %>" target="_blank" itemprop="url">
+        <%- project.title %>
+    </a>
+</h3>
