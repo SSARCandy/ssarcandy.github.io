@@ -3873,6 +3873,10 @@ pre .javascript .function {
 }
 .project-links {
   font-size: 20px;
+  margin-top: 5px;
+}
+.project-link:hover {
+  color: #E040FB;
 }
 .project-meta {
   margin: 10px 0;
