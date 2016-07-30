@@ -1,3 +1,11 @@
 <ul class="post-list">
-l;tgf'yhtf
+
+  <% for (i in site.data.works) { %>
+    <li class="project-list-item">
+        <%- partial('_partial/work-item', {
+            project: site.data.works[i]
+        }) %>
+    </li>
+  <% } %>
+
 </ul>

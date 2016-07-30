@@ -1,0 +1,16 @@
+- name: ssarcandy-vim
+  description: 'My vim settings and plugins, compatible with MacVim in OSX'
+  github: https://github.com/SSARCandy/ssarcandy-vim
+  preview: http://ssarcandy.tw/ssarcandy-vim/
+  tags:
+    - vimL
+
+- name: stylizationRD
+  description: '"Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE)'
+  github: https://github.com/cglabnccu/stylizationRD
+  preview: http://cglabnccu.github.io/stylizationRD/
+  youtube: https://www.youtube.com/watch?v=fNc89Y-tbjY
+  tags:
+    - C++
+    - Computer Graphic 
+    - Rendering
