@@ -107,3 +107,11 @@
     - C#
     - Unity
     - Game
+
+- name: nccugo12
+  title: 第十二屆政大盃圍棋錦標賽宣傳網站
+  description: 以棋會友，以智取勝。第十二屆政大盃全國圍棋團體錦標賽宣傳網站。
+  github: https://github.com/SSARCandy/nccugo12
+  preview: http://ssarcandy.tw/nccugo12
+  tags:
+    - Responsive_Web
