@@ -4,12 +4,10 @@
     </div>
 
     <div class="project-item-details">
-        <h3 class="post-title" itemprop="name">
-            <a class="post-title-link" href="<%- url_for(project.github) %>" target="_blank" itemprop="url">
-                <%- project.name %>
-            </a>
-        </h3>
-        <div class="post-content" id="post-content" itemprop="postContent" >
+        <%- partial('works/project-title') %>
+        <%- partial('works/project-links') %>
+
+        <div class="post-content project-description" id="post-content" itemprop="postContent" >
             <%- project.description %>
         </div>
         <div class="project-meta">
@@ -20,26 +18,6 @@
                 </li>
                 <% } %>
             </ul>
-        </div>
-        <div class="project-links">
-
-        <% if (project.github) { %>
-            <a href="<%- project.github %>" target="_blank">
-                <i class="icon icon-lg icon-github" aria-hidden="true"></i>
-            </a>
-        <% } %>
-
-        <% if (project.preview) { %>
-            <a href="<%- project.preview %>" target="_blank">
-                <i class="icon icon-lg icon-globe" aria-hidden="true"></i>
-            </a>
-        <% } %>
-
-        <% if (project.youtube) { %>
-            <a href="<%- project.youtube %>" target="_blank">
-                <i class="icon icon-lg icon-play-circle" aria-hidden="true"></i>
-            </a>
-        <% } %>
         </div>
     </div>
 </article>

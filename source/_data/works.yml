@@ -1,4 +1,5 @@
 - name: ssarcandy-vim
+  title: ssarcandy-vim
   description: 'My vim settings and plugins, compatible with MacVim in OSX'
   github: https://github.com/SSARCandy/ssarcandy-vim
   preview: http://ssarcandy.tw/ssarcandy-vim/
@@ -6,11 +7,102 @@
     - vimL
 
 - name: stylizationRD
-  description: '"Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE)'
+  title: Image stylization using reaction diffusion
+  description: 'This is the official system of "Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE)'
   github: https://github.com/cglabnccu/stylizationRD
   preview: http://cglabnccu.github.io/stylizationRD/
   youtube: https://www.youtube.com/watch?v=fNc89Y-tbjY
   tags:
     - C++
-    - Computer Graphic 
+    - OpenCV
     - Rendering
+
+- name: nccu30
+  title: 政大三十大講堂
+  description: '「政大三十大講堂」宣傳網站。'
+  github: https://github.com/SSARCandy/nccu30
+  preview: http://139.162.49.112:3210/home
+  tags:
+    - Responsive Web
+
+- name: ExchangeWorld
+  title: ExchangeWorld
+  description: '"Exchange your preloved with people locally and personally." A location based social-website built with Angularjs and Nodejs'
+  github: https://github.com/ExchangeWorld/ExchangeWorld
+  preview: http://exwd.csie.org/
+  tags:
+    - Responsive Web
+    - Angularjs
+
+- name: Ultimate-Shooting-Flappy-Bird
+  title: Ultimate Shooting Flappy Bird
+  description: A 2D Game implement with OpenGL
+  github: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird
+  preview: http://ssarcandy.tw/Ultimate-Shooting-Flappy-Bird
+  tags:
+    - C++
+    - OpenGL
+    - Game
+
+- name: openGL_Telescope_Model
+  title: 3D Telescope Simulator
+  description: A 3D Telescope simulator implement with openGL 
+  github: https://github.com/SSARCandy/openGL_Telescope_Model
+  preview: http://ssarcandy.tw/openGL_Telescope_Model/
+  tags:
+    - C++
+    - OpenGL
+    - Rendering
+
+- name: n-puzzle-solver-with-CV
+  title:  N-puzzle Solver with CV
+  description: An auto N-puzzle solver using Computer Vision and A* algorithm.
+  github: https://github.com/SSARCandy/n-puzzle-solver-with-CV
+  preview: http://ssarcandy.tw/n-puzzle-solver-with-CV/
+  tags:
+    - C++
+    - OpenCV
+    - Computer Vision
+
+- name: Coherent-Line-Drawing
+  title: Coherent Line Drawing
+  description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007.'
+  github: https://github.com/SSARCandy/Coherent-Line-Drawing
+  preview: http://ssarcandy.tw/Coherent-Line-Drawing/
+  tags:
+    - C++
+    - OpenCV
+    - Rendering
+
+- name: slack-for-APOD
+  title: slack-bot for APOD
+  description: 'A Slack-bot that can post Astronomy "Picture of the Day" article into Slack channel'
+  github: https://github.com/SSARCandy/node-apod
+  preview: http://ssarcandy.tw/node-apod/demo.html
+  tags:
+    - Node.js
+
+- name: node-apod
+  title: node-apod
+  description: '"Astronomy Picture of the Day" scraper for node, support multi-language'
+  github: https://github.com/SSARCandy/slack-for-APOD
+  preview: http://ssarcandy.tw/slack-for-APOD/
+  tags:
+    - Node.js
+
+- name: Side-Scroll-Tower-Defense-Game
+  title: Side Scroll Tower Defense Game
+  description: '以手機熱門遊戲 Battle Cat 為構想，自行開發出有類似功能，甚至更多功能之守塔防禦遊戲。'
+  github: https://github.com/NCCUCS-Windows-Programming/Side-Scroll-Tower-Defense-Game
+  tags:
+    - C#
+    - Game
+
+- name: 3D-Hits-the-mole
+  title: 3D 打地鼠
+  description: '將可愛又堪稱經典的打地鼠遊戲擴展到三維空間，並且在不失其易上手性的前提下豐富遊戲內容。使用 Unity 開發，能夠快速發佈至 Desktop, Android, iOS 三平台。'
+  github: https://github.com/seal789ie/3D-Hits-the-mole
+  tags:
+    - C#
+    - Unity
+    - Game
