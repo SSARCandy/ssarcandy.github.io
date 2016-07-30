@@ -2386,7 +2386,7 @@ hr,
   z-index: 70;
   width: 100%;
   height: 3px;
-  background: #7C4DFF;
+  background: #E040FB;
 }
 #loading.active {
   -webkit-animation: loading-anim 1s ease-in-out infinite;
@@ -2771,7 +2771,7 @@ a[title="站长统计"] {
   color: #D1C4E9;
 }
 .content-header .article-category-list-link {
-  color: #a280ff;
+  color: #e872fc;
 }
 @media screen and (max-width: 1240px) {
   .header-title {
@@ -2865,10 +2865,10 @@ a[title="站长统计"] {
   display: inline;
 }
 .article-category-list a {
-  color: #7C4DFF;
+  color: #E040FB;
 }
 .article-category-list a:hover {
-  color: #7C4DFF;
+  color: #E040FB;
 }
 .article-tag-list {
   overflow: hidden;
@@ -2892,7 +2892,7 @@ a[title="站长统计"] {
 .article-tag-list-link:active {
   font-size: 13px;
   color: #fff;
-  background: #7C4DFF;
+  background: #E040FB;
 }
 .post-more {
   float: right;
@@ -2970,7 +2970,7 @@ a[title="站长统计"] {
   line-height: 56px;
   text-align: center;
   color: #fff;
-  background: #7C4DFF;
+  background: #E040FB;
   border-radius: 50%;
   opacity: 0;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -3234,22 +3234,22 @@ a[title="站长统计"] {
 }
 .post-content p a,
 .post-content li a {
-  color: #7C4DFF;
-  border-bottom: 1px solid #f4f0ff;
+  color: #E040FB;
+  border-bottom: 1px solid #fae0fe;
   word-break: break-all;
 }
 .post-content p a:hover,
 .post-content li a:hover,
 .post-content p a:active,
 .post-content li a:active {
-  border-color: #7C4DFF;
+  border-color: #E040FB;
 }
 .post-content strong {
   font-weight: 600;
-  border-bottom: 1px solid #7C4DFF;
+  border-bottom: 1px solid #E040FB;
 }
 .post-content strong a {
-  border-color: #7C4DFF;
+  border-color: #E040FB;
 }
 .post-content h1 {
   font-size: 24px;
@@ -3387,7 +3387,7 @@ a[title="站长统计"] {
 }
 .post-content p code,
 .post-content li code {
-  color: #7C4DFF;
+  color: #E040FB;
   line-height: 1;
   margin: 0 4px;
   font-size: 80%;
@@ -3505,7 +3505,7 @@ a[title="站长统计"] {
          }*/
 }
 .tag-list-item:hover .tag-list-link {
-  color: #7C4DFF;
+  color: #E040FB;
 }
 .tag-list-item::after {
   content: "";
@@ -3514,7 +3514,7 @@ a[title="站长统计"] {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #7C4DFF;
+  background-color: #E040FB;
   visibility: hidden;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
@@ -3642,7 +3642,7 @@ a[title="站长统计"] {
   font: 0.85em Consolas, Monaco, courier, monospace;
 }
 .post-content .gist .gist-meta a {
-  color: #7C4DFF;
+  color: #E040FB;
   font-weight: normal;
 }
 .post-content .gist .gist-meta a:hover {
@@ -3845,5 +3845,56 @@ pre .javascript .function {
     max-height: 100%;
     border-radius: 0;
     box-shadow: none;
+  }
+}
+#plugin-search-input {
+  display: none;
+}
+.project-item {
+  display: flex;
+}
+.project-img-container {
+  width: 40%;
+}
+.preview {
+  max-width: 100%;
+  height: auto;
+}
+.project-item-details {
+  margin: 10px 20px;
+  width: 55%;
+}
+.project-list-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #DADADA;
+  background: #fff;
+  border-bottom: 1px solid #dadada;
+  box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
+}
+.project-links {
+  font-size: 20px;
+}
+.project-meta {
+  margin: 10px 0;
+}
+.project-description {
+  margin: 20px 0;
+}
+.plugin {
+  display: none;
+}
+.on {
+  display: block;
+}
+@media screen and (max-width: 760px) {
+  .project-img-container {
+    width: 100%;
+  }
+  .project-item {
+    display: initial;
+  }
+  .project-item-details {
+    width: initial;
+    margin: 20px 10px;
   }
 }
