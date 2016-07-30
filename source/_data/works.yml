@@ -77,16 +77,17 @@
 - name: slack-for-APOD
   title: slack-bot for APOD
   description: 'A Slack-bot that can post Astronomy "Picture of the Day" article into Slack channel'
-  github: https://github.com/SSARCandy/node-apod
-  preview: http://ssarcandy.tw/node-apod/demo.html
+  github: https://github.com/SSARCandy/slack-for-APOD
+  preview: http://ssarcandy.tw/slack-for-APOD/
   tags:
     - Node.js
 
 - name: node-apod
   title: node-apod
-  description: '"Astronomy Picture of the Day" scraper for node, support multi-language'
-  github: https://github.com/SSARCandy/slack-for-APOD
-  preview: http://ssarcandy.tw/slack-for-APOD/
+  description: '"Astronomy Picture of the Day" scraper for node, support multi-language. Return JSON format data.'
+  github: https://github.com/SSARCandy/node-apod
+  preview: http://ssarcandy.tw/node-apod/demo.html
+  npm: https://www.npmjs.com/package/node-apod
   tags:
     - Node.js
 
