@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="SSARCandy">
 <meta property="og:description" content="其實 hexo 作者 TC 已經有發過一篇文章在講這個主題了，也講得很清楚了，基本上矇著眼睛照做就行了。而這篇主要是再補充幾個細節。">
 <meta property="og:image" content="https://ssarcandy.tw/img/2016-07-29/2.PNG">
-<meta property="og:updated_time" content="2016-07-31T16:30:52.041Z">
+<meta property="og:updated_time" content="2016-07-31T17:22:57.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Travis CI 自動部屬 hexo 到 GitHub">
 <meta name="twitter:description" content="其實 hexo 作者 TC 已經有發過一篇文章在講這個主題了，也講得很清楚了，基本上矇著眼睛照做就行了。而這篇主要是再補充幾個細節。">
@@ -28,7 +28,18 @@
   
   <meta name="summary" content="&lt;p&gt;其實 &lt;a href=&quot;https://hexo.io/&quot;&gt;hexo&lt;/a&gt; 作者 TC 已經有發過&lt;a href=&quot;https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/&quot;&gt;一篇文章&lt;/a&gt;在講這個主題了，也講得很清楚了，基本上&lt;del&gt;矇著眼睛&lt;/del&gt;照做就行了。&lt;br&gt;而這篇主要是再補充幾個細節。&lt;/p&gt;">
   <link rel="shortcut icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- Add mousewheel plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+
+    <!-- Add fancyBox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
 </head>
 
 <body>
@@ -143,12 +154,11 @@
         
 
         <div class="post-main">
-
             <div class="post-content" id="post-content" itemprop="postContent">
             <p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">一篇文章</a>在講這個主題了，也講得很清楚了，基本上<del>矇著眼睛</del>照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
 <h2 id="SSH-KEY"><a href="#SSH-KEY" class="headerlink" title="SSH KEY"></a>SSH KEY</h2><p>  矇著眼照做<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">那篇</a>，到這行:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure></p>
-<p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個flag可以幫你插入解密指令到<code>.travis.yml</code>的<code>before_install</code>。<br>  不過這flag真的很機車，會把你的<code>.travis.yml</code>排版全搞亂，順便把註解刪光光！<br>  建議不要加<code>--add</code>自己手動插入解密指令，排版就不會亂掉。<br>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <img src="/img/2016-07-29/2.PNG" alt="repository &gt; more options 可以設定、看到 Travis 的環境變數"><span class="image-caption">repository &gt; more options 可以設定、看到 Travis 的環境變數</span> </p>
+<p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個flag可以幫你插入解密指令到<code>.travis.yml</code>的<code>before_install</code>。<br>  不過這flag真的很機車，會把你的<code>.travis.yml</code>排版全搞亂，順便把註解刪光光！<br>  建議不要加<code>--add</code>自己手動插入解密指令，排版就不會亂掉。<br>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <a class="fancybox" href="/img/2016-07-29/2.PNG" title="repository > more options 可以設定、看到 Travis 的環境變數"><img src="/img/2016-07-29/2.PNG" alt="repository > more options 可以設定、看到 Travis 的環境變數"><span class="image-caption">repository > more options 可以設定、看到 Travis 的環境變數</span></a></p>
 <h2 id="USE-SSH"><a href="#USE-SSH" class="headerlink" title="USE SSH"></a>USE SSH</h2><p>  Travis 是用 GitHub 的 <a href="https://developer.github.com/guides/managing-deploy-keys/" target="_blank" rel="external">Deploy key</a> 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">那篇文章</a>做就可以了。<br>  如果不幸在<code>hexo deploy</code>時遇到錯誤如下:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">remote: Invalid username or password.</div><div class="line">fatal: Authentication failed for &quot;....&quot;</div></pre></td></tr></table></figure></p>
 <p>  那可以檢查一下 hexo 的<code>_config.yml</code> <code>deploy</code>的部分，要用 ssh 的形式設定 repository<br>  <figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: git@github.com:SSARCandy/ssarcandy.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
 <h2 id="SETTING-UP-travis-yml"><a href="#SETTING-UP-travis-yml" class="headerlink" title="SETTING UP .travis.yml"></a>SETTING UP .travis.yml</h2><p>我這個網站結構如下:</p>
@@ -249,9 +259,20 @@ ga('create', 'UA-81178870-1', 'auto');
 ga('send', 'pageview');
 
 </script>
-<!-- End Google Analytics --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<!-- End Google Analytics -->
 
 
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+            helpers: {
+                overlay: {
+                locked: false
+                }
+            }
+        });
+	});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

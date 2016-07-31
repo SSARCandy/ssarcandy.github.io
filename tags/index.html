@@ -15,7 +15,7 @@
 <meta property="og:title" content="SSARCandy">
 <meta property="og:url" content="https://ssarcandy.tw/tags/index.html">
 <meta property="og:site_name" content="SSARCandy">
-<meta property="og:updated_time" content="2016-07-31T16:30:52.053Z">
+<meta property="og:updated_time" content="2016-07-31T17:22:57.068Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSARCandy">
   
@@ -23,7 +23,18 @@
   
   <meta name="summary" content="">
   <link rel="shortcut icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- Add mousewheel plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+
+    <!-- Add fancyBox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
 </head>
 
 <body>
@@ -177,9 +188,20 @@ ga('create', 'UA-81178870-1', 'auto');
 ga('send', 'pageview');
 
 </script>
-<!-- End Google Analytics --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<!-- End Google Analytics -->
 
 
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+            helpers: {
+                overlay: {
+                locked: false
+                }
+            }
+        });
+	});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

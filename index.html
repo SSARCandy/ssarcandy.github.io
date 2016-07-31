@@ -22,7 +22,18 @@
   
   <meta name="summary" content="">
   <link rel="shortcut icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- Add mousewheel plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+
+    <!-- Add fancyBox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
 </head>
 
 <body>
@@ -229,7 +240,8 @@
     
         <h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv">OpenCV</a> and <a href="https://cmake.org/">Cmake</a></li>
-<li>Build opencv with cmake<br><img src="/img/2016-07-23/1.png" alt="image"><ul>
+<li>Build opencv with cmake<a class="fancybox" href="/img/2016-07-23/1.png" title="Cmake configuration"><img src="/img/2016-07-23/1.png" alt="Cmake configuration">
+<ul>
 <li>Press <code>configure</code>, choose <code>visual studio 2015</code>, finish</li>
 <li>Then press <code>generate</code></li>
 </ul>
@@ -296,9 +308,20 @@ ga('create', 'UA-81178870-1', 'auto');
 ga('send', 'pageview');
 
 </script>
-<!-- End Google Analytics --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<!-- End Google Analytics -->
 
 
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+            helpers: {
+                overlay: {
+                locked: false
+                }
+            }
+        });
+	});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
