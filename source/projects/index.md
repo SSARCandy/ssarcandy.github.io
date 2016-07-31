@@ -1,5 +1,5 @@
 ---
-title: Works
+title: Projects
 layout: works
 data: works
 noDate: true
