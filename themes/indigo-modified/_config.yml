@@ -17,8 +17,8 @@ menu:
   archives:
     url: /archives
   code:
-    text: Works
-    url: /works
+    text: Projects
+    url: /projects
   github:
     url: https://github.com/SSARCandy
     target: _blank
