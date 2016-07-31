@@ -20,7 +20,7 @@ tags:
   不過這flag真的很機車，會把你的`.travis.yml`排版全搞亂，順便把註解刪光光！
   建議不要加`--add`自己手動插入解密指令，排版就不會亂掉。
   另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。
-  ![repository > more options 可以設定、看到 Travis 的環境變數](/img/2016-07-29/2.PNG) 
+  {% fancybox /img/2016-07-29/2.PNG repository > more options 可以設定、看到 Travis 的環境變數 %}
 
 ## USE SSH
   Travis 是用 GitHub 的 [Deploy key](https://developer.github.com/guides/managing-deploy-keys/) 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC [那篇文章](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)做就可以了。
