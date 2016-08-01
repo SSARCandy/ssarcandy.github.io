@@ -81,3 +81,40 @@ sitemap:
   path: sitemap.xml
 
 disqus_shortname: ssarcandy
+
+hfc_html:
+  enable: true
+
+hfc_css:
+  enable: false
+  exclude: 
+    - '*.min.css'
+
+hfc_useref:
+  enable: true
+  concat: true
+  exclude: 
+
+hfc_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude: 
+    - '*.min.js'
+
+hfc_img:
+  enable: true
+  interlaced: false
+  multipass: false
+  optimizationLevel: 2
+  pngquant: false
+  progressive: false
+  webp: true
+  webpQuality: 75
+  gifslice: true
+  jpegtran: true
+  jpegrecompress: false
+  jpegrecompressQuality: 'medium'
+  optipng: true
+  svgo: true
