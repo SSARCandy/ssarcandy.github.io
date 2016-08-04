@@ -1,2 +1,20 @@
 <pre>still working....
 </pre>
+
+<% 
+var edu = site.data.experiences.educations
+var work = site.data.experiences.works
+console.log(edu, work)
+%>
+
+<h3> Education</h3>
+<ul>
+  <% 
+  for (i in edu) {
+    %>
+    <li><%- edu[i].name%></li>
+    <li><%- edu[i].time%></li>
+    <%
+  }
+  %>
+</ul>
