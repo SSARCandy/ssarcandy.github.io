@@ -110,8 +110,7 @@ hfc_img:
   optimizationLevel: 2
   pngquant: false
   progressive: false
-  webp: true
-  webpQuality: 75
+  webp: false
   gifslice: true
   jpegtran: true
   jpegrecompress: false
