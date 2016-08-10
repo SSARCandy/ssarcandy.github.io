@@ -1,6 +1,6 @@
 <div class="inner flex-row-vertical">
   <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-      <i class="icon icon-lg icon-close"></i>
+      <i class="icon icon-lg material-icons">close</i>
   </a>
   <div class="brand-wrap">
     <div class="brand">
@@ -20,10 +20,11 @@
       for (var i in theme.menu) {
         menuItem = theme.menu[i];
       %>
-        <li class="waves-block waves-effect<% if(isActive(menuItem)){ %> active<% } %>">
+        <li class="waves-block waves-effect<% if(isActive(menuItem)){ %> active<% } %>" style="line-height:44px">
           <a href="<%- url_for(menuItem.url) %>" <% if(menuItem.target){ %>target="_blank"<% } %> >
-            <i class="icon icon-lg icon-<%= i %>"></i>
-            <%=(menuItem.text || _.startCase(i)) %>
+            <% if(menuItem.type === 'ml') {%><i class="material-icons icon icon-lg"><%= i %></i><% }
+            else {%><i class="icon icon-lg icon-<%= i %>"></i><% } %>
+            <span><%-(menuItem.text || _.startCase(i)) %></span>
           </a>
         </li>
     <% } %>
