@@ -7,7 +7,7 @@
     - vimL
 
 - name: stylizationRD
-  title: Image stylization using reaction diffusion
+  title: Image stylization using anisotropic reaction diffusion
   description: 'This is the official system of "Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE)'
   github: https://github.com/cglabnccu/stylizationRD
   preview: http://cglabnccu.github.io/stylizationRD/
