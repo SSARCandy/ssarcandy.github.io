@@ -29,11 +29,11 @@ menu:
     type: fa
     url: https://github.com/SSARCandy
     target: _blank
-  flask:
-    type: fa
-    text: CMLAB
-    url: https://www.cmlab.csie.ntu.edu.tw/new_cml_website/index.php
-    target: _blank
+#   flask:
+#     type: fa
+#     text: CMLAB
+#     url: https://www.cmlab.csie.ntu.edu.tw/new_cml_website/index.php
+#     target: _blank
 
 rss: /atom.xml
 
