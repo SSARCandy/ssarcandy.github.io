@@ -1,29 +1,52 @@
 educations:
-  - name: 'Taipei Municipal SONG-SHAN Senior High School'
+  - name: 'NTU'
+    degree: 'Master of Science'
+    department: 'Information Management, '
+    link: 'http://www.im.ntu.edu.tw/'
+    time: 2016 ~ 
+    icon: NTU
+
+  - name: 'NCCU'
+    degree: 'Bachelor of Science'
+    department: 'Computer Science, '
+    link: 'http://www.cs.nccu.edu.tw/'
+    time: 2012 ~ 2016
+    icon: NCCU
+
+  - name: 'NCCU'
+    degree: 'Bachelor of Science'
+    department: 'Management Information Systems, '
+    link: 'http://www.mis2.nccu.edu.tw/'
+    time: 2012 ~ 2016
+    icon: NCCU
+
+  - name: 'SONG-SHAN Senior High School'
+    link: 'http://www.sssh.tp.edu.tw/'
     time: 2010 ~ 2012
-
-  - name: 'Computer Science, National Chenchi University'
-    time: 2012 ~ 2016
-
-  - name: 'Management Information Systems, National Chengchi University'
-    time: 2012 ~ 2016
-
-  - name: 'Information Management, National Taiwan University'
-    time: 2016 ~ present
+    icon: SSSH
 
 works:
-  - serviceUnit: 'Center for Teaching and Learning Development, NCCU'
-    job: Systems Engineer Assistant
-    time: 2014 ~ 2015
-
-  - serviceUnit: 'Computer Graphic Lab, NCCU'
-    job: Adjunct Research Assistant
-    time: 2015 ~ 2016
+  - serviceUnit: 'Dcard'
+    link: 'https://join.dcard.today/'
+    job: Web Developer
+    time: '09/2015 ~ 08/2016'
+    icon: Dcard
 
   - serviceUnit: '3D Game Programming, NCCU'
-    job: Teaching assistant
-    time: 'Fall, 2015'
+    link: 'http://www.cs.nccu.edu.tw/'
+    job: Teaching Assistant
+    time: '09/2015 ~ 01/2016'
+    icon: NCCUCS
 
-  - serviceUnit: 'Dcard'
-    job: Web Developer
-    time: 2015 ~ 2016
+  - serviceUnit: 'Computer Graphic Lab, NCCU'
+    link: 'http://www.cs.nccu.edu.tw/'
+    job: Adjunct Research Assistant
+    time: '02/2015 ~ 08/2016'
+    icon: NCCUCS
+
+  - serviceUnit: 'Center of Teaching and Learning Development, NCCU'
+    link: 'http://learning.nccu.edu.tw/'
+    job: Systems Engineer Assistant
+    time: '11/2014 ~ 02/2015'
+    icon: NCCUTLD
+
