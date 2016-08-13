@@ -14,9 +14,7 @@ var work = site.data.experiences.works
                 <td>
                 <ul class="about-list">
                     <li><%- edu[i].time%></li>
-                    <% if(edu[i].department) {%>
                     <li><%- edu[i].degree%></li>
-                    <%}%>
                     <li><a href="<%- edu[i].link%>" target="_blank"><%- edu[i].department%> <%- edu[i].name%></a></li>
                 </ul>
                 </td> 
@@ -36,7 +34,7 @@ var work = site.data.experiences.works
                 <ul class="about-list">
                     <li><%- work[i].time %></li>
                     <li><%- work[i].job %></li>
-                    <li><a href="<%- edu[i].link%>" target="_blank"><%- work[i].serviceUnit %></a></li>
+                    <li><a href="<%- work[i].link%>" target="_blank"><%- work[i].serviceUnit %></a></li>
                 </ul>
                 </td>
             </tr>
