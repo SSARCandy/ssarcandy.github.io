@@ -3930,6 +3930,10 @@ pre .javascript .function {
   list-style: none;
   padding-left: 8px;
 }
+.about-intro {
+  margin-bottom: 30px;
+  font-size: 18px;
+}
 @media screen and (min-width: 760px) {
   .about-container {
     display: flex;
