@@ -3,7 +3,15 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg material-icons">menu</i>
         </a>
-        <div class="flex-col header-title ellipsis"><%=page.title || config.title %></div>
+        <div class="flex-col header-title ellipsis">
+        <% if (is_home()) { %>
+            Posts
+        <% } else if (is_archive()) { %> 
+            Archives 
+        <% } else { %> 
+            <%= page.title %> 
+        <% } %>
+        </div>
         <% if(theme.search){ %>
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -25,7 +33,15 @@
 <header class="content-header">
   <% if (page.layout !== 'aboutMe') { %>
   <div class="container">
-    <h1 class="author"><%= page.title || config.title %></h1>
+    <h1 class="author">
+        <% if (is_home()) { %>
+            Posts
+        <% } else if (is_archive()) { %> 
+            Archives 
+        <% } else { %> 
+            <%= page.title %> 
+        <% } %>
+    </h1>
     <h5 class="subtitle">
         <% if (page.date && !page.noDate) { %>
             <%- partial('post/head-meta') %>
