@@ -6,7 +6,7 @@
         <div class="flex-col header-title ellipsis">
         <% if (is_home()) { %>
             Posts
-        <% } else if (is_archive()) { %> 
+        <% } else if (is_archive() || is_tag()) { %> 
             Archives 
         <% } else { %> 
             <%= page.title %> 
@@ -36,7 +36,7 @@
     <h1 class="author">
         <% if (is_home()) { %>
             Posts
-        <% } else if (is_archive()) { %> 
+        <% } else if (is_archive() || is_tag()) { %> 
             Archives 
         <% } else { %> 
             <%= page.title %> 
