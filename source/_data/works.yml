@@ -76,7 +76,7 @@
 
 - name: slack-for-APOD
   title: slack-bot for APOD
-  description: 'A Slack-bot that can post Astronomy "Picture of the Day" article into Slack channel'
+  description: 'A Slack-bot that can post "Astronomy Picture of the Day" article into Slack channel'
   github: https://github.com/SSARCandy/slack-for-APOD
   preview: http://ssarcandy.tw/slack-for-APOD/
   tags:
