@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-08-14T09:52:46.145Z</updated>
+  <updated>2016-08-14T16:10:06.864Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-08-14T09:52:46.145Z</updated>
+    <updated>2016-08-14T16:10:06.864Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">一篇文章</a>在講這個主題了，也講得很清楚了，基本上<del>矇著眼睛</del>照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -56,7 +56,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-08-14T09:52:46.145Z</updated>
+    <updated>2016-08-14T16:10:06.864Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -86,7 +86,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-08-14T09:52:46.145Z</updated>
+    <updated>2016-08-14T16:10:06.864Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
