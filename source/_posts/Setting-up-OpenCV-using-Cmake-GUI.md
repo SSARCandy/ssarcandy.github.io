@@ -1,7 +1,9 @@
 ---
 title: Setting up OpenCV using Cmake GUI
 date: 2016-07-23 00:46:45
-tags: cmake
+tags: 
+- note
+- cmake
 ---
 
 ### Build OpenCV
