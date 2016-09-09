@@ -8,12 +8,13 @@ tags:
 ---
 
 最近的專案需要用到 [OpenCV](http://opencv.org/)，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。
-說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)，而這篇就是在記錄一下這些坑～
+說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)
 <!-- more -->
 
 我這次專案是 Python 2.7 + OpenCV 3.1。
-安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在[這篇](https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/)有教學；
-而 Python 的稍微簡單一點，把 `cv2.pyd` 放到 `C:\Python27\Lib\site-packages` 就可以了 [1]。在 Mac/Linux 上更簡單，可以使用 [conda](https://www.continuum.io/) [2] 來幫你安裝。
+安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的[另一篇](https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/)有教學；
+而 Python 安裝 OpenCV 稍微簡單一點，把 `cv2.pyd` 放到 `C:\Python27\Lib\site-packages` 就可以了 [1]。
+在 Mac/Linux 上更簡單，可以使用 [conda](https://www.continuum.io/) [2] 來幫你安裝。
 
 
 ---
@@ -35,8 +36,8 @@ Python2 的除法很特別，竟然只除到整數，意思就是 `5 / 2 = 2`，
 
 ```py
 print(5 / 2)        # 會無條件捨去小數點，印出 2
-print(5 / 2.0)      # = 2.5
-print(5 / float(2)) # = 2.5
+print(5 / 2.0)      # 2.5
+print(5 / float(2)) # 2.5
 ```
 
 不過這樣好麻煩，有沒有一勞永逸的方法？
@@ -67,17 +68,19 @@ class Foo(object):
   
     def __private_func(self):
         print('I am private function')
+  
+  
+foo = Foo()          # new 一個新的 Foo
+foo.hello_world()    # 不用帶任何參數
+foo.__private_func() # 無法呼叫，會噴 Error: AttributeError: 'Foo' object has no attribute '__private_func'
 ```
 
-其中，第一行的 `object` 是必須的。`__init__` 這個 function 也是必須的，這是 Class Constructor。
-每個 function 的第一個參數必須放 `self`，這與 C++ Class 中的 `this` 相似，基本上就是拿來存取**自己**用的，例如 `hello_world()` 中就有存取 `bar1` 跟 `bar2`，而在呼叫時 `self` 會被跳過。
-如果要寫 private method [3]，就在 function name 前加上 `__`，如同上面的第 9 行處。
+- 第一行的 `object` 是必須的。
+- `__init__` 這個 function 也是必須的，這是 Class Constructor。
+- 每個 function 的第一個參數必須放 `self`，這與 C++ Class 中的 `this` 相似，基本上就是拿來存取**自己**用的。
+  - 例如 `hello_world()` 中就有存取 `bar1` 跟 `bar2`，而在呼叫時 `self` 會被跳過。
+- 如果要寫 private method [3]，就在 function name 前加上雙底線 `__`，如同上面的第 9 行處。
 
-```py
-foo = Foo() # new 一個新的 Foo
-foo.hello_world() # 不用帶任何參數
-foo._private_func() # 無法呼叫，會噴 Error: AttributeError: 'Foo' object has no attribute '__private_func'
-```
 
 # Path
 
@@ -92,10 +95,10 @@ Python 提供了個好工具 `os.path.join()`，簡單來說就是幫忙處理�
 
 ```py
 import os
-
 cv2.imread(os.path.join('..', 'data', 'foo.jpg'))
 ```
 
+這樣的寫法就可以順利地在各平台運作～！
 
 # Function name and Variable name
 
