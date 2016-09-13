@@ -2380,8 +2380,8 @@ hr,
   flex: 0 auto;
 }
 .turbolinks-progress-bar {
-  height: 3px;
-  background-color: #E040FB;
+  height: 3px !important;
+  background-color: #E040FB !important;
 }
 #loading {
   position: fixed;
