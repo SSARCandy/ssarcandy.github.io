@@ -2379,6 +2379,10 @@ hr,
   -ms-flex: 0 auto;
   flex: 0 auto;
 }
+.turbolinks-progress-bar {
+  height: 3px;
+  background-color: #E040FB;
+}
 #loading {
   position: fixed;
   top: 0;
