@@ -33,16 +33,16 @@ works:
     time: '09/2015 ~ 08/2016'
     icon: Dcard
 
-  - serviceUnit: 'Computer Graphic Lab, NCCU'
-    link: 'http://www.cs.nccu.edu.tw/'
-    job: Adjunct Research Assistant
-    time: '02/2015 ~ 08/2016'
-    icon: NCCUCS
-
   - serviceUnit: '3D Game Programming, NCCU'
     link: 'http://www.cs.nccu.edu.tw/'
     job: Teaching Assistant
     time: '09/2015 ~ 01/2016'
+    icon: NCCUCS
+
+  - serviceUnit: 'Computer Graphic Lab, NCCU'
+    link: 'http://www.cs.nccu.edu.tw/'
+    job: Adjunct Research Assistant
+    time: '02/2015 ~ 08/2016'
     icon: NCCUCS
 
   - serviceUnit: 'Center of Teaching and Learning Development, NCCU'

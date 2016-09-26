@@ -115,3 +115,11 @@
   preview: http://ssarcandy.tw/nccugo12
   tags:
     - Responsive_Web
+
+- name: ssarcandy
+  title: ssarcandy.tw
+  description: My personal website.
+  github: https://github.com/SSARCandy/ssarcandy.github.io
+  preview: http://ssarcandy.tw/
+  tags:
+    - Responsive_Web
