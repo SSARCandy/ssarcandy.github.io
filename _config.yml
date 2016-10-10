@@ -117,3 +117,6 @@ hfc_img:
   jpegrecompressQuality: 'medium'
   optipng: true
   svgo: true
+
+math:
+  engine: 'mathjax' # or 'katex'
