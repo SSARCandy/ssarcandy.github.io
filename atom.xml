@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-10-10T17:41:10.435Z</updated>
+  <updated>2016-10-11T06:10:26.927Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,25 +20,25 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <a class="fancybox" href="/img/2016-10-10/3.jpg" title="據說 IKEA 型錄的圖都是渲染出來的[1]"><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></a></p>
 <a id="more"></a>
 <h2 id="關於-pbrt-與-ray-tracing"><a href="#關於-pbrt-與-ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指(因為沒有任何光打到手指並反射到眼中)。<br>至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
 <p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
-<p>pbrt 中的各種 shape，<br>有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；<br>而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
-<h2 id="實作-heightfield-交點測試"><a href="#實作-heightfield-交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 <code>(x, y)</code> 而言只會有一個 <code>z</code> 值。算是個滿單純的shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
+<p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
+<h2 id="實作-heightfield-交點測試"><a href="#實作-heightfield-交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
 <p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~哈哈<br>但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
 <p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了Z軸)。<br>  <a class="fancybox" href="/img/2016-10-10/2.png" title="2D-DDA 邏輯。[2]"><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。[2]"><span class="image-caption">2D-DDA 邏輯。[2]</span></a></p>
-<p>可以看到其實可以在一開始就算出<code>x</code>, <code>y</code>要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 <code>(x, y)</code> 而言只會有一個 <code>z</code> 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
+<p>可以看到其實可以在一開始就算出<code>x</code>, <code>y</code>要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
 <p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計DDA的結構時，除了讓Voxel高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br>  <a class="fancybox" href="/img/2016-10-10/4.png" title="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。"><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></a></p>
 <p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
 <p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br>  <a class="fancybox" href="/img/2016-10-10/landsea-big.jpg" title="用直接求交點的方式取代原本先做三角化的方法。"><img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></a></p>
 <h2 id="平滑化"><a href="#平滑化" class="headerlink" title="平滑化"></a>平滑化</h2><p>看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br>  <a class="fancybox" href="/img/2016-10-10/1.png" title="三角化後每個點 M 都有六個鄰居。"><img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></a></p>
 <p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
-<p>那我就平均一下六個法向量來當作真正的法向量<br>$\underset{Normalize(}{ }\underset{MTL}{\rightarrow}  \underset{\times}{ } \underset{ML}{\rightarrow} \underset{+}{ } \underset{ML}{\rightarrow}  \underset{\times}{ } \underset{MB}{\rightarrow} \underset{+}{ } \underset{MB}{\rightarrow}  \underset{\times}{ } \underset{MBR}{\rightarrow} \underset{+}{ } \underset{MBR}{\rightarrow}  \underset{\times}{ } \underset{MR}{\rightarrow} \underset{+}{ } \underset{MR}{\rightarrow}  \underset{\times}{ } \underset{MT}{\rightarrow} \underset{+}{ } \underset{MT}{\rightarrow}  \underset{\times}{ } \underset{MTL}{\rightarrow} \underset{)}{ }$</p>
+<p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>$\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \underset{L}{\rightarrow} \underset{+}{ } \underset{L}{\rightarrow}  \underset{\times}{ } \underset{B}{\rightarrow} \underset{+}{ } \underset{B}{\rightarrow}  \underset{\times}{ } \underset{BR}{\rightarrow} \underset{+}{ } \underset{BR}{\rightarrow}  \underset{\times}{ } \underset{R}{\rightarrow} \underset{+}{ } \underset{R}{\rightarrow}  \underset{\times}{ } \underset{T}{\rightarrow} \underset{+}{ } \underset{T}{\rightarrow}  \underset{\times}{ } \underset{TL}{\rightarrow} \underset{)}{ }$</p>
 <p>這樣子改進後，就可以讓結果變這樣:<br>  <a class="fancybox" href="/img/2016-10-10/landsea-big-smooth.jpg" title="平滑化的結果"><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果"><span class="image-caption">平滑化的結果</span></a></p>
-<h2 id="加速"><a href="#加速" class="headerlink" title="加速"></a>加速</h2><p>很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上….嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與Bbox交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
+<h2 id="加速"><a href="#加速" class="headerlink" title="加速"></a>加速</h2><p>很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上….嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
 <p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
 <table>
 <thead>
@@ -85,10 +85,10 @@
 <li><code>Intersect()</code> 欄的數字是指CPU採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
 <li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
 </ul>
-<p>經過幾次最佳化後，成功壓低執行時間，效能比較如下:<br>  <a class="fancybox" href="/img/2016-10-10/5.png" title="效能比較。"><img src="/img/2016-10-10/5.png" alt="效能比較。"><span class="image-caption">效能比較。</span></a></p>
+<p>經過幾次最佳化後，成功壓低執行時間，效能比較如下:<br>  <a class="fancybox" href="/img/2016-10-10/5.png" title="效能比較。[3]"><img src="/img/2016-10-10/5.png" alt="效能比較。[3]"><span class="image-caption">效能比較。[3]</span></a></p>
 <h2 id="雜談"><a href="#雜談" class="headerlink" title="雜談"></a>雜談</h2><p>說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈(雖然問題跟演算法沒關係)<br>只能說不愧是 Stanford 的題目囉？</p>
 <hr>
-<p> 註:<br> [1]: 可以看<a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external">這篇</a>介紹 IKEA 渲染型錄<br> [2]: 原圖來自 Physically Based Rendering, Second Edition</p>
+<p> 註:<br> [1]: 可以看<a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external">這篇</a>介紹 IKEA 渲染型錄<br> [2]: 原圖來自 Physically Based Rendering, Second Edition<br> [3]: 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
 ]]></content>
     
     <summary type="html">
@@ -97,6 +97,8 @@
     
     </summary>
     
+    
+      <category term="computer_graphic" scheme="https://ssarcandy.tw/tags/computer-graphic/"/>
     
       <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
     
@@ -111,7 +113,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。<br>說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的<a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/">另一篇</a>有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -185,7 +187,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -227,7 +229,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">一篇文章</a>在講這個主題了，也講得很清楚了，基本上<del>矇著眼睛</del>照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -263,7 +265,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -293,7 +295,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-10-10T17:41:10.435Z</updated>
+    <updated>2016-10-11T06:10:26.927Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
