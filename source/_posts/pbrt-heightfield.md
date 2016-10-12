@@ -84,7 +84,7 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 - `Intersect()` 欄的數字是指CPU採樣時落在這函式的總樣本數，越多表示執行時間越長
 - 測試的是 `landsea-2.pbrt`，並且使用 `–ncores 1` 以減少多執行緒的誤差
 
-經過幾次最佳化後，成功壓低執行時間，效能比較如下:
+經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:
   {% fancybox /img/2016-10-10/5.png 效能比較。[3] %}
 
 
