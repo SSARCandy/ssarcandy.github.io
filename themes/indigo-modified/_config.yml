@@ -17,7 +17,7 @@ menu:
     type: ml
     text: Posts
     url: /
-    turbo: false
+    # turbo: false
   view_list:
     type: ml
     text: Archives
