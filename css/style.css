@@ -3652,6 +3652,9 @@ a[title="站长统计"] {
 .post-content .gist .gist-meta a:hover {
   text-decoration: underline;
 }
+pre .meta-string {
+  color: #d69597;
+}
 pre .comment {
   color: #999999;
 }
@@ -3670,7 +3673,7 @@ pre .html .doctype,
 pre .css .id,
 pre .css .class,
 pre .css .pseudo {
-  color: #f2777a;
+  color: #d69597;
 }
 pre .class,
 pre .number,
