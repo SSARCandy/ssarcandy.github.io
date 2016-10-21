@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-10-13T16:25:49.869Z</updated>
+  <updated>2016-10-21T17:57:53.522Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -67,7 +67,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <a class="fancybox" href="/img/2016-10-10/3.jpg" title="據說 IKEA 型錄的圖都是渲染出來的[1]"><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></a></p>
 <a id="more"></a>
@@ -85,6 +85,9 @@
 <p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
 <p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>$\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \underset{L}{\rightarrow} \underset{+}{ } \underset{L}{\rightarrow}  \underset{\times}{ } \underset{B}{\rightarrow} \underset{+}{ } \underset{B}{\rightarrow}  \underset{\times}{ } \underset{BR}{\rightarrow} \underset{+}{ } \underset{BR}{\rightarrow}  \underset{\times}{ } \underset{R}{\rightarrow} \underset{+}{ } \underset{R}{\rightarrow}  \underset{\times}{ } \underset{T}{\rightarrow} \underset{+}{ } \underset{T}{\rightarrow}  \underset{\times}{ } \underset{TL}{\rightarrow} \underset{)}{ }$</p>
 <p>這樣子改進後，就可以讓結果變這樣:<br>  <a class="fancybox" href="/img/2016-10-10/landsea-big-smooth.jpg" title="平滑化的結果"><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果"><span class="image-caption">平滑化的結果</span></a></p>
+<h2 id="浮點數精度問題-10-22-更新"><a href="#浮點數精度問題-10-22-更新" class="headerlink" title="浮點數精度問題(10/22 更新)"></a>浮點數精度問題(10/22 更新)</h2><p>做完平滑化之後，感覺海好像怪怪的歐….<br>一開始其實我還沒察覺，過這麼久才發現這問題…</p>
+<p>很顯然只有海有這樣的問題，八成是因為海的 $z$ 值差距太小，計算法向量時的誤差。<br>用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 <code>Normalize(sumOfNormals)</code>，這步驟造成 $z$ 值起伏太小的海的計算誤差….<br>把 <code>Normalize()</code> 拔掉之後就正常了～</p>
+  <a class="fancybox" href="/img/2016-10-10/4.jpg" title="修正浮點數精度問題後的結果"><img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果"><span class="image-caption">修正浮點數精度問題後的結果</span>
 <h2 id="加速"><a href="#加速" class="headerlink" title="加速"></a>加速</h2><p>很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上….嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
 <p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
 <table>
@@ -136,7 +139,7 @@
 <h2 id="雜談"><a href="#雜談" class="headerlink" title="雜談"></a>雜談</h2><p>說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈(雖然問題跟演算法沒關係)<br>只能說不愧是 Stanford 的題目囉？</p>
 <hr>
 <p> 註:<br> [1]: 可以看<a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external">這篇</a>介紹 IKEA 渲染型錄<br> [2]: 原圖來自 Physically Based Rendering, Second Edition<br> [3]: 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
-]]></content>
+</a>]]></content>
     
     <summary type="html">
     
@@ -158,7 +161,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。<br>說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的<a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/">另一篇</a>有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -232,7 +235,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -274,7 +277,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過<a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">一篇文章</a>在講這個主題了，也講得很清楚了，基本上<del>矇著眼睛</del>照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -310,7 +313,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -340,7 +343,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-10-13T16:25:49.869Z</updated>
+    <updated>2016-10-21T17:57:53.522Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
