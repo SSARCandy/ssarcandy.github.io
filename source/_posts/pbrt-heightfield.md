@@ -61,6 +61,17 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 這樣子改進後，就可以讓結果變這樣:
   {% fancybox /img/2016-10-10/landsea-big-smooth.jpg 平滑化的結果 %}
 
+## 浮點數精度問題(10/22 更新)
+
+做完平滑化之後，感覺海好像怪怪的歐....
+一開始其實我還沒察覺，過這麼久才發現這問題...
+
+很顯然只有海有這樣的問題，八成是因為海的 $z$ 值差距太小，計算法向量時的誤差。
+用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 `Normalize(sumOfNormals)`，這步驟造成 $z$ 值起伏太小的海的計算誤差....
+把 `Normalize()` 拔掉之後就正常了～
+
+  {% fancybox /img/2016-10-10/4.jpg 修正浮點數精度問題後的結果 %}
+
 
 ## 加速
 
