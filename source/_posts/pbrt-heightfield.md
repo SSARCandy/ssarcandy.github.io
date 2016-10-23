@@ -37,7 +37,7 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~
 
 建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。
-而關於每個 Voxel 的交點測試其實也是滿單純的，在設計DDA的結構時，除了讓Voxel高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 `x` 及 `y` 也是有很大的好處的，如下圖:
+而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 `x` 及 `y` 也是有很大的好處的，如下圖:
   {% fancybox /img/2016-10-10/4.png 從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。 %}
 
 依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~
@@ -86,12 +86,12 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 |------------------------------------------------------------------------------------------------------------------------|------------:|-----------------:|
 | 未最佳化。                                                                                                             |      90,274 |           100.0% |
 | 發現 `ObjectBound()` 很慢，改在 Heightfield construction 時就先存 `minZ`, `maxZ`。                                             |      82,731 |            91.6% |
-| 發現在算 Voxel BBox 使用的 `Bbox(Union(Bbox, Bbox))` 超爆慢，改用 `Bbox(Point,Point)`。                                      |      53,408 |            59.1% |
+| 發現在算 Voxel BBox 使用的 `Bbox(Union(Bbox, Bbox))` 超爆慢，改用 `Bbox(Point, Point)`。                                      |      53,408 |            59.1% |
 | 發現有不必要的坐標系轉換，由於在 Voxel 交點測試中會先測與 Voxel Bbox 交點，所以最好直接給他已轉好的 Ray(Object Space)。     |      46,922 |            51.9% |
-| 由於 `Bbox(Point, Point)` 建構時都要重新判斷 min max，改用先建構空的BBOX再直接給值(`pmin`, `pmax`)省去建構時間。                |      36,768 |            40.7% |
-| 把用不到的 Bbox 給 Voxel 交點測試中再利用，節省Construction Time(避免重新 relocate 記憶體位置以及建構空 Bbox 的時間)。 |      32,742 |            36.2% |
+| 由於 `Bbox(Point, Point)` 建構時都要重新判斷 min max，改用先建構空的 Bbox 再直接給值(`pmin`, `pmax`)省去建構時間。                |      36,768 |            40.7% |
+| 把用不到的 Bbox 給 Voxel 交點測試中再利用，節省 Construction Time(避免重新 relocate 記憶體位置以及建構空 Bbox 的時間)。 |      32,742 |            36.2% |
 
-- `Intersect()` 欄的數字是指CPU採樣時落在這函式的總樣本數，越多表示執行時間越長
+- `Intersect()` 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長
 - 測試的是 `landsea-2.pbrt`，並且使用 `–ncores 1` 以減少多執行緒的誤差
 
 經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:
