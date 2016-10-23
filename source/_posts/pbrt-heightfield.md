@@ -23,7 +23,7 @@ pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交�
 
 ## 實作 heightfield 交點測試
 
-Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的shape。
+Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的 shape。
 Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` 來把形狀轉為 triangleMesh 再做交點測試的。
 
 如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？
