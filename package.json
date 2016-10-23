@@ -9,6 +9,7 @@
     "hexo": "^3.2.0",
     "hexo-cli": "^1.0.2",
     "hexo-deployer-git": "^0.2.0",
+    "hexo-filter-auto-spacing": "^0.2.1",
     "hexo-filter-cleanup": "^1.0.2",
     "hexo-generator-archive": "^0.1.4",
     "hexo-generator-category": "^0.1.3",
