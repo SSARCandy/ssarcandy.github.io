@@ -64,6 +64,11 @@ $\theta$: 光束與成像平面法向量夾角
 
 # 結果
 
+我嘗試渲染大張一點的圖並且讓每個像素的 sample 512 次，希望能夠讓結果圖漂亮一點。
+帶來的副作用就是一張圖要跑好幾個小時......
+
+{% fancybox /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel %}
+
 # 加速
 
 每個透鏡面基本上是以部份的球面來模擬，要求交點很容易，因為 `src/shape/shpere.cpp` 已經實做求交點了，可以直接創一個 Sphere object ，然後再 `s.Intersect(r, &thit, &rayEpsilon, &dg)` 來取得交點。
