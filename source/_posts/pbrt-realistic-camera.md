@@ -28,7 +28,7 @@ Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面
 3. 找出折射後的新 eye-ray
 4. 重覆 2, 3 直到 eye-ray 離開光學系統進入場景為止
 
-以 psudo-code 表示，大概可以寫成這樣：
+以 pseudo-code 表示，大概可以寫成這樣：
 
 ```py
 filmP = random point on film
