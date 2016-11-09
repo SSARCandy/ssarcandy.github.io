@@ -65,9 +65,10 @@ $\theta$: 光束與成像平面法向量夾角
 # 結果
 
 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。
-帶來的副作用就是一張圖要跑好幾個小時......
+代價就是一張圖要跑好幾個小時......
 
-{% fancybox /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel %}
+{% fancybox /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel(1024*1024) %}
+{% fancybox /img/2016-11-09/06.png wide 22mm with 512 samples per pixel(500*500) %}
 
 # 加速
 
