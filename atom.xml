@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-11-09T16:58:49.502Z</updated>
+  <updated>2016-11-09T17:10:50.792Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
-    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><a class="fancybox" href="/img/2016-11-09/01.png" title="ray-tracing 中，光束是從相機射出來的。"><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。</span></a></p>
+    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><a class="fancybox" href="/img/2016-11-09/01.png" title="ray-tracing 中，光束是從相機射出來的。[1]"><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></a></p>
 <a id="more"></a>
 <h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
-<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><a class="fancybox" href="/img/2016-11-09/02.png" title="真實相機通常都是由多片透鏡組成的光學系統。"><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。</span></a></p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><a class="fancybox" href="/img/2016-11-09/02.png" title="真實相機通常都是由多片透鏡組成的光學系統。[2]"><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。[2]"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。[2]</span></a></p>
 <p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
 <p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
 <ol>
@@ -35,10 +35,10 @@
 <li>重覆 2, 3 直到 eye-ray 離開光學系統進入場景為止</li>
 </ol>
 <p>以 pseudo-code 表示，大概可以寫成這樣：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP: </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
 <hr>
 <p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><a class="fancybox" href="/img/2016-11-09/03.png" title="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。"><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></a></p>
-<p>除此之外，也需要計算每條 ray 的權重，根據論文所說是如下公式：</p>
+<p>除此之外，也需要計算每條 ray 的權重，根據論文 [2] 所說是如下公式：</p>
 <p>$E = A\frac{cos^4\theta}{Z^2}$</p>
 <p>$A$: 出射瞳面積<br>$Z$: 最後透鏡與成像平面的距離<br>$\theta$: 光束與成像平面法向量夾角</p>
 <h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
@@ -48,15 +48,17 @@
 <p>這樣寫簡單易懂，三兩下解決求交點這件事，但其實效能並不好，因為只為了求一個交點卻建構了一個完整的 shpere shape ，稍微有點浪費……</p>
 <p>改善方式可以藉由複製貼上 <code>Shpere::Intersect()</code> 並加以改寫，就可以省去這樣的 overhead<br>實際上效能大約差 2 倍。</p>
 <h1 id="各種坑"><a href="# 各種坑" class="headerlink" title="各種坑"></a>各種坑</h1><ul>
-<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 $Z$ 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<a class="fancybox" href="/img/2016-11-09/04.png" title="Raster/Camera space 之間關係。"><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。"><span class="image-caption">Raster/Camera space 之間關係。</span></a></li>
+<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<a class="fancybox" href="/img/2016-11-09/04.png" title="Raster/Camera space 之間關係。"><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。"><span class="image-caption">Raster/Camera space 之間關係。</span></a></li>
 <li><strong>Ray minT, maxT</strong><br>在 <code>GenerateRay()</code> 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖…</li>
 <li><strong>Total reflection</strong><br>我使用 <a href="https://www.wikiwand.com/en/Snell&#39;s_law" target="_blank" rel="external">Snell’s law</a> 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。<br>所以記得要注意別把負數開根號了。</li>
 </ul>
+<hr>
+<p> 註:<br> [1]: 圖片取自維基百科 <a href="https://www.wikiwand.com/en/Ray_tracing_(graphics" target="_blank" rel="external">Ray-tracing</a>)<br> [2]: A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995</p>
 </a></a>]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;a class=&quot;fancybox&quot; href=&quot;/img/2016-11-09/01.png&quot; title=&quot;ray-tracing 中，光束是從相機射出來的。&quot;&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;a class=&quot;fancybox&quot; href=&quot;/img/2016-11-09/01.png&quot; title=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot;&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -74,7 +76,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -121,7 +123,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <a class="fancybox" href="/img/2016-10-10/3.jpg" title="據說 IKEA 型錄的圖都是渲染出來的[1]"><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></a></p>
 <a id="more"></a>
@@ -215,7 +217,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -289,7 +291,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -331,7 +333,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -367,7 +369,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -397,7 +399,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-11-09T16:58:49.502Z</updated>
+    <updated>2016-11-09T17:10:50.792Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
