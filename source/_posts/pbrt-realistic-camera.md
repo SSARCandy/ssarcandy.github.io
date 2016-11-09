@@ -8,7 +8,7 @@ tags:
 ---
 
 Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。
-{% fancybox /img/2016-11-09/01.png ray-tracing 中，光束是從相機射出來的。 %}
+{% fancybox /img/2016-11-09/01.png ray-tracing 中，光束是從相機射出來的。[1] %}
 
 <!-- more -->
 
@@ -17,7 +17,7 @@ Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面
 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， [pbrt-v2](https://github.com/mmp/pbrt-v2) 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 `src/camera` 之下。
 
 實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。
-{% fancybox /img/2016-11-09/02.png 真實相機通常都是由多片透鏡組成的光學系統。 %}
+{% fancybox /img/2016-11-09/02.png 真實相機通常都是由多片透鏡組成的光學系統。[2] %}
 
 上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同[這篇](https://ssarcandy.tw/2016/10/10/pbrt-heightfield/)在做的事。
 
@@ -38,7 +38,7 @@ ray.d = Vector(lensP - originP)
   
 for l in lens:  # from rear to front
   intersectionP = l.intersect(ray)
-  if not intersectionP: 
+  if not intersectionP:
     return 0
   
   newDirection = l.refractRay(ray)
@@ -53,7 +53,7 @@ for l in lens:  # from rear to front
 (關於如何利用 vdb 除錯，可以參考[這篇](https://ssarcandy.tw/2016/10/13/debug-using-vdb/)。)
 {% fancybox /img/2016-11-09/03.png pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。 %}
 
-除此之外，也需要計算每條 ray 的權重，根據論文所說是如下公式：
+除此之外，也需要計算每條 ray 的權重，根據論文[2]所說是如下公式：
 
 $E = A\frac{cos^4\theta}{Z^2}$
 
@@ -82,10 +82,17 @@ $\theta$: 光束與成像平面法向量夾角
 # 各種坑
 
 - **RasterToCamera**
-  在 `GenerateRay()` 中，`sample.imageX` `sample.imageY` 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 $Z$ 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。
+  在 `GenerateRay()` 中，`sample.imageX` `sample.imageY` 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。
   {% fancybox /img/2016-11-09/04.png  Raster/Camera space 之間關係。 %}
 - **Ray minT, maxT**
   在 `GenerateRay()` 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖...
 - **Total reflection**
   我使用 [Snell's law](https://www.wikiwand.com/en/Snell's_law) 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。
   所以記得要注意別把負數開根號了。
+
+
+---
+
+ 註:
+ [1]: 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_(graphics))
+ [2]: A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995
