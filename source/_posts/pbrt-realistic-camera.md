@@ -23,7 +23,7 @@ Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面
 
 所以，要模擬真實相機的光學系統，其實就是幾個步驟：
 
-1. 在成樣平面上與第一個透鏡面上各取一點，相連產生 eye-ray
+1. 在成像平面上與第一個透鏡面上各取一點，相連產生 eye-ray
 2. 找出 eye-ray 與第一個透鏡面的交點，沒交點就結束
 3. 找出折射後的新 eye-ray
 4. 重覆 2, 3 直到 eye-ray 離開光學系統進入場景為止
@@ -69,6 +69,8 @@ $\theta$: 光束與成像平面法向量夾角
 
 {% fancybox /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel(1024*1024) %}
 {% fancybox /img/2016-11-09/06.png wide 22mm with 512 samples per pixel(500*500) %}
+{% fancybox /img/2016-11-09/06.png telephoto 250mm with 512 samples per pixel(500*500) %}
+{% fancybox /img/2016-11-09/06.png fisheye 10mm with 512 samples per pixel(500*500) %}
 
 # 加速
 
