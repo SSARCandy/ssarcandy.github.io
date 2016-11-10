@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-11-10T06:21:41.843Z</updated>
+  <updated>2016-11-10T06:25:31.796Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><a class="fancybox" href="/img/2016-11-09/01.png" title="ray-tracing 中，光束是從相機射出來的。[1]"><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></a></p>
 <a id="more"></a>
@@ -44,8 +44,8 @@
 <h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
 <a class="fancybox" href="/img/2016-11-09/05.png" title="dobule-gauss 50mm with 512 samples per pixel(1024*1024)"><img src="/img/2016-11-09/05.png" alt="dobule-gauss 50mm with 512 samples per pixel(1024*1024)"><span class="image-caption">dobule-gauss 50mm with 512 samples per pixel(1024*1024)</span>
 <a class="fancybox" href="/img/2016-11-09/06.png" title="wide 22mm with 512 samples per pixel(500*500)"><img src="/img/2016-11-09/06.png" alt="wide 22mm with 512 samples per pixel(500*500)"><span class="image-caption">wide 22mm with 512 samples per pixel(500*500)</span>
-<a class="fancybox" href="/img/2016-11-09/06.png" title="telephoto 250mm with 512 samples per pixel(500*500)"><img src="/img/2016-11-09/06.png" alt="telephoto 250mm with 512 samples per pixel(500*500)"><span class="image-caption">telephoto 250mm with 512 samples per pixel(500*500)</span>
-<a class="fancybox" href="/img/2016-11-09/06.png" title="fisheye 10mm with 512 samples per pixel(500*500)"><img src="/img/2016-11-09/06.png" alt="fisheye 10mm with 512 samples per pixel(500*500)"><span class="image-caption">fisheye 10mm with 512 samples per pixel(500*500)</span>
+<a class="fancybox" href="/img/2016-11-09/07.png" title="telephoto 250mm with 512 samples per pixel(500*500)"><img src="/img/2016-11-09/07.png" alt="telephoto 250mm with 512 samples per pixel(500*500)"><span class="image-caption">telephoto 250mm with 512 samples per pixel(500*500)</span>
+<a class="fancybox" href="/img/2016-11-09/08.png" title="fisheye 10mm with 512 samples per pixel(500*500)"><img src="/img/2016-11-09/08.png" alt="fisheye 10mm with 512 samples per pixel(500*500)"><span class="image-caption">fisheye 10mm with 512 samples per pixel(500*500)</span>
 <h1 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h1><p> 每個透鏡面基本上是以部份的球面來模擬，要求交點很容易，因為 <code>src/shape/shpere.cpp</code> 已經實做求交點了，可以直接創一個 Sphere object ，然後再 <code>s.Intersect(r, &amp;thit, &amp;rayEpsilon, &amp;dg)</code> 來取得交點。</p>
 <p>這樣寫簡單易懂，三兩下解決求交點這件事，但其實效能並不好，因為只為了求一個交點卻建構了一個完整的 shpere shape ，稍微有點浪費……</p>
 <p>改善方式可以藉由複製貼上 <code>Shpere::Intersect()</code> 並加以改寫，就可以省去這樣的 overhead<br>實際上效能大約差 2 倍。</p>
@@ -78,7 +78,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -125,7 +125,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <a class="fancybox" href="/img/2016-10-10/3.jpg" title="據說 IKEA 型錄的圖都是渲染出來的[1]"><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></a></p>
 <a id="more"></a>
@@ -219,7 +219,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.800Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -293,7 +293,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.800Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -335,7 +335,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -371,7 +371,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -401,7 +401,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-11-10T06:21:41.843Z</updated>
+    <updated>2016-11-10T06:25:31.796Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
