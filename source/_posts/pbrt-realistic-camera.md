@@ -69,8 +69,8 @@ $\theta$: 光束與成像平面法向量夾角
 
 {% fancybox /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel(1024*1024) %}
 {% fancybox /img/2016-11-09/06.png wide 22mm with 512 samples per pixel(500*500) %}
-{% fancybox /img/2016-11-09/06.png telephoto 250mm with 512 samples per pixel(500*500) %}
-{% fancybox /img/2016-11-09/06.png fisheye 10mm with 512 samples per pixel(500*500) %}
+{% fancybox /img/2016-11-09/07.png telephoto 250mm with 512 samples per pixel(500*500) %}
+{% fancybox /img/2016-11-09/08.png fisheye 10mm with 512 samples per pixel(500*500) %}
 
 # 加速
 
