@@ -27,6 +27,12 @@ educations:
     icon: SSSH
 
 works:
+  - serviceUnit: 'CMLAB, NTU'
+    link: 'https://cmlab.csie.ntu.edu.tw/'
+    job: CMLAB UNIX Manager
+    time: '09/2016 ~'
+    icon: NTU
+
   - serviceUnit: 'Dcard'
     link: 'https://join.dcard.today/'
     job: Web Developer
