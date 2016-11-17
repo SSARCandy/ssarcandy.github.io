@@ -2,7 +2,6 @@
 title: 用 Facebook 聊天機器人當通知系統
 date: 2016-11-17 19:57:17
 tags: 
-- devOps
 - nodejs
 - unix
 ---
@@ -29,8 +28,8 @@ request('https://www.cmlab.csie.ntu.edu.tw/status/', function (error, response, 
 
 ## facebook-chat-api
 
-[facebook-chat-api](https://github.com/Schmavery/facebook-chat-api) 可以很容易的操作聊天室相關的行為，我利用這套件來達成通知自己機器有狀況了。
-將爬下來的網頁內容，找出掛掉的機器，配合 [facebook-chat-api](https://github.com/Schmavery/facebook-chat-api) 就可以達成用 fb 通知有機器掛掉了。
+[facebook-chat-api](https://github.com/Schmavery/facebook-chat-api) 可以很容易的操作聊天室相關的行為，我利用這套件來達成通知自己。
+將爬下來的網頁內容，找出掛掉的機器，配合 [facebook-chat-api](https://github.com/Schmavery/facebook-chat-api) 就可以用 fb 通知有機器掛掉了。
 
 ```js
 // require modules
@@ -63,7 +62,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/', function (err, res, body) {
 
 ## 定時檢查
 
-這隻程式並不是個持續監控的程式，只能算是個 script 而已。所以我用 `crontab` 設定排程定時幫我檢查機器是不是有狀況。
+這隻程式並不是個持續監控的程式，只能算是個 script 而已。所以我用 `crontab` 設定排程定時檢查機器是不是有狀況。
 利用 unix 指令 `crontab -e` 編輯排程。
 
 ```sh
