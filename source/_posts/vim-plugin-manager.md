@@ -48,7 +48,7 @@ Plug 'tpope/vim-fugitive'
 其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。
 所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。
 不過還是可以看看別人的實驗
-{% fancybox /img/2016-08-17/1.png 不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time %}
+![不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time](/img/2016-08-17/1.png)
  
 不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！
 如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。

@@ -58,7 +58,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/', function (err, res, body) {
 });
 ```
 
-{% fancybox /img/2016-11-17/1.png 透過 Facebook 聊天室告知我有機器掛掉了。 %}
+![透過 Facebook 聊天室告知我有機器掛掉了。](/img/2016-11-17/1.png)
 
 ## 定時檢查
 
