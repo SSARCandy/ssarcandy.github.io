@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-11-17T14:38:44.153Z</updated>
+  <updated>2016-11-22T19:25:25.865Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -29,7 +29,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div><div class="line">request(<span class="string">'https://www.cmlab.csie.ntu.edu.tw/status/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">error, response, body</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(body) <span class="comment">// Show the HTML</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <h2 id="facebook-chat-api"><a href="#facebook-chat-api" class="headerlink" title="facebook-chat-api"></a>facebook-chat-api</h2><p><a href="https://github.com/Schmavery/facebook-chat-api" target="_blank" rel="external">facebook-chat-api</a> 可以很容易的操作聊天室相關的行為，我利用這套件來達成通知自己。<br>將爬下來的網頁內容，找出掛掉的機器，配合 <a href="https://github.com/Schmavery/facebook-chat-api" target="_blank" rel="external">facebook-chat-api</a> 就可以用 fb 通知有機器掛掉了。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// require modules</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> deadMachines = [];</div><div class="line">request(<span class="string">'http://www.cmlab.csie.ntu.edu.tw/status/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, res, body</span>) </span>&#123;</div><div class="line">    <span class="keyword">const</span> $ = cheerio.load(body);</div><div class="line">    <span class="keyword">const</span> dead = $(<span class="string">'.dead'</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; dead.length; i++) &#123;</div><div class="line">        <span class="keyword">const</span> machineId = dead.eq(i).text();</div><div class="line">        deadMachines.push(machineId);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// all machines are fine~</span></div><div class="line">    <span class="keyword">if</span> (!deadMachines.length) <span class="keyword">return</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// login to facebook and send msg to unix manager</span></div><div class="line">    loginFacebook(config.account, <span class="function"><span class="keyword">function</span> (<span class="params">err, api</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</div><div class="line"> </div><div class="line">        api.sendMessage(<span class="string">`<span class="subst">$&#123;deadMachines.toString()&#125;</span> is dead.`</span>, <span class="comment">/* channel_id */</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;deadMachines.toString()&#125;</span> is dead.`</span>);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<a class="fancybox" href="/img/2016-11-17/1.png" title="透過 Facebook 聊天室告知我有機器掛掉了。"><img src="/img/2016-11-17/1.png" alt="透過 Facebook 聊天室告知我有機器掛掉了。"><span class="image-caption">透過 Facebook 聊天室告知我有機器掛掉了。</span>
+<p><img src="/img/2016-11-17/1.png" alt="透過 Facebook 聊天室告知我有機器掛掉了。"><span class="image-caption">透過 Facebook 聊天室告知我有機器掛掉了。</span></p>
 <h2 id="定時檢查"><a href="# 定時檢查" class="headerlink" title="定時檢查"></a>定時檢查 </h2><p> 這隻程式並不是個持續監控的程式，只能算是個 script 而已。所以我用 <code>crontab</code> 設定排程定時檢查機器是不是有狀況。<br>利用 unix 指令 <code>crontab -e</code> 編輯排程。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 每小時執行程式</span></div><div class="line">0 * * * * node index.js</div></pre></td></tr></table></figure>
 <p>crontab 是吃 localtime，系統現在是甚麼時間可以藉由 <code>timedatectl</code> 查看:</p>
@@ -38,13 +38,13 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /etc/init.d/cron restart</div></pre></td></tr></table></figure>
 <h2 id="截圖"><a href="# 截圖" class="headerlink" title="截圖"></a>截圖 </h2><p> 直到現在其實已經達成目標了，但是只講句「某某機器掛了。」似乎還是差強人意，為了防範未然，應該要把高負載的機器也告知一下，提早處理以免機器死掉。<br>想想感覺把整個網站截圖下來傳給我不是最快嗎。<br>恩，那就這樣弄吧！</p>
 <p>多虧廣大 nodejs 套件開發者，這件事可以很容易地利用 <a href="https://github.com/brenden/node-webshot" target="_blank" rel="external">webshot</a> 達成。</p>
-<a class="fancybox" href="/img/2016-11-17/2.png" title="截下整個表格傳給我。"><img src="/img/2016-11-17/2.png" alt="截下整個表格傳給我。"><span class="image-caption">截下整個表格傳給我。</span>
+<p><img src="/img/2016-11-17/2.png" alt="截下整個表格傳給我。"><span class="image-caption">截下整個表格傳給我。</span></p>
 <h2 id="Callback-to-Promise"><a href="#Callback-to-Promise" class="headerlink" title="Callback to Promise"></a>Callback to Promise</h2><p>爬網頁、截圖、傳訊息都是非同步的動作，寫起來就變成 Callback Hell 了。<br>真的是醜爆了…</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Scrap web</span></div><div class="line">request(<span class="string">'url'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, res, body</span>) </span>&#123;</div><div class="line">    <span class="comment">/* do something with 'body' */</span></div><div class="line">    <span class="comment">// Screenshot</span></div><div class="line">    webshot(body, <span class="string">'tmp.png'</span>, options, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">        <span class="comment">// login to facebook and send msg</span></div><div class="line">        loginFacebook(config.account, <span class="function"><span class="keyword">function</span> (<span class="params">err, api</span>) </span>&#123;</div><div class="line">            <span class="comment">// send message</span></div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>利用 <a href="http://bluebirdjs.com/docs/getting-started.html" target="_blank" rel="external">bluebird</a>，可以把 Callback 神奇的轉為 Promise，<br>並且用 es6 的語法改寫，就可以大幅改善程式碼的易讀性～</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">request(<span class="string">'url'</span>)</div><div class="line">    .then(<span class="function"><span class="params">body</span> =&gt;</span> &#123;</div><div class="line">        <span class="comment">/* do something with 'body' */</span></div><div class="line">        <span class="comment">// Screenshot</span></div><div class="line">        <span class="keyword">return</span> webshot(body, <span class="string">'tmp.png'</span>, options);</div><div class="line">    &#125;)</div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> loginFacebook(config.account)) <span class="comment">// login to facebook and send msg</span></div><div class="line">    .then(<span class="function"><span class="params">api</span> =&gt;</span> &#123;</div><div class="line">        <span class="comment">// send message</span></div><div class="line">    &#125;)</div><div class="line">    .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(err));</div></pre></td></tr></table></figure>
 <p>完整的程式碼: <a href="https://github.com/SSARCandy/cml-status-fb-notify" target="_blank" rel="external">https://github.com/SSARCandy/cml-status-fb-notify</a></p>
-</a></a>]]></content>
+]]></content>
     
     <summary type="html">
     
@@ -65,12 +65,12 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
-    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><a class="fancybox" href="/img/2016-11-09/01.png" title="ray-tracing 中，光束是從相機射出來的。[1]"><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></a></p>
+    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></p>
 <a id="more"></a>
 <h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
-<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><a class="fancybox" href="/img/2016-11-09/02.png" title="真實相機通常都是由多片透鏡組成的光學系統。[2]"><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。[2]"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。[2]</span></a></p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。[2]"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。[2]</span></p>
 <p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
 <p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
 <ol>
@@ -82,30 +82,27 @@
 <p>以 pseudo-code 表示，大概可以寫成這樣：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
 <hr>
-<p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><a class="fancybox" href="/img/2016-11-09/03.png" title="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。"><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></a></p>
+<p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></p>
 <p>除此之外，也需要計算每條 ray 的權重，根據論文 [2] 所說是如下公式：</p>
 <p>$E = A\frac{cos^4\theta}{Z^2}$</p>
 <p>$A$: 出射瞳面積<br>$Z$: 最後透鏡與成像平面的距離<br>$\theta$: 光束與成像平面法向量夾角</p>
 <h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
-<a class="fancybox" href="/img/2016-11-09/05.png" title="dobule-gauss 50mm with 512 samples per pixel(1024*1024)"><img src="/img/2016-11-09/05.png" alt="dobule-gauss 50mm with 512 samples per pixel(1024*1024)"><span class="image-caption">dobule-gauss 50mm with 512 samples per pixel(1024*1024)</span>
-<a class="fancybox" href="/img/2016-11-09/06.png" title="wide 22mm with 512 samples per pixel(1024*1024)"><img src="/img/2016-11-09/06.png" alt="wide 22mm with 512 samples per pixel(1024*1024)"><span class="image-caption">wide 22mm with 512 samples per pixel(1024*1024)</span>
-<a class="fancybox" href="/img/2016-11-09/07.png" title="telephoto 250mm with 512 samples per pixel(1024*1024)"><img src="/img/2016-11-09/07.png" alt="telephoto 250mm with 512 samples per pixel(1024*1024)"><span class="image-caption">telephoto 250mm with 512 samples per pixel(1024*1024)</span>
-<a class="fancybox" href="/img/2016-11-09/08.png" title="fisheye 10mm with 512 samples per pixel(1024*1024)"><img src="/img/2016-11-09/08.png" alt="fisheye 10mm with 512 samples per pixel(1024*1024)"><span class="image-caption">fisheye 10mm with 512 samples per pixel(1024*1024)</span>
+<p><img src="/img/2016-11-09/05.png" alt="dobule-gauss 50mm with 512 samples per pixel(1024*1024)"><span class="image-caption">dobule-gauss 50mm with 512 samples per pixel(1024*1024)</span><br><img src="/img/2016-11-09/06.png" alt="wide 22mm with 512 samples per pixel(1024*1024)"><span class="image-caption">wide 22mm with 512 samples per pixel(1024*1024)</span><br><img src="/img/2016-11-09/07.png" alt="telephoto 250mm with 512 samples per pixel(1024*1024)"><span class="image-caption">telephoto 250mm with 512 samples per pixel(1024*1024)</span><br><img src="/img/2016-11-09/08.png" alt="fisheye 10mm with 512 samples per pixel(1024*1024)"><span class="image-caption">fisheye 10mm with 512 samples per pixel(1024*1024)</span></p>
 <h1 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h1><p> 每個透鏡面基本上是以部份的球面來模擬，要求交點很容易，因為 <code>src/shape/shpere.cpp</code> 已經實做求交點了，可以直接創一個 Sphere object ，然後再 <code>s.Intersect(r, &amp;thit, &amp;rayEpsilon, &amp;dg)</code> 來取得交點。</p>
 <p>這樣寫簡單易懂，三兩下解決求交點這件事，但其實效能並不好，因為只為了求一個交點卻建構了一個完整的 shpere shape ，稍微有點浪費……</p>
 <p>改善方式可以藉由複製貼上 <code>Shpere::Intersect()</code> 並加以改寫，就可以省去這樣的 overhead<br>實際上效能大約差 2 倍。</p>
 <h1 id="各種坑"><a href="# 各種坑" class="headerlink" title="各種坑"></a>各種坑</h1><ul>
-<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<a class="fancybox" href="/img/2016-11-09/04.png" title="Raster/Camera space 之間關係。"><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。"><span class="image-caption">Raster/Camera space 之間關係。</span></a></li>
+<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<br><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。"><span class="image-caption">Raster/Camera space 之間關係。</span></li>
 <li><strong>Ray minT, maxT</strong><br>在 <code>GenerateRay()</code> 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖…</li>
 <li><strong>Total reflection</strong><br>我使用 <a href="https://www.wikiwand.com/en/Snell&#39;s_law" target="_blank" rel="external">Snell’s law</a> 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。<br>所以記得要注意別把負數開根號了。</li>
 </ul>
 <hr>
 <p> 註:<br> [1]: 圖片取自維基百科 <a href="https://www.wikiwand.com/en/Ray_tracing_(graphics" target="_blank" rel="external">Ray-tracing</a>)<br> [2]: A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995</p>
-</a></a></a></a>]]></content>
+]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;a class=&quot;fancybox&quot; href=&quot;/img/2016-11-09/01.png&quot; title=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot;&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -123,7 +120,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -136,12 +133,12 @@
 <li>在要偵錯的程式中，可以在任何地方插入 <code>vdb_line()</code> 等他所提供的函式</li>
 </ol>
 <h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>以 pbrt 為例，由於結果都是一張渲染完成的影像，說實在的這真的很難 debug….<br>那利用 vdb 這工具能有甚麼好處呢？</p>
-<p>藉由他，可以很容易地畫出像是物體的樣子以及他的 Bounding Box，如圖：<br><a class="fancybox" href="/img/2016-10-13/1.png" title="heightfield object and its bounding box"><img src="/img/2016-10-13/1.png" alt="heightfield object and its bounding box"><span class="image-caption">heightfield object and its bounding box</span></a></p>
+<p>藉由他，可以很容易地畫出像是物體的樣子以及他的 Bounding Box，如圖：<br><img src="/img/2016-10-13/1.png" alt="heightfield object and its bounding box"><span class="image-caption">heightfield object and its bounding box</span></p>
 <hr>
-<p>或者是當你在算 Vertex normal 時，不知道到底算的對不對，也可以直接畫出來：<br><a class="fancybox" href="/img/2016-10-13/2.png" title="Showing Normals on vertices"><img src="/img/2016-10-13/2.png" alt="Showing Normals on vertices"><span class="image-caption">Showing Normals on vertices</span></a></p>
+<p>或者是當你在算 Vertex normal 時，不知道到底算的對不對，也可以直接畫出來：<br><img src="/img/2016-10-13/2.png" alt="Showing Normals on vertices"><span class="image-caption">Showing Normals on vertices</span></p>
 <hr>
 <p>我個人覺得 vdb 對我最大的幫助是 object space 以及 world space 之間的關係了，<br>坐標系一個沒弄好就會讓渲染的結果差異甚大，完全摸不著頭緒到底發生什麼事情…..</p>
-<p>藉由 vdb 實際畫出各個 object 時候，很容易就發現 object/world space 之間的 bug<br><a class="fancybox" href="/img/2016-10-13/3.png" title="Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方"><img src="/img/2016-10-13/3.png" alt="Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方"><span class="image-caption">Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方</span></a></p>
+<p>藉由 vdb 實際畫出各個 object 時候，很容易就發現 object/world space 之間的 bug<br><img src="/img/2016-10-13/3.png" alt="Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方"><span class="image-caption">Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方</span></p>
 <h2 id="Some-tips"><a href="#Some-tips" class="headerlink" title="Some tips"></a>Some tips</h2><p>其實上面說的很簡單，但事實上我剛開始嘗試使用 vdb 時遇到了超多的問題，這邊就來記錄一下：</p>
 <h5 id="Header-files-order"><a href="#Header-files-order" class="headerlink" title="Header files order"></a>Header files order</h5><p><code>#include &quot;vdb.h&quot;</code> 要擺在哪裡？一般來說當然越上面越好，但還是有例外的：</p>
 <figure class="highlight cpp"><figcaption><span>heightfield.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"vdb.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"shapes/heightfieldImproved.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"shapes/trianglemesh.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"paramset.h"</span></span></div></pre></td></tr></table></figure>
@@ -170,27 +167,27 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
-    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <a class="fancybox" href="/img/2016-10-10/3.jpg" title="據說 IKEA 型錄的圖都是渲染出來的[1]"><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></a></p>
+    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br>  <img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></p>
 <a id="more"></a>
 <h2 id="關於 -pbrt- 與 -ray-tracing"><a href="# 關於 -pbrt- 與 -ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指 (因為沒有任何光打到手指並反射到眼中)。<br> 至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
 <p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
 <p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
 <h2 id="實作 -heightfield- 交點測試"><a href="# 實作 -heightfield- 交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的 shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
 <p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~ 哈哈 <br> 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
-<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br>  <a class="fancybox" href="/img/2016-10-10/2.png" title="2D-DDA 邏輯。[2]"><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。[2]"><span class="image-caption">2D-DDA 邏輯。[2]</span></a></p>
+<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br>  <img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。[2]"><span class="image-caption">2D-DDA 邏輯。[2]</span></p>
 <p>可以看到其實可以在一開始就算出 <code>x</code>, <code>y</code> 要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓 3D 結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
-<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br>  <a class="fancybox" href="/img/2016-10-10/4.png" title="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。"><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></a></p>
+<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br>  <img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></p>
 <p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
-<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br>  <a class="fancybox" href="/img/2016-10-10/landsea-big.jpg" title="用直接求交點的方式取代原本先做三角化的方法。"><img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></a></p>
-<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br>  <a class="fancybox" href="/img/2016-10-10/1.png" title="三角化後每個點 M 都有六個鄰居。"><img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></a></p>
+<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br>  <img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></p>
+<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br>  <img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></p>
 <p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
 <p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>$\underset{Normalize(}{}\underset{TL}{\rightarrow}  \underset{\times}{} \underset{L}{\rightarrow} \underset{+}{} \underset{L}{\rightarrow}  \underset{\times}{} \underset{B}{\rightarrow} \underset{+}{} \underset{B}{\rightarrow}  \underset{\times}{} \underset{BR}{\rightarrow} \underset{+}{} \underset{BR}{\rightarrow}  \underset{\times}{} \underset{R}{\rightarrow} \underset{+}{} \underset{R}{\rightarrow}  \underset{\times}{} \underset{T}{\rightarrow} \underset{+}{} \underset{T}{\rightarrow}  \underset{\times}{} \underset{TL}{\rightarrow} \underset{)}{}$</p>
-<p>這樣子改進後，就可以讓結果變這樣:<br>  <a class="fancybox" href="/img/2016-10-10/landsea-big-smooth.jpg" title="平滑化的結果"><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果"><span class="image-caption">平滑化的結果</span></a></p>
+<p>這樣子改進後，就可以讓結果變這樣:<br>  <img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果"><span class="image-caption">平滑化的結果</span></p>
 <h2 id="浮點數精度問題 -10-22- 更新"><a href="# 浮點數精度問題 -10-22- 更新" class="headerlink" title="浮點數精度問題 (10/22 更新)"></a> 浮點數精度問題 (10/22 更新)</h2><p> 做完平滑化之後，感覺海好像怪怪的歐….<br>一開始其實我還沒察覺，過這麼久才發現這問題…</p>
 <p>很顯然只有海有這樣的問題，八成是因為海的 $z$ 值差距太小，計算法向量時的誤差。<br>用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 <code>Normalize(sumOfNormals)</code>，這步驟造成 $z$ 值起伏太小的海的計算誤差….<br>把 <code>Normalize()</code> 拔掉之後就正常了～</p>
-  <a class="fancybox" href="/img/2016-10-10/4.jpg" title="修正浮點數精度問題後的結果"><img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果"><span class="image-caption">修正浮點數精度問題後的結果</span>
+<p>  <img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果"><span class="image-caption">修正浮點數精度問題後的結果</span></p>
 <h2 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h2><p> 很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上…. 嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
 <p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
 <table>
@@ -238,15 +235,15 @@
 <li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
 <li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
 </ul>
-<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br>  <a class="fancybox" href="/img/2016-10-10/5.png" title="效能比較。[3]"><img src="/img/2016-10-10/5.png" alt="效能比較。[3]"><span class="image-caption">效能比較。[3]</span></a></p>
+<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br>  <img src="/img/2016-10-10/5.png" alt="效能比較。[3]"><span class="image-caption">效能比較。[3]</span></p>
 <h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
 <hr>
 <p> 註:<br> [1]: 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2]: 原圖來自 Physically Based Rendering, Second Edition<br> [3]: 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
-</a>]]></content>
+]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;  &lt;a class=&quot;fancybox&quot; href=&quot;/img/2016-10-10/3.jpg&quot; title=&quot;據說 IKEA 型錄的圖都是渲染出來的[1]&quot;&gt;&lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的[1]&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;  &lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的[1]&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -264,7 +261,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -338,7 +335,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -353,7 +350,7 @@
 <p>安裝也是跟 Vundle 差不多，關鍵字不一樣而已 (<code>:PlugInstall</code>)</p>
 <p>比較厲害的是 vim-plug 可以 <strong>on-demand loading</strong>！<br>像是 <a href="https://github.com/fatih/vim-go" target="_blank" rel="external">vim-go</a>(強大的 Golang Dev-plugin)，這種只有在寫 golang 時候才要的 plugin，就應該只在副檔名是 <code>.go</code> 的時候載入就好；<br><a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a> 也是，有時候只是打開一個檔案要編輯而已，用不著這個套件，只有當真的觸發開啟 NERDTree 的時候再載入就好。<br>這些 vim-plug 都可以設定(設定方式詳見 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">readme</a>)，大幅提升 vim 開啟速度～</p>
 <h3 id="效能"><a href="# 效能" class="headerlink" title="效能"></a>效能 </h3><p> 我從 Pathogen 換到 Vundle 是為了可以很容易的在新環境設定好 vim，<br>而從 Vundle 換到 vim-plug 則是為了他的 on-demand loading。</p>
-<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br><a class="fancybox" href="/img/2016-08-17/1.png" title="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time"><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time"><span class="image-caption">不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></a></p>
+<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time"><span class="image-caption">不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></p>
 <p>不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！<br>如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim --startuptime vim.log</div></pre></td></tr></table></figure>
 <p>詳細開啟資訊都會寫入 <code>vim.log</code></p>
@@ -380,12 +377,12 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
 <h2 id="SSH-KEY"><a href="#SSH-KEY" class="headerlink" title="SSH KEY"></a>SSH KEY</h2><p>  矇著眼照做 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 那篇</a>，到這行:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure></p>
-<p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個 flag 可以幫你插入解密指令到 <code>.travis.yml</code> 的<code>before_install</code>。<br>  不過這 flag 真的很機車，會把你的 <code>.travis.yml</code> 排版全搞亂，順便把註解刪光光！<br>  建議不要加 <code>--add</code> 自己手動插入解密指令，排版就不會亂掉。<br>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <a class="fancybox" href="/img/2016-07-29/2.PNG" title="repository> more options 可以設定、看到 Travis 的環境變數"><img src="/img/2016-07-29/2.PNG" alt="repository> more options 可以設定、看到 Travis 的環境變數"><span class="image-caption">repository> more options 可以設定、看到 Travis 的環境變數</span></a></p>
+<p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個 flag 可以幫你插入解密指令到 <code>.travis.yml</code> 的<code>before_install</code>。<br>  不過這 flag 真的很機車，會把你的 <code>.travis.yml</code> 排版全搞亂，順便把註解刪光光！<br>  建議不要加 <code>--add</code> 自己手動插入解密指令，排版就不會亂掉。<br>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <img src="/img/2016-07-29/2.PNG" alt="repository &gt; more options 可以設定、看到 Travis 的環境變數"><span class="image-caption">repository &gt; more options 可以設定、看到 Travis 的環境變數</span></p>
 <h2 id="USE-SSH"><a href="#USE-SSH" class="headerlink" title="USE SSH"></a>USE SSH</h2><p>  Travis 是用 GitHub 的 <a href="https://developer.github.com/guides/managing-deploy-keys/" target="_blank" rel="external">Deploy key</a> 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">那篇文章 </a> 做就可以了。<br>  如果不幸在 <code>hexo deploy</code> 時遇到錯誤如下:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">remote: Invalid username or password.</div><div class="line">fatal: Authentication failed for &quot;....&quot;</div></pre></td></tr></table></figure></p>
 <p>  那可以檢查一下 hexo 的 <code>_config.yml</code> <code>deploy</code> 的部分，要用 ssh 的形式設定 repository<br>  <figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: git@github.com:SSARCandy/ssarcandy.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
 <h2 id="SETTING-UP-travis-yml"><a href="#SETTING-UP-travis-yml" class="headerlink" title="SETTING UP .travis.yml"></a>SETTING UP .travis.yml</h2><p>我這個網站結構如下:</p>
@@ -416,16 +413,16 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
-    <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><a class="fancybox" href="/img/2016-07-27/1.PNG" title="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></a></p>
+    <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br>![](/img/2016-07-27/1.PNG 自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。 %}</p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
 <p>所以我只好忍痛取消這個 Slack bot，改成直接用 Direct message 傳給 <em>David 老師</em> XD</p>
-<p>結果 <em>David 老師 </em> 也做了個每半小時就發名言佳句給我的 bot，<br> 害我只好也把我的 bot 改成每十分鐘隨機發天文圖給他，看誰比較耐得住煩～<br><a class="fancybox" href="/img/2016-07-27/2.PNG" title="每半小時發給我一句名言佳句，真是世界煩。"><img src="/img/2016-07-27/2.PNG" alt="每半小時發給我一句名言佳句，真是世界煩。"><span class="image-caption">每半小時發給我一句名言佳句，真是世界煩。</span></a></p>
+<p>結果 <em>David 老師 </em> 也做了個每半小時就發名言佳句給我的 bot，<br> 害我只好也把我的 bot 改成每十分鐘隨機發天文圖給他，看誰比較耐得住煩～<br><img src="/img/2016-07-27/2.PNG" alt="每半小時發給我一句名言佳句，真是世界煩。"><span class="image-caption">每半小時發給我一句名言佳句，真是世界煩。</span></p>
 <p>當然這種互相毀滅的 bot 大戰持續沒多久就在雙方讓步之下都停止了…..</p>
 <p>— 以上都是前言 —</p>
-<p>即使 Slack 上都沒人要鳥我，<br>我還是秉持著推廣基礎天文教育的偉大理念，認為優質的每日天文圖的不應該被埋沒，要讓這樣優質的內容給更多人接觸到！<br>最後突然想到：「不然乾脆發在 Dcard 廢版好了，那邊最多人在看了而且不受版規限制」<br>可是懶人如我是不可能每天上去 Po 文的，所以又寫了個 bot 每天中午戳 Dcard API，發優質天文圖到廢版(廢文？<br><a class="fancybox" href="/img/2016-07-27/3.PNG" title="發廢文到廢版"><img src="/img/2016-07-27/3.PNG" alt="發廢文到廢版"><span class="image-caption">發廢文到廢版</span></a></p>
-<p>結果意外反應還不錯？<br>還有人想要我整理系列文，不愧是廢版版友，就是有眼光！<br><a class="fancybox" href="/img/2016-07-27/4.PNG" title="大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯"><img src="/img/2016-07-27/4.PNG" alt="大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯"><span class="image-caption">大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯</span></a></p>
+<p>即使 Slack 上都沒人要鳥我，<br>我還是秉持著推廣基礎天文教育的偉大理念，認為優質的每日天文圖的不應該被埋沒，要讓這樣優質的內容給更多人接觸到！<br>最後突然想到：「不然乾脆發在 Dcard 廢版好了，那邊最多人在看了而且不受版規限制」<br>可是懶人如我是不可能每天上去 Po 文的，所以又寫了個 bot 每天中午戳 Dcard API，發優質天文圖到廢版(廢文？<br><img src="/img/2016-07-27/3.PNG" alt="發廢文到廢版"><span class="image-caption">發廢文到廢版</span></p>
+<p>結果意外反應還不錯？<br>還有人想要我整理系列文，不愧是廢版版友，就是有眼光！<br><img src="/img/2016-07-27/4.PNG" alt="大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯"><span class="image-caption">大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯</span></p>
 <p><del>不知道要過多久才會有人會發現這都是 bot 在發文 XDD</del></p>
 <p>–<br>最後自己推銷一下，由於 APOD 只有 NASA 有提供官方 <a href="https://api.nasa.gov/" target="_blank" rel="external">API</a>，除了英文以外其他語言的子站 (像是中文版) 都沒辦法簡單的取得內容，所以我寫了一個 npm 套件，專門處理取得指定日期、指定語言的 APOD 內容。<br>Github: <a href="https://github.com/SSARCandy/node-apod" target="_blank" rel="external">https://github.com/SSARCandy/node-apod</a><br>Demo: <a href="http://ssarcandy.tw/node-apod/demo.html">http://ssarcandy.tw/node-apod/demo.html</a></p>
 ]]></content>
@@ -446,30 +443,28 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-11-17T14:38:44.153Z</updated>
+    <updated>2016-11-22T19:25:25.865Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></li>
-<li>Build opencv with cmake<a class="fancybox" href="/img/2016-07-23/1.png" title="Cmake configuration"><img src="/img/2016-07-23/1.png" alt="Cmake configuration"><span class="image-caption">Cmake configuration</span>
-<ul>
+<li>Build opencv with cmake<br><img src="/img/2016-07-23/1.png" alt="Cmake configuration"><span class="image-caption">Cmake configuration</span><ul>
 <li>Press <code>configure</code>, choose <code>visual studio 2015</code>, finish</li>
 <li>Then press <code>generate</code></li>
 </ul>
-</a></li>
+</li>
 </ol>
 <a id="more"></a>
 <ol>
 <li>Open <code>OpenCV.sln</code> under <code>build/</code></li>
-<li><p>Build it using <code>Debug</code>, <code>Release</code></p>
-<a class="fancybox" href="/img/2016-07-23/2.png" title="Right click> build"><img src="/img/2016-07-23/2.png" alt="Right click> build"><span class="image-caption">Right click> build</span>
+<li><p>Build it using <code>Debug</code>, <code>Release</code><br><img src="/img/2016-07-23/2.png" alt="Right click &gt; build"><span class="image-caption">Right click &gt; build</span></p>
 <ul>
 <li>right click &gt; build</li>
 <li>switch to <code>Release</code> mode and build again</li>
 </ul>
-</a></li>
+</li>
 <li><p>[Windows] Setting up environment variable</p>
 <ul>
-<li>add <code>&lt;opencv&gt;/bin</code> into <code>PATH</code><a class="fancybox" href="/img/2016-07-23/3.png" title="Add new environment variable"><img src="/img/2016-07-23/3.png" alt="Add new environment variable"><span class="image-caption">Add new environment variable</span></a></li>
+<li>add <code>&lt;opencv&gt;/bin</code> into <code>PATH</code><br><img src="/img/2016-07-23/3.png" alt="Add new environment variable"><span class="image-caption">Add new environment variable</span></li>
 <li>add new env named <code>OpenCV_DIR</code>, value as <code>&lt;opencv&gt;/build</code> </li>
 <li>it may need logout to apply setting, you can check it by <code>echo %PATH%</code>, <code>echo %OpenCV_DIR%</code></li>
 </ul>
@@ -480,21 +475,20 @@
 <li>In step <code>2. Build opencv with cmake</code>, press <code>configure</code></li>
 <li>Set up <code>OPENCV_EXTRA_MODULES_PATH</code> to proper path(<code>&lt;opencv_contrib&gt;/modules</code>)</li>
 </ol>
-<a class="fancybox" href="/img/2016-07-23/4.png" title="Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules"><img src="/img/2016-07-23/4.png" alt="Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules"><span class="image-caption">Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules</span>
+<p>![](/img/2016-07-23/4.png Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules %}</p>
 <ol>
 <li>Press <code>configure</code> again, then <code>generate</code></li>
 </ol>
 <p>To see more details instructions, see <a href="https://github.com/Itseez/opencv_contrib#how-to-build-opencv-with-extra-modules" target="_blank" rel="external">opencv_contrib</a> README</p>
 <hr>
 <h3 id="Travis-yml-example"><a href="#Travis-yml-example" class="headerlink" title="Travis.yml example"></a>Travis.yml example</h3><figure class="highlight bash"><figcaption><span>title: travis.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">language:</div><div class="line">  - cpp</div><div class="line"> </div><div class="line">sudo: required</div><div class="line"> </div><div class="line">compiler:</div><div class="line">  - gcc</div><div class="line"> </div><div class="line"><span class="comment"># building opencv is time consuming, caching it is better</span></div><div class="line">cache:</div><div class="line">    apt: <span class="literal">true</span></div><div class="line">    ccache: <span class="literal">true</span></div><div class="line">    directories:</div><div class="line">        - opencv-3.1.0</div><div class="line">        - opencv_contrib-3.1.0</div><div class="line"> </div><div class="line">install:</div><div class="line"> </div><div class="line">  <span class="comment"># OpenCV dependencies - Details available at: http://docs.opencv.org/trunk/doc/tutorials/introduction/linux_install/linux_install.html</span></div><div class="line">  - sudo apt-get install -y build-essential</div><div class="line">  - sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev</div><div class="line">  - sudo apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev</div><div class="line"> </div><div class="line">  <span class="comment"># Download v3.1.0 .zip file and extract.</span></div><div class="line">  - curl <span class="_">-s</span>L https://github.com/Itseez/opencv/archive/3.1.0.zip &gt; opencv.zip</div><div class="line">  - unzip -n opencv.zip &gt; <span class="built_in">log</span>1</div><div class="line"> </div><div class="line">  <span class="comment"># Download EXTRA MODULES and extract.</span></div><div class="line">  - curl <span class="_">-s</span>L https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip &gt; opencv_contrib.zip</div><div class="line">  - unzip -n opencv_contrib.zip &gt; <span class="built_in">log</span>2</div><div class="line"> </div><div class="line">  <span class="comment"># Create a new 'build' folder.</span></div><div class="line">  - <span class="built_in">cd</span> opencv-3.1.0</div><div class="line">  - mkdir -p build</div><div class="line">  - <span class="built_in">cd</span> build</div><div class="line"> </div><div class="line">  <span class="comment"># if Makefile is cached, then skip cmake opencv</span></div><div class="line">  <span class="comment"># Set build instructions for Ubuntu distro.</span></div><div class="line">  - cat Makefile &gt; l1 || cmake -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.1.0/modules CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span> -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..</div><div class="line"> </div><div class="line">  <span class="comment"># if Makefile is cached, then skip make opencv</span></div><div class="line">  <span class="comment"># Run 'make' with four threads.</span></div><div class="line">  - cat Makefile &gt; l2 ||make -j5 &gt; make_log</div><div class="line"> </div><div class="line">  <span class="comment"># Install to OS.</span></div><div class="line">  - sudo make install</div><div class="line"> </div><div class="line">  <span class="comment"># Add configuration to OpenCV to tell it where the library files are located on the file system (/usr/local/lib)</span></div><div class="line">  - sudo sh -c <span class="string">'echo"/usr/local/lib"&gt; /etc/ld.so.conf.d/opencv.conf'</span></div><div class="line"> </div><div class="line">  - sudo ldconfig</div><div class="line">  - <span class="built_in">echo</span> <span class="string">"OpenCV installed."</span></div><div class="line"> </div><div class="line">  <span class="comment"># We need to return to the repo "root" folder, so we can then 'cd' into the C++ project folder.</span></div><div class="line">  - <span class="built_in">cd</span> ../../</div><div class="line">  - ls -al</div><div class="line"> </div><div class="line">script:</div><div class="line">  - cmake CMakeLists.txt</div><div class="line">  - make</div><div class="line">  - <span class="string">"./a.out &gt; log1.txt"</span></div></pre></td></tr></table></figure>
-</a>]]></content>
+]]></content>
     
     <summary type="html">
     
       &lt;h3 id=&quot;Build-OpenCV&quot;&gt;&lt;a href=&quot;#Build-OpenCV&quot; class=&quot;headerlink&quot; title=&quot;Build OpenCV&quot;&gt;&lt;/a&gt;Build OpenCV&lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;Download &lt;a href=&quot;https://github.com/Itseez/opencv&quot;&gt;OpenCV&lt;/a&gt; and &lt;a href=&quot;https://cmake.org/&quot;&gt;Cmake&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Build opencv with cmake&lt;a class=&quot;fancybox&quot; href=&quot;/img/2016-07-23/1.png&quot; title=&quot;Cmake configuration&quot;&gt;&lt;img src=&quot;/img/2016-07-23/1.png&quot; alt=&quot;Cmake configuration&quot;&gt;
-&lt;ul&gt;
+&lt;li&gt;Build opencv with cmake&lt;br&gt;&lt;img src=&quot;/img/2016-07-23/1.png&quot; alt=&quot;Cmake configuration&quot;&gt;&lt;ul&gt;
 &lt;li&gt;Press &lt;code&gt;configure&lt;/code&gt;, choose &lt;code&gt;visual studio 2015&lt;/code&gt;, finish&lt;/li&gt;
 &lt;li&gt;Then press &lt;code&gt;generate&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
