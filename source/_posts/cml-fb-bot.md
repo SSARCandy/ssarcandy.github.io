@@ -97,7 +97,7 @@ $ /etc/init.d/cron restart
 
 多虧廣大 nodejs 套件開發者，這件事可以很容易地利用 [webshot](https://github.com/brenden/node-webshot) 達成。
 
-{% fancybox /img/2016-11-17/2.png 截下整個表格傳給我。 %}
+![截下整個表格傳給我。](/img/2016-11-17/2.png)
 
 ## Callback to Promise
 
