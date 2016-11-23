@@ -1,54 +1,55 @@
-<h3>Introduction</h3>
-<div class="about-intro">
-<p>
-I am HSU, SHU-HSUAN (許書軒), A student of <a href="https://www.cmlab.csie.ntu.edu.tw" target="_blank">CMLab</a>, National Taiwan University.<br>
-Like to write some code and share on <a href="https://github.com/SSARCandy" target="_blank">Github</a>, trying to make world better <span style="text-decoration: line-through;">(or just make life easier)</span>.<br>
-Also interested in Astronomy, Computer Graphic, Web development, and playing GO(圍棋).
-</p>
-</div>
-
-<% 
-var edu = site.data.experiences.educations
-var work = site.data.experiences.works
-%>
-<div class="about-container">
-    <div class="about-exp">
-        <h3>Educations</h3>
-        <table>
-        <% for (i in edu) { %>
-            <tr>
-                <td style="width: 50px;">
-                    <img src="/img/aboutMe/<%- edu[i].icon %>.png" height="50px" width="50px">
-                </td>
-                <td>
-                <ul class="about-list">
-                    <li><%- edu[i].time %></li>
-                    <li><%- edu[i].degree %></li>
-                    <li><a href="<%- edu[i].link %>" target="_blank"><%- edu[i].department %> <%- edu[i].name %></a></li>
-                </ul>
-                </td> 
-            </tr>
-        <% } %>
-        </table>
+<div style="padding: 0 16px;">
+    <h3>Introduction</h3>
+    <div class="about-intro">
+    <p>
+    I am HSU, SHU-HSUAN (許書軒), A student of <a href="https://www.cmlab.csie.ntu.edu.tw" target="_blank">CMLab</a>, National Taiwan University.<br>
+    Like to write some code and share on <a href="https://github.com/SSARCandy" target="_blank">Github</a>, trying to make world better <span style="text-decoration: line-through;">(or just make life easier)</span>.<br>
+    Also interested in Astronomy, Computer Graphic, Web development, and playing GO(圍棋).
+    </p>
     </div>
-    <div class="about-exp">
-        <h3>Experiences</h3>
-        <table>
-        <% for (i in work) { %>
-            <tr>
-                <td style="width: 50px;">
-                    <img src="/img/aboutMe/<%- work[i].icon %>.png" height="50px" width="50px">
-                </td>
-                <td>
-                <ul class="about-list">
-                    <li><%- work[i].time %></li>
-                    <li><%- work[i].job %></li>
-                    <li><a href="<%- work[i].link %>" target="_blank"><%- work[i].serviceUnit %></a></li>
-                </ul>
-                </td>
-            </tr>
-        <% } %>
-        </table>
+
+    <% 
+    var edu = site.data.experiences.educations
+    var work = site.data.experiences.works
+    %>
+    <div class="about-container">
+        <div class="about-exp">
+            <h3>Educations</h3>
+            <table>
+            <% for (i in edu) { %>
+                <tr>
+                    <td style="width: 50px;">
+                        <img src="/img/aboutMe/<%- edu[i].icon %>.png" height="50px" width="50px">
+                    </td>
+                    <td>
+                    <ul class="about-list">
+                        <li><%- edu[i].time %></li>
+                        <li><%- edu[i].degree %></li>
+                        <li><a href="<%- edu[i].link %>" target="_blank"><%- edu[i].department %> <%- edu[i].name %></a></li>
+                    </ul>
+                    </td> 
+                </tr>
+            <% } %>
+            </table>
+        </div>
+        <div class="about-exp">
+            <h3>Experiences</h3>
+            <table>
+            <% for (i in work) { %>
+                <tr>
+                    <td style="width: 50px;">
+                        <img src="/img/aboutMe/<%- work[i].icon %>.png" height="50px" width="50px">
+                    </td>
+                    <td>
+                    <ul class="about-list">
+                        <li><%- work[i].time %></li>
+                        <li><%- work[i].job %></li>
+                        <li><a href="<%- work[i].link %>" target="_blank"><%- work[i].serviceUnit %></a></li>
+                    </ul>
+                    </td>
+                </tr>
+            <% } %>
+            </table>
+        </div>
     </div>
 </div>
-

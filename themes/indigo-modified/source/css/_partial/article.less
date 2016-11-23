@@ -37,7 +37,6 @@
 
 .post-body {
     padding: 30px 0 20px;
-
 }
 
 .post-main {
@@ -196,7 +195,6 @@
         margin: 10px auto 0px auto;
         background: #fff;
         overflow: hidden;
-        /*box-shadow: @boxShadow;*/
     }
 
     blockquote {
@@ -320,6 +318,16 @@
         display: none
     }
 
+    .article {
+        p, h1, h2, h3, h4, h5, h6, .post-meat {
+            margin: 0px 16px;
+            img {
+                max-width: 100vw;
+                margin-left: -16px;
+            }
+        }
+    }
+
 }
 
 .duoshuo {
@@ -333,4 +341,9 @@
     margin-top: .5em;
     position: relative;
     text-align: center;
+}
+
+
+.post-list-item img {
+    width: 100%;
 }
