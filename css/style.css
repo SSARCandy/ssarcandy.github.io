@@ -3322,13 +3322,11 @@ a[title="站长统计"] {
 }
 .post-content img {
   display: block;
-  max-width: 96%;
+  max-width: 100%;
   margin: 10px auto 0px auto;
-  padding: 8px;
   background: #fff;
-  border-radius: 2px;
   overflow: hidden;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  /*box-shadow: @boxShadow;*/
 }
 .post-content blockquote {
   position: relative;
@@ -3437,7 +3435,7 @@ a[title="站长统计"] {
 }
 .archive-article {
   position: relative;
-  padding: 25px 25px 25px 140px;
+  padding: 15px 25px 15px 140px;
   background: #fff;
   border-bottom: 1px solid #DADADA;
   box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
@@ -3458,12 +3456,11 @@ a[title="站长统计"] {
   font-weight: bold;
 }
 .archive-article .article-tag-list-item {
-  margin: 5px 5px 0 0;
-  padding: 0 6px;
+  margin: 5px 7px 0 0;
   font-size: 12px;
 }
 .archive-article-inner {
-  display: inline;
+  display: block;
 }
 .archive-article-date {
   position: absolute;
@@ -3561,7 +3558,7 @@ a[title="站长统计"] {
   background: #2d2d2d;
   padding: 15px;
   line-height: 19.2px;
-  border-radius: 2px;
+  /*border-radius: 2px;*/
   color: #cccccc;
 }
 .post-content pre code {
@@ -3574,7 +3571,7 @@ a[title="站长统计"] {
   background: #2d2d2d;
   padding: 15px;
   line-height: 19.2px;
-  border-radius: 2px;
+  /*border-radius: 2px;*/
 }
 .post-content .highlight pre {
   margin: 0;
