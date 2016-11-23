@@ -9,23 +9,21 @@ tags:
 
 ### Build OpenCV
 
-1. Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)
+1. <p>Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)</p>
 2. Build opencv with cmake
- ![Cmake configuration](/img/2016-07-23/1.png)
+ <div>![Cmake configuration](/img/2016-07-23/1.png)</div>
  - Press `configure`, choose `visual studio 2015`, finish
- - Then press `generate`
-
-<!-- more -->
+ - Then press `generate` <!-- more -->
 
 3. Open `OpenCV.sln` under `build/`
 4. Build it using `Debug`, `Release`
-  ![Right click > build](/img/2016-07-23/2.png)
+  <div>![Right click > build](/img/2016-07-23/2.png)</div>
   - right click > build
   - switch to `Release` mode and build again
 
 5. [Windows] Setting up environment variable
   - add `<opencv>/bin` into `PATH`
-  ![Add new environment variable](/img/2016-07-23/3.png)
+  <div>![Add new environment variable](/img/2016-07-23/3.png)</div>
   - add new env named `OpenCV_DIR`, value as `<opencv>/build` 
   - it may need logout to apply setting, you can check it by `echo %PATH%`, `echo %OpenCV_DIR%`
 
@@ -36,7 +34,7 @@ tags:
 1. In step `2. Build opencv with cmake`, press `configure`
 2. Set up `OPENCV_EXTRA_MODULES_PATH` to proper path(`<opencv_contrib>/modules`)
 
-![](/img/2016-07-23/4.png Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules %}
+![Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules](/img/2016-07-23/4.png)
 
 3. Press `configure` again, then `generate`
 

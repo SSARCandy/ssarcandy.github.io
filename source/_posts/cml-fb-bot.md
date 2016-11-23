@@ -58,7 +58,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/', function (err, res, body) {
 });
 ```
 
-![透過 Facebook 聊天室告知我有機器掛掉了。](/img/2016-11-17/1.png)
+<div>![透過 Facebook 聊天室告知我有機器掛掉了。](/img/2016-11-17/1.png)</div>
 
 ## 定時檢查
 
@@ -97,7 +97,7 @@ $ /etc/init.d/cron restart
 
 多虧廣大 nodejs 套件開發者，這件事可以很容易地利用 [webshot](https://github.com/brenden/node-webshot) 達成。
 
-![截下整個表格傳給我。](/img/2016-11-17/2.png)
+<div>![截下整個表格傳給我。](/img/2016-11-17/2.png)</div>
 
 ## Callback to Promise
 
