@@ -1,6 +1,11 @@
 <article class="article project-item" itemprop="blogPost">
-    <div class="project-img-container">
-        <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" class="preview">
+    <div class="project-responsive-container">
+        <div class="project-dummy"></div>
+
+        <div class="project-img-container">
+            <div class="project-centerer"></div>
+            <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" class="preview">
+        </div>
     </div>
 
     <div class="project-item-details">

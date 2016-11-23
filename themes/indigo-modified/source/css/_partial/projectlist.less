@@ -6,10 +6,6 @@
     display: flex;
 }
 
-.project-img-container {
-    width: 40%;
-}
-
 .preview {
     max-width: 100%;
     height: auto;
@@ -53,8 +49,43 @@
     display: block;
 }
 
+
+.project-responsive-container {
+    position: relative;
+    width: 55%;
+}
+
+.project-dummy {
+    padding-top: 62.5%; /* img aspect ratio */
+}
+
+.project-img-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    text-align:center; /* Align center inline elements */
+    font: 0/0 a;
+}
+
+.project-img-container .project-centerer {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.project-img-container img {
+    vertical-align: middle;
+    display: inline-block;
+    max-height: 100%;  /* <-- Set maximum height to 100% of its parent */
+    max-width: 100%;   /* <-- Set maximum width to 100% of its parent */
+}
+
 @media screen and (max-width:760px) {
-    .project-img-container {
+    .project-responsive-container {
+        position: relative;
         width: 100%;
     }
 
