@@ -27,6 +27,6 @@
     "hexo-renderer-stylus": "^0.3.1",
     "hexo-server": "^0.2.0",
     "lodash": "^4.14.1",
-    "lunr": "^0.7.1"
+    "lunr": "^0.7.2"
   }
 }
