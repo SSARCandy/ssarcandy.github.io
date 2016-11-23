@@ -2715,7 +2715,7 @@ a[title="站长统计"] {
 @media screen and (max-width: 760px) {
   .container {
     width: 100%;
-    padding: 20px 16px;
+    padding: 20px 0px;
   }
   #menu .brand {
     padding-top: 20px;
@@ -2957,6 +2957,10 @@ a[title="站长统计"] {
     height: 28px;
     line-height: 28px;
     font-size: 13px;
+  }
+  .post-list {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 .read-more {
@@ -3326,7 +3330,6 @@ a[title="站长统计"] {
   margin: 10px auto 0px auto;
   background: #fff;
   overflow: hidden;
-  /*box-shadow: @boxShadow;*/
 }
 .post-content blockquote {
   position: relative;
@@ -3414,9 +3417,35 @@ a[title="站长统计"] {
   .post-widget {
     display: none;
   }
-}
-.duoshuo {
-  padding-top: 40px;
+  .article p,
+  .article h1,
+  .article h2,
+  .article h3,
+  .article h4,
+  .article h5,
+  .article h6,
+  .article blockquote,
+  .article .post-meat {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .article p img,
+  .article h1 img,
+  .article h2 img,
+  .article h3 img,
+  .article h4 img,
+  .article h5 img,
+  .article h6 img,
+  .article blockquote img,
+  .article .post-meat img {
+    max-width: 100vw;
+    margin-left: -16px;
+  }
+  .post-nav,
+  #comments {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
 }
 .image-caption {
   color: #999;
@@ -3425,6 +3454,31 @@ a[title="站长统计"] {
   margin-top: .5em;
   position: relative;
   text-align: center;
+}
+.post-list-item p,
+.project-item-details p,
+.post-list-item h1,
+.project-item-details h1,
+.post-list-item h2,
+.project-item-details h2,
+.post-list-item h3,
+.project-item-details h3,
+.post-list-item h4,
+.project-item-details h4,
+.post-list-item h5,
+.project-item-details h5,
+.post-list-item h6,
+.project-item-details h6,
+.post-list-item blockquote,
+.project-item-details blockquote,
+.post-list-item .post-meat,
+.project-item-details .post-meat {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.post-list-item img,
+.project-item-details img {
+  width: 100%;
 }
 .archive-separator {
   margin: 35px 0 13px;
@@ -3472,10 +3526,14 @@ a[title="站长统计"] {
     margin: 0 -16px;
     padding: 20px 20px 20px 80px;
   }
+  .archive-separator {
+    margin-left: 10px;
+  }
 }
 @media screen and (max-width: 420px) {
   .archive-article {
     padding: 20px;
+    padding-left: 30px;
   }
   .archive-article-date {
     position: static;
@@ -3558,6 +3616,7 @@ a[title="站长统计"] {
   background: #2d2d2d;
   padding: 15px;
   line-height: 19.2px;
+  margin: 20px 0;
   /*border-radius: 2px;*/
   color: #cccccc;
 }
@@ -3571,6 +3630,7 @@ a[title="站长统计"] {
   background: #2d2d2d;
   padding: 15px;
   line-height: 19.2px;
+  margin: 20px 0;
   /*border-radius: 2px;*/
 }
 .post-content .highlight pre {
