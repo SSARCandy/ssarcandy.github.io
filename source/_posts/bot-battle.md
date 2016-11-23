@@ -8,7 +8,7 @@ tags: trashtalk
 因為我懶得每天都上 [APOD](http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html) 官網看...
 乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～
 <!-- more -->
-![](/img/2016-07-27/1.PNG 自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。 %}
+![自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。](/img/2016-07-27/1.PNG)
 
 不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ
 _David老師_ 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ
