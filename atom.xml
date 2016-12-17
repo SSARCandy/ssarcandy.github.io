@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-11-24T11:47:39.328Z</updated>
+  <updated>2016-12-17T18:57:05.528Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -16,11 +16,61 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>pbrt - 用多點光源模擬環境光</title>
+    <link href="https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/"/>
+    <id>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</id>
+    <published>2016-12-17T17:45:08.000Z</published>
+    <updated>2016-12-17T18:57:05.528Z</updated>
+    
+    <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
+<p><img src="/img/2016-12-18/1.jpg" alt=""><br><a id="more"></a><br><img src="/img/2016-12-18/4.jpg"alt=" 不同的環境光會讓場景中物件有不同的渲染結果[1]"><span class="image-caption"> 不同的環境光會讓場景中物件有不同的渲染結果[1]</span></p>
+<h1 id="Median-Cut-Alogrithm"><a href="#Median-Cut-Alogrithm" class="headerlink" title="Median Cut Alogrithm"></a>Median Cut Alogrithm</h1><p>直接來看一張圖:</p>
+<p><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源[2]"><span class="image-caption">用 median-cut algorithm 把環境光轉成多點光源[2]</span></p>
+<p>事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:</p>
+<ol>
+<li>初始狀態 = 整張 env light probe 影像（陣列中只有一個區域）</li>
+<li>對於每個區域，沿著長邊切成兩塊一樣能量的區塊</li>
+<li>如果區塊少於 x ，則繼續做 2.</li>
+<li>把點光源放在每個區域中的能量重心處</li>
+</ol>
+<h1 id="計算能量重心"><a href="# 計算能量重心" class="headerlink" title="計算能量重心"></a>計算能量重心 </h1><p> 能量重心計算其實就是 x, y 軸分別加權平均（權重為點能量）<br>點能量計算方式可以根據 RGB channel 加權平均來計算<br>eg. Y = 0.2125R + 0.7154G + 0.0721B 之類的加權法</p>
+<h1 id="計算區塊能量"><a href="# 計算區塊能量" class="headerlink" title="計算區塊能量"></a>計算區塊能量 </h1><p> 直覺的想法其實就是這區塊中所有點能量和就是這區塊能量了。<br>不過在做 Median-cut 時期時會不斷需要計算區塊的能量，用這種暴力解會使效能突破天際的差。<br>這邊可以利用預先計算 environment light probe 的能量 Sum Area Table(簡稱 SAT)，概念很簡單:<br>一開始先維護一個能量累積的二維陣列，每個點的值就是其左上角區塊的能量和，藉由這個陣列可以使獲得任意區塊能量的時間複雜度為 O(1)。</p>
+<p><img src="/img/2016-12-18/3.jpg" alt="這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。"><span class="image-caption">這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。</span></p>
+<h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 渲染出來的結果其實跟原本的環境光還是有些差別，畢竟是用多點光源來模擬環境光，本來就不會一模一樣。</p>
+<p><img src="/img/2016-12-18/new-256-my.jpg" alt="Median cut algorithm"><span class="image-caption">Median cut algorithm</span><br><img src="/img/2016-12-18/new-256.jpg" alt="Important sampling(original)"><span class="image-caption">Important sampling(original)</span></p>
+<p>不過在效能方面，用多點光源模擬所需要的運算時間大概都只有原本算法的 30% ，可以說是大幅加速了!</p>
+<h1 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談</h1><ul>
+<li>這次中間卡了一周跑去 SIGGRAPH ASIA，由於我懶沒帶電腦去，所以也就稍微趕了一點…(幸好這次比較簡單一點點…哈哈)</li>
+<li>我學乖了，用 cmlab 工作站跑 pbrt 整個就是舒爽，Enter 按下去差不多就算完了~</li>
+<li>GA 累積人次快突破 5000 瀏覽了，不過發現還真的有人在看我的文章還是覺得很特別~ 哈哈</li>
+<li>之前 group meeting 座前面學長一直在看我的 <a href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/">realist-camera</a>，害我注意力都被吸走了 XD</li>
+</ul>
+<hr>
+<p>註:<br>[1] 原圖來自 Physically Based Rendering, Second Edition<br>[2] 原圖來自 A Median Cut Algorithm for Light Probe Sampling, SIGGRAPH 2006</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。&lt;br&gt;pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/2016-12-18/1.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+  </entry>
+  
+  <entry>
     <title>用 Facebook 聊天機器人當通知系統</title>
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -67,7 +117,7 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></p>
 <a id="more"></a>
@@ -122,7 +172,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -169,7 +219,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈</p>
 <div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></div>
@@ -283,7 +333,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -357,7 +407,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -401,7 +451,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -437,7 +487,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -471,7 +521,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-11-24T11:47:39.328Z</updated>
+    <updated>2016-12-17T18:57:05.528Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
