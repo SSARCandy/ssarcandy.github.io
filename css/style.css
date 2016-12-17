@@ -3480,6 +3480,7 @@ a[title="站长统计"] {
 .post-list-item img,
 .project-item-details img {
   width: 100%;
+  margin-left: 0 !important;
 }
 .archive-separator {
   margin: 35px 0 13px;
