@@ -31,7 +31,7 @@ do
 done > policyd.sql
 ```
 
-這邊產出的 .sql 會有語法錯誤，用 vim 開啟並下 `:/TYPE=innondb/ENGINE=innondb/g` 指令修改全部。
+這邊產出的 .sql 會有語法錯誤，用 vim 開啟並下 `:%s/TYPE=innondb/ENGINE=innondb/g` 指令修改全部。
 
 ### 初始化資料庫，建立新資料庫並匯入 `policyd.sql` :
 
