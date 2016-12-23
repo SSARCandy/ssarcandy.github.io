@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2016-12-17T19:12:41.582Z</updated>
+  <updated>2016-12-23T16:40:53.900Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -16,11 +16,61 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>安裝 Policyd 並設定外寄 Quota</title>
+    <link href="https://ssarcandy.tw/2016/12/23/policyd/"/>
+    <id>https://ssarcandy.tw/2016/12/23/policyd/</id>
+    <published>2016-12-23T16:15:40.000Z</published>
+    <updated>2016-12-23T16:40:53.900Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
+<p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
+<a id="more"></a>
+<h1 id="安裝"><a href="# 安裝" class="headerlink" title="安裝"></a>安裝 </h1><p> 在 cluebringer 2.0 以前的版本不支援 IPv6，所以基本上只能從官網下載最新版，又，官網安裝說明充滿錯誤，我在弄得時候十分不開心….，所以決定自己整理安裝流程。</p>
+<h3 id="下載並解壓縮"><a href="# 下載並解壓縮" class="headerlink" title="下載並解壓縮"></a>下載並解壓縮</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ wget http://download.policyd.org/v2.0.14/cluebringer-v2.0.14.zip</div><div class="line">$ unzip cluebringer-v2.0.14.zip</div></pre></td></tr></table></figure>
+<h3 id="在 -database- 下，執行這段 -shell-script"><a href="# 在 -database- 下，執行這段 -shell-script" class="headerlink" title="在 database/ 下，執行這段 shell script"></a>在 <code>database/</code> 下，執行這段 shell script</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> core.tsql access_control.tsql quotas.tsql amavis.tsql checkhelo.tsql checkspf.tsql greylisting.tsql</div><div class="line"><span class="keyword">do</span></div><div class="line">  ./convert-tsql mysql <span class="variable">$i</span></div><div class="line"><span class="keyword">done</span> &gt; policyd.sql</div></pre></td></tr></table></figure>
+<p>這邊產出的 .sql 會有語法錯誤，用 vim 開啟並下 <code>:/TYPE=innondb/ENGINE=innondb/g</code> 指令修改全部。</p>
+<h3 id="初始化資料庫，建立新資料庫並匯入 -policyd-sql"><a href="# 初始化資料庫，建立新資料庫並匯入 -policyd-sql" class="headerlink" title="初始化資料庫，建立新資料庫並匯入 policyd.sql :"></a>初始化資料庫，建立新資料庫並匯入 <code>policyd.sql</code> :</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mysql -u root -p <span class="_">-e</span> <span class="string">'CREATE DATABASE policyd'</span></div><div class="line">$ mysql -u root -p policyd &lt; policyd.mysql</div></pre></td></tr></table></figure>
+<h3 id="複製檔案到該放的地方"><a href="# 複製檔案到該放的地方" class="headerlink" title="複製檔案到該放的地方"></a>複製檔案到該放的地方</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cp -r cbp /usr/<span class="built_in">local</span>/lib/cbpolicyd-2.1/</div><div class="line">$ cp cbpadmin /usr/<span class="built_in">local</span>/bin/</div><div class="line">$ cp cbpolicyd /usr/<span class="built_in">local</span>/sbin/</div></pre></td></tr></table></figure>
+<h1 id="啟動"><a href="# 啟動" class="headerlink" title="啟動"></a>啟動</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/bin/perl /usr/<span class="built_in">local</span>/sbin/cbpolicyd --config /etc/cluebringer.conf</div></pre></td></tr></table></figure>
+<p>如果啟動時遇到類似: <code>you may need to install the Mail::SPF module</code>  等等 error，就安裝這個: <code>sudo aptitude install libmail-spf-perl</code></p>
+<p>要查看是否有啟動成功，可以下 <code>ps aux | grep policyd</code> 指令。<br>要查看 port 10031 是否有在 listen，可以下 <code>netstat -pln | grep :10031</code> 指令檢查。</p>
+<h1 id="設定 -Postfix- 使用 -Policyd"><a href="# 設定 -Postfix- 使用 -Policyd" class="headerlink" title="設定 Postfix 使用 Policyd"></a>設定 Postfix 使用 Policyd</h1><p>去 Postfix config 檔設定 <code>check_policy_service</code> :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">smtpd_sender_restrictions = </div><div class="line">  ...,</div><div class="line">  check_policy_service inet:127.0.0.1:10031</div><div class="line">  </div><div class="line">smtpd_recipient_restrictions = </div><div class="line">    ...,</div><div class="line">    check_policy_service inet:127.0.0.1:10031,</div><div class="line">    permit_mynetworks,</div><div class="line">    permit</div><div class="line">  </div><div class="line">smtpd_end_of_data_restrictions = </div><div class="line">    check_policy_service inet:127.0.0.1:10031</div></pre></td></tr></table></figure>
+<p>在 <code>smtpd_recipient_restrictions</code> 中，<code>check_policy_service</code> 需要在 <code>permit_mynetworks</code> 上面才有用。<br>若要設定外寄 Quota 的話則 <code>smtpd_sender_restrictions</code> 也要加上 <code>check_policy_service</code>。</p>
+<p>另外提醒註解不要亂放，會讓設定檔整個壞掉….<br>可以透過 <code>postconf</code> 指令來列出真正 postfix 吃到的設定值</p>
+<h1 id="設定 -Policyd-Web-UI"><a href="# 設定 -Policyd-Web-UI" class="headerlink" title="設定 Policyd Web UI"></a>設定 Policyd Web UI</h1><p>policyd 有提供一個 web 的設定介面，讓我們比較方便設定 policyd。</p>
+<h3 id="複製解壓縮檔裡的 -webui- 到 -web-server"><a href="# 複製解壓縮檔裡的 -webui- 到 -web-server" class="headerlink" title="複製解壓縮檔裡的 webui/ 到 web server"></a>複製解壓縮檔裡的 <code>webui/</code> 到 web server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cp -r webui /var/www/</div><div class="line">$ vim /var/www/webui/include/config <span class="comment"># 填上該填的資訊</span></div></pre></td></tr></table></figure>
+<p>需要把擁有者改成 www-data</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ chown -R webui</div><div class="line">$ chgrp -R webui</div></pre></td></tr></table></figure>
+<p>就可以直接連上 web 介面: <code>http://your.domian/webui/</code></p>
+<h3 id="設定權限"><a href="# 設定權限" class="headerlink" title="設定權限"></a>設定權限 </h3><p> 這 web 介面預設不用登入，大家都可以隨意更改，所以必須利用其他方式加個密碼保護。</p>
+<p>這邊是用 <code>lighthttpd</code> 設定密碼</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> /etc/lighthttpd</div><div class="line">$ vim <span class="built_in">pwd</span> <span class="comment"># user:password</span></div><div class="line">$ vim lighthttpd.conf</div></pre></td></tr></table></figure>
+<p>詳細可以參考: <a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
+<h1 id="Policyd- 設定 -Rate-Limit"><a href="#Policyd- 設定 -Rate-Limit" class="headerlink" title="Policyd 設定 Rate Limit"></a>Policyd 設定 Rate Limit</h1><p>到這邊就簡單了，藉由 web 介面按按按鈕就可以設定各種 Quota，詳細可參考這篇圖文教學:<br><a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a></p>
+<h3 id="驗證"><a href="# 驗證" class="headerlink" title="驗證"></a>驗證 </h3><p> 想確定是不是有成功，可以去 mySQL &gt; policyd &gt; quota_tracking 查看是不是真的有在追蹤大家的流量。</p>
+<hr>
+<p>References:<br><a href="http://wiki.policyd.org/installing" target="_blank" rel="external">Policyd-Installing</a><br><a href="https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/" target="_blank" rel="external">Postfix + Centos + Policyd V2 + MySQL</a><br><a href="http://en.enisozgen.com/policydcluebringer-installation/" target="_blank" rel="external">Policyd(Cluebringer) installation</a><br><a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a><br><a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。&lt;/p&gt;
+&lt;p&gt;Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
     <title>pbrt - 用多點光源模擬環境光</title>
     <link href="https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <p><img src="/img/2016-12-18/1.jpg" alt=""><br><a id="more"></a><br><img src="/img/2016-12-18/4.jpg"alt=" 不同的環境光會讓場景中物件有不同的渲染結果[1]"><span class="image-caption"> 不同的環境光會讓場景中物件有不同的渲染結果[1]</span></p>
@@ -57,11 +107,11 @@
     </summary>
     
     
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
       <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
     
       <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
-    
-      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
     
   </entry>
   
@@ -70,7 +120,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -106,9 +156,9 @@
     </summary>
     
     
-      <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
-    
       <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+      <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     
   </entry>
   
@@ -117,7 +167,7 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></p>
 <a id="more"></a>
@@ -159,11 +209,11 @@
     </summary>
     
     
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
       <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
     
       <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
-    
-      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
     
   </entry>
   
@@ -172,7 +222,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -219,7 +269,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈</p>
 <div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></div>
@@ -320,11 +370,11 @@
     </summary>
     
     
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
       <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
     
       <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
-    
-      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
     
   </entry>
   
@@ -333,7 +383,7 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
@@ -407,7 +457,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -451,7 +501,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -487,7 +537,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -521,7 +571,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2016-12-17T19:12:41.582Z</updated>
+    <updated>2016-12-23T16:40:53.900Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
