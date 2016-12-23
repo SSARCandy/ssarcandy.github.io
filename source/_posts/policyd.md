@@ -37,7 +37,7 @@ done > policyd.sql
 
 ```bash
 $ mysql -u root -p -e 'CREATE DATABASE policyd'
-$ mysql -u root -p policyd < policyd.mysql
+$ mysql -u root -p policyd < policyd.sql
 ```
 
 ### 複製檔案到該放的地方
