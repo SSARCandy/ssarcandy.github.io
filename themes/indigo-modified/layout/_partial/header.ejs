@@ -47,6 +47,8 @@
             <%- partial('post/head-meta') %>
         <% } else if (page.layout === 'works') { %>
             <%- partial('works/head-meta') %>
+        <% } else if (is_archive() || is_tag()) { %>
+            <%- partial('archive/head-meta') %>
         <% } else { %>
             <%= config.subtitle %>
         <% } %>
