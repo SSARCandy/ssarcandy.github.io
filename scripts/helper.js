@@ -26,7 +26,7 @@ var rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:ww
 *   {% fancybox /path/to/image [/path/to/thumbnail] [title] %}
 */
 
-hexo.extend.tag.register('fancybox', function(args){
+hexo.extend.tag.register('zoom', function(args){
   var original = args.shift(),
     thumbnail = '';
 
@@ -36,8 +36,8 @@ hexo.extend.tag.register('fancybox', function(args){
 
   var title = args.join(' ');
 
-  return '<a class="fancybox" href="' + original + '" title="' + title + '">' +
-    '<img src="' + (thumbnail || original) + '" alt="' + title + '">'
-    '</a>' +
-    (title ? '<span class="caption">' + title + '</span>' : '');
+  return '<p>' +
+    '<img src="' + (thumbnail || original) + '" alt="' + title + '" data-action="zoom">'+
+    (title ? '<span class="caption">' + title + '</span>' : '') +
+    '</p>';
 });
