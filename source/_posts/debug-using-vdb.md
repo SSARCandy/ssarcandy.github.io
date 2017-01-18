@@ -29,18 +29,18 @@ tags:
 那利用 vdb 這工具能有甚麼好處呢？
 
 藉由他，可以很容易地畫出像是物體的樣子以及他的 Bounding Box，如圖：
-![heightfield object and its bounding box](/img/2016-10-13/1.png)
+{% zoom /img/2016-10-13/1.png heightfield object and its bounding box %}
 
 ---
 或者是當你在算 Vertex normal 時，不知道到底算的對不對，也可以直接畫出來：
-![Showing Normals on vertices](/img/2016-10-13/2.png)
+{% zoom /img/2016-10-13/2.png Showing Normals on vertices %}
 
 ---
 我個人覺得 vdb 對我最大的幫助是 object space 以及 world space 之間的關係了，
 坐標系一個沒弄好就會讓渲染的結果差異甚大，完全摸不著頭緒到底發生什麼事情.....
 
 藉由 vdb 實際畫出各個 object 時候，很容易就發現 object/world space 之間的 bug
-![Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方](/img/2016-10-13/3.png)
+{% zoom /img/2016-10-13/3.png Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方 %}
 
 
 ## Some tips
