@@ -3181,9 +3181,6 @@ a[title="站长统计"] {
 .post-body {
   padding: 30px 0 20px;
 }
-.post-main {
-  overflow: hidden;
-}
 .post-main .post-content {
   min-height: 100px;
 }
