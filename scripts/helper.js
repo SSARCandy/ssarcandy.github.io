@@ -36,8 +36,7 @@ hexo.extend.tag.register('zoom', function(args){
 
   var title = args.join(' ');
 
-  return '<p>' +
+  return '<div>' +
     '<img src="' + (thumbnail || original) + '" alt="' + title + '" data-action="zoom">'+
-    (title ? '<span class="caption">' + title + '</span>' : '') +
-    '</p>';
+    '</div>';
 });
