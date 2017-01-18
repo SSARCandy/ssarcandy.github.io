@@ -3,7 +3,7 @@ title: 一些 Python 筆記
 date: 2016-09-10 00:28:57
 tags:
 - note
-- python2
+- python
 - opencv
 ---
 
