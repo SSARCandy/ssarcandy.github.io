@@ -8,7 +8,7 @@ tags:
 ---
 
 pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈
-<div>![據說 IKEA 型錄的圖都是渲染出來的[1]](/img/2016-10-10/3.jpg)</div>
+{% zoom /img/2016-10-10/3.jpg 據說 IKEA 型錄的圖都是渲染出來的[1] %}
 
 
 <!-- more -->
@@ -31,26 +31,26 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~
 
 這邊我是使用 [DDA](https://www.wikiwand.com/en/Digital_differential_analyzer)(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了Z軸)。
-<div>![2D-DDA 邏輯。[2]](/img/2016-10-10/2.png)</div>
+{% zoom /img/2016-10-10/2.png 2D-DDA 邏輯。[2] %}
 
 可以看到其實可以在一開始就算出`x`, `y`要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 `z` 軸的資訊，並且每一個 pixel 變成 voxel。
 3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~
 
 建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。
 而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 `x` 及 `y` 也是有很大的好處的，如下圖:
-<div>![從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。](/img/2016-10-10/4.png)</div>
+{% zoom /img/2016-10-10/4.png 從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。 %}
 
 依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~
 
 根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:
-<div>![用直接求交點的方式取代原本先做三角化的方法。](/img/2016-10-10/landsea-big.jpg)</div>
+{% zoom /img/2016-10-10/landsea-big.jpg 用直接求交點的方式取代原本先做三角化的方法。 %}
 
 
 ## 平滑化
 
 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。
 如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。
-<div>![三角化後每個點 M 都有六個鄰居。](/img/2016-10-10/1.png)</div>
+{% zoom /img/2016-10-10/1.png 三角化後每個點 M 都有六個鄰居。 %}
 
 這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；
 點 `M` 的鄰居有 `TL`、`T`、`R`、`BR`、`B`、`L` 六點，點 `M` 的法向量可以藉由任意兩向量外積得出。
@@ -59,7 +59,7 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \underset{L}{\rightarrow} \underset{+}{ } \underset{L}{\rightarrow}  \underset{\times}{ } \underset{B}{\rightarrow} \underset{+}{ } \underset{B}{\rightarrow}  \underset{\times}{ } \underset{BR}{\rightarrow} \underset{+}{ } \underset{BR}{\rightarrow}  \underset{\times}{ } \underset{R}{\rightarrow} \underset{+}{ } \underset{R}{\rightarrow}  \underset{\times}{ } \underset{T}{\rightarrow} \underset{+}{ } \underset{T}{\rightarrow}  \underset{\times}{ } \underset{TL}{\rightarrow} \underset{)}{ }$
 
 這樣子改進後，就可以讓結果變這樣:
-<div>![平滑化的結果](/img/2016-10-10/landsea-big-smooth.jpg)</div>
+{% zoom /img/2016-10-10/landsea-big-smooth.jpg 平滑化的結果 %}
 
 ## 浮點數精度問題(10/22 更新)
 
@@ -70,7 +70,7 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 `Normalize(sumOfNormals)`，這步驟造成 $z$ 值起伏太小的海的計算誤差....
 把 `Normalize()` 拔掉之後就正常了～
 
- <div>![修正浮點數精度問題後的結果](/img/2016-10-10/4.jpg)</div>
+ {% zoom /img/2016-10-10/4.jpg 修正浮點數精度問題後的結果 %}
 
 
 ## 加速
@@ -95,7 +95,7 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 - 測試的是 `landsea-2.pbrt`，並且使用 `–ncores 1` 以減少多執行緒的誤差
 
 經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:
-<div>![效能比較。[3]](/img/2016-10-10/5.png)</div>
+{% zoom /img/2016-10-10/5.png 效能比較。[3] %}
 
 
 ## 雜談

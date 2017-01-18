@@ -12,7 +12,7 @@ pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以�
 
 ![](/img/2016-12-18/1.jpg)
 <!-- more -->
-![不同的環境光會讓場景中物件有不同的渲染結果[1]](/img/2016-12-18/4.jpg)
+{% zoom /img/2016-12-18/4.jpg 不同的環境光會讓場景中物件有不同的渲染結果[1] %}
 
 
 
@@ -20,7 +20,7 @@ pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以�
 
 直接來看一張圖:
 
-![用 median-cut algorithm 把環境光轉成多點光源[2]](/img/2016-12-18/2.jpg)
+{% zoom /img/2016-12-18/2.jpg 用 median-cut algorithm 把環境光轉成多點光源[2] %}
 
 事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:
 
@@ -42,15 +42,15 @@ eg. Y = 0.2125R + 0.7154G + 0.0721B 之類的加權法
 這邊可以利用預先計算 environment light probe 的能量 Sum Area Table(簡稱 SAT)，概念很簡單:
 一開始先維護一個能量累積的二維陣列，每個點的值就是其左上角區塊的能量和，藉由這個陣列可以使獲得任意區塊能量的時間複雜度為 O(1)。
 
-![這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。](/img/2016-12-18/3.jpg)
+{% zoom /img/2016-12-18/3.jpg 這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。 %}
 
 
 # 結果
 
 渲染出來的結果其實跟原本的環境光還是有些差別，畢竟是用多點光源來模擬環境光，本來就不會一模一樣。
 
-![Median cut algorithm](/img/2016-12-18/new-256-my.jpg)
-![Important sampling(original)](/img/2016-12-18/new-256.jpg)
+{% zoom /img/2016-12-18/new-256-my.jpg Median cut algorithm %}
+{% zoom /img/2016-12-18/new-256.jpg Important sampling(original) %}
 
 不過在效能方面，用多點光源模擬所需要的運算時間大概都只有原本算法的 30% ，可以說是大幅加速了!
 

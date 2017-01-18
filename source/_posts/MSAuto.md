@@ -13,11 +13,11 @@ tags:
 
 <!--more-->
 
-![有圖有真相，沒作弊打 3204 分](/img/2016-12-25/4.jpg)
+{% zoom /img/2016-12-25/4.jpg  有圖有真相，沒作弊打 3204 分 %}
 
 既然他們都這樣玩，我也沒在客氣的，直接發個強一點的分數: 8萬分。
 
-<div>![直接發 request 獲得八萬分](/img/2016-12-25/5.png)</div>
+{% zoom /img/2016-12-25/5.png 直接發 request 獲得八萬分 %}
 
 後來還發現 github 上竟然有自動練等的專案 [neverwing](https://github.com/ThePeiggy/neverwing) ，做得如此完整，真的是讓我開眼界了哈哈。
 
@@ -45,7 +45,7 @@ tags:
 
 接下來挑戰下個模式: COMBAT SCHOOL ，這就是每天可以打電腦三次然後會給你獎品(也是滿沒意義的模式…)
 
-![COMBAT SCHOOL](/img/2016-12-25/2.png)
+{% zoom /img/2016-12-25/2.png COMBAT SCHOOL %}
 
 在做這模式的自動化時卡滿久的，有個 POST request 的 x-www-form-urlencoded data 長這樣:
 
@@ -60,7 +60,7 @@ tags:
 
 再挑戰下一個模式: P.O.W RESCUE ，每天可以打 20 關電腦，會給你一些獎品~~(怎麼每個模式都大同小異XD)~~。這是我覺得最浪費時間的模式了，因為一天要打 20 次。
 
-![P.O.W RESCUE](/img/2016-12-25/3.png)
+{% zoom /img/2016-12-25/3.png P.O.W RESCUE %}
 
 
 這邏輯稍微複雜一點，因為每次挑戰的 `stage_id` 都不一樣，要先 GET 下一關 `stage_id` ，而且又有那種 nodejs [request](https://github.com/request/request) 不能發的 request。解法兩種:
