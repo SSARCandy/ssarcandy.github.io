@@ -1,7 +1,9 @@
 ---
 title: 安裝 Policyd 並設定外寄 Quota
 date: 2016-12-24 00:15:40
-tags: unix
+tags:
+- unix
+- note
 ---
 
 
