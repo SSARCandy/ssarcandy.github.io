@@ -8,7 +8,7 @@ tags:
 ---
 
 pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈
-{% zoom /img/2016-10-10/3.jpg 據說 IKEA 型錄的圖都是渲染出來的[1] %}
+{% zoom /img/2016-10-10/3.jpg 據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup> %}
 
 
 <!-- more -->
@@ -31,7 +31,7 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~
 
 這邊我是使用 [DDA](https://www.wikiwand.com/en/Digital_differential_analyzer)(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了Z軸)。
-{% zoom /img/2016-10-10/2.png 2D-DDA 邏輯。[2] %}
+{% zoom /img/2016-10-10/2.png 2D-DDA 邏輯。<sup>[2]</sup> %}
 
 可以看到其實可以在一開始就算出`x`, `y`要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 `z` 軸的資訊，並且每一個 pixel 變成 voxel。
 3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~
@@ -95,7 +95,7 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 - 測試的是 `landsea-2.pbrt`，並且使用 `–ncores 1` 以減少多執行緒的誤差
 
 經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:
-{% zoom /img/2016-10-10/5.png 效能比較。[3] %}
+{% zoom /img/2016-10-10/5.png 效能比較。<sup>[3]</sup> %}
 
 
 ## 雜談
@@ -109,6 +109,6 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 ---
 
  註:
- [1]: 可以看[這篇](http://www.wsj.com/articles/SB10000872396390444508504577595414031195148)介紹 IKEA 渲染型錄
- [2]: 原圖來自 Physically Based Rendering, Second Edition
- [3]: 執行時間用 `bash` 內建 `time` 指令來量測
+ [1] 可以看[這篇](http://www.wsj.com/articles/SB10000872396390444508504577595414031195148)介紹 IKEA 渲染型錄
+ [2] 原圖來自 Physically Based Rendering, Second Edition
+ [3] 執行時間用 `bash` 內建 `time` 指令來量測

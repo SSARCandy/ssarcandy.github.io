@@ -13,8 +13,8 @@ tags:
 
 我這次專案是 Python 2.7 + OpenCV 3.1。
 安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的[另一篇](https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/)有教學；
-而 Python 安裝 OpenCV 稍微簡單一點，把 `cv2.pyd` 放到 `C:\Python27\Lib\site-packages` 就可以了 [1]。
-在 Mac/Linux 上更簡單，可以使用 [conda](https://www.continuum.io/) [2] 來幫你安裝。
+而 Python 安裝 OpenCV 稍微簡單一點，把 `cv2.pyd` 放到 `C:\Python27\Lib\site-packages` 就可以了 <sup>[1]</sup>。
+在 Mac/Linux 上更簡單，可以使用 [conda](https://www.continuum.io/) <sup>[2]</sup> 來幫你安裝。
 
 
 ---
@@ -79,7 +79,7 @@ foo.__private_func() # 無法呼叫，會噴 Error: AttributeError: 'Foo' object
 - `__init__` 這個 function 也是必須的，這是 Class Constructor。
 - 每個 function 的第一個參數必須放 `self`，這與 C++ Class 中的 `this` 相似，基本上就是拿來存取**自己**用的。
   - 例如 `hello_world()` 中就有存取 `bar1` 跟 `bar2`，而在呼叫時 `self` 會被跳過。
-- 如果要寫 private method [3]，就在 function name 前加上雙底線 `__`，如同上面的第 9 行處。
+- 如果要寫 private method <sup>[3]</sup>，就在 function name 前加上雙底線 `__`，如同上面的第 9 行處。
 
 
 # Path
@@ -103,7 +103,7 @@ cv2.imread(os.path.join('..', 'data', 'foo.jpg'))
 # Function name and Variable name
 
 每個程式語言都有保留字，像是 `for`, `while`, `if` 之類的都是常見的保留字，而 Python 也不例外，你可以在[這邊](https://docs.python.org/2.5/ref/keywords.html)看到全部的保留字。
-而通常 function name 也跟保留字一樣不能當作變數名稱 [4]。
+而通常 function name 也跟保留字一樣不能當作變數名稱 <sup>[4]</sup>。
 特別的是 Python 允許變數名稱與 function 名稱一樣，像是：
 
 ```py
@@ -154,8 +154,8 @@ Python 作者 Tim Peters 把一首詩藏在 `import this` 中，
 
 
 ---
-
-註一： `cv.pyd` 可以在 build 好的 opencv 資料夾中找到。
-註二： OpenCV 不能用 `pip` 安裝，而 `conda` 是類似 `pip` 的 Python 套件管理軟體。
-註三： Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考[這篇](http：//stackoverflow.com/questions/17193457/private-method-in-python)。 
-註四： 函式名子**不一定**不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。
+註:
+[1] `cv.pyd` 可以在 build 好的 opencv 資料夾中找到。
+[2] OpenCV 不能用 `pip` 安裝，而 `conda` 是類似 `pip` 的 Python 套件管理軟體。
+[3] Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考[這篇](http：//stackoverflow.com/questions/17193457/private-method-in-python)。 
+[4] 函式名子**不一定**不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。

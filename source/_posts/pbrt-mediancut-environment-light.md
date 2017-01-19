@@ -12,7 +12,7 @@ pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以�
 
 {% zoom /img/2016-12-18/1.jpg %}
 <!-- more -->
-{% zoom /img/2016-12-18/4.jpg 不同的環境光會讓場景中物件有不同的渲染結果[1] %}
+{% zoom /img/2016-12-18/4.jpg 不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup> %}
 
 
 
@@ -20,7 +20,7 @@ pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以�
 
 直接來看一張圖:
 
-{% zoom /img/2016-12-18/2.jpg 用 median-cut algorithm 把環境光轉成多點光源[2] %}
+{% zoom /img/2016-12-18/2.jpg 用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup> %}
 
 事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:
 

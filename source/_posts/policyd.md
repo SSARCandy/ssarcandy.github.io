@@ -136,9 +136,9 @@ $ vim lighthttpd.conf
 ----------
 
 References:
-[Policyd-Installing](http://wiki.policyd.org/installing)
-[Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
-[Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
-[How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
-[Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
+[1] [Policyd-Installing](http://wiki.policyd.org/installing)
+[2] [Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
+[3] [Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
+[4] [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
+[5] [Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
 
