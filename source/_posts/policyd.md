@@ -132,6 +132,13 @@ $ vim lighthttpd.conf
 
 想確定是不是有成功，可以去 mySQL > policyd > quota_tracking 查看是不是真的有在追蹤大家的流量。
 
+或者也可以看 mail.log ，會有流量的 log 資訊，包含還剩多少用量等等資訊。
+
+```
+$ tail /var/log/mail.log | grep cbpolicyd
+Jan 20 00:02:05 cml2 cbpolicyd[32562]: module=Quotas, mode=update, reason=quota_update,
+policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/200 (0.5%)
+```
 
 ----------
 
