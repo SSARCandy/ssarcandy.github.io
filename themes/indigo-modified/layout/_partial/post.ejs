@@ -3,6 +3,14 @@
     <div class="post-meat flex-row">
         <%- partial('post/tag') %>
     </div>
+    <div class="post-meat" style="color:grey; font-size:13px;">
+        <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
+        <% if (typeof popular_posts_pv !== 'undefined') { %>
+        	<%- popular_posts_pv() %>
+        <% } else { %>
+            0
+        <% } %>
+    </div>
     <div class="post-body">
         <% if(theme.toc){ %>
             <aside class="post-widget" id="post-widget">
