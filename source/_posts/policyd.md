@@ -132,13 +132,20 @@ $ vim lighthttpd.conf
 
 想確定是不是有成功，可以去 mySQL > policyd > quota_tracking 查看是不是真的有在追蹤大家的流量。
 
+或者也可以看 mail.log ，會有流量的 log 資訊，包含還剩多少用量等等資訊。
+
+```
+$ tail /var/log/mail.log | grep cbpolicyd
+Jan 20 00:02:05 cml2 cbpolicyd[32562]: module=Quotas, mode=update, reason=quota_update,
+policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/200 (0.5%)
+```
 
 ----------
 
 References:
-[Policyd-Installing](http://wiki.policyd.org/installing)
-[Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
-[Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
-[How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
-[Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
+[1] [Policyd-Installing](http://wiki.policyd.org/installing)
+[2] [Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
+[3] [Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
+[4] [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
+[5] [Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
 

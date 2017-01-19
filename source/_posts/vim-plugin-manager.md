@@ -59,6 +59,8 @@ $ vim --startuptime vim.log
 
 詳細開啟資訊都會寫入 `vim.log`
 
-##### ref:
-- [vim-plugins-and-startup-time](http://junegunn.kr/2014/07/vim-plugins-and-startup-time/)
-- [vim.tw](https://www.facebook.com/groups/vim.tw/)
+---
+
+References:
+[1] [vim-plugins-and-startup-time](http://junegunn.kr/2014/07/vim-plugins-and-startup-time/)
+[2] [vim.tw](https://www.facebook.com/groups/vim.tw/)

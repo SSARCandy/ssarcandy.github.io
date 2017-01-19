@@ -14,7 +14,7 @@ tags:
 
 光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：
 
-{% zoom /img/2017-01-18/01.png 圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源[1] %}
+{% zoom /img/2017-01-18/01.png 圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup> %}
 
 <!-- more -->
 
@@ -33,7 +33,7 @@ tags:
 我以之前做的[真實相機系統](https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/)為基礎，在主透鏡焦距上放置微透鏡陣列，藉此來模擬光場相機的硬體設備。
 光場相機原始影像紀錄了四維的光線資訊，$L(u, v, s, t)$ 這個函式代表從主透鏡的 2D 點 $(u, v)$ 射到微透鏡的 2D 點 $(s, t)$ 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。
 
-{% zoom /img/2017-01-18/04.png 圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s' 平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源[2] %}
+{% zoom /img/2017-01-18/04.png 圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s' 平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup> %}
 
 原始焦距的比例。假設要重對焦影像至 $s'$ 平面，可以由已知算出：
 
@@ -65,9 +65,9 @@ $ E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left
 
 由圖六可以看出焦距的改變影響清楚的部分，雖然其實沒有十分明顯，但還是可以看到右上角的圖清楚的部分是紅龍的背部及尾部，而左下清楚的則是藍龍的背部。
 
-另外，利用光場相機的原始影像來做數位重對焦的部分除了拿我自己產生出的光場相機影像來試驗以外，我也利用網路[5]直接尋找了一張光場相機的影像，並直接拿來當作我數位重對焦的測試資料，這是九個不同字母分別在不同的距離處。可以看見成功的對焦到不同的字母上。
+另外，利用光場相機的原始影像來做數位重對焦的部分除了拿我自己產生出的光場相機影像來試驗以外，我也利用網路<sup>[5]</sup>直接尋找了一張光場相機的影像，並直接拿來當作我數位重對焦的測試資料，這是九個不同字母分別在不同的距離處。可以看見成功的對焦到不同的字母上。
 
-{% zoom /img/2017-01-18/07.png 圖七：(a)從網路[5]上獲得的第三方光場相機原始影像。(b)用(a)來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。 %}
+{% zoom /img/2017-01-18/07.png 圖七：(a)從網路<sup>[5]</sup>上獲得的第三方光場相機原始影像。(b)用(a)來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。 %}
 
 # 雜談
 
@@ -81,9 +81,9 @@ $ E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left
 ---
 
 註:
-[1]	[Light Field Photography with a Hand-held Plenoptic Camera](http://graphics.stanford.edu/papers/lfcamera/), R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan
-[2]	[CS348b Project： Light Field Camera Simulation](https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf), Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen
-[3]	[Fourier Slice Photography](http://graphics.stanford.edu/papers/fourierphoto/), Ren Ng, ACM Transactions on Graphics, July 2005
-[4]	[The (New) Stanford Light Field Archive](http://lightfield.stanford.edu/lfs.html)
-[5]	[光場相機原理及仿真實現](http://blog.csdn.net/endlch/article/details/44539055)
-[6]	[LYTRO Light Field Camera 原理解析](https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/)
+[1] [Light Field Photography with a Hand-held Plenoptic Camera](http://graphics.stanford.edu/papers/lfcamera/), R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan
+[2] [CS348b Project： Light Field Camera Simulation](https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf), Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen
+[3] [Fourier Slice Photography](http://graphics.stanford.edu/papers/fourierphoto/), Ren Ng, ACM Transactions on Graphics, July 2005
+[4] [The (New) Stanford Light Field Archive](http://lightfield.stanford.edu/lfs.html)
+[5] [光場相機原理及仿真實現](http://blog.csdn.net/endlch/article/details/44539055)
+[6] [LYTRO Light Field Camera 原理解析](https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/)
