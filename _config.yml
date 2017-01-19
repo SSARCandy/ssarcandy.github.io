@@ -120,3 +120,14 @@ hfc_img:
 
 math:
   engine: 'mathjax' # or 'katex'
+
+popularPosts:
+  # (optional) Popular posts options
+  googleAnalyticsAPI:
+    # clientId: *****.apps.googleusercontent.com # get it from google dev-console
+    # serviceEmail: *****@hexo-pv.iam.gserviceaccount.com  # get it from google dev-console
+    # key: /source/ga.pem
+    # viewId: 123456789 # get it from ga
+    dateRange: 30
+    expiresDate: 10
+    pvMeasurementsStartDate: 2016/07/20
