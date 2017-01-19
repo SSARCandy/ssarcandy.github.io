@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-01-18T18:34:28.843Z</updated>
+  <updated>2017-01-19T16:12:58.591Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,11 +20,11 @@
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
-<div><img src="/img/2017-01-18/01.png" alt="圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源[1]" data-action="zoom"><span class="image-caption">圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源[1]</span></div>
+<div><img src="/img/2017-01-18/01.png" alt="圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup>" data-action="zoom"><span class="image-caption">圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup></span></div>
 <a id="more"></a>
 <p>光場相機每個像素紀錄的則是只有一條光線。由於光場相機這樣的設計，所以光場相機所拍出的原始影像很特別，會是一格一格的，如圖二所示。</p>
 <div><img src="/img/2017-01-18/02.png" alt="圖二：光場相機所拍出的原始影像是一格一格的。" data-action="zoom"><span class="image-caption">圖二：光場相機所拍出的原始影像是一格一格的。</span></div>
@@ -32,7 +32,7 @@
 <p>另外，藉由對這些微透鏡影像的重新排列，可以生成不同視角的影像。具體來說，就是挑選每個微透鏡的同一格像素，組合出一張長寬分別等同於微透鏡在長邊以及寬邊的數量的影像。而一張光場相機原始影像能夠產生多少不同視角的影像，端看每個微透鏡後面對應到的像素有幾個。</p>
 <div><img src="/img/2017-01-18/03.png" alt="圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。" data-action="zoom"><span class="image-caption">圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。</span></div>
 <h1 id="數位重對焦"><a href="# 數位重對焦" class="headerlink" title="數位重對焦"></a>數位重對焦 </h1><p> 我以之前做的 <a href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"> 真實相機系統 </a> 為基礎，在主透鏡焦距上放置微透鏡陣列，藉此來模擬光場相機的硬體設備。<br>光場相機原始影像紀錄了四維的光線資訊，$L(u, v, s, t)$ 這個函式代表從主透鏡的 2D 點 $(u, v)$ 射到微透鏡的 2D 點 $(s, t)$ 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。</p>
-<div><img src="/img/2017-01-18/04.png" alt="圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源[2]" data-action="zoom"><span class="image-caption">圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源[2]</span></div>
+<div><img src="/img/2017-01-18/04.png" alt="圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup></span></div>
 <p>原始焦距的比例。假設要重對焦影像至 $s’$ 平面，可以由已知算出：</p>
 <p>$ s’=as+\left(1-a\right) u$</p>
 <p>不過由於光線能量函式是 $L(u, v, s, t)$ ，所以必須把 $s’$ 改寫成 $s$ 的形式：</p>
@@ -50,8 +50,8 @@
 <div><img src="/img/2017-01-18/05.png" alt="圖五：(a)微透鏡大小較大，但數位重對焦以後會是比較低畫質的影像。(b) 微透鏡大小較小，數位重對焦以後會是比較高畫質的影像。" data-action="zoom"><span class="image-caption">圖五：(a)微透鏡大小較大，但數位重對焦以後會是比較低畫質的影像。(b) 微透鏡大小較小，數位重對焦以後會是比較高畫質的影像。</span></div>
 <div><img src="/img/2017-01-18/06.png" alt="圖六：數位重對焦結果。左上、右上、左下、右下分別對焦點為：遠、中、近、更近。四張皆裁切掉上方黑色區塊。" data-action="zoom"><span class="image-caption">圖六：數位重對焦結果。左上、右上、左下、右下分別對焦點為：遠、中、近、更近。四張皆裁切掉上方黑色區塊。</span></div>
 <p>由圖六可以看出焦距的改變影響清楚的部分，雖然其實沒有十分明顯，但還是可以看到右上角的圖清楚的部分是紅龍的背部及尾部，而左下清楚的則是藍龍的背部。</p>
-<p>另外，利用光場相機的原始影像來做數位重對焦的部分除了拿我自己產生出的光場相機影像來試驗以外，我也利用網路 [5] 直接尋找了一張光場相機的影像，並直接拿來當作我數位重對焦的測試資料，這是九個不同字母分別在不同的距離處。可以看見成功的對焦到不同的字母上。</p>
-<div><img src="/img/2017-01-18/07.png" alt="圖七：(a)從網路 [5] 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。" data-action="zoom"><span class="image-caption">圖七：(a)從網路 [5] 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。</span></div>
+<p>另外，利用光場相機的原始影像來做數位重對焦的部分除了拿我自己產生出的光場相機影像來試驗以外，我也利用網路 <sup>[5]</sup> 直接尋找了一張光場相機的影像，並直接拿來當作我數位重對焦的測試資料，這是九個不同字母分別在不同的距離處。可以看見成功的對焦到不同的字母上。</p>
+<div><img src="/img/2017-01-18/07.png" alt="圖七：(a)從網路 <sup>[5]</sup> 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。" data-action="zoom"><span class="image-caption">圖七：(a)從網路 <sup>[5]</sup> 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。</span></div>
 <h1 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談</h1><ul>
 <li>其實自己模擬出來的光場影像做數位重對焦的時候效果一直不太理想，搞不懂是哪邊有問題 QQ</li>
 <li>不過用別人的光場影像做數位重對焦很成功阿，肯定是 pbrt 那邊我寫錯了什麼…</li>
@@ -60,14 +60,14 @@
 <li>markdown + latex 還真多要注意的，markdown 的 <code>_</code> 會先被轉成 <code>&lt;em&gt;</code> 然後像是 <code>\sum _{u}</code> 的 latex 就會變成<code>\sum &lt;em&gt;{u}</code>…</li>
 </ul>
 <hr>
-<p>註:<br>[1]    <a href="http://graphics.stanford.edu/papers/lfcamera/" target="_blank" rel="external">Light Field Photography with a Hand-held Plenoptic Camera</a>, R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan<br>[2]    <a href="https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf" target="_blank" rel="external">CS348b Project： Light Field Camera Simulation</a>, Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen<br>[3]    <a href="http://graphics.stanford.edu/papers/fourierphoto/" target="_blank" rel="external">Fourier Slice Photography</a>, Ren Ng, ACM Transactions on Graphics, July 2005<br>[4]    <a href="http://lightfield.stanford.edu/lfs.html" target="_blank" rel="external">The (New) Stanford Light Field Archive</a><br>[5]    <a href="http://blog.csdn.net/endlch/article/details/44539055" target="_blank" rel="external">光場相機原理及仿真實現</a><br>[6]    <a href="https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/" target="_blank" rel="external">LYTRO Light Field Camera 原理解析</a></p>
+<p>註:<br>[1] <a href="http://graphics.stanford.edu/papers/lfcamera/" target="_blank" rel="external">Light Field Photography with a Hand-held Plenoptic Camera</a>, R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan<br>[2] <a href="https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf" target="_blank" rel="external">CS348b Project： Light Field Camera Simulation</a>, Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen<br>[3] <a href="http://graphics.stanford.edu/papers/fourierphoto/" target="_blank" rel="external">Fourier Slice Photography</a>, Ren Ng, ACM Transactions on Graphics, July 2005<br>[4] <a href="http://lightfield.stanford.edu/lfs.html" target="_blank" rel="external">The (New) Stanford Light Field Archive</a><br>[5] <a href="http://blog.csdn.net/endlch/article/details/44539055" target="_blank" rel="external">光場相機原理及仿真實現</a><br>[6] <a href="https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/" target="_blank" rel="external">LYTRO Light Field Camera 原理解析</a></p>
 ]]></content>
     
     <summary type="html">
     
       &lt;p&gt;一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。&lt;/p&gt;
 &lt;p&gt;光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：&lt;/p&gt;
-&lt;div&gt;&lt;img src=&quot;/img/2017-01-18/01.png&quot; alt=&quot;圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源[1]&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
+&lt;div&gt;&lt;img src=&quot;/img/2017-01-18/01.png&quot; alt=&quot;圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
     
     </summary>
     
@@ -87,7 +87,7 @@
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.587Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -147,7 +147,7 @@
     <link href="https://ssarcandy.tw/2016/12/23/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/23/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -176,8 +176,10 @@
 <p>詳細可以參考: <a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
 <h1 id="Policyd- 設定 -Rate-Limit"><a href="#Policyd- 設定 -Rate-Limit" class="headerlink" title="Policyd 設定 Rate Limit"></a>Policyd 設定 Rate Limit</h1><p>到這邊就簡單了，藉由 web 介面按按按鈕就可以設定各種 Quota，詳細可參考這篇圖文教學:<br><a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a></p>
 <h3 id="驗證"><a href="# 驗證" class="headerlink" title="驗證"></a>驗證 </h3><p> 想確定是不是有成功，可以去 mySQL &gt; policyd &gt; quota_tracking 查看是不是真的有在追蹤大家的流量。</p>
+<p>或者也可以看 mail.log ，會有流量的 log 資訊，包含還剩多少用量等等資訊。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ tail /var/log/mail.log | grep cbpolicyd</div><div class="line">Jan 20 00:02:05 cml2 cbpolicyd[32562]: module=Quotas, mode=update, reason=quota_update,</div><div class="line">policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/200 (0.5%)</div></pre></td></tr></table></figure>
 <hr>
-<p>References:<br><a href="http://wiki.policyd.org/installing" target="_blank" rel="external">Policyd-Installing</a><br><a href="https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/" target="_blank" rel="external">Postfix + Centos + Policyd V2 + MySQL</a><br><a href="http://en.enisozgen.com/policydcluebringer-installation/" target="_blank" rel="external">Policyd(Cluebringer) installation</a><br><a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a><br><a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
+<p>References:<br>[1] <a href="http://wiki.policyd.org/installing" target="_blank" rel="external">Policyd-Installing</a><br>[2] <a href="https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/" target="_blank" rel="external">Postfix + Centos + Policyd V2 + MySQL</a><br>[3] <a href="http://en.enisozgen.com/policydcluebringer-installation/" target="_blank" rel="external">Policyd(Cluebringer) installation</a><br>[4] <a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a><br>[5] <a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
 ]]></content>
     
     <summary type="html">
@@ -199,14 +201,14 @@
     <link href="https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
 <a id="more"></a>
-<div><img src="/img/2016-12-18/4.jpg" alt="不同的環境光會讓場景中物件有不同的渲染結果[1]" data-action="zoom"><span class="image-caption">不同的環境光會讓場景中物件有不同的渲染結果[1]</span></div>
+<div><img src="/img/2016-12-18/4.jpg" alt="不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup>" data-action="zoom"><span class="image-caption">不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup></span></div>
 <h1 id="Median-Cut-Alogrithm"><a href="#Median-Cut-Alogrithm" class="headerlink" title="Median Cut Alogrithm"></a>Median Cut Alogrithm</h1><p>直接來看一張圖:</p>
-<div><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源[2]" data-action="zoom"><span class="image-caption">用 median-cut algorithm 把環境光轉成多點光源[2]</span></div>
+<div><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup></span></div>
 <p>事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:</p>
 <ol>
 <li>初始狀態 = 整張 env light probe 影像（陣列中只有一個區域）</li>
@@ -252,7 +254,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -297,12 +299,12 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
-    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。[1]" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。[1]</span></div></p>
+    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
 <h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
-<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。[2]" data-action="zoom"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。[2]</span></div></p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup></span></div></p>
 <p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
 <p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
 <ol>
@@ -315,7 +317,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
 <hr>
 <p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><div><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。" data-action="zoom"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></div></p>
-<p>除此之外，也需要計算每條 ray 的權重，根據論文 [2] 所說是如下公式：</p>
+<p>除此之外，也需要計算每條 ray 的權重，根據論文 <sup>[2]</sup> 所說是如下公式：</p>
 <p>$E = A\frac{cos^4\theta}{Z^2}$</p>
 <p>$A$: 出射瞳面積<br>$Z$: 最後透鏡與成像平面的距離<br>$\theta$: 光束與成像平面法向量夾角</p>
 <h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
@@ -332,12 +334,12 @@
 <li><strong>Total reflection</strong><br>我使用 <a href="https://www.wikiwand.com/en/Snell&#39;s_law" target="_blank" rel="external">Snell’s law</a> 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。<br>所以記得要注意別把負數開根號了。</li>
 </ul>
 <hr>
-<p> 註:<br> [1]: 圖片取自維基百科 <a href="https://www.wikiwand.com/en/Ray_tracing_(graphics" target="_blank" rel="external">Ray-tracing</a>)<br> [2]: A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995</p>
+<p> 註:<br> [1] 圖片取自維基百科 <a href="https://www.wikiwand.com/en/Ray_tracing_(graphics" target="_blank" rel="external">Ray-tracing</a>)<br> [2] A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。[1]&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
+      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
     
     </summary>
     
@@ -355,7 +357,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -402,16 +404,16 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
-    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的[1]" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的[1]</span></div></p>
+    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
 <h2 id="關於 -pbrt- 與 -ray-tracing"><a href="# 關於 -pbrt- 與 -ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指 (因為沒有任何光打到手指並反射到眼中)。<br> 至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
 <p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
 <p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
 <h2 id="實作 -heightfield- 交點測試"><a href="# 實作 -heightfield- 交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的 shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
 <p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~ 哈哈 <br> 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
-<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br><div><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。[2]" data-action="zoom"><span class="image-caption">2D-DDA 邏輯。[2]</span></div></p>
+<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br><div><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">2D-DDA 邏輯。<sup>[2]</sup></span></div></p>
 <p>可以看到其實可以在一開始就算出 <code>x</code>, <code>y</code> 要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓 3D 結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
 <p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br><div><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。" data-action="zoom"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></div></p>
 <p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
@@ -470,15 +472,15 @@
 <li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
 <li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
 </ul>
-<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。[3]" data-action="zoom"><span class="image-caption">效能比較。[3]</span></div></p>
+<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption">效能比較。<sup>[3]</sup></span></div></p>
 <h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
 <hr>
-<p> 註:<br> [1]: 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2]: 原圖來自 Physically Based Rendering, Second Edition<br> [3]: 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
+<p> 註:<br> [1] 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2] 原圖來自 Physically Based Rendering, Second Edition<br> [3] 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的[1]&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
+      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
     
     </summary>
     
@@ -496,10 +498,10 @@
     <link href="https://ssarcandy.tw/2016/09/09/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/09/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
-<p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 [1]。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> [2] 來幫你安裝。</p>
+<p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
 <hr>
 <p>好，接下來就是用到現在所做的一些筆記～</p>
 <h1 id="Coding-style"><a href="#Coding-style" class="headerlink" title="Coding-style"></a>Coding-style</h1><p>Python 的 Coding-style 基本上就是參考 <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">PEP8</a>，簡結一下重點:</p>
@@ -526,14 +528,14 @@
 <li>例如 <code>hello_world()</code> 中就有存取 <code>bar1</code> 跟 <code>bar2</code>，而在呼叫時 <code>self</code> 會被跳過。</li>
 </ul>
 </li>
-<li>如果要寫 private method [3]，就在 function name 前加上雙底線 <code>__</code>，如同上面的第 9 行處。</li>
+<li>如果要寫 private method <sup>[3]</sup>，就在 function name 前加上雙底線 <code>__</code>，如同上面的第 9 行處。</li>
 </ul>
 <h1 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h1><p>檔案路徑也是一個滿麻煩的事情，假設要讀一個檔案，一開始可能會這樣寫：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cv2.imread(<span class="string">'../data/foo.jpg'</span>) <span class="comment"># cv2.imread 是 opencv 的讀圖函式</span></div></pre></td></tr></table></figure>
 <p>這樣當然可以讀的到，但當你換了一個工作環境，像是 Windows，這樣寫就炸了～(因為 Window 路徑是用反斜線 <code>\</code>)<br>Python 提供了個好工具 <code>os.path.join()</code>，簡單來說就是幫忙處理斜線。所以上面那個例子可以改寫成這樣：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line">cv2.imread(os.path.join(<span class="string">'..'</span>, <span class="string">'data'</span>, <span class="string">'foo.jpg'</span>))</div></pre></td></tr></table></figure>
 <p>這樣的寫法就可以順利地在各平台運作～！</p>
-<h1 id="Function-name-and-Variable-name"><a href="#Function-name-and-Variable-name" class="headerlink" title="Function name and Variable name"></a>Function name and Variable name</h1><p>每個程式語言都有保留字，像是 <code>for</code>, <code>while</code>, <code>if</code> 之類的都是常見的保留字，而 Python 也不例外，你可以在 <a href="https://docs.python.org/2.5/ref/keywords.html" target="_blank" rel="external"> 這邊 </a> 看到全部的保留字。<br>而通常 function name 也跟保留字一樣不能當作變數名稱 [4]。<br>特別的是 Python 允許變數名稱與 function 名稱一樣，像是：</p>
+<h1 id="Function-name-and-Variable-name"><a href="#Function-name-and-Variable-name" class="headerlink" title="Function name and Variable name"></a>Function name and Variable name</h1><p>每個程式語言都有保留字，像是 <code>for</code>, <code>while</code>, <code>if</code> 之類的都是常見的保留字，而 Python 也不例外，你可以在 <a href="https://docs.python.org/2.5/ref/keywords.html" target="_blank" rel="external"> 這邊 </a> 看到全部的保留字。<br>而通常 function name 也跟保留字一樣不能當作變數名稱 <sup>[4]</sup>。<br>特別的是 Python 允許變數名稱與 function 名稱一樣，像是：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sum = sum([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])  <span class="comment"># sum() is built-in function for python</span></div><div class="line">print(sum)              <span class="comment"># 15</span></div><div class="line">print(sum([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])) <span class="comment"># 15</span></div></pre></td></tr></table></figure>
 <p>上面的例子可以看到，Python 能夠清楚的分辨這個 <code>sum</code> 是指變數還是內建函式。<br>javascript 就不行：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">btoa = btoa(<span class="string">'hello'</span>)       <span class="comment">// btoa() is built-in function for javascript</span></div><div class="line"><span class="built_in">console</span>.log(btoa)          <span class="comment">// aGVsbG8=</span></div><div class="line"><span class="built_in">console</span>.log(btoa(<span class="string">'hello'</span>)) <span class="comment">// Uncaught TypeError: btoa is not a function</span></div></pre></td></tr></table></figure>
@@ -547,7 +549,7 @@
 <p>寫 Python 就像是在寫 pseudo-code 一樣爽！</p>
 </blockquote>
 <hr>
-<p>註一： <code>cv.pyd</code> 可以在 build 好的 opencv 資料夾中找到。<br>註二： OpenCV 不能用 <code>pip</code> 安裝，而 <code>conda</code> 是類似 <code>pip</code> 的 Python 套件管理軟體。<br>註三： Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考 <a href="http：//stackoverflow.com/questions/17193457/private-method-in-python"> 這篇 </a>。<br> 註四： 函式名子 <strong> 不一定 </strong> 不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。</p>
+<p>註:<br>[1] <code>cv.pyd</code> 可以在 build 好的 opencv 資料夾中找到。<br>[2] OpenCV 不能用 <code>pip</code> 安裝，而 <code>conda</code> 是類似 <code>pip</code> 的 Python 套件管理軟體。<br>[3] Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考 <a href="http：//stackoverflow.com/questions/17193457/private-method-in-python"> 這篇 </a>。<br>[4] 函式名子<strong> 不一定 </strong> 不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。</p>
 ]]></content>
     
     <summary type="html">
@@ -570,7 +572,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -589,10 +591,8 @@
 <p>不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！<br>如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim --startuptime vim.log</div></pre></td></tr></table></figure>
 <p>詳細開啟資訊都會寫入 <code>vim.log</code></p>
-<h5 id="ref"><a href="#ref" class="headerlink" title="ref:"></a>ref:</h5><ul>
-<li><a href="http://junegunn.kr/2014/07/vim-plugins-and-startup-time/" target="_blank" rel="external">vim-plugins-and-startup-time</a></li>
-<li><a href="https://www.facebook.com/groups/vim.tw/" target="_blank" rel="external">vim.tw</a></li>
-</ul>
+<hr>
+<p>References:<br>[1] <a href="http://junegunn.kr/2014/07/vim-plugins-and-startup-time/" target="_blank" rel="external">vim-plugins-and-startup-time</a><br>[2] <a href="https://www.facebook.com/groups/vim.tw/" target="_blank" rel="external">vim.tw</a></p>
 ]]></content>
     
     <summary type="html">
@@ -612,7 +612,7 @@
     <link href="https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.591Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -648,7 +648,7 @@
     <link href="https://ssarcandy.tw/2016/07/26/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/26/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.587Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><div><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。" data-action="zoom"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></div></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -678,7 +678,7 @@
     <link href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2017-01-18T18:34:28.843Z</updated>
+    <updated>2017-01-19T16:12:58.587Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
