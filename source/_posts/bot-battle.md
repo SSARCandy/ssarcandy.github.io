@@ -1,7 +1,9 @@
 ---
 title: 自動分享每日天文圖(APOD)到 Dcard
 date: 2016-07-27 00:16:45
-tags: trashtalk
+tags:
+- trashtalk
+- automation
 ---
 
 原本其實只是要做個 [Slack bot](https://api.slack.com/bot-users)，

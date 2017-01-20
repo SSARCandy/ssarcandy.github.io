@@ -3,6 +3,7 @@ title: MSAuto - 玩遊戲也要自動化
 date: 2016-12-25 21:12:48
 tags:
 - trashtalk
+- automation
 ---
 
 

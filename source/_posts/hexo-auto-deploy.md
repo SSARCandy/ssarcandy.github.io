@@ -3,7 +3,7 @@ title: 用 Travis CI 自動部屬 hexo 到 GitHub
 date: 2016-07-29 00:51:43
 tags:
 - hexo
-- CI
+- automation
 ---
 
 其實 [hexo](https://hexo.io/) 作者 TC 已經有發過[一篇文章](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)在講這個主題了，也講得很清楚了，基本上~~矇著眼睛~~照做就行了。
