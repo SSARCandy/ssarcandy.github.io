@@ -108,6 +108,15 @@
     - Unity
     - Game
 
+- name: colorblock
+  title: ColorBlocks
+  description: 'A fun puzzle game implemented in terminal(console) using C++'
+  github: https://github.com/SSARCandy/colorblock-console
+  preview: http://ssarcandy.tw/colorblock-console
+  tags:
+    - C++
+    - Game
+
 - name: nccugo12
   title: 第十二屆政大盃圍棋錦標賽宣傳網站
   description: 以棋會友，以智取勝。第十二屆政大盃全國圍棋團體錦標賽宣傳網站。
