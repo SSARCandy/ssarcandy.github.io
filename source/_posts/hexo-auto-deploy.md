@@ -17,8 +17,10 @@ tags:
   $ travis encrypt-file ssh_key --add
   ```
   這邊會幫你上傳 ssh_key 到 Travis 上，`--add`這個flag可以幫你插入解密指令到`.travis.yml`的`before_install`。
-  不過這flag真的很機車，會把你的`.travis.yml`排版全搞亂，順便把註解刪光光！
+  不過這 flag 真的很機車，會把你的`.travis.yml`排版全搞亂，順便把註解刪光光！
   建議不要加`--add`自己手動插入解密指令，排版就不會亂掉。
+  而且用 Windows 的人會在解密文件時莫名失敗，所以只能用 Mac 或 Unix 環境做這件事([File decryption fails on Windows](https://github.com/travis-ci/travis-ci/issues/4746))，超雷...
+
   另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。
   {% zoom /img/2016-07-29/2.PNG repository > more options 可以設定、看到 Travis 的環境變數 %}
 
