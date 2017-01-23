@@ -1,8 +1,17 @@
+- name: colorblocks-react
+  title: ColorBlocks - React
+  description: 'A fun puzzle game implemented with React.js'
+  github: https://github.com/SSARCandy/colorblocks-react
+  preview: https://ssarcandy.tw/colorblocks-react/
+  tags:
+    - React
+    - Game
+
 - name: ssarcandy-vim
   title: ssarcandy-vim
   description: 'My vim settings and plugins, compatible with MacVim in OSX'
   github: https://github.com/SSARCandy/ssarcandy-vim
-  preview: http://ssarcandy.tw/ssarcandy-vim/
+  preview: https://ssarcandy.tw/ssarcandy-vim/
   tags:
     - vimL
 
@@ -108,11 +117,11 @@
     - Unity
     - Game
 
-- name: colorblock
+- name: colorblocks-console
   title: ColorBlocks
   description: 'A fun puzzle game implemented in terminal(console) using C++'
-  github: https://github.com/SSARCandy/colorblock-console
-  preview: http://ssarcandy.tw/colorblock-console
+  github: https://github.com/SSARCandy/colorblocks-console
+  preview: http://ssarcandy.tw/colorblocks-console
   tags:
     - C++
     - Game
