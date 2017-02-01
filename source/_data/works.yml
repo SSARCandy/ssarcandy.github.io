@@ -1,3 +1,13 @@
+- name: colorblocks-react-native
+  title: ColorBlocks - React Native
+  description: 'A fun puzzle game for both iOS and Android devices, implemented with React Native, the code-base are 99.9% same for iOS and Android version.'
+  github: https://github.com/SSARCandy/colorblocks-react-native
+  preview: https://ssarcandy.tw/colorblocks-react-native/
+  download: https://github.com/SSARCandy/colorblocks-react-native/releases/download/v1.1.0/app-release.apk
+  tags:
+    - React_Native
+    - Game
+
 - name: colorblocks-react
   title: ColorBlocks - React
   description: 'A fun puzzle game implemented with React.js'
@@ -49,6 +59,7 @@
   description: A 2D Game implement with OpenGL
   github: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird
   preview: http://ssarcandy.tw/Ultimate-Shooting-Flappy-Bird
+  download: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird/releases/download/v1.0.0/windows_executable.zip
   tags:
     - C++
     - OpenGL
@@ -123,6 +134,7 @@
   description: 'A fun puzzle game implemented in terminal(console) using C++'
   github: https://github.com/SSARCandy/colorblocks-console
   preview: http://ssarcandy.tw/colorblocks-console
+  download: https://github.com/SSARCandy/colorblocks-console/releases/download/v1.0/colorblock-windows-executable.exe
   tags:
     - C++
     - Game
