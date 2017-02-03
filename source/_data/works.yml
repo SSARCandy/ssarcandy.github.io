@@ -3,7 +3,7 @@
   description: 'A fun puzzle game for both iOS and Android devices, implemented with React Native, the code-base are 99.9% same for iOS and Android version.'
   github: https://github.com/SSARCandy/colorblocks-react-native
   preview: https://ssarcandy.tw/colorblocks-react-native/
-  download: https://play.google.com/store/apps/details?id=com.colorblocksrn&rdid=com.colorblocksrn
+  download: https://play.google.com/store/apps/details?id=com.colorblocksrn
   tags:
     - React_Native
     - Game
