@@ -18,6 +18,7 @@ img.zoom-img {
 }
 .zoom-overlay {
   z-index: 420;
+  text-align: center;
   background: #fff;
   position: fixed;
   top: 0;
@@ -42,4 +43,12 @@ img.zoom-img {
 
 .body-wrap-zoom {
   width: 100vw;
+}
+
+.zoom-caption {
+  z-index: 667;
+  bottom: 10px;
+  position: fixed;
+  left: 10px;
+  right: 10px;
 }
