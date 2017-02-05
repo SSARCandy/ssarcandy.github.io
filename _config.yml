@@ -87,8 +87,6 @@ hfc_html:
 
 hfc_css:
   enable: false
-  exclude: 
-    - '*.min.css'
 
 hfc_useref:
   enable: true
@@ -117,6 +115,11 @@ hfc_img:
   jpegrecompressQuality: 'medium'
   optipng: true
   svgo: true
+
+criticalcss:
+  enable: false
+  critical:
+    minify: true
 
 math:
   engine: 'mathjax' # or 'katex'

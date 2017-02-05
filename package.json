@@ -5,9 +5,16 @@
   "hexo": {
     "version": "3.2.2"
   },
+  "scripts": {
+    "build": "hexo generate && gulp",
+    "deploy": "hexo deploy"
+  },
   "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.3.2",
     "hexo": "^3.2.0",
     "hexo-cli": "^1.0.2",
+    "hexo-critical-css": "^1.0.6",
     "hexo-deployer-git": "^0.2.0",
     "hexo-filter-auto-spacing": "^0.2.1",
     "hexo-filter-cleanup": "^1.0.6",
