@@ -117,7 +117,7 @@ hfc_img:
   svgo: true
 
 criticalcss:
-  enable: false
+  enable: true
   critical:
     minify: true
 
