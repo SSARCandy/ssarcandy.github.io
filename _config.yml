@@ -86,7 +86,7 @@ hfc_html:
   enable: true
 
 hfc_css:
-  enable: false
+  enable: true
 
 hfc_useref:
   enable: true
