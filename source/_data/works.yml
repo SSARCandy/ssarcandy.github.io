@@ -20,7 +20,7 @@
 
 - name: ssarcandy-vim
   title: ssarcandy-vim
-  description: 'My vim settings and plugins, compatible with MacVim in OSX'
+  description: 'My vim settings and plugins, compatible with MacVim in OSX.'
   github: https://github.com/SSARCandy/ssarcandy-vim
   preview: https://ssarcandy.tw/ssarcandy-vim/
   tags:
@@ -28,7 +28,7 @@
 
 - name: stylizationRD
   title: Image stylization using anisotropic reaction diffusion
-  description: 'This is the official system of "Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE)'
+  description: 'This is the official system of "Image stylization using anisotropic reaction diffusion", The Visual Computer (SCIE).'
   github: https://github.com/cglabnccu/stylizationRD
   preview: http://cglabnccu.github.io/stylizationRD/
   youtube: https://www.youtube.com/watch?v=fNc89Y-tbjY
@@ -47,7 +47,7 @@
 
 - name: ExchangeWorld
   title: ExchangeWorld
-  description: '"Exchange your preloved with people locally and personally." A location based social-website built with Angularjs and Nodejs'
+  description: '"Exchange your preloved with people locally and personally." A location based social-website built with Angularjs and Nodejs.'
   github: https://github.com/ExchangeWorld/ExchangeWorld
   preview: http://exwd.csie.org/
   tags:
@@ -56,7 +56,7 @@
 
 - name: Ultimate-Shooting-Flappy-Bird
   title: Ultimate Shooting Flappy Bird
-  description: A 2D Game implement with OpenGL
+  description: A 2D Game implement with OpenGL.
   github: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird
   preview: http://ssarcandy.tw/Ultimate-Shooting-Flappy-Bird
   download: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird/releases/download/v1.0.0/windows_executable.zip
@@ -67,7 +67,7 @@
 
 - name: openGL_Telescope_Model
   title: 3D Telescope Simulator
-  description: A 3D Telescope simulator implement with openGL 
+  description: A 3D Telescope simulator implement with openGL.
   github: https://github.com/SSARCandy/openGL_Telescope_Model
   preview: http://ssarcandy.tw/openGL_Telescope_Model/
   tags:
@@ -97,9 +97,10 @@
 
 - name: slack-for-APOD
   title: slack-bot for APOD
-  description: 'A Slack-bot that can post "Astronomy Picture of the Day" article into Slack channel'
+  description: 'A Slack-bot that can post "Astronomy Picture of the Day" article into Slack channel.'
   github: https://github.com/SSARCandy/slack-for-APOD
   preview: http://ssarcandy.tw/slack-for-APOD/
+  download: https://github.com/SSARCandy/slack-for-APOD/archive/v1.0.0.zip
   tags:
     - Node.js
 
@@ -108,14 +109,15 @@
   description: '"Astronomy Picture of the Day" scraper for node, support multi-language. Return JSON format data.'
   github: https://github.com/SSARCandy/node-apod
   preview: http://ssarcandy.tw/node-apod/demo.html
-  npm: https://www.npmjs.com/package/node-apod
+  download: https://www.npmjs.com/package/node-apod
   tags:
     - Node.js
 
 - name: Side-Scroll-Tower-Defense-Game
   title: Side Scroll Tower Defense Game
-  description: '以手機熱門遊戲 Battle Cat 為構想，自行開發出有類似功能，甚至更多功能之守塔防禦遊戲。'
+  description: '以手機熱門遊戲 Battle Cat 為構想，用 .net C# 開發出有類似功能，甚至更多功能之守塔防禦遊戲。'
   github: https://github.com/NCCUCS-Windows-Programming/Side-Scroll-Tower-Defense-Game
+  download: https://github.com/NCCUCS-Windows-Programming/Side-Scroll-Tower-Defense-Game/releases/download/v1.125/Windows-executable.zip
   tags:
     - C#
     - Game

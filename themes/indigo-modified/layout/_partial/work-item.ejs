@@ -4,7 +4,7 @@
 
         <div class="project-img-container">
             <div class="project-centerer"></div>
-            <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" class="preview" data-action="zoom">
+            <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" alt='<%- project.description %>' class="preview" data-action="zoom">
         </div>
     </div>
 
@@ -12,12 +12,7 @@
         <%- partial('works/project-title') %>
         <%- partial('works/project-links') %>
 
-        <div class="post-content project-description" id="post-content" itemprop="postContent">        
-            <% if (project.npm) { %>
-                npm-package: <a href="<%- project.npm %>" target="_blank">npm-site</a>
-                <br/>
-            <% } %>
-
+        <div class="post-content project-description" id="post-content" itemprop="postContent">
             <%- project.description %>
         </div>
         <div class="project-meta">
