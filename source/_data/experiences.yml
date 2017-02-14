@@ -29,7 +29,7 @@ educations:
 works:
   - serviceUnit: 'CMLab, NTU'
     link: 'https://cmlab.csie.ntu.edu.tw/'
-    job: UNIX Manager
+    job: UNIX System Manager
     time: '09/2016 ~'
     icon: NTU
 
