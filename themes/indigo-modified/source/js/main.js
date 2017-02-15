@@ -207,4 +207,12 @@
     Waves.attach('.global-share li', ['waves-block']);
     Waves.attach('.article-tag-list-link, #page-nav a, #page-nav span', ['waves-button']);
 
+    document.body.oncopy = function (e) {
+        var origin_text = window.getSelection();
+        var notice_text = origin_text.toString().length > 20 ? '\n\nSource: ' + window.location.href + '\n' : '';
+
+        e.clipboardData.setData('text/plain', origin_text + notice_text);
+
+        return false;
+    }
 })(window, document);
