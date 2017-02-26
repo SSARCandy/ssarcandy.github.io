@@ -74,10 +74,9 @@ $ dpkg-reconfigure mailgraph
 
 然後會問你三個問題
 
-Should Mailgraph start on boot? <-- **Yes**
-Logfile used by mailgraph: <-- `/var/log/mail.log`
-
-第三題 Count incoming mail as outgoing mail? 這要看你是否有安裝一些過濾器 (amavisd 之類的)，有的話就選 **NO**，反之則選 **YES**
+- Should Mailgraph start on boot? <-- **Yes**
+- Logfile used by mailgraph: <-- `/var/log/mail.log`
+- Count incoming mail as outgoing mail? 這要看你是否有安裝一些過濾器 (amavisd 之類的)，有的話就選 **NO**，反之則選 **YES**
 
 再來就是把對應檔案搬到 web server 下面
 
