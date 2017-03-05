@@ -1,6 +1,8 @@
 (function(w, d) {
 
     var body = d.body,
+        $ = d.querySelector.bind(d),
+        $$ = d.querySelectorAll.bind(d),
         gotop = d.getElementById('gotop'),
         menu = d.getElementById('menu'),
         header = d.getElementById('header'),
@@ -68,46 +70,52 @@
                 header.classList.remove('fixed');
             }
         },
-        fixedToc: (function() {
-            var toc = d.getElementById('post-toc');
+        toc: (function () {
+            var toc = $('#post-toc');
 
-            if (!toc) {
-                return noop;
+            if (!toc || !toc.children.length) {
+                return {
+                    fixed: noop,
+                    actived: noop
+                }
             }
 
-            var tocOfs = offset(toc),
-                tocTop = tocOfs.y,
-                tocH = toc.offsetHeight,
-                isScroll = tocH > w.innerHeight,
-                titles = d.getElementById('post-content').querySelectorAll('h1, h2, h3, h4, h5, h6'),
-                cssTop = 150,
-                minTop = -1 * (tocH - w.innerHeight) - cssTop;
+            var bannerH = $('.content-header').clientHeight,
+                headerH = header.clientHeight,
+                titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-            function scroll(top) {
+            toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
 
-                for (var id, i = 0, len = titles.length; i < len; i++) {
-                    if (top > offset(titles[i]).y) {
-                        id = titles[i].id;
+            Array.prototype.forEach.call($$('a[href^="#"]'), function (el) {
+
+                el.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var top = offset($('[id="' + decodeURIComponent(this.hash).substr(1) + '"]')).y - headerH;
+                    // animate(Blog.goTop.bind(Blog, top));
+                    docEl.scrollTop = top;
+                })
+            });
+
+            return {
+                fixed: function (top) {
+                    top >= bannerH - headerH ? toc.classList.add('fixed') : toc.classList.remove('fixed')
+                },
+                actived: function (top) {
+                    for (i = 0, len = titles.length; i < len; i++) {
+                        if (top > offset(titles[i]).y - headerH - 5) {
+                            toc.querySelector('li.active').classList.remove('active');
+
+                            var active = toc.querySelector('a[href="#' + titles[i].id + '"]').parentNode;
+                            active.classList.add('active');
+                        }
+                    }
+
+                    if (top < offset(titles[0]).y) {
+                        toc.querySelector('li.active').classList.remove('active');
+                        toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
                     }
                 }
-
-                var top = cssTop - toc.querySelectorAll('a[href="#' + id + '"]')[0].offsetTop;
-
-                toc.style.top = (top < minTop ? minTop : top) + 'px';
             }
-
-            return function(top) {
-                if (top > tocTop) {
-                    toc.classList.add('fixed');
-
-                    if (isScroll) {
-                        scroll(top);
-                    }
-                } else {
-                    toc.classList.remove('fixed');
-                }
-
-            };
         })(),
         share: function() {
 
@@ -169,6 +177,9 @@
 
     w.addEventListener('load', function() {
         loading.classList.remove('active');
+        var top = docEl.scrollTop;
+        Blog.toc.fixed(top);
+        Blog.toc.actived(top);
     });
 
     w.addEventListener('resize', function() {
@@ -196,7 +207,8 @@
         var top = docEl.scrollTop;
         Blog.toggleGotop(top);
         Blog.fixedHeader(top);
-        Blog.fixedToc(top);
+        Blog.toc.fixed(top);
+        Blog.toc.actived(top);
     }, false);
 
     if (typeof BLOG_SHARE !== 'undefined') {
