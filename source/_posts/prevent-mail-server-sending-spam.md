@@ -22,7 +22,7 @@ tags:
 
 <!-- more -->
 
-### pflogsumm
+## pflogsumm
 
 `pflogsumm` 是個可以把 mail.log 整理成一份比較好閱讀的報告，可以一目瞭然這時段內共收發多少信、誰寄最多信、誰收最多信等等的資訊。
 用法也很簡單:
@@ -58,7 +58,7 @@ messages
 
 
 
-### mailgraph
+## mailgraph
 
 這是一個視覺化圖表呈現 mail server 狀態的工具，顯示整個時間軸收發了多少信之類的資訊，介面大概長這樣:
 
@@ -94,7 +94,7 @@ $ cp -p /usr/lib/cgi-bin/mailgraph.css /var/www/mailgraph
 通常 mail server 寄信量暴增都是因為有使用者在大量寄信，無論是真人在搞鬼或是有程式在惡意寄信，都應該視情況直接封鎖他寄信的功能。
 
 
-### 找 `nrcpt` 過高者
+## 找 `nrcpt` 過高者
 
 ```bash
 $ cat mail.log | egrep 'nrcpt=[1-9][0-9]' 
@@ -102,7 +102,7 @@ $ cat mail.log | egrep 'nrcpt=[1-9][0-9]'
 
 nrcpt 是 number of recipients 的縮寫，nrcpt 很大表示這封信要寄給很多人，合不合理還是要看情況，但至少由此下手比較能夠找到搞鬼的人。
 
-### 看 `pflogsumm` 誰寄太多信
+## 看 `pflogsumm` 誰寄太多信
 
 ```bash
 $ pflogsumm /var/log/mail.log -d today

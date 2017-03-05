@@ -17,14 +17,16 @@ Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個�
 
 在 cluebringer 2.0 以前的版本不支援 IPv6，所以基本上只能從官網下載最新版，又，官網安裝說明充滿錯誤，我在弄得時候十分不開心….，所以決定自己整理安裝流程。
 
-### 下載並解壓縮
+## 下載並解壓縮
 
 ```bash
 $ wget http://download.policyd.org/v2.0.14/cluebringer-v2.0.14.zip
-$ unzip cluebringer-v2.0.14.zip 
+$ unzip cluebringer-v2.0.14.zip
 ```
 
-### 在 `database/` 下，執行這段 shell script
+## 初始化資料庫
+
+在 `database/` 下，執行這段 shell script
 
 ```bash
 for i in core.tsql access_control.tsql quotas.tsql amavis.tsql checkhelo.tsql checkspf.tsql greylisting.tsql
@@ -35,14 +37,14 @@ done > policyd.sql
 
 這邊產出的 .sql 會有語法錯誤，用 vim 開啟並下 `:%s/TYPE=innondb/ENGINE=innondb/g` 指令修改全部。
 
-### 初始化資料庫，建立新資料庫並匯入 `policyd.sql` :
+建立新資料庫並匯入 `policyd.sql` :
 
 ```bash
 $ mysql -u root -p -e 'CREATE DATABASE policyd'
 $ mysql -u root -p policyd < policyd.sql
 ```
 
-### 複製檔案到該放的地方
+## 複製檔案到該放的地方
 
 ```bash
 $ cp -r cbp /usr/local/lib/cbpolicyd-2.1/
@@ -92,7 +94,7 @@ smtpd_end_of_data_restrictions =
 
 policyd 有提供一個 web 的設定介面，讓我們比較方便設定 policyd。
 
-### 複製解壓縮檔裡的 `webui/` 到 web server
+複製解壓縮檔裡的 `webui/` 到 web server
 
 ```bash
 $ cp -r webui /var/www/
@@ -108,7 +110,7 @@ $ chgrp -R webui
 
 就可以直接連上 web 介面: `http://your.domian/webui/`
 
-### 設定權限
+## 設定權限
 
 這 web 介面預設不用登入，大家都可以隨意更改，所以必須利用其他方式加個密碼保護。
 
@@ -123,12 +125,12 @@ $ vim lighthttpd.conf
 詳細可以參考: [Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
 
 
-# Policyd 設定 Rate Limit
+# 設定 Rate Limit
 
 到這邊就簡單了，藉由 web 介面按按按鈕就可以設定各種 Quota，詳細可參考這篇圖文教學:
 [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
 
-### 驗證
+## 驗證
 
 想確定是不是有成功，可以去 mySQL > policyd > quota_tracking 查看是不是真的有在追蹤大家的流量。
 
