@@ -12,17 +12,6 @@
         <% } %>
     </div>
     <div class="post-body">
-        <% if(theme.toc){ %>
-            <aside class="post-widget" id="post-widget">
-                <nav class="post-toc-wrap" id="post-toc">
-                <%- toc(post.content, {
-                    class: 'post-toc',
-                    list_number: theme.toc.list_number
-                    }) %>
-                </nav>
-            </aside>
-        <% } %>
-
         <div class="post-main">
             <div class="post-content" id="post-content" itemprop="postContent">
             <%- post.content %>

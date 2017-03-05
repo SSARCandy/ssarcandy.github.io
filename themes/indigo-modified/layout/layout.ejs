@@ -6,6 +6,21 @@
   </nav>
   <main id="main">
     <%- partial('_partial/header') %>
+      <% if(is_post() && theme.toc){ 
+          var idx = toc(page.content, {
+              class: 'post-toc',
+              list_number: theme.toc.list_number
+          });
+      %>
+      <% if (idx) { %>
+          <aside class="post-widget" id="post-widget">
+              <nav class="post-toc-wrap" id="post-toc">
+                <h4>TOC</h4>
+                <%- idx %>
+              </nav>
+          </aside>
+      <% } %>
+    <% } %>
     <div class="container body-wrap" id="body-wrap">
       <%- body %>
     </div>
