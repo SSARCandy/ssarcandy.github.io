@@ -106,7 +106,7 @@ nrcpt 是 number of recipients 的縮寫，nrcpt 很大表示這封信要寄給�
 
 ```bash
 $ pflogsumm /var/log/mail.log -d today
-
+ 
 Senders by message count
 ------------------------
     1060   xxx@cmlab.csie.ntu.edu.tw
