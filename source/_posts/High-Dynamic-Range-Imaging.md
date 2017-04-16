@@ -75,7 +75,7 @@ Median Threshold Bitmap Alignment<sup>[1]</sup> 演算法，是利用金字塔�
 # Construct HDR
 
 
-由於一般數位相機的影像就是每個 pixel 8 bits，所以每台數位相機其實都有自己對的 response curve
+由於一般數位相機的影像就是每個 pixel 8 bits，所以每台數位相機其實都有自己對應的 response curve
 Response curve 是在決定接收到多少能量該轉成多少的值(此值是 [0~255])。
 那我就可以透過多張不同曝光時間的影像來反推出這個 response curve，有了 response curve 之後就可以進一步算出真實能量分佈圖。
 
@@ -232,4 +232,4 @@ $$
 1. 結果說真的還是有不少人工的感覺，可能我太廢了吧...QQ
 2. Latex 配 markdown 要注意該死的 `_`，在 Hexo 中底線會先被視為斜體字，所以在 Latex 中底線前面要用跳脫字元。
 3. Hexo 的 markdown 真 robust! 愛怎亂搞都會跟預期中的一樣，也可以亂加 html 語法～(望向 github...
-4. 這篇文章照片真多，總共 9MB 多，超不 friendly der~
+4. 這篇文章照片真多，竟然要下載 30MB 之多，超不 friendly der~
