@@ -82,6 +82,11 @@ sitemap:
 
 disqus_shortname: ssarcandy
 
+hfc_favicons:
+  enable: true
+  src: img/favico.png
+  target: img/
+
 hfc_html:
   enable: true
 
