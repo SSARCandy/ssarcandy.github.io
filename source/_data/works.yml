@@ -1,3 +1,12 @@
+- name: high-dynamic-range-imaging
+  title: High Dynamic Range Imaging
+  description: 'An implementation of "Paul E. Debevec, Jitendra Malik, Recovering High Dynamic Range Radiance Maps from Photographs, SIGGRAPH 1997."'
+  github: https://github.com/SSARCandy/HDR-imaging
+  preview: https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/
+  tags:
+    - Python
+    - OpenCV
+
 - name: colorblocks-react-native
   title: ColorBlocks - React Native
   description: 'A fun puzzle game for both iOS and Android devices, implemented with React Native, the code-base are 99.9% same for iOS and Android version.'
