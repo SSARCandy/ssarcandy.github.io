@@ -27,7 +27,7 @@ tags:
 G Suite 中有提供資料遷移的工具，其中包含遷移舊信件，
 他的方法是透過 IMAP 下載 dovecot 信件再匯入至 Gmail.
 
-遷移設定中，要設定以下幾個東西:
+遷移設定中，要設定以下幾個東西：
 
 - 原郵件伺服器類型 → 我們的例子要選 **其他電子郵件伺服器**
 - 原本的 IMAP server
@@ -36,7 +36,7 @@ G Suite 中有提供資料遷移的工具，其中包含遷移舊信件，
 
 # Password mismatch
 
-這邊可能會遇到問題(帳號密碼不正確/password mismatch?)，可以查看 `/var/log/mail.log` 中的詳細錯誤訊息:
+這邊可能會遇到問題(帳號密碼不正確/password mismatch?)，可以查看 `/var/log/mail.log` 中的詳細錯誤訊息：
 
 ```
 Mar 16 19:00:54 cml2 dovecot: auth-worker(10594): pam(ssarcandy@cmlab.csie.ntu.edu.tw,173.194.90.100):
@@ -45,7 +45,7 @@ pam_authenticate() failed: Authentication failure (password mismatch?)
 
 這是因為這邊使用 full email address 去登入 IMAP server，而原本我們 dovecot 的設定是只要打 user name 就好(不用加 @domain)，才會造成帳密不正確的問題。
 
-為了迎合 G suite 的格式，去原郵件伺服器更改 dovecot 設定:
+為了迎合 G suite 的格式，去原郵件伺服器更改 dovecot 設定：
 
 ```bash
 $ vim /etc/dovecot/conf.d/10-auth.conf
@@ -68,9 +68,9 @@ $ service dovecot restart
 # 設定遷移範圍
 
 下一步是要設定要遷移的時間、資料夾等，
-以我們的例子而言:
+以我們的例子而言：
 
-- 時間選到 cmlab 創立以來的全部 ~(遷移!全都遷移!
+- 時間選到 cmlab 創立以來的全部 ～(遷移！全都遷移！
 - 資料夾則選擇忽略幾個特定資料夾，像是 `virus-mail` , `trash-mail`, `spam-mail` 等等
 
 {% zoom /img/2017-04-23/01.jpg 完整的資料遷移設定 %}
@@ -78,7 +78,7 @@ $ service dovecot restart
 
 # 選取遷移的使用者
 
-接下來可以直接上傳一個 csv 檔，其中包含:
+接下來可以直接上傳一個 csv 檔，其中包含：
 
 - 原郵件伺服器帳號
 - 原郵件伺服器密碼
@@ -86,7 +86,7 @@ $ service dovecot restart
 
 上傳時有個潛規則，csv 檔不可以超過 500 行，超過它就會說未知錯誤(對，這是我們試出來的…
 
-另外，在遷移時有幾個常見的錯誤:
+另外，在遷移時有幾個常見的錯誤：
 
 ## 驗證失敗
 
@@ -94,7 +94,7 @@ $ service dovecot restart
 這表示所提供的原郵件伺服器帳號、密碼不正確，
 也就是可能這個人不存在原郵件伺服器，或者提供的密碼不正確。
 
-如果原郵件伺服器的驗證是像我們一樣透過 LDAP 的話，可以用 `ldapsearch` 確認這人在不在:
+如果原郵件伺服器的驗證是像我們一樣透過 LDAP 的話，可以用 `ldapsearch` 確認這人在不在：
 
 ```bash
 $ ldapsearch -x "uid=??,dc=base_dn"
@@ -121,7 +121,7 @@ Google 其實有提供一份錯誤一覽表 → [錯誤一覽表](https://suppor
 
 # 怎麼得到大家的密碼
 
-我想看到這邊應該會發現一個問題:
-遷移的 csv 檔其中一欄要提供大家的密碼，這是即使是有 root 權限也沒辦法知道的資訊欸!
+我想看到這邊應該會發現一個問題：
+遷移的 csv 檔其中一欄要提供大家的密碼，這是即使是有 root 權限也沒辦法知道的資訊欸！
 雖然我們最後還是有想到辦法，不過那過程也很繁瑣，就留到下一次介紹吧…
 
