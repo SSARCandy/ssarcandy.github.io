@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-04-27T18:11:23.526Z</updated>
+  <updated>2017-04-29T15:54:40.349Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -16,11 +16,85 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Migrate mail server to Gmail - migration strategy</title>
+    <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
+    <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
+    <published>2017-04-29T14:56:05.000Z</published>
+    <updated>2017-04-29T15:54:40.349Z</updated>
+    
+    <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
+<a id="more"></a>
+<h1 id="概況"><a href="# 概況" class="headerlink" title="概況"></a>概況 </h1><p> 我們的伺服器是透過 LDAP 集中管理身分認證資訊，大致架構如下:</p>
+<div><img src="/img/2017-04-29/01.JPG" alt="伺服器架構: 由 LDAP 來統一管理身分資訊。" data-action="zoom"><span class="image-caption">伺服器架構: 由 LDAP 來統一管理身分資訊。</span></div>
+<p>除了一般工作站以外，郵件伺服器也同樣是利用 LDAP 的資訊來登入，簡單來說就是使用者只須要記得一個密碼，就可以登入各工作站以及郵件伺服器。</p>
+<h1 id="繞過密碼"><a href="# 繞過密碼" class="headerlink" title="繞過密碼"></a>繞過密碼 </h1><p> 想來想去最後想到兩種方法，一是從 LDAP 下手，一是從郵件伺服器下手。</p>
+<h2 id="從 -LDAP- 下手"><a href="# 從 -LDAP- 下手" class="headerlink" title="從 LDAP 下手"></a>從 LDAP 下手 </h2><p> 雖然 root 看不到大家的密碼，但是能直接更改別人的密碼 XD<br>所以呢，我們可以複製出一個假的 LDAP server，就專給郵件伺服器用。</p>
+<div><img src="/img/2017-04-29/02.JPG" alt="複製一個 LDAP，專門給郵件伺服器使用。" data-action="zoom"><span class="image-caption">複製一個 LDAP，專門給郵件伺服器使用。</span></div>
+<p>要複製一個 LDAP 並不困難，只需要安裝好 LDAP 之後把資料 dump 過來就完成了。<br>創造好一個 fake LDAP 之後就要來改改郵件伺服器的設定，讓他改用 fake LDAP 的資訊來做身分認證。</p>
+<p>首先要先更改 <code>/etc/hosts</code> ，把 LDAP 對應的 ip address 改對 (如果有的話)，<br> 如果沒有用 <code>/etc/hosts</code> 的話，則記得要更改 roundcube 設定:</p>
+<p><strong>更改 roundcube ldap</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/roundcube/main.inc.php</div></pre></td></tr></table></figure>
+<p>把 <code>hosts</code> 改成 fake LDAP:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$config[<span class="string">'ldap_public'</span>][<span class="string">'public'</span>] = <span class="keyword">array</span>(</div><div class="line">    <span class="string">'name'</span>              =&gt; <span class="string">'Public LDAP Addressbook'</span>,</div><div class="line">    <span class="string">'hosts'</span>             =&gt; <span class="keyword">array</span>(<span class="string">'fake LDAP'</span>),</div><div class="line">    <span class="string">'port'</span>              =&gt; <span class="number">389</span>,</div><div class="line">    <span class="string">'user_specific'</span>     =&gt; <span class="keyword">false</span>,</div><div class="line">    <span class="string">'base_dn'</span>           =&gt; <span class="string">'ou=public,ou=rcabook,dc=localhost'</span>,</div><div class="line">    <span class="string">'bind_dn'</span>           =&gt; <span class="string">'cn=rcuser,ou=rcabook,dc=localhost'</span>,</div><div class="line">    <span class="string">'bind_pass'</span>         =&gt; <span class="string">'rcpass'</span>,</div><div class="line">    <span class="string">'filter'</span>            =&gt; <span class="string">'(objectClass=inetOrgPerson)'</span>,</div><div class="line">    <span class="string">'groups'</span>            =&gt; <span class="keyword">array</span>(</div><div class="line">        <span class="string">'base_dn'</span>         =&gt; <span class="string">''</span>,</div><div class="line">        <span class="string">'filter'</span>          =&gt; <span class="string">'(objectClass=groupOfNames)'</span>,</div><div class="line">        <span class="string">'object_classes'</span>  =&gt; <span class="keyword">array</span>(<span class="string">"top"</span>, <span class="string">"groupOfNames"</span>),</div><div class="line">    ),</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>詳細可以看 roundcube 說明文件。</p>
+<p>弄好之後記得要刷新 <code>nslcd</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /etc/init.d/nslcd force-reload <span class="comment"># maybe need to reload</span></div></pre></td></tr></table></figure>
+<p>接下來就是要更改大家密碼啦~<br>由於郵件伺服器現在是使用 fake LDAP 驗證資訊了，所以這時候更改密碼只會改到 fake LDAP 上的資訊，而不影響大家登入使用其他工作站。也就是說使用這種方法的壞處只有在遷移的過程中不能登入原郵件伺服器。<br>不過由於收發信件都已經轉移去 gmail 了，暫時不能登入原郵件伺服器其實影響應該不會太大了。</p>
+<p><strong>更改 ldap user password</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ ldappasswd -h &lt;ldap_ip&gt; -x -ZZ \</div><div class="line">        -D <span class="string">"cn=admin,dc=your_base_dn"</span> \</div><div class="line">        <span class="string">"user_distinguished_name"</span> \</div><div class="line">        <span class="_">-s</span> &lt;new_password&gt; \</div><div class="line">        -w &lt;ldap_admin_password&gt;</div></pre></td></tr></table></figure>
+<p>以上是更改一個人 LDAP 密碼的方式，那要批次更改全部人的密碼可以這樣:</p>
+<p>先去 <code>/var/spool/mail/</code> 找誰有郵件帳戶，然後組合成 ldap dn ，輸出到一個檔案:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ ls /var/spool/mail/ <span class="_">-l</span> \</div><div class="line">        | grep rw \</div><div class="line">        | awk &#123;<span class="string">'print $3'</span>&#125; \</div><div class="line">        | xargs -I &#123;&#125; <span class="built_in">echo</span> <span class="string">"uid=&#123;&#125;,ou=people,dc=cmlab,dc=csie,dc=ntu,dc=edu,dc=tw"</span> &gt; ~/mail_all.txt</div></pre></td></tr></table></figure>
+<p>再組合出改密碼的指令並輸出到 <code>change_password.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat mail_all.txt \</div><div class="line">    | xargs -I &#123;&#125; <span class="built_in">echo</span> <span class="string">"ldappasswd -x -ZZ -D cn=admin,dc=your_base_dn &#123;&#125; -s &lt;new_password&gt; -w &lt;ldap_password&gt;"</span> &gt; change_passwd.sh</div></pre></td></tr></table></figure>
+<p>然後就可以:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./change_password.sh</div></pre></td></tr></table></figure>
+<h2 id="從 -Mail-Account- 下手"><a href="# 從 -Mail-Account- 下手" class="headerlink" title="從 Mail Account 下手"></a>從 Mail Account 下手 </h2><p> 從 LDAP 下手的基本上就可以解決密碼的問題，不過就是會在遷移的期間讓大家無法登入看舊信件(因為大家密碼被改掉了)，雖說影響應該不大，不過依舊是有影響的。</p>
+<p>另一個繞過密碼的方式是從郵件帳戶下手，先創建一個假帳號，再把信件都複製到假帳號那邊，就可以用假帳號存取那個人的信件。</p>
+<p>假設有個帳號 <code>ssarcandy</code>，實際方法如下:</p>
+<ol>
+<li>Add a fake user into ldap, i.e. <code>ssarcandy_fake</code></li>
+<li>Create home dir for it, change the owner to <code>ssarcandy_fake</code></li>
+<li>Copy <code>/var/spool/mail/ssarcandy</code> to <code>/var/spool/mail/ssarcandy_fake</code>, and chage owner</li>
+<li>Copy <code>~ssarcandy/mail/</code> to <code>~ssarcandy_fake/mail/</code> if it exist, and chage owner</li>
+</ol>
+<p>寫成 script 大致如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"> </div><div class="line"><span class="comment"># $1=new fake user   -&gt; i.e. ssarcandy_fake</span></div><div class="line"><span class="comment"># $2=correspond user -&gt; i.e. ssarcandy</span></div><div class="line"> </div><div class="line">PASSWORD=<span class="string">'some_password'</span></div><div class="line">HOME_DIR_BASE=<span class="string">'/data/mail_migrate_tmp'</span></div><div class="line">LDAP_BASE=<span class="string">'base dn'</span></div><div class="line">LDAP_DN=<span class="string">'ldap admin dn'</span></div><div class="line">LDAP_PASS=<span class="string">'ldap admin password'</span></div><div class="line">LDAP_HOST=<span class="string">'ip address'</span></div><div class="line"> </div><div class="line"><span class="built_in">echo</span> <span class="string">"dn: uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span></span></div><div class="line">uid: <span class="variable">$1</span></div><div class="line">sn: lastname</div><div class="line">cn: complete name</div><div class="line">mail: <span class="variable">$1</span>@cmlab.csie.ntu.edu.tw</div><div class="line">objectClass: person</div><div class="line">objectClass: organizationalPerson</div><div class="line">objectClass: inetOrgPerson</div><div class="line">objectClass: posixAccount</div><div class="line">objectClass: top</div><div class="line">objectClass: shadowAccount</div><div class="line">userPassword: &#123;crypt&#125;12345</div><div class="line">shadowMax: 99999</div><div class="line">shadowWarning: 7</div><div class="line">loginShell: /bin/bash</div><div class="line">uidNumber: 6577</div><div class="line">gidNumber: 1000</div><div class="line">homeDirectory: <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span>"&gt; tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Create fake account</span></div><div class="line">ldapadd -h <span class="variable">$LDAP_HOST</span> -ZZ -x -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> <span class="_">-f</span> tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Change fake account password</span></div><div class="line">ldappasswd -h <span class="variable">$LDAP_HOST</span> -ZZ -x \</div><div class="line">    -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> \</div><div class="line">    <span class="string">"uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span>"</span> <span class="_">-s</span> <span class="variable">$PASSWORD</span></div><div class="line"> </div><div class="line"><span class="comment"># Create home dir for fake account</span></div><div class="line">mkdir -p <span class="variable">$HOME_DIR_BASE</span></div><div class="line">mkdir <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div><div class="line"> </div><div class="line"><span class="comment"># Copy mails to fake account.</span></div><div class="line">cp /var/spool/mail/<span class="variable">$2</span> /var/spool/mail/<span class="variable">$1</span></div><div class="line">cp -r $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$2</span>)/mail $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$1</span>)</div><div class="line"> </div><div class="line"><span class="comment"># Change owner of copied mails</span></div><div class="line">chown 6577:1000 /var/spool/mail/<span class="variable">$1</span></div><div class="line">chown -R 6577:1000 <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div></pre></td></tr></table></figure>
+<p>這就是另一個繞過密碼的方式，這方式的優點是可以不影響使用者的帳戶，也就是在遷移過程中依舊可以登入舊郵件伺服器。<br>但也是有缺點的，就是必須複製一份使用者的 mails，在遷移期間會浪費兩倍的容量。</p>
+<h1 id="遷移策略"><a href="# 遷移策略" class="headerlink" title="遷移策略"></a>遷移策略 </h1><p> 我們要遷移的郵件說多不多，但也不太少，以容量來說大概 600 GB 左右。<br>不過空間上稍微尷尬一點，只剩 50 GB 可以使用。<br>所以基本上是沒辦法讓大家都使用第二種方法(創假帳號並複製郵件)，先使用 fake LDAP 轉移大部分人會是比較適當的方式。</p>
+<p>以時間軸的方式來呈現整個遷移的過程，大致如下:</p>
+<ul class="timeline"><li><div class="direction-r"><div class="flag-wrapper"><span class="flag">設定 MX record</span></div><div class="desc">信件收發轉至 Gmail</div></div></li><li><div class="direction-l"><div class="flag-wrapper"><span class="flag">建立 fake LDAP 讓 mail server 使用 </span></div><div class="desc"> 開始遷移大部分使用者，遷移期間使用者無法登入原郵件伺服器 (因密碼不同)。</div></div></li><li><div class="direction-r"><div class="flag-wrapper"><span class="flag"> 讓 mail server 使用原 LDAP</span></div><div class="desc">使用者可以正常登入原郵件伺服器。</div></div></li><li><div class="direction-l"><div class="flag-wrapper"><span class="flag">針對重要使用者建立假帳號 </span></div><div class="desc"> 開始轉移那些信件特多的使用者，使用建立假帳號的方式。</div></div></li><li><div class="direction-r"><div class="flag-wrapper"><span class="flag">善後 </span></div><div class="desc"> 完成轉移，刪除假帳號。</div></div></li></ul>
+
+<p>開始遷移信件的時間點是在已將 MX record 設定完，收發功能已轉至 gmail 之後才開始的。<br>我們基本上分兩階段轉移信件，<br>第一階段是用 fake LDAP 的方式轉移大部分的使用者；<br>第二階段則是用假帳號的方式轉移最重要 (信件特多) 的使用者。</p>
+<p>首先我們先對使用者的信件用量做分群，找出哪些人用量相似、哪些人用量特多等等。<br>可以利用 dovecot 的 admin 工具查詢:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 查詢 ssarcandy 的總信件數目</span></div><div class="line">$ doveadm search -u ssarcandy ALL | wc <span class="_">-l</span></div><div class="line">14990</div></pre></td></tr></table></figure>
+<p>把大家的郵件數目分佈畫成圖表:</p>
+<div><img src="/img/2017-04-29/04.JPG" alt="帳戶郵件分佈圖" data-action="zoom"><span class="image-caption">帳戶郵件分佈圖</span></div>
+<p>可以看到基本上大部分人都沒甚麼信，只有少數人有超大量的信，而這些少數人會是遷移的 bottleneck，所以應該要挑出來用假帳號的方式轉移信件，才能避免讓原郵件伺服器不能登入的時間拉太長。</p>
+<p>另外，由於 G Suite 遷移工具是一批一批遷移的，所以同一批最好大家的郵件數目都要差不多，才可以減少總體等待時間。</p>
+<hr>
+<p>我們用以上的遷移策略，總共耗時約十天完成大家的所有信件遷移。<br>當初預估一周真是太天真了阿 QQ</p>
+<style>.timeline,.timeline li{padding:1em 0}.timeline{position:relative;width:660px;margin:20px auto 0;list-style-type:none}.timeline:before{position:absolute;left:50%;top:0;content:'';display:block;width:6px;height:100%;margin-left:-3px;background:#505050;background:-moz-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(30,87,153,1)),color-stop(100%,rgba(125,185,232,1)));background:-webkit-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-o-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-ms-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:linear-gradient(to bottom,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);z-index:5}.direction-l,.direction-r{width:300px;position:relative}.timeline li:after{content:"";display:block;height:0;clear:both;visibility:hidden}.direction-l{float:left;text-align:right}.direction-r{float:right}.flag-wrapper{position:relative;display:inline-block;text-align:center}.flag{position:relative;display:inline;background:#f8f8f8;padding:6px 10px;border-radius:5px;font-weight:600;text-align:left}.direction-l .flag{-webkit-box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15)}.direction-r .flag{-webkit-box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);-moz-box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15)}.direction-l .flag:before,.direction-r .flag:before{position:absolute;top:50%;right:-36px;content:'';display:block;width:12px;height:12px;margin-top:-10px;background:#fff;border-radius:10px;border:4px solid #ff5050;z-index:10}.direction-l .flag:after,.direction-r .flag:after{content:"";position:absolute;top:50%;height:0;width:0;margin-top:-8px;pointer-events:none}.direction-r .flag:before{left:-36px}.direction-l .flag:after{left:100%;border:solid transparent;border-left-color:#f8f8f8;border-width:8px}.direction-r .flag:after{right:100%;border:solid transparent;border-right-color:#f8f8f8;border-width:8px}.time-wrapper{display:inline;line-height:1em;font-size:.66666em;color:#fa5050;vertical-align:middle}.direction-l .time-wrapper{float:left}.direction-r .time-wrapper{float:right}.time{display:inline-block;padding:4px 6px;background:#f8f8f8}.desc{margin:1em .75em 0 0;line-height:1.5em}.direction-r .desc{margin:1em 0 0 .75em}@media screen and (max-width:660px){.timeline{width:100%;padding:4em 0 1em}.timeline li{padding:2em 0}.direction-l,.direction-r{float:none;width:100%;text-align:center}.flag-wrapper{text-align:center}.flag{background:#fff;z-index:15}.direction-l .flag:before,.direction-r .flag:before{position:absolute;top:-30px;left:52%;content:'';display:block;width:12px;height:12px;margin-left:-9px;background:#fff;border-radius:10px;border:4px solid #ff5050;z-index:10}.direction-l .flag:after,.direction-r .flag:after{content:"";position:absolute;left:52%;top:-8px;height:0;width:0;margin-left:-8px;border:solid transparent;border-bottom-color:#fff;border-width:8px;pointer-events:none}.time-wrapper{display:block;position:relative;margin:4px 0 0;z-index:14}.direction-l .time-wrapper,.direction-r .time-wrapper{float:none}.desc{position:relative;margin:1em 0 0;padding:1em;background:#f5f5f5;-webkit-box-shadow:0 0 1px rgba(0,0,0,.2);-moz-box-shadow:0 0 1px rgba(0,0,0,.2);box-shadow:0 0 1px rgba(0,0,0,.2);z-index:15}.direction-l .desc,.direction-r .desc{position:relative;margin:1em 1em 0;padding:1em;z-index:15}}@media screen and (min-width:400px ?? max-width:660px){.direction-l .desc,.direction-r .desc{margin:1em 4em 0}}</style>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。&lt;br&gt;一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。&lt;br&gt;而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過(?)密碼這關。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Migrate mail server to Gmail - using migration tool</title>
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -99,7 +173,7 @@
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.345Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -207,7 +281,7 @@
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -274,7 +348,7 @@
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -346,7 +420,7 @@
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -399,7 +473,7 @@
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -466,7 +540,7 @@
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -528,7 +602,7 @@
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -585,7 +659,7 @@
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
@@ -638,7 +712,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -685,7 +759,7 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -743,7 +817,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -790,7 +864,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -884,7 +958,7 @@
     <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
@@ -958,7 +1032,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -998,7 +1072,7 @@
     <link href="https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -1035,7 +1109,7 @@
     <link href="https://ssarcandy.tw/2016/07/27/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/27/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><div><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。" data-action="zoom"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></div></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -1067,7 +1141,7 @@
     <link href="https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2017-04-27T18:11:23.526Z</updated>
+    <updated>2017-04-29T15:54:40.349Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
