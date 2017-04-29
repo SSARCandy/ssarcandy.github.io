@@ -1,4 +1,4 @@
-# my blog
+# my blog - [ssarcandy.tw](https://ssarcandy.tw/)
 
 ![badge](https://travis-ci.org/SSARCandy/ssarcandy.github.io.svg?branch=develop)
 
