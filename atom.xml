@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-05-07T14:27:31.570Z</updated>
+  <updated>2017-05-07T15:03:19.647Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
 <a id="more"></a>
@@ -94,7 +94,7 @@
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -125,7 +125,7 @@
 <li>時間選到 cmlab 創立以來的全部 ～(遷移！全都遷移！</li>
 <li>資料夾則選擇忽略幾個特定資料夾，像是 <code>virus-mail</code> , <code>trash-mail</code>, <code>spam-mail</code> 等等</li>
 </ul>
-{% zoom /img/2017-04-23/01.jpg 完整的資料遷移設定 %}
+<div><img src="/img/2017-04-23/01.jpg" alt="完整的資料遷移設定" data-action="zoom"><span class="image-caption">完整的資料遷移設定</span></div>
 <h1 id="選取遷移的使用者"><a href="# 選取遷移的使用者" class="headerlink" title="選取遷移的使用者"></a>選取遷移的使用者 </h1><p> 接下來可以直接上傳一個 csv 檔，其中包含：</p>
 <ul>
 <li>原郵件伺服器帳號</li>
@@ -173,7 +173,7 @@
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -197,7 +197,7 @@
 </li>
 <li><p>產生 exclude mask<br>由於那些太接近閾值的像素有可能會造成誤差，故將太接近閾值的像素標示出來，在比對時就直接跳過不比對。<br>假設要忽略的是 <strong>閾值 ± 10</strong> ，可以用 opencv 的 <code>cv2.inRange()</code>達成</p>
  <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mask_img = cv2.inRange(img, median - <span class="number">10</span>, median + <span class="number">10</span>)</div></pre></td></tr></table></figure>
- {% zoom /img/2017-04-16/02.PNG 這是用於跳過過於接近閾值的像素的 MASK %}
+ <div><img src="/img/2017-04-16/02.PNG" alt="這是用於跳過過於接近閾值的像素的 MASK" data-action="zoom"><span class="image-caption">這是用於跳過過於接近閾值的像素的 MASK</span></div>
 </li>
 <li><p>由最小至最大的順序比對影像差異 <br> 在每一個層級中，都是往九個鄰居移動，看哪個最小，再往上傳遞繼續做這個比對。<br>由於影像都是 binary image，所以要比對影像差異挺容易的:<br>影像差異 = <code>img1 XOR img2 AND mask</code><br>越小層級的移動的權重越大。</p>
 </li>
@@ -205,17 +205,17 @@
 <h1 id="Construct-HDR"><a href="#Construct-HDR" class="headerlink" title="Construct HDR"></a>Construct HDR</h1><p>由於一般數位相機的影像就是每個 pixel 8 bits，所以每台數位相機其實都有自己對應的 response curve<br>Response curve 是在決定接收到多少能量該轉成多少的值 (此值是 [0~255])。<br> 那我就可以透過多張不同曝光時間的影像來反推出這個 response curve，有了 response curve 之後就可以進一步算出真實能量分佈圖。</p>
 <h2 id="Solving-response-curve"><a href="#Solving-response-curve" class="headerlink" title="Solving response curve"></a>Solving response curve</h2><p>我建立 HDR 影像的方法為 1997 Debevec<sup>[2]</sup> 的方法。<br>由於論文很佛心的有提供 MatLab Code，所以我就直接拿他為基底改寫成 python 程式碼，<br>並利用 numpy 提供的 <code>np.linalg.lstsq(A, b)</code> 解 $Ax = b$ 的 $x$ 解。</p>
 <p>我將 RGB channel 分別計算 response curve，並全部畫在一圖表上檢視，以下是我做的幾個例子。</p>
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/memorial0062.png %}<br>{% zoom /img/2017-04-16/test-response-curve.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/DSC_0126.png %}<br>{% zoom /img/2017-04-16/street2-response-curve.png %}<br></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/memorial0062.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/test-response-curve.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/DSC_0126.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2-response-curve.png"alt="" data-action="zoom"></div><br></div>
 
 <p>另外，Debevec 論文 <sup>[2]</sup> 所提及的 $L$ (控制 response curve smoothness 程度)，並不好掌握最好的值，不過依據實驗 $L$ 值大約在 30~50 就還不錯。</p>
 <hr>
 <p>關於 smaple 點的方式，我試了兩種:</p>
 <ol>
 <li><p><strong>Random 取 50 個點 </strong><br> 好處是很直覺且容易實作，但我發現做出來的 response curve 有時會有很不一樣的結果，比較不可靠。以下圖為例，可以看到在綠色的 channel 就有比較怪異的結果，藍色在頂部也是怪怪的。</p>
- <div style="display: flex; align-items: center;"><br> {% zoom /img/2017-04-16/04.PNG Random sampling 50 points %}<br> {% zoom /img/2017-04-16/05.PNG Response curve %}<br> </div>
+ <div style="display: flex; align-items: center;"><br> <div><img src="/img/2017-04-16/04.PNG" alt="Random sampling 50 points" data-action="zoom"><span class="image-caption">Random sampling 50 points</span></div><br> <div><img src="/img/2017-04-16/05.PNG" alt="Response curve" data-action="zoom"><span class="image-caption">Response curve</span></div><br> </div>
 </li>
 <li><p><strong>把圖片縮成 10x10，全部拿去算 </strong><br> 由於縮小圖片基本上還是能保有圖片的特徵(特亮的、特暗之類的)，所以做出來的效果也比較好一點，左圖是縮放到 10x10 的影像，右為 response curve:</p>
- <div style="display: flex; align-items: center;"><br> {% zoom /img/2017-04-16/03.PNG Shrink original img to 10x10 and use all pixels %}<br> {% zoom /img/2017-04-16/test-response-curve2.png Response curve %}<br> </div>
+ <div style="display: flex; align-items: center;"><br> <div><img src="/img/2017-04-16/03.PNG" alt="Shrink original img to 10x10 and use all pixels" data-action="zoom"><span class="image-caption">Shrink original img to 10x10 and use all pixels</span></div><br> <div><img src="/img/2017-04-16/test-response-curve2.png" alt="Response curve" data-action="zoom"><span class="image-caption">Response curve</span></div><br> </div>
 
 </li>
 </ol>
@@ -223,26 +223,26 @@
 <h2 id="Construct-radiance-map"><a href="#Construct-radiance-map" class="headerlink" title="Construct radiance map"></a>Construct radiance map</h2><p>再藉由 Debevec 論文 <sup>[2]</sup> 上 Equation(6) 所提的 construct radiance map:<br>透過剛剛產生的 response curve 帶入公式來得到 radiance map。</p>
 <p>$$<br>\ln E_{i}=\dfrac {\sum _{j=1}^{P} w\left(Zij\right) \left(g\left( Zij\right) -\ln \Delta t_{j}\right)} {\sum _{j=1}^{P} w\left(Zij\right)}<br>$$</p>
 <p>其中 $g$ 函式就是剛剛產生的 response curve。<br>有了 radiance map 之後，就可以套用假色來顯示出真實能量分佈圖，以下是我做的幾的例子(這邊的值都是 log value)</p>
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/test-radiance-map.png %}<br>{% zoom /img/2017-04-16/taipei-radiance-map.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street2-radiance-map.png %}<br>{% zoom /img/2017-04-16/living_room2-radiance-map.png %}<br></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/test-radiance-map.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei-radiance-map.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2-radiance-map.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2-radiance-map.png"alt="" data-action="zoom"></div><br></div>
 
 <h1 id="Tone-mapping"><a href="#Tone-mapping" class="headerlink" title="Tone mapping"></a>Tone mapping</h1><p>到此已經重建出 Radiance map 了，也就是已經知道真實能量分佈了，但這能量範圍太廣，沒辦法直接顯示到一般的顯示器上 (0~255)<br> 所以需要再把這樣 <strong> 高動態範圍成像 </strong> 壓回 <strong> 低動態範圍成像 </strong>，不過這壓縮的方式有其學問，如何才能讓低動態範圍成像<strong> 看起來 </strong> 像高動態範圍成像就是 Tone mapping 在做的事。</p>
 <p>根據不同的 Cases，最適合的演算法不見得相同，所以就是要看情況決定。<br>這邊展示幾個 Tone mapping 之後的結果:</p>
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/test-ashikhmin.jpg %}<br>{% zoom /img/2017-04-16/taipei-drago.jpg %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street2-ashikhmin.jpg %}<br>{% zoom /img/2017-04-16/living_room2-gdc.jpg %}<br></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/test-ashikhmin.jpg" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei-drago.jpg"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2-ashikhmin.jpg" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2-gdc.jpg"alt="" data-action="zoom"></div><br></div>
 
-<h1 id="Result-galleries"><a href="#Result-galleries" class="headerlink" title="Result galleries"></a>Result galleries</h1>{% zoom /img/2017-04-16/living_room2-gdc.jpg Living room, tone map algroithm: gdc, Camera: Nikon D5000 %}
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/living_room2/DSC_0078.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0079.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0080.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0081.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/living_room2/DSC_0082.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0083.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0084.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0085.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/living_room2/DSC_0086.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0087.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0088.png %}<br>{% zoom /img/2017-04-16/living_room2/DSC_0089.png %}<br></div>
-
-<hr>
-{% zoom /img/2017-04-16/taipei-drago.jpg Taipei city, tone map algroithm: drago, Camera: Nikon D5000 %}
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/taipei/DSC_0058.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0060.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0061.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0062.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/taipei/DSC_0063.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0064.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0065.png %}<br>{% zoom /img/2017-04-16/taipei/DSC_0066.png %}<br></div>
+<h1 id="Result-galleries"><a href="#Result-galleries" class="headerlink" title="Result galleries"></a>Result galleries</h1><div><img src="/img/2017-04-16/living_room2-gdc.jpg" alt="Living room, tone map algroithm: gdc, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Living room, tone map algroithm: gdc, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0078.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0079.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0080.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0081.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0082.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0083.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0084.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0085.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0086.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0087.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0088.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0089.png"alt="" data-action="zoom"></div><br></div>
 
 <hr>
-{% zoom /img/2017-04-16/street-drago.jpg Street, tone map algroithm: drago, Camera: Nikon D5000 %}
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street/DSC_0099.png %}<br>{% zoom /img/2017-04-16/street/DSC_0098.png %}<br>{% zoom /img/2017-04-16/street/DSC_0097.png %}<br>{% zoom /img/2017-04-16/street/DSC_0096.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street/DSC_0095.png %}<br>{% zoom /img/2017-04-16/street/DSC_0094.png %}<br>{% zoom /img/2017-04-16/street/DSC_0093.png %}<br>{% zoom /img/2017-04-16/street/DSC_0092.png %}<br></div>
+<div><img src="/img/2017-04-16/taipei-drago.jpg" alt="Taipei city, tone map algroithm: drago, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Taipei city, tone map algroithm: drago, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/taipei/DSC_0058.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0060.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0061.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0062.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/taipei/DSC_0063.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0064.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0065.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0066.png"alt="" data-action="zoom"></div><br></div>
 
 <hr>
-{% zoom /img/2017-04-16/street2-ashikhmin.jpg Street at night, tone map algroithm: ashikhmin, Camera: Nikon D5000 %}
-<div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street2/DSC_0123.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0124.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0127.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0128.png %}<br></div><div style="display: flex; align-items: center;"><br>{% zoom /img/2017-04-16/street2/DSC_0129.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0131.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0132.png %}<br>{% zoom /img/2017-04-16/street2/DSC_0133.png %}<br></div>
+<div><img src="/img/2017-04-16/street-drago.jpg" alt="Street, tone map algroithm: drago, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Street, tone map algroithm: drago, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street/DSC_0099.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0098.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0097.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0096.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street/DSC_0095.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0094.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0093.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0092.png"alt="" data-action="zoom"></div><br></div>
+
+<hr>
+<div><img src="/img/2017-04-16/street2-ashikhmin.jpg" alt="Street at night, tone map algroithm: ashikhmin, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Street at night, tone map algroithm: ashikhmin, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2/DSC_0123.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0124.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0127.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0128.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2/DSC_0129.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0131.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0132.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0133.png"alt="" data-action="zoom"></div><br></div>
 
 
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] Fast, Robust Image Registration for Compositing High Dynamic Range Photographs from Handheld Exposures, G. Ward, JGT 2003<br>[2] Recovering High Dynamic Range Radiance Maps from Photographs, Paul E. Debevec, Jitendra Malik, SIGGRAPH 1997</p>
@@ -281,7 +281,7 @@
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -348,7 +348,7 @@
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -362,7 +362,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ apt-get install pflogsumm  <span class="comment"># install</span></div><div class="line">$ pflogsumm /var/<span class="built_in">log</span>/mail.log <span class="_">-d</span> today <span class="comment"># generate today's report</span></div><div class="line"> </div><div class="line">Postfix <span class="built_in">log</span> summaries <span class="keyword">for</span> Feb 26</div><div class="line"> </div><div class="line">Grand Totals</div><div class="line">------------</div><div class="line">messages</div><div class="line">      659   received</div><div class="line">     1047   delivered</div><div class="line">      135   forwarded</div><div class="line">        0   deferred</div><div class="line">        2   bounced</div><div class="line">     3285   rejected (75%)</div><div class="line">        0   reject warnings</div><div class="line">        0   held</div><div class="line">        0   discarded (0%)</div><div class="line">  </div><div class="line">    15378k  bytes received</div><div class="line">    20065k  bytes delivered</div><div class="line">      142   senders</div><div class="line">       88   sending hosts/domains</div><div class="line">      156   recipients</div><div class="line">       15   recipient hosts/domains</div></pre></td></tr></table></figure>
 <p>這邊只列出 report 的一部份，還有很多有用的資訊，可以自己試試看。</p>
 <h2 id="mailgraph"><a href="#mailgraph" class="headerlink" title="mailgraph"></a>mailgraph</h2><p>這是一個視覺化圖表呈現 mail server 狀態的工具，顯示整個時間軸收發了多少信之類的資訊，介面大概長這樣:</p>
-{% zoom /img/2017-02-26/01.png mailgrapgh 網頁統計資訊 %}
+<div><img src="/img/2017-02-26/01.png" alt="mailgrapgh 網頁統計資訊" data-action="zoom"><span class="image-caption">mailgrapgh 網頁統計資訊</span></div>
 <p>這是以網頁來呈現的，原理就是每幾分鐘就會去整理 mail.log 中的資訊，然後產生圖表再呈現在網頁上。<br>安裝流程如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ apt-get install rrdtool mailgraph</div><div class="line">$ dpkg-reconfigure mailgraph</div></pre></td></tr></table></figure>
 <p>然後會問你三個問題</p>
@@ -420,16 +420,16 @@
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
 <a id="more"></a>
 <p>說真的寫好 React 版本以後要改寫成 React Native 還挺容易的，基本上要改的只有介面的部分，對應到程式碼大概就是每個 Component 中的 <code>render()</code>，當然還有 CSS 要改成 react-native 的 style，Animation 也不能用 CSS 來做了，這也是比較麻煩的地方。</p>
 <h1 id="檔案結構"><a href="# 檔案結構" class="headerlink" title="檔案結構"></a>檔案結構</h1><p>React 版跟 React Native 版的檔案結構其實幾乎都是差不多的，可以看下圖的對應：</p>
-{% zoom /img/2017-02-02/02.png 左圖是 React 的檔案結構；右圖是 React Native 的檔案結構。 %}
+<div><img src="/img/2017-02-02/02.png" alt="左圖是 React 的檔案結構；右圖是 React Native 的檔案結構。" data-action="zoom"><span class="image-caption">左圖是 React 的檔案結構；右圖是 React Native 的檔案結構。</span></div>
 <p>最大的差異是 <code>style/</code> 資料夾不見了，這是因為 React Native 的 style 我都寫在 components 檔案裡面了。React 版本的 <code>index.js</code> 是進入點。其他檔案基本上都維持一樣的結構、React 版本定義的 components 在 react-native 版中都依舊存在。</p>
-{% zoom /img/2017-02-02/03.png 左為 React 版；右為 React Native 版，元件完全一致。 %}
+<div><img src="/img/2017-02-02/03.png" alt="左為 React 版；右為 React Native 版，元件完全一致。" data-action="zoom"><span class="image-caption">左為 React 版；右為 React Native 版，元件完全一致。</span></div>
 <h1 id="改寫 -render"><a href="# 改寫 -render" class="headerlink" title="改寫 render()"></a>改寫 <code>render()</code></h1><blockquote>
 <p>邏輯可以重用，要改的只有渲染的部分。</p>
 </blockquote>
@@ -456,7 +456,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個&lt;a href=&quot;https://ssarcandy.tw/colorblocks-react/&quot;&gt;網頁小遊戲&lt;/a&gt;，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.colorblocksrn&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Google play&lt;/a&gt; 上～(iOS app store 費用太高付不起…)&lt;br&gt;算是完成幾個長久以來的小小目標(?)&lt;/p&gt;
+      &lt;p&gt;接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個&lt;a href=&quot;https://ssarcandy.tw/colorblocks-react/&quot;&gt;網頁小遊戲&lt;/a&gt;，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.colorblocksrn&quot;&gt;Google play&lt;/a&gt; 上～(iOS app store 費用太高付不起…)&lt;br&gt;算是完成幾個長久以來的小小目標(?)&lt;/p&gt;
 &lt;div&gt;&lt;img src=&quot;/img/2017-02-02/01.jpg&quot; alt=&quot;用 React Native 做出 Android/iOS 原生 app&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
     
     </summary>
@@ -473,7 +473,7 @@
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -540,7 +540,7 @@
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -567,7 +567,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"cover=2&amp;deck_no=3&amp;stage_id=706&amp;training_id=1"</span> +</div><div class="line"><span class="string">"&amp;unit_ids[]=15&amp;unit_ids[]=16&amp;unit_ids[]=17&amp;unit_ids[]=18&amp;unit_ids[]=19&amp;unit_ids[]=21&amp;unit_ids[]=84&amp;unit_ids[]=82&amp;unit_ids[]=271&amp;unit_ids[]=340"</span> +</div><div class="line"><span class="string">"&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50"</span></div></pre></td></tr></table></figure>
 <p>可以發現有一大堆 key 都是一樣的 (<code>unit_ids[]</code> , <code>unit_level[]</code> )，這用 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 似乎辦不到，所以我最後決定寫 shell script 直接用 curl 發 request ，再用 cronjob 設定每天幫刷一下關。<br> 恩，就成功了。 </p>
 <p>再挑戰下一個模式: P.O.W RESCUE ，每天可以打 20 關電腦，會給你一些獎品<del>(怎麼每個模式都大同小異 XD)</del>。這是我覺得最浪費時間的模式了，因為一天要打 20 次。</p>
-{% zoom /img/2016-12-25/3.png P.O.W RESCUE %}
+<div><img src="/img/2016-12-25/3.png" alt="P.O.W RESCUE" data-action="zoom"><span class="image-caption">P.O.W RESCUE</span></div>
 <p>這邏輯稍微複雜一點，因為每次挑戰的 <code>stage_id</code> 都不一樣，要先 GET 下一關 <code>stage_id</code> ，而且又有那種 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 不能發的 request。解法兩種:</p>
 <ol>
 <li>全部用 shell script 寫。</li>
@@ -602,7 +602,7 @@
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -659,7 +659,7 @@
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
@@ -712,7 +712,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -740,15 +740,15 @@
     
     <summary type="html">
     
-      &lt;p&gt;CMLab 有二十幾台 unix work stations 供大家使用(據說 CMLab 的工作站比資工系工作站還要好…)。&lt;br&gt;雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。&lt;br&gt;實驗室有個 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;網站&lt;/a&gt; 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。&lt;/p&gt;
+      &lt;p&gt;CMLab 有二十幾台 unix work stations 供大家使用(據說 CMLab 的工作站比資工系工作站還要好…)。&lt;br&gt;雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。&lt;br&gt;實驗室有個 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status/&quot;&gt;網站&lt;/a&gt; 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。&lt;/p&gt;
 &lt;p&gt;但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。&lt;/p&gt;
     
     </summary>
     
     
-      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
-    
       <category term="automation" scheme="https://ssarcandy.tw/tags/automation/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
     
       <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     
@@ -759,12 +759,12 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
 <h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
-<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br>{% zoom /img/2016-11-09/02.png 真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup> %}</p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup></span></div></p>
 <p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
 <p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
 <ol>
@@ -776,20 +776,20 @@
 <p>以 pseudo-code 表示，大概可以寫成這樣：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
 <hr>
-<p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br>{% zoom /img/2016-11-09/03.png pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。 %}</p>
+<p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><div><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。" data-action="zoom"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></div></p>
 <p>除此之外，也需要計算每條 ray 的權重，根據論文 <sup>[2]</sup> 所說是如下公式：</p>
 <p>$E = A\frac{cos^4\theta}{Z^2}$</p>
 <p>$A$: 出射瞳面積<br>$Z$: 最後透鏡與成像平面的距離<br>$\theta$: 光束與成像平面法向量夾角</p>
 <h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
-{% zoom /img/2016-11-09/05.png dobule-gauss 50mm with 512 samples per pixel(1024*1024) %}
-{% zoom /img/2016-11-09/06.png wide 22mm with 512 samples per pixel(1024*1024) %}
-{% zoom /img/2016-11-09/07.png telephoto 250mm with 512 samples per pixel(1024*1024) %}
-{% zoom /img/2016-11-09/08.png fisheye 10mm with 512 samples per pixel(1024*1024) %}
+<div><img src="/img/2016-11-09/05.png" alt="dobule-gauss 50mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">dobule-gauss 50mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/06.png" alt="wide 22mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">wide 22mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/07.png" alt="telephoto 250mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">telephoto 250mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/08.png" alt="fisheye 10mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">fisheye 10mm with 512 samples per pixel(1024*1024)</span></div>
 <h1 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h1><p> 每個透鏡面基本上是以部份的球面來模擬，要求交點很容易，因為 <code>src/shape/shpere.cpp</code> 已經實做求交點了，可以直接創一個 Sphere object ，然後再 <code>s.Intersect(r, &amp;thit, &amp;rayEpsilon, &amp;dg)</code> 來取得交點。</p>
 <p>這樣寫簡單易懂，三兩下解決求交點這件事，但其實效能並不好，因為只為了求一個交點卻建構了一個完整的 shpere shape ，稍微有點浪費……</p>
 <p>改善方式可以藉由複製貼上 <code>Shpere::Intersect()</code> 並加以改寫，就可以省去這樣的 overhead<br>實際上效能大約差 2 倍。</p>
 <h1 id="各種坑"><a href="# 各種坑" class="headerlink" title="各種坑"></a>各種坑</h1><ul>
-<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。{% zoom /img/2016-11-09/04.png Raster/Camera space 之間關係。 %}</li>
+<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<div><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。" data-action="zoom"><span class="image-caption">Raster/Camera space 之間關係。</span></div></li>
 <li><strong>Ray minT, maxT</strong><br>在 <code>GenerateRay()</code> 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖…</li>
 <li><strong>Total reflection</strong><br>我使用 <a href="https://www.wikiwand.com/en/Snell&#39;s_law" target="_blank" rel="external">Snell’s law</a> 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。<br>所以記得要注意別把負數開根號了。</li>
 </ul>
@@ -817,7 +817,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -847,8 +847,8 @@
     
     <summary type="html">
     
-      &lt;p&gt;有時候在寫 &lt;a href=&quot;https://www.opengl.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;openGL&lt;/a&gt; 或者是類似 &lt;a href=&quot;http://www.pbrt.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;pbrt&lt;/a&gt; 這樣有牽涉到三維空間的程式的時候總是很難除錯…&lt;br&gt;雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/zdevito/vdb&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;vdb&lt;/a&gt; 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。&lt;/p&gt;
+      &lt;p&gt;有時候在寫 &lt;a href=&quot;https://www.opengl.org/&quot;&gt;openGL&lt;/a&gt; 或者是類似 &lt;a href=&quot;http://www.pbrt.org/&quot;&gt;pbrt&lt;/a&gt; 這樣有牽涉到三維空間的程式的時候總是很難除錯…&lt;br&gt;雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/zdevito/vdb&quot;&gt;vdb&lt;/a&gt; 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。&lt;/p&gt;
     
     </summary>
     
@@ -864,7 +864,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -873,18 +873,18 @@
 <p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
 <h2 id="實作 -heightfield- 交點測試"><a href="# 實作 -heightfield- 交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的 shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
 <p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~ 哈哈 <br> 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
-<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br>{% zoom /img/2016-10-10/2.png 2D-DDA 邏輯。<sup>[2]</sup> %}</p>
+<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br><div><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">2D-DDA 邏輯。<sup>[2]</sup></span></div></p>
 <p>可以看到其實可以在一開始就算出 <code>x</code>, <code>y</code> 要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓 3D 結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
-<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br>{% zoom /img/2016-10-10/4.png 從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。 %}</p>
+<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br><div><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。" data-action="zoom"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></div></p>
 <p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
-<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br>{% zoom /img/2016-10-10/landsea-big.jpg 用直接求交點的方式取代原本先做三角化的方法。 %}</p>
-<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br>{% zoom /img/2016-10-10/1.png 三角化後每個點 M 都有六個鄰居。 %}</p>
+<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br><div><img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。" data-action="zoom"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></div></p>
+<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br><div><img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。" data-action="zoom"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></div></p>
 <p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
 <p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>$\underset{Normalize(}{}\underset{TL}{\rightarrow}  \underset{\times}{} \underset{L}{\rightarrow} \underset{+}{} \underset{L}{\rightarrow}  \underset{\times}{} \underset{B}{\rightarrow} \underset{+}{} \underset{B}{\rightarrow}  \underset{\times}{} \underset{BR}{\rightarrow} \underset{+}{} \underset{BR}{\rightarrow}  \underset{\times}{} \underset{R}{\rightarrow} \underset{+}{} \underset{R}{\rightarrow}  \underset{\times}{} \underset{T}{\rightarrow} \underset{+}{} \underset{T}{\rightarrow}  \underset{\times}{} \underset{TL}{\rightarrow} \underset{)}{}$</p>
 <p>這樣子改進後，就可以讓結果變這樣:<br><div><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果" data-action="zoom"><span class="image-caption">平滑化的結果</span></div></p>
 <h2 id="浮點數精度問題 -10-22- 更新"><a href="# 浮點數精度問題 -10-22- 更新" class="headerlink" title="浮點數精度問題 (10/22 更新)"></a> 浮點數精度問題 (10/22 更新)</h2><p> 做完平滑化之後，感覺海好像怪怪的歐….<br>一開始其實我還沒察覺，過這麼久才發現這問題…</p>
 <p>很顯然只有海有這樣的問題，八成是因為海的 $z$ 值差距太小，計算法向量時的誤差。<br>用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 <code>Normalize(sumOfNormals)</code>，這步驟造成 $z$ 值起伏太小的海的計算誤差….<br>把 <code>Normalize()</code> 拔掉之後就正常了～</p>
- {% zoom /img/2016-10-10/4.jpg 修正浮點數精度問題後的結果 %}
+ <div><img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果" data-action="zoom"><span class="image-caption">修正浮點數精度問題後的結果</span></div>
 <h2 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h2><p> 很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上…. 嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
 <p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
 <table>
@@ -932,7 +932,7 @@
 <li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
 <li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
 </ul>
-<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br>{% zoom /img/2016-10-10/5.png 效能比較。<sup>[3]</sup> %}</p>
+<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption">效能比較。<sup>[3]</sup></span></div></p>
 <h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
 <hr>
 <p> 註:<br> [1] 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2] 原圖來自 Physically Based Rendering, Second Edition<br> [3] 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測</p>
@@ -958,7 +958,7 @@
     <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
@@ -1014,7 +1014,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;最近的專案需要用到 &lt;a href=&quot;http://opencv.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;OpenCV&lt;/a&gt;，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。&lt;br&gt;說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)&lt;br&gt;
+      &lt;p&gt;最近的專案需要用到 &lt;a href=&quot;http://opencv.org/&quot;&gt;OpenCV&lt;/a&gt;，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。&lt;br&gt;說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)&lt;br&gt;
     
     </summary>
     
@@ -1032,7 +1032,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-05-07T14:27:31.574Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -1047,7 +1047,7 @@
 <p>安裝也是跟 Vundle 差不多，關鍵字不一樣而已 (<code>:PlugInstall</code>)</p>
 <p>比較厲害的是 vim-plug 可以 <strong>on-demand loading</strong>！<br>像是 <a href="https://github.com/fatih/vim-go" target="_blank" rel="external">vim-go</a>(強大的 Golang Dev-plugin)，這種只有在寫 golang 時候才要的 plugin，就應該只在副檔名是 <code>.go</code> 的時候載入就好；<br><a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a> 也是，有時候只是打開一個檔案要編輯而已，用不著這個套件，只有當真的觸發開啟 NERDTree 的時候再載入就好。<br>這些 vim-plug 都可以設定(設定方式詳見 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">readme</a>)，大幅提升 vim 開啟速度～</p>
 <h3 id="效能"><a href="# 效能" class="headerlink" title="效能"></a>效能 </h3><p> 我從 Pathogen 換到 Vundle 是為了可以很容易的在新環境設定好 vim，<br>而從 Vundle 換到 vim-plug 則是為了他的 on-demand loading。</p>
-<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br>{% zoom /img/2016-08-17/1.png 不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time %}</p>
+<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br><div><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time" data-action="zoom"><span class="image-caption">不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></div></p>
 <p>不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！<br>如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim --startuptime vim.log</div></pre></td></tr></table></figure>
 <p>詳細開啟資訊都會寫入 <code>vim.log</code></p>
@@ -1057,7 +1057,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;我用過了幾乎所有有名的 vim plugin-manager，包含 &lt;a href=&quot;https://github.com/tpope/vim-pathogen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Pathogen&lt;/a&gt;, &lt;a href=&quot;https://github.com/VundleVim/Vundle.vim&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Vundle&lt;/a&gt; 以及比較新的 &lt;a href=&quot;https://github.com/junegunn/vim-plug&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;vim-plug&lt;/a&gt;。&lt;br&gt;而以時間序來說也是 Pathogen -&amp;gt; Vundle -&amp;gt; vim-plug&lt;/p&gt;
+      &lt;p&gt;我用過了幾乎所有有名的 vim plugin-manager，包含 &lt;a href=&quot;https://github.com/tpope/vim-pathogen&quot;&gt;Pathogen&lt;/a&gt;, &lt;a href=&quot;https://github.com/VundleVim/Vundle.vim&quot;&gt;Vundle&lt;/a&gt; 以及比較新的 &lt;a href=&quot;https://github.com/junegunn/vim-plug&quot;&gt;vim-plug&lt;/a&gt;。&lt;br&gt;而以時間序來說也是 Pathogen -&amp;gt; Vundle -&amp;gt; vim-plug&lt;/p&gt;
 &lt;p&gt;先來談談用過這三個分別的感想好了：&lt;/p&gt;
     
     </summary>
@@ -1072,13 +1072,13 @@
     <link href="https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
 <h2 id="SSH-KEY"><a href="#SSH-KEY" class="headerlink" title="SSH KEY"></a>SSH KEY</h2><p>  矇著眼照做 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 那篇</a>，到這行:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure></p>
 <p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個 flag 可以幫你插入解密指令到 <code>.travis.yml</code> 的<code>before_install</code>。<br>  不過這 flag 真的很機車，會把你的 <code>.travis.yml</code> 排版全搞亂，順便把註解刪光光！<br>  建議不要加 <code>--add</code> 自己手動插入解密指令，排版就不會亂掉。<br>  而且用 Windows 的人會在解密文件時莫名失敗，所以只能用 Mac 或 Unix 環境做這件事(<a href="https://github.com/travis-ci/travis-ci/issues/4746" target="_blank" rel="external">File decryption fails on Windows</a>)，超雷…</p>
-<p>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  {% zoom /img/2016-07-29/2.PNG repository> more options 可以設定、看到 Travis 的環境變數 %}</p>
+<p>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <div><img src="/img/2016-07-29/2.PNG" alt="repository> more options 可以設定、看到 Travis 的環境變數" data-action="zoom"><span class="image-caption">repository> more options 可以設定、看到 Travis 的環境變數</span></div></p>
 <h2 id="USE-SSH"><a href="#USE-SSH" class="headerlink" title="USE SSH"></a>USE SSH</h2><p>  Travis 是用 GitHub 的 <a href="https://developer.github.com/guides/managing-deploy-keys/" target="_blank" rel="external">Deploy key</a> 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">那篇文章 </a> 做就可以了。<br>  如果不幸在 <code>hexo deploy</code> 時遇到錯誤如下:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">remote: Invalid username or password.</div><div class="line">fatal: Authentication failed for &quot;....&quot;</div></pre></td></tr></table></figure></p>
 <p>  那可以檢查一下 hexo 的 <code>_config.yml</code> <code>deploy</code> 的部分，要用 ssh 的形式設定 repository<br>  <figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: git@github.com:SSARCandy/ssarcandy.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
 <h2 id="SETTING-UP-travis-yml"><a href="#SETTING-UP-travis-yml" class="headerlink" title="SETTING UP .travis.yml"></a>SETTING UP .travis.yml</h2><p>我這個網站結構如下:</p>
@@ -1093,7 +1093,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;其實 &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo&lt;/a&gt; 作者 TC 已經有發過&lt;a href=&quot;https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;一篇文章&lt;/a&gt;在講這個主題了，也講得很清楚了，基本上&lt;del&gt;矇著眼睛&lt;/del&gt;照做就行了。&lt;br&gt;而這篇主要是再補充幾個細節。&lt;/p&gt;
+      &lt;p&gt;其實 &lt;a href=&quot;https://hexo.io/&quot;&gt;hexo&lt;/a&gt; 作者 TC 已經有發過&lt;a href=&quot;https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/&quot;&gt;一篇文章&lt;/a&gt;在講這個主題了，也講得很清楚了，基本上&lt;del&gt;矇著眼睛&lt;/del&gt;照做就行了。&lt;br&gt;而這篇主要是再補充幾個細節。&lt;/p&gt;
     
     </summary>
     
@@ -1109,7 +1109,7 @@
     <link href="https://ssarcandy.tw/2016/07/27/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/27/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><div><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。" data-action="zoom"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></div></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -1125,7 +1125,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;原本其實只是要做個 &lt;a href=&quot;https://api.slack.com/bot-users&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Slack bot&lt;/a&gt;，&lt;br&gt;因為我懶得每天都上 &lt;a href=&quot;http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;APOD&lt;/a&gt; 官網看…&lt;br&gt;乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～&lt;br&gt;
+      &lt;p&gt;原本其實只是要做個 &lt;a href=&quot;https://api.slack.com/bot-users&quot;&gt;Slack bot&lt;/a&gt;，&lt;br&gt;因為我懶得每天都上 &lt;a href=&quot;http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html&quot;&gt;APOD&lt;/a&gt; 官網看…&lt;br&gt;乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～&lt;br&gt;
     
     </summary>
     
@@ -1141,7 +1141,7 @@
     <link href="https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2017-05-07T14:27:31.570Z</updated>
+    <updated>2017-05-07T15:03:19.647Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
@@ -1155,7 +1155,7 @@
 <li><p>Open <code>OpenCV.sln</code> under <code>build/</code></p>
 </li>
 <li><p>Build it using <code>Debug</code>, <code>Release</code></p>
-{% zoom /img/2016-07-23/2.png Right click> build %}
+<div><img src="/img/2016-07-23/2.png" alt="Right click> build" data-action="zoom"><span class="image-caption">Right click> build</span></div>
 <ul>
 <li>right click &gt; build</li>
 <li>switch to <code>Release</code> mode and build again</li>
@@ -1163,7 +1163,7 @@
 </li>
 <li><p>[Windows] Setting up environment variable</p>
 <ul>
-<li>add <code>&lt;opencv&gt;/bin</code> into <code>PATH</code>{% zoom /img/2016-07-23/3.png Add new environment variable %}</li>
+<li>add <code>&lt;opencv&gt;/bin</code> into <code>PATH</code><div><img src="/img/2016-07-23/3.png" alt="Add new environment variable" data-action="zoom"><span class="image-caption">Add new environment variable</span></div></li>
 <li>add new env named <code>OpenCV_DIR</code>, value as <code>&lt;opencv&gt;/build</code> </li>
 <li>it may need logout to apply setting, you can check it by <code>echo %PATH%</code>, <code>echo %OpenCV_DIR%</code></li>
 </ul>
@@ -1174,7 +1174,7 @@
 <li>In step <code>2. Build opencv with cmake</code>, press <code>configure</code></li>
 <li>Set up <code>OPENCV_EXTRA_MODULES_PATH</code> to proper path(<code>&lt;opencv_contrib&gt;/modules</code>)</li>
 </ol>
-{% zoom /img/2016-07-23/4.png Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules %}
+<div><img src="/img/2016-07-23/4.png" alt="Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules" data-action="zoom"><span class="image-caption">Set OPENCV_EXTRA_MODULES_PATH as opencv_contrib/modules</span></div>
 <ol>
 <li>Press <code>configure</code> again, then <code>generate</code></li>
 </ol>
@@ -1186,7 +1186,7 @@
     <summary type="html">
     
       &lt;h3 id=&quot;Build-OpenCV&quot;&gt;&lt;a href=&quot;#Build-OpenCV&quot; class=&quot;headerlink&quot; title=&quot;Build OpenCV&quot;&gt;&lt;/a&gt;Build OpenCV&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Download &lt;a href=&quot;https://github.com/Itseez/opencv&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;OpenCV&lt;/a&gt; and &lt;a href=&quot;https://cmake.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Cmake&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Download &lt;a href=&quot;https://github.com/Itseez/opencv&quot;&gt;OpenCV&lt;/a&gt; and &lt;a href=&quot;https://cmake.org/&quot;&gt;Cmake&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Build opencv with cmake&lt;/p&gt;
 &lt;div&gt;&lt;img src=&quot;/img/2016-07-23/1.png&quot; alt=&quot;Cmake configuration&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
 &lt;ul&gt;
