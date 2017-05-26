@@ -37,7 +37,7 @@ tags:
 
 Descriptor 是用來描述特徵點的東西，通常是以高維度的向量來表示，我則是使用 Harris corner 算出 corner response image 之後，將最高的 1% 的點抓出來，以一個 5x5 的 window 來表示成 25 維的向量。
 
-{% zoom /img/2017-05-26/04.jpg 以周邊像素的值當作 descriptor。<sup>[2]</sup> %}
+{% zoom /img/2017-05-26/04.jpg 以周邊像素的值當作 descriptor。<sup>[1]</sup> %}
 
 這是一個 3x3 window 所表示的9維向量，實作上我是使用 5x5。
 
@@ -146,3 +146,9 @@ $("#panorama2").panorama_viewer({repeat: false,direction: "horizontal",animation
 $("#panorama3").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4634});
 $("#panorama4").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4120});
 </script>
+
+
+---
+
+Reference:
+[1] Image from Digital Visual Effects(NTU) slides
