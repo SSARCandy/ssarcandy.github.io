@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-05-26T18:27:07.771Z</updated>
+  <updated>2017-05-26T19:30:51.732Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -16,11 +16,100 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Panorama image stitching</title>
+    <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
+    <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
+    <published>2017-05-25T17:28:09.000Z</published>
+    <updated>2017-05-26T19:30:51.732Z</updated>
+    
+    <content type="html"><![CDATA[<p>全景照 (panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br> 以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
+<a id="more"></a>
+<h1 id="Warp-images-to-cylinder"><a href="#Warp-images-to-cylinder" class="headerlink" title="Warp images to cylinder"></a>Warp images to cylinder</h1><p>由於 360 全景影像的特性，是利用相機旋轉拍攝出環場影像，所以在做偵測特徵點或將照片接起來之前，必須先投影到圓柱體上才會有比較好的效果。</p>
+<div><img src="/img/2017-05-26/01.jpg" alt="內圈的黑線分別代表六張照片的成像平面，紅線則是要投影到的圓柱面。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">內圈的黑線分別代表六張照片的成像平面，紅線則是要投影到的圓柱面。<sup>[1]</sup></span></div>
+<p>如同上圖所示，真正拍到的影像是內圈的黑線，分別代表六張照片，但是要接起來必須重新投影到外圈紅色才會接得上。</p>
+<div><img src="/img/2017-05-26/02.jpg" alt="右邊的圖木紋的直線都變成有個曲率的彎線。" data-action="zoom"><span class="image-caption">右邊的圖木紋的直線都變成有個曲率的彎線。</span></div>
+<p>這是我將影像投影至圓柱前後的差別，可以看見右邊的圖木紋的直線都變成有個曲率的彎線，這就是投影之後造成的差異。</p>
+<h1 id="Feature-detection"><a href="#Feature-detection" class="headerlink" title="Feature detection"></a>Feature detection</h1><p>要找出兩兩照片中的特徵點才好找出照片間的相對位置，所以首先要找出特徵點，這邊我實作的是 Harris corner detector。</p>
+<div><img src="/img/2017-05-26/03.jpg" alt="左: 用棋盤圖來當作測試資料；右: corner response image" data-action="zoom"><span class="image-caption">左: 用棋盤圖來當作測試資料；右: corner response image</span></div>
+<p>這是利用 Harris corner 找出的 corner response image，可以看到交叉點的值都比較高(紅色點)，而這些就是應該要挑出來的特徵點。</p>
+<h1 id="Feature-descriptor"><a href="#Feature-descriptor" class="headerlink" title="Feature descriptor"></a>Feature descriptor</h1><p>Descriptor 是用來描述特徵點的東西，通常是以高維度的向量來表示，我則是使用 Harris corner 算出 corner response image 之後，將最高的 1% 的點抓出來，以一個 5x5 的 window 來表示成 25 維的向量。</p>
+<div><img src="/img/2017-05-26/04.jpg" alt="以周邊像素的值當作 descriptor。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">以周邊像素的值當作 descriptor。<sup>[1]</sup></span></div>
+<p>這是一個 3x3 window 所表示的 9 維向量，實作上我是使用 5x5。</p>
+<p>找出來以後，我還做了一些處理來減少 feature points 的數目:</p>
+<ol>
+<li>只挑選 corner response 最高的 1%</li>
+<li>切掉上下邊緣(因為投影到圓柱之後會有黑邊)</li>
+<li>做 local suppression</li>
+</ol>
+<div><img src="/img/2017-05-26/05.jpg" alt="由左至右分別是: 前 1% 的 features、切掉上下邊緣、以一個 window size 掃過整張圖，每個 window 中只保留最強的 feature。" data-action="zoom"><span class="image-caption">由左至右分別是: 前 1% 的 features、切掉上下邊緣、以一個 window size 掃過整張圖，每個 window 中只保留最強的 feature。</span></div>
+<p>減少 feature 數目最主要的原因是因為希望加快運算速度。</p>
+<h1 id="Feature-matching"><a href="#Feature-matching" class="headerlink" title="Feature matching"></a>Feature matching</h1><p>再來就是 match 出兩兩圖片中對應的點，我用的方法很簡單，就是將兩個影像中找出的 feature descriptors 互相算出向量距離，找出對應的組合。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(descriptor1)):</div><div class="line">    min_distance = inf</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(descriptor2)):</div><div class="line">        distance = ((descriptor1[i]-descriptor2[j])**<span class="number">2</span>).sum() </div><div class="line">        <span class="keyword">if</span> distance &lt; min_distance:</div><div class="line">            min_distance = distance</div></pre></td></tr></table></figure>
+<p>以 psudo-code 來表示的話就是兩個 for loop 一個一個算距離找出最小的那組合。是最暴力最直覺的方式 XDDD</p>
+<p>其實我也有嘗試對 descriptors 建立 KD-tree 來加速整個 matching 的過程，但是由於 descriptor 是個 25 維的向量，使用 KD-tree 幾乎沒有速度上的優勢，所以最後還是只用這種最單純的算法。<br>另外，為了達到更好以及更快的 matching 效果，我有定一個假設:「前後兩張影像的垂直差異不會過大」，雖說這假設並不一定成立，但是在 360 環場影像的狀況下還算符合。</p>
+<div><img src="/img/2017-05-26/06.jpg" alt="兩張影像中對應的點，以紅色連線來表示。" data-action="zoom"><span class="image-caption">兩張影像中對應的點，以紅色連線來表示。</span></div>
+<h1 id="Find-best-warp-model-using-RANSAC"><a href="#Find-best-warp-model-using-RANSAC" class="headerlink" title="Find best warp model using RANSAC"></a>Find best warp model using RANSAC</h1><p>再來就是要找出最好的 translation model，進而移動影像來讓兩張影像中相同的部分疊在一起，這邊我用 RANSAC 來找出最佳的 translation model。<br>RANSAC 基本精神就是隨機挑兩個點的相對位置當作最好的 translation model，然後讓所有 matched pair 都套用這個 model，再來計算有多少個 pair 套用這 model 之後也是有落在可接受的範圍之內。這樣的過程重複跑個幾百次，就有很高的機率可以找出最佳的 translation model。</p>
+<p>另外，有時候找出的 matched pair 其實並沒有很多，這時候比起使用隨機選點的方式，直接窮盡所有組合相對快上許多。</p>
+<h1 id="Stitch-image-with-Blending"><a href="#Stitch-image-with-Blending" class="headerlink" title="Stitch image with Blending"></a>Stitch image with Blending</h1><p>有了兩張圖的相對位置之後就可以來連接兩張影像，但是直接連起來會有很明顯的縫，所以需要做 blending。<br>我實作了兩種 blend method:</p>
+<ol>
+<li>Linear blend</li>
+<li>Linear blend with constant width</li>
+</ol>
+<p>Linear blend 是最簡單的方式，重疊的部分的顏色由兩張影像加權平均得出，加權的比重如下圖所示，x 軸位置接近哪張影像則權重就比較高。</p>
+<div><img src="/img/2017-05-26/07.jpg" alt="x 軸位置接近哪張影像則權重就比較高" data-action="zoom"><span class="image-caption">x 軸位置接近哪張影像則權重就比較高</span></div>
+<p>不過這樣會有一個問題，如果重疊的區域有棵樹在動，那這樣 blend 就會出現鬼影的問題。<br>所以我就改成第二種方法，Linear blend with constant width，先找出兩張影像重疊部分的中心線，以此左右取個固定寬度再做 linear blend，這樣就能避免鬼影的問題。</p>
+<div><img src="/img/2017-05-26/08.jpg" alt="只在兩張影像重疊部分的中心線左右一點點區間做 linear blend" data-action="zoom"><span class="image-caption">只在兩張影像重疊部分的中心線左右一點點區間做 linear blend</span></div>
+<p>以下是分別用兩種方法所接合的圖，可以看到用第一種方法的左邊的樹明顯糊糊的，右邊的則幾乎沒有鬼影。</p>
+<div><img src="/img/2017-05-26/09.jpg" alt="左: 第一種方法，可看到樹葉糊糊的；右: 第二種方法，沒有鬼影現象。" data-action="zoom"><span class="image-caption">左: 第一種方法，可看到樹葉糊糊的；右: 第二種方法，沒有鬼影現象。</span></div>
+<h1 id="End-to-end-alignment-and-Crop"><a href="#End-to-end-alignment-and-Crop" class="headerlink" title="End to end alignment and Crop"></a>End to end alignment and Crop</h1><p>完成所有影像接合之後，會有一些上下的誤差，這時候可以直接將誤差平均分配給每張影像，就可以得出一張比較平的圖片。</p>
+<p>原始的接起來的影像，可以看到這一張有嚴重的上下飄移。</p>
+<div><img src="/img/2017-05-26/15.jpg" alt="接完以後的原始影像" data-action="zoom"><span class="image-caption">接完以後的原始影像</span></div>
+<p>把誤差平均分配給大家，可以變成比較平的影像。<br><div><img src="/img/2017-05-26/15-aligned.jpg" alt="經過 end to end alignment 修正之後的圖" data-action="zoom"><span class="image-caption">經過 end to end alignment 修正之後的圖</span></div></p>
+<p>最後再把上下的黑邊切除掉，就可以得出一張完整的影像。<br><div><img src="/img/2017-05-26/15-cropped.jpg" alt="裁減掉黑邊的圖。" data-action="zoom"><span class="image-caption">裁減掉黑邊的圖。</span></div></p>
+<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p>這邊展示幾個結果，圖片都可以拖曳喔~</p>
+<div id="panorama1"><br> <img src="/img/2017-05-26/15-cropped.jpg"><br></div>
+
+<div id="panorama3"><br> <img src="/img/2017-05-26/13-cropped.jpg"><br></div>
+
+<div id="panorama2"><br> <img src="/img/2017-05-26/17-cropped.jpg"><br></div>
+
+<div id="panorama4"><br> <img src="/img/2017-05-26/cropped.jpg"><br></div>
+
+<p><link href="/css/panorama_viewer.css" rel="stylesheet"></p>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/js/jquery.panorama_viewer.js"></script>
+
+<script>
+$("#panorama1").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 5103});
+$("#panorama2").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4556});
+$("#panorama3").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4634});
+$("#panorama4").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4120});
+</script>
+
+
+<hr>
+<p>Reference:<br>[1] Image from Digital Visual Effects(NTU) slides</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;全景照(panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。&lt;br&gt;以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。&lt;br&gt;但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="opencv" scheme="https://ssarcandy.tw/tags/opencv/"/>
+    
+      <category term="python" scheme="https://ssarcandy.tw/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Migrate mail server to Gmail - migration strategy</title>
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
 <a id="more"></a>
@@ -94,7 +183,7 @@
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -173,7 +262,7 @@
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -281,7 +370,7 @@
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -348,7 +437,7 @@
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -420,7 +509,7 @@
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -473,7 +562,7 @@
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -540,7 +629,7 @@
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -602,7 +691,7 @@
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -659,7 +748,7 @@
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
@@ -712,7 +801,7 @@
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -759,7 +848,7 @@
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -817,7 +906,7 @@
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -864,7 +953,7 @@
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -958,7 +1047,7 @@
     <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
@@ -1032,7 +1121,7 @@
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -1072,7 +1161,7 @@
     <link href="https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
@@ -1109,7 +1198,7 @@
     <link href="https://ssarcandy.tw/2016/07/27/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/27/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><div><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。" data-action="zoom"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></div></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -1141,7 +1230,7 @@
     <link href="https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2017-05-26T18:27:07.771Z</updated>
+    <updated>2017-05-26T19:30:51.732Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
