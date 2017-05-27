@@ -120,31 +120,25 @@ Linear blend 是最簡單的方式，重疊的部分的顏色由兩張影像加�
 
 這邊展示幾個結果，圖片都可以拖曳喔~
 
-<div id="panorama1">
- <img src="/img/2017-05-26/15-cropped.jpg">
-</div>
+<div id="pano1" style="position:relative;"><div style="background-image:url('/img/2017-05-26/15-cropped.jpg'); width:5103px; height:921px;"></div></div>
+<div id="pano2" style="position:relative;"><div style="background-image:url('/img/2017-05-26/13-cropped.jpg'); width:4634px; height:744px;"></div></div>
+<div id="pano3" style="position:relative;"><div style="background-image:url('/img/2017-05-26/17-cropped.jpg'); width:4556px; height:497px;"></div></div>
+<div id="pano4" style="position:relative;"><div style="background-image:url('/img/2017-05-26/cropped.jpg'); width:4120px; height:492px;"></div></div>
 
-<div id="panorama3">
- <img src="/img/2017-05-26/13-cropped.jpg">
-</div>
 
-<div id="panorama2">
- <img src="/img/2017-05-26/17-cropped.jpg">
-</div>
-
-<div id="panorama4">
- <img src="/img/2017-05-26/cropped.jpg">
-</div>
-
-<link href="/css/panorama_viewer.css" rel="stylesheet">
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="/js/jquery.panorama_viewer.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.7.0/css/perfect-scrollbar.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.7.0/js/perfect-scrollbar.min.js"></script>
 
 <script>
-$("#panorama1").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 5103});
-$("#panorama2").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4556});
-$("#panorama3").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4634});
-$("#panorama4").panorama_viewer({repeat: false,direction: "horizontal",animationTime: 200,easing: "ease-out",overlay: false,w: 4120});
+window.onload = function() {
+    var pano1 = document.getElementById('pano1');
+    var pano2 = document.getElementById('pano2');
+    var pano3 = document.getElementById('pano3');
+    var pano4 = document.getElementById('pano4');
+    [pano1, pano2, pano3, pano4].map(function(pano) {
+        Ps.initialize(pano);
+    });
+};
 </script>
 
 
