@@ -111,19 +111,32 @@ Linear blend 是最簡單的方式，重疊的部分的顏色由兩張影像加�
 
 
 把誤差平均分配給大家，可以變成比較平的影像。
-{% zoom /img/2017-05-26/15-aligned.jpg 經過 end to end alignment 修正之後的圖%}
+{% zoom /img/2017-05-26/15-aligned.jpg 經過 end to end alignment 修正之後的圖 %}
 
 最後再把上下的黑邊切除掉，就可以得出一張完整的影像。
-{% zoom /img/2017-05-26/15-cropped.jpg  裁減掉黑邊的圖。 %}
+{% zoom /img/2017-05-26/15-cropped.jpg 裁減掉黑邊的圖。 %}
 
 # Results
 
-這邊展示幾個結果，圖片都可以拖曳喔~
+這邊展示幾個結果，一張綜覽全貌、一張是原始尺寸（可拖曳）
 
-<div id="pano1" style="position:relative;"><div style="background-image:url('/img/2017-05-26/15-cropped.jpg'); width:5103px; height:921px;"></div></div>
-<div id="pano2" style="position:relative;"><div style="background-image:url('/img/2017-05-26/13-cropped.jpg'); width:4634px; height:744px;"></div></div>
-<div id="pano3" style="position:relative;"><div style="background-image:url('/img/2017-05-26/17-cropped.jpg'); width:4556px; height:497px;"></div></div>
-<div id="pano4" style="position:relative;"><div style="background-image:url('/img/2017-05-26/cropped.jpg'); width:4120px; height:492px;"></div></div>
+{% zoom /img/2017-05-26/15-cropped.jpg 大雪山登山口。 %}
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/15-cropped.jpg'); width:5103px; height:921px;"></div></div>
+
+---
+
+{% zoom /img/2017-05-26/13-cropped.jpg 台大總圖後面。 %}
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/13-cropped.jpg'); width:4634px; height:744px;"></div></div>
+
+---
+
+{% zoom /img/2017-05-26/17-cropped.jpg Testing image from internet %}
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/17-cropped.jpg'); width:4556px; height:497px;"></div></div>
+
+---
+
+{% zoom /img/2017-05-26/cropped.jpg Testing image from internet %}
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/cropped.jpg'); width:4120px; height:492px;"></div></div>
 
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.7.0/css/perfect-scrollbar.min.css" rel="stylesheet">
@@ -131,11 +144,8 @@ Linear blend 是最簡單的方式，重疊的部分的顏色由兩張影像加�
 
 <script>
 window.onload = function() {
-    var pano1 = document.getElementById('pano1');
-    var pano2 = document.getElementById('pano2');
-    var pano3 = document.getElementById('pano3');
-    var pano4 = document.getElementById('pano4');
-    [pano1, pano2, pano3, pano4].map(function(pano) {
+    var panoramas = document.getElementsByClassName('pano');
+    Array.prototype.map.call(panoramas, function(pano) {
         Ps.initialize(pano);
     });
 };
