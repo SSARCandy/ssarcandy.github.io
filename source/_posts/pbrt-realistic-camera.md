@@ -55,11 +55,11 @@ for l in lens:  # from rear to front
 
 除此之外，也需要計算每條 ray 的權重，根據論文<sup>[2]</sup>所說是如下公式：
 
-$E = A\frac{cos^4\theta}{Z^2}$
+\\(E = A\frac{cos^4\theta}{Z^2}\\)
 
-$A$: 出射瞳面積
-$Z$: 最後透鏡與成像平面的距離
-$\theta$: 光束與成像平面法向量夾角
+\\(A\\): 出射瞳面積
+\\(Z\\): 最後透鏡與成像平面的距離
+\\(\theta\\): 光束與成像平面法向量夾角
 
 
 # 結果
@@ -98,3 +98,4 @@ $\theta$: 光束與成像平面法向量夾角
  註:
  [1] 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_(graphics))
  [2] A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995
+$$$$

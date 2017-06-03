@@ -43,7 +43,7 @@ for y in [min..max]:
 ```
 
 如何訂 min, max 值是個難題，太大會效率差，太小可能會沒找最好的解。
-不過依據我的經驗，拍攝的時候有搭配腳架以及快門線的話，其實誤差差不多都在 5 pixels 之間，所以可以把 $(min, max) = (-2, 2)$
+不過依據我的經驗，拍攝的時候有搭配腳架以及快門線的話，其實誤差差不多都在 5 pixels 之間，所以可以把 \\((min, max) = (-2, 2)\\)
 
 ## Median Threshold Bitmap
 
@@ -83,7 +83,7 @@ Response curve 是在決定接收到多少能量該轉成多少的值(此值是 
 
 我建立 HDR 影像的方法為 1997 Debevec<sup>[2]</sup> 的方法。
 由於論文很佛心的有提供 MatLab Code，所以我就直接拿他為基底改寫成 python 程式碼，
-並利用 numpy 提供的 `np.linalg.lstsq(A, b)` 解 $Ax = b$ 的 $x$ 解。
+並利用 numpy 提供的 `np.linalg.lstsq(A, b)` 解 \\(Ax = b\\) 的 \\(x\\) 解。
 
 我將 RGB channel 分別計算 response curve，並全部畫在一圖表上檢視，以下是我做的幾個例子。
 
@@ -95,7 +95,7 @@ Response curve 是在決定接收到多少能量該轉成多少的值(此值是 
 {% zoom /img/2017-04-16/street2-response-curve.png %}
 </div>
 
-另外，Debevec 論文<sup>[2]</sup>所提及的 $L$ (控制 response curve smoothness 程度)，並不好掌握最好的值，不過依據實驗 $L$ 值大約在 30~50 就還不錯。
+另外，Debevec 論文<sup>[2]</sup>所提及的 \\(L\\) (控制 response curve smoothness 程度)，並不好掌握最好的值，不過依據實驗 \\(L\\) 值大約在 30~50 就還不錯。
 
 ---
 
@@ -127,7 +127,7 @@ $$
 \ln E\_{i}=\dfrac {\sum \_{j=1}^{P} w\left( Zij\right) \left( g\left( Zij\right) -\ln \Delta t\_{j}\right)} {\sum \_{j=1}^{P} w\left( Zij\right)} 
 $$
 
-其中 $g$ 函式就是剛剛產生的 response curve。
+其中 \\(g\\) 函式就是剛剛產生的 response curve。
 有了 radiance map之後，就可以套用假色來顯示出真實能量分佈圖，以下是我做的幾的例子(這邊的值都是log value)
 
 <div style="display: flex; align-items: center;">

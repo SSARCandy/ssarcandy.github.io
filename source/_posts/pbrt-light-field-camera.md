@@ -31,21 +31,21 @@ tags:
 # 數位重對焦
 
 我以之前做的[真實相機系統](https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/)為基礎，在主透鏡焦距上放置微透鏡陣列，藉此來模擬光場相機的硬體設備。
-光場相機原始影像紀錄了四維的光線資訊，$L(u, v, s, t)$ 這個函式代表從主透鏡的 2D 點 $(u, v)$ 射到微透鏡的 2D 點 $(s, t)$ 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。
+光場相機原始影像紀錄了四維的光線資訊，\\(L(u, v, s, t)\\) 這個函式代表從主透鏡的 2D 點 \\((u, v)\\) 射到微透鏡的 2D 點 \\((s, t)\\) 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。
 
 {% zoom /img/2017-01-18/04.png 圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s' 平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup> %}
 
-原始焦距的比例。假設要重對焦影像至 $s'$ 平面，可以由已知算出：
+原始焦距的比例。假設要重對焦影像至 \\(s'\\) 平面，可以由已知算出：
 
-$ s'=as+\left( 1-a\right) u$
+\\( s'=as+\left( 1-a\right) u\\)
 
-不過由於光線能量函式是 $L(u, v, s, t)$ ，所以必須把 $s'$ 改寫成 $s$ 的形式：
+不過由於光線能量函式是 \\(L(u, v, s, t)\\) ，所以必須把 \\(s'\\) 改寫成 \\(s\\) 的形式：
 
-$ s=\dfrac {1} {a}\left( s'-\left( 1-a\right) u\right) $
+\\( s=\dfrac {1} {a}\left( s'-\left( 1-a\right) u\right) \\)
 
 所以對於一個重對焦影像的像素而言，能量可以這樣求得：
 
-$ E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left(s' - \left(1 - a \right) u\right), \dfrac {1} {a} \left( t'-\left(1-a\right) v\right) \right) $
+\\( E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left(s' - \left(1 - a \right) u\right), \dfrac {1} {a} \left( t'-\left(1-a\right) v\right) \right) \\)
 
 其實應該要寫成積分形式才是真實狀況，但是由於真正得到的資料是離散的(像素)，所以用加總的就可以了。
 
@@ -77,7 +77,6 @@ $ E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left
 - 查資料一直看到 Lytro 的開箱文....
 - markdown + latex 還真多要注意的，markdown 的`_`會先被轉成`<em>`然後像是`\sum _{u}`的 latex 就會變成`\sum <em>{u}`...
 
-
 ---
 
 註:
@@ -87,3 +86,4 @@ $ E\left(s', t'\right) = \sum \_{u} \sum \_{v} L\left(u, v, \dfrac {1} {a} \left
 [4] [The (New) Stanford Light Field Archive](http://lightfield.stanford.edu/lfs.html)
 [5] [光場相機原理及仿真實現](http://blog.csdn.net/endlch/article/details/44539055)
 [6] [LYTRO Light Field Camera 原理解析](https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/)
+$$$$

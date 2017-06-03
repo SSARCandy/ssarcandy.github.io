@@ -23,7 +23,7 @@ pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交�
 
 ## 實作 heightfield 交點測試
 
-Heightfield 其實就是平面但是有高低差，也就是說，對每個 $(x, y)$ 而言只會有一個 $z$ 值。算是個滿單純的 shape。
+Heightfield 其實就是平面但是有高低差，也就是說，對每個 \\((x, y)\\) 而言只會有一個 \\(z\\) 值。算是個滿單純的 shape。
 Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` 來把形狀轉為 triangleMesh 再做交點測試的。
 
 如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？
@@ -34,7 +34,7 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 {% zoom /img/2016-10-10/2.png 2D-DDA 邏輯。<sup>[2]</sup> %}
 
 可以看到其實可以在一開始就算出`x`, `y`要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 `z` 軸的資訊，並且每一個 pixel 變成 voxel。
-3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 $(x, y)$ 而言只會有一個 $z$ 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~
+3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 \\((x, y)\\) 而言只會有一個 \\(z\\) 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓3D結構的 heightfield 套用 2D-DDA 了！耶~~~
 
 建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。
 而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 `x` 及 `y` 也是有很大的好處的，如下圖:
@@ -56,7 +56,7 @@ Heightfield 也是原本就有實作的一種 shape，是直接用 `Refine()` �
 點 `M` 的鄰居有 `TL`、`T`、`R`、`BR`、`B`、`L` 六點，點 `M` 的法向量可以藉由任意兩向量外積得出。
 
 那我就平均一下六個法向量來當作真正的法向量，以 `M` 為原點，可算出平均法向量為:
-$\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \underset{L}{\rightarrow} \underset{+}{ } \underset{L}{\rightarrow}  \underset{\times}{ } \underset{B}{\rightarrow} \underset{+}{ } \underset{B}{\rightarrow}  \underset{\times}{ } \underset{BR}{\rightarrow} \underset{+}{ } \underset{BR}{\rightarrow}  \underset{\times}{ } \underset{R}{\rightarrow} \underset{+}{ } \underset{R}{\rightarrow}  \underset{\times}{ } \underset{T}{\rightarrow} \underset{+}{ } \underset{T}{\rightarrow}  \underset{\times}{ } \underset{TL}{\rightarrow} \underset{)}{ }$
+\\(\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \underset{L}{\rightarrow} \underset{+}{ } \underset{L}{\rightarrow}  \underset{\times}{ } \underset{B}{\rightarrow} \underset{+}{ } \underset{B}{\rightarrow}  \underset{\times}{ } \underset{BR}{\rightarrow} \underset{+}{ } \underset{BR}{\rightarrow}  \underset{\times}{ } \underset{R}{\rightarrow} \underset{+}{ } \underset{R}{\rightarrow}  \underset{\times}{ } \underset{T}{\rightarrow} \underset{+}{ } \underset{T}{\rightarrow}  \underset{\times}{ } \underset{TL}{\rightarrow} \underset{)}{ }\\)
 
 這樣子改進後，就可以讓結果變這樣:
 {% zoom /img/2016-10-10/landsea-big-smooth.jpg 平滑化的結果 %}
@@ -66,8 +66,8 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
 做完平滑化之後，感覺海好像怪怪的歐....
 一開始其實我還沒察覺，過這麼久才發現這問題...
 
-很顯然只有海有這樣的問題，八成是因為海的 $z$ 值差距太小，計算法向量時的誤差。
-用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 `Normalize(sumOfNormals)`，這步驟造成 $z$ 值起伏太小的海的計算誤差....
+很顯然只有海有這樣的問題，八成是因為海的 \\(z\\) 值差距太小，計算法向量時的誤差。
+用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 `Normalize(sumOfNormals)`，這步驟造成 \\(z\\) 值起伏太小的海的計算誤差....
 把 `Normalize()` 拔掉之後就正常了～
 
  {% zoom /img/2016-10-10/4.jpg 修正浮點數精度問題後的結果 %}
@@ -112,3 +112,4 @@ $\underset{Normalize(}{ }\underset{TL}{\rightarrow}  \underset{\times}{ } \under
  [1] 可以看[這篇](http://www.wsj.com/articles/SB10000872396390444508504577595414031195148)介紹 IKEA 渲染型錄
  [2] 原圖來自 Physically Based Rendering, Second Edition
  [3] 執行時間用 `bash` 內建 `time` 指令來量測
+$$$$
