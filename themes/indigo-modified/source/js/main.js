@@ -5,6 +5,7 @@
         $$ = d.querySelectorAll.bind(d),
         gotop = d.getElementById('gotop'),
         menu = d.getElementById('menu'),
+        main = d.getElementById('main'),
         header = d.getElementById('header'),
         mask = d.getElementById('mask'),
         menuToggle = d.getElementById('menu-toggle'),
@@ -52,6 +53,7 @@
         toggleMenu: function(flag) {
             if (flag) {
                 menu.classList.remove('hide');
+                main.classList.add('offset-main');
 
                 if (w.innerWidth < 1241) {
                     mask.classList.add('in');
@@ -61,6 +63,7 @@
             } else {
                 menu.classList.remove('show');
                 mask.classList.remove('in');
+                main.classList.remove('offset-main');
             }
         },
         fixedHeader: function(top) {
@@ -197,6 +200,7 @@
 
     menuOff.addEventListener(even, function() {
         menu.classList.add('hide');
+        main.classList.remove('offset-main');
     }, false);
 
     mask.addEventListener(even, function() {

@@ -412,3 +412,15 @@
         display: none
     }
 }
+
+@media screen and (max-width: 1680px) and (min-width: 1440px) {
+    main > #post-widget {
+        opacity: 1;
+        .transition(.6s);
+    }
+
+    .offset-main > #post-widget {
+        opacity: 0;
+        .transition(.4s, cubic-bezier(0.18, 0.81, 0.3, 0.89));
+    }
+}
