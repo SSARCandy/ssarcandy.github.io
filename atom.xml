@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-06-05T18:33:20.197Z</updated>
+  <updated>2017-06-06T13:09:39.557Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
     <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
     <published>2017-05-25T17:28:09.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>全景照 (panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br> 以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
 <a id="more"></a>
@@ -116,7 +116,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
 <a id="more"></a>
@@ -190,7 +190,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -269,7 +269,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -377,7 +377,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -416,7 +416,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo $DISPLAY</div><div class="line">localhost:10.0</div></pre></td></tr></table></figure>
 <p>如果看到如上的回傳，就表示一切正常。</p>
 <p>試試 <code>gvim</code> ，就會跳出小巧可愛的視窗:</p>
-<div><img src="/img/2017-03-20/01.PNG" alt="透過 X11-forwarding 讓 server 上的 gvim 顯示到本機 (windows)" data-action="zoom"><span class="image-caption"> 透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows)</span></div>
+<div><img src="/img/2017-03-20/01.PNG" alt="透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows)" data-action="zoom"><span class="image-caption">透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows)</span></div>
 <hr>
 <p>Reference:</p>
 <p>[1] <a href="https://support.apple.com/zh-tw/HT201341" target="_blank" rel="external">Mac 已不再隨附 X11</a><br>[2] <a href="http://cypresslin.web.fc2.com/Memo/M-SSH.html" target="_blank" rel="external">SSH X11 Forwarding</a><br>[3] <a href="http://www.geo.mtu.edu/geoschem/docs/putty_install.html" target="_blank" rel="external">Installing/Configuring PuTTy and Xming</a><br>[4] <a href="https://www.vultr.com/docs/setup-x11-forwarding-over-ssh-on-debian-wheezy" target="_blank" rel="external">Setup X11 Forwarding over SSH on Debian Wheezy</a></p>
@@ -444,7 +444,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -516,7 +516,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -569,11 +569,11 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
-<div><img src="/img/2017-01-18/01.png" alt="圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源 <sup>[1]</sup>" data-action="zoom"><span class="image-caption"> 圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup></span></div>
+<div><img src="/img/2017-01-18/01.png" alt="圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup>" data-action="zoom"><span class="image-caption">圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup></span></div>
 <a id="more"></a>
 <p>光場相機每個像素紀錄的則是只有一條光線。由於光場相機這樣的設計，所以光場相機所拍出的原始影像很特別，會是一格一格的，如圖二所示。</p>
 <div><img src="/img/2017-01-18/02.png" alt="圖二：光場相機所拍出的原始影像是一格一格的。" data-action="zoom"><span class="image-caption">圖二：光場相機所拍出的原始影像是一格一格的。</span></div>
@@ -581,7 +581,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <p>另外，藉由對這些微透鏡影像的重新排列，可以生成不同視角的影像。具體來說，就是挑選每個微透鏡的同一格像素，組合出一張長寬分別等同於微透鏡在長邊以及寬邊的數量的影像。而一張光場相機原始影像能夠產生多少不同視角的影像，端看每個微透鏡後面對應到的像素有幾個。</p>
 <div><img src="/img/2017-01-18/03.png" alt="圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。" data-action="zoom"><span class="image-caption">圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。</span></div>
 <h1 id="數位重對焦"><a href="# 數位重對焦" class="headerlink" title="數位重對焦"></a>數位重對焦 </h1><p> 我以之前做的 <a href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"> 真實相機系統 </a> 為基礎，在主透鏡焦距上放置微透鏡陣列，藉此來模擬光場相機的硬體設備。<br>光場相機原始影像紀錄了四維的光線資訊，\(L(u, v, s, t)\) 這個函式代表從主透鏡的 2D 點 \((u, v)\) 射到微透鏡的 2D 點 \((s, t)\) 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。</p>
-<div><img src="/img/2017-01-18/04.png" alt="圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源 <sup>[2]</sup>" data-action="zoom"><span class="image-caption"> 圖四：在 s'平面重新聚焦，即是讓所有光錐都落在 s' 平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup></span></div>
+<div><img src="/img/2017-01-18/04.png" alt="圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup></span></div>
 <p>原始焦距的比例。假設要重對焦影像至 \(s’\) 平面，可以由已知算出：</p>
 <p>\(s’=as+\left( 1-a\right) u\)</p>
 <p>不過由於光線能量函式是 \(L(u, v, s, t)\) ，所以必須把 \(s’\) 改寫成 \(s\) 的形式：</p>
@@ -636,7 +636,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -698,7 +698,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -755,14 +755,14 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
 <a id="more"></a>
-<div><img src="/img/2016-12-18/4.jpg" alt="不同的環境光會讓場景中物件有不同的渲染結果 <sup>[1]</sup>" data-action="zoom"><span class="image-caption"> 不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup></span></div>
+<div><img src="/img/2016-12-18/4.jpg" alt="不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup>" data-action="zoom"><span class="image-caption">不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup></span></div>
 <h1 id="Median-Cut-Alogrithm"><a href="#Median-Cut-Alogrithm" class="headerlink" title="Median Cut Alogrithm"></a>Median Cut Alogrithm</h1><p>直接來看一張圖:</p>
-<div><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源 <sup>[2]</sup>" data-action="zoom"><span class="image-caption"> 用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup></span></div>
+<div><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup></span></div>
 <p>事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:</p>
 <ol>
 <li>初始狀態 = 整張 env light probe 影像（陣列中只有一個區域）</li>
@@ -808,7 +808,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -855,12 +855,12 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
 <h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
-<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像 (或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup>" data-action="zoom"><span class="image-caption"> 真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup></span></div></p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup></span></div></p>
 <p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
 <p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
 <ol>
@@ -913,7 +913,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -960,9 +960,9 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
-    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈 <br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption"> 據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
+    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
 <h2 id="關於 -pbrt- 與 -ray-tracing"><a href="# 關於 -pbrt- 與 -ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指 (因為沒有任何光打到手指並反射到眼中)。<br> 至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
 <p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
@@ -1028,7 +1028,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
 <li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
 </ul>
-<p>經過幾次最佳化後，成功壓低執行時間 (單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption"> 效能比較。<sup>[3]</sup></span></div></p>
+<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption">效能比較。<sup>[3]</sup></span></div></p>
 <h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
 <hr>
 <p> 註:<br> [1] 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2] 原圖來自 Physically Based Rendering, Second Edition<br> [3] 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測<br>$$$$</p>
@@ -1054,7 +1054,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.561Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
@@ -1128,7 +1128,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.561Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -1143,7 +1143,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <p>安裝也是跟 Vundle 差不多，關鍵字不一樣而已 (<code>:PlugInstall</code>)</p>
 <p>比較厲害的是 vim-plug 可以 <strong>on-demand loading</strong>！<br>像是 <a href="https://github.com/fatih/vim-go" target="_blank" rel="external">vim-go</a>(強大的 Golang Dev-plugin)，這種只有在寫 golang 時候才要的 plugin，就應該只在副檔名是 <code>.go</code> 的時候載入就好；<br><a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a> 也是，有時候只是打開一個檔案要編輯而已，用不著這個套件，只有當真的觸發開啟 NERDTree 的時候再載入就好。<br>這些 vim-plug 都可以設定(設定方式詳見 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">readme</a>)，大幅提升 vim 開啟速度～</p>
 <h3 id="效能"><a href="# 效能" class="headerlink" title="效能"></a>效能 </h3><p> 我從 Pathogen 換到 Vundle 是為了可以很容易的在新環境設定好 vim，<br>而從 Vundle 換到 vim-plug 則是為了他的 on-demand loading。</p>
-<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗 <br><div><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time" data-action="zoom"><span class="image-caption"> 不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></div></p>
+<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br><div><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time" data-action="zoom"><span class="image-caption">不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></div></p>
 <p>不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！<br>如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim --startuptime vim.log</div></pre></td></tr></table></figure>
 <p>詳細開啟資訊都會寫入 <code>vim.log</code></p>
@@ -1168,13 +1168,13 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
 <h2 id="SSH-KEY"><a href="#SSH-KEY" class="headerlink" title="SSH KEY"></a>SSH KEY</h2><p>  矇著眼照做 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 那篇</a>，到這行:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ travis encrypt-file ssh_key --add</div></pre></td></tr></table></figure></p>
 <p>  這邊會幫你上傳 ssh_key 到 Travis 上，<code>--add</code>這個 flag 可以幫你插入解密指令到 <code>.travis.yml</code> 的<code>before_install</code>。<br>  不過這 flag 真的很機車，會把你的 <code>.travis.yml</code> 排版全搞亂，順便把註解刪光光！<br>  建議不要加 <code>--add</code> 自己手動插入解密指令，排版就不會亂掉。<br>  而且用 Windows 的人會在解密文件時莫名失敗，所以只能用 Mac 或 Unix 環境做這件事(<a href="https://github.com/travis-ci/travis-ci/issues/4746" target="_blank" rel="external">File decryption fails on Windows</a>)，超雷…</p>
-<p>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <div><img src="/img/2016-07-29/2.PNG" alt="repository> more options 可以設定、看到 Travis 的環境變數" data-action="zoom"><span class="image-caption">repository > more options 可以設定、看到 Travis 的環境變數</span></div></p>
+<p>  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。<br>  <div><img src="/img/2016-07-29/2.PNG" alt="repository> more options 可以設定、看到 Travis 的環境變數" data-action="zoom"><span class="image-caption">repository> more options 可以設定、看到 Travis 的環境變數</span></div></p>
 <h2 id="USE-SSH"><a href="#USE-SSH" class="headerlink" title="USE SSH"></a>USE SSH</h2><p>  Travis 是用 GitHub 的 <a href="https://developer.github.com/guides/managing-deploy-keys/" target="_blank" rel="external">Deploy key</a> 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external">那篇文章 </a> 做就可以了。<br>  如果不幸在 <code>hexo deploy</code> 時遇到錯誤如下:<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">remote: Invalid username or password.</div><div class="line">fatal: Authentication failed for &quot;....&quot;</div></pre></td></tr></table></figure></p>
 <p>  那可以檢查一下 hexo 的 <code>_config.yml</code> <code>deploy</code> 的部分，要用 ssh 的形式設定 repository<br>  <figure class="highlight plain"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: git@github.com:SSARCandy/ssarcandy.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
 <h2 id="SETTING-UP-travis-yml"><a href="#SETTING-UP-travis-yml" class="headerlink" title="SETTING UP .travis.yml"></a>SETTING UP .travis.yml</h2><p>我這個網站結構如下:</p>
@@ -1205,7 +1205,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/07/27/bot-battle/"/>
     <id>https://ssarcandy.tw/2016/07/27/bot-battle/</id>
     <published>2016-07-26T16:16:45.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<p>原本其實只是要做個 <a href="https://api.slack.com/bot-users" target="_blank" rel="external">Slack bot</a>，<br>因為我懶得每天都上 <a href="http://www.phys.ncku.edu.tw/~astrolab/mirrors/apod/archivepix.html" target="_blank" rel="external">APOD</a> 官網看…<br>乾脆做個 bot 每天都會在中午 12:30 發今日的圖跟說明到 Slack channel 裡～<br><a id="more"></a><br><div><img src="/img/2016-07-27/1.PNG" alt="自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。" data-action="zoom"><span class="image-caption">自動發文到 slack channel 裡，然後還隨機搭配內容農場風格的一句話。</span></div></p>
 <p>不過除了我自己以外好像都沒什麼人捧場，幾乎都被無視 QQ<br><em>David 老師</em> 還表示很煩要我關掉 (明明一天才 Po 一次啊啊啊 ಠ_ಠ</p>
@@ -1213,7 +1213,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <p>結果 <em>David 老師 </em> 也做了個每半小時就發名言佳句給我的 bot，<br> 害我只好也把我的 bot 改成每十分鐘隨機發天文圖給他，看誰比較耐得住煩～<br><div><img src="/img/2016-07-27/2.PNG" alt="每半小時發給我一句名言佳句，真是世界煩。" data-action="zoom"><span class="image-caption">每半小時發給我一句名言佳句，真是世界煩。</span></div></p>
 <p>當然這種互相毀滅的 bot 大戰持續沒多久就在雙方讓步之下都停止了…..</p>
 <p>— 以上都是前言 —</p>
-<p>即使 Slack 上都沒人要鳥我，<br>我還是秉持著推廣基礎天文教育的偉大理念，認為優質的每日天文圖的不應該被埋沒，要讓這樣優質的內容給更多人接觸到！<br>最後突然想到：「不然乾脆發在 Dcard 廢版好了，那邊最多人在看了而且不受版規限制」<br>可是懶人如我是不可能每天上去 Po 文的，所以又寫了個 bot 每天中午戳 Dcard API，發優質天文圖到廢版 (廢文？<br><div><img src="/img/2016-07-27/3.PNG" alt="發廢文到廢版" data-action="zoom"><span class="image-caption"> 發廢文到廢版</span></div></p>
+<p>即使 Slack 上都沒人要鳥我，<br>我還是秉持著推廣基礎天文教育的偉大理念，認為優質的每日天文圖的不應該被埋沒，要讓這樣優質的內容給更多人接觸到！<br>最後突然想到：「不然乾脆發在 Dcard 廢版好了，那邊最多人在看了而且不受版規限制」<br>可是懶人如我是不可能每天上去 Po 文的，所以又寫了個 bot 每天中午戳 Dcard API，發優質天文圖到廢版(廢文？<br><div><img src="/img/2016-07-27/3.PNG" alt="發廢文到廢版" data-action="zoom"><span class="image-caption">發廢文到廢版</span></div></p>
 <p>結果意外反應還不錯？<br>還有人想要我整理系列文，不愧是廢版版友，就是有眼光！<br><div><img src="/img/2016-07-27/4.PNG" alt="大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯" data-action="zoom"><span class="image-caption">大家都很捧場，覺得溫馨 ╰(〞︶〝) ╯</span></div></p>
 <p><del>不知道要過多久才會有人會發現這都是 bot 在發文 XDD</del></p>
 <p>–<br>最後自己推銷一下，由於 APOD 只有 NASA 有提供官方 <a href="https://api.nasa.gov/" target="_blank" rel="external">API</a>，除了英文以外其他語言的子站 (像是中文版) 都沒辦法簡單的取得內容，所以我寫了一個 npm 套件，專門處理取得指定日期、指定語言的 APOD 內容。<br>Github: <a href="https://github.com/SSARCandy/node-apod" target="_blank" rel="external">https://github.com/SSARCandy/node-apod</a><br>Demo: <a href="http://ssarcandy.tw/node-apod/demo.html">http://ssarcandy.tw/node-apod/demo.html</a></p>
@@ -1237,7 +1237,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/"/>
     <id>https://ssarcandy.tw/2016/07/23/Setting-up-OpenCV-using-Cmake-GUI/</id>
     <published>2016-07-22T16:46:45.000Z</published>
-    <updated>2017-06-05T18:33:20.197Z</updated>
+    <updated>2017-06-06T13:09:39.557Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Build-OpenCV"><a href="#Build-OpenCV" class="headerlink" title="Build OpenCV"></a>Build OpenCV</h3><ol>
 <li><p>Download <a href="https://github.com/Itseez/opencv" target="_blank" rel="external">OpenCV</a> and <a href="https://cmake.org/" target="_blank" rel="external">Cmake</a></p></li>
@@ -1251,7 +1251,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <li><p>Open <code>OpenCV.sln</code> under <code>build/</code></p>
 </li>
 <li><p>Build it using <code>Debug</code>, <code>Release</code></p>
-<div><img src="/img/2016-07-23/2.png" alt="Right click> build" data-action="zoom"><span class="image-caption">Right click > build</span></div>
+<div><img src="/img/2016-07-23/2.png" alt="Right click> build" data-action="zoom"><span class="image-caption">Right click> build</span></div>
 <ul>
 <li>right click &gt; build</li>
 <li>switch to <code>Release</code> mode and build again</li>
