@@ -1,3 +1,15 @@
+- name: Coherent-Line-Drawing
+  title: Coherent Line Drawing
+  description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007. With an easy-to-use, real-time interactive graphic user interface system.'
+  github: https://github.com/SSARCandy/Coherent-Line-Drawing
+  preview: http://ssarcandy.tw/Coherent-Line-Drawing/
+  download: https://github.com/SSARCandy/Coherent-Line-Drawing/releases
+  youtube: https://www.youtube.com/watch?v=48fTXKUTM-8
+  tags:
+    - C++
+    - OpenCV
+    - Rendering
+    
 - name: high-dynamic-range-imaging
   title: High Dynamic Range Imaging
   description: 'An implementation of "Paul E. Debevec, Jitendra Malik, Recovering High Dynamic Range Radiance Maps from Photographs, SIGGRAPH 1997."'
@@ -93,16 +105,6 @@
     - C++
     - OpenCV
     - Computer_Vision
-
-- name: Coherent-Line-Drawing
-  title: Coherent Line Drawing
-  description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007.'
-  github: https://github.com/SSARCandy/Coherent-Line-Drawing
-  preview: http://ssarcandy.tw/Coherent-Line-Drawing/
-  tags:
-    - C++
-    - OpenCV
-    - Rendering
 
 - name: slack-for-APOD
   title: slack-bot for APOD
