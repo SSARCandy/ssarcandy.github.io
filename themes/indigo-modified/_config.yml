@@ -61,6 +61,9 @@ share: false
 #是否开启搜索
 search: true
 
+#是否啟用 turbolinks.js
+turbolinks: true
+
 #是否大屏幕下文章页隐藏导航
 hideMenu: true
 
