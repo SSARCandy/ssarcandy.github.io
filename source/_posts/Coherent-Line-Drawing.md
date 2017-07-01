@@ -1,6 +1,6 @@
 ---
 title: Coherent Line Drawing
-date: 2017-06-26 00：14：38
+date: 2017-06-26 00:14:38
 tags:
 - c++
 - opencv
