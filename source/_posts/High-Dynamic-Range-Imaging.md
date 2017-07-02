@@ -4,6 +4,7 @@ date: 2017-04-16 01:34:44
 tags:
 - opencv
 - python
+image: /img/2017-04-16/living_room2-radiance-map.png
 ---
 
 > 高動態範圍成像（英語：High Dynamic Range Imaging，簡稱HDRI或HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。

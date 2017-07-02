@@ -4,6 +4,7 @@ date: 2017-04-23 19:36:51
 tags:
 - unix
 - note
+image: /img/2017-04-23/01.jpg
 ---
 
 最近 CMLab 終於申請到 G Suite for Education 了～

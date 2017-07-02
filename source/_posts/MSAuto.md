@@ -4,6 +4,7 @@ date: 2016-12-25 21:12:48
 tags:
 - trashtalk
 - automation
+image: /img/2016-12-25/3.png
 ---
 
 

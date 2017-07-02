@@ -4,6 +4,7 @@ date: 2016-07-27 00:16:45
 tags:
 - trashtalk
 - automation
+image: /img/2016-07-27/3.PNG
 ---
 
 原本其實只是要做個 [Slack bot](https://api.slack.com/bot-users)，

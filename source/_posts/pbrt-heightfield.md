@@ -5,6 +5,7 @@ tags:
 - rendering
 - pbrt
 - c++
+image: /img/2016-10-10/landsea-big-smooth.jpg
 ---
 
 pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈

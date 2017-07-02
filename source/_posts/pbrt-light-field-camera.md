@@ -6,6 +6,7 @@ tags:
 - rendering
 - python
 - c++
+image: /img/2017-01-18/02.png
 ---
 
 

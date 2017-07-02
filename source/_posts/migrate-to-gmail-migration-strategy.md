@@ -4,6 +4,7 @@ date: 2017-04-29 22:56:05
 tags:
 - unix
 - note
+image: /img/2017-04-29/01.JPG
 ---
 
 上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。
