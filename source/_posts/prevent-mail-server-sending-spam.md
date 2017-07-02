@@ -4,6 +4,7 @@ date: 2017-02-26 21:14:07
 tags:
 - unix
 - note
+image: /img/2017-02-26/01.png
 ---
 
 最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過...

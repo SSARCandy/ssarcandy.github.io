@@ -2,6 +2,7 @@
 title: 談談 vim plugin-manager
 date: 2016-08-17 11:02:10
 tags: vim
+image: /img/2016-08-17/1.png
 ---
 
 我用過了幾乎所有有名的 vim plugin-manager，包含 [Pathogen](https://github.com/tpope/vim-pathogen), [Vundle](https://github.com/VundleVim/Vundle.vim) 以及比較新的 [vim-plug](https://github.com/junegunn/vim-plug)。

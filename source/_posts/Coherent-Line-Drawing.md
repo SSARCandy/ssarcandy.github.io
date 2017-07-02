@@ -5,6 +5,7 @@ tags:
 - c++
 - opencv
 - rendering
+image: /img/2017-06-26/01.jpg
 ---
 
 線條藝術畫(line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。

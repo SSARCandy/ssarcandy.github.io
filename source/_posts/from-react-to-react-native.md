@@ -4,6 +4,7 @@ date: 2017-02-02 11:04:00
 tags:
 - react
 - react native
+image: /img/2017-02-02/03.png
 ---
 
 接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個[網頁小遊戲](https://ssarcandy.tw/colorblocks-react/)，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 [Google play](https://play.google.com/store/apps/details?id=com.colorblocksrn) 上～(iOS app store 費用太高付不起…)

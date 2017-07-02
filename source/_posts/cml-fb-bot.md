@@ -5,6 +5,7 @@ tags:
 - nodejs
 - unix
 - automation
+image: /img/2016-11-17/1.png
 ---
 
 CMLab 有二十幾台 unix work stations 供大家使用(據說 CMLab 的工作站比資工系工作站還要好...)。

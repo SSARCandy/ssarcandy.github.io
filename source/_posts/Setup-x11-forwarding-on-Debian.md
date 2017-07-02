@@ -3,6 +3,8 @@ title: Setup x11 forwarding on Debian
 date: 2017-03-20 02:03:08
 tags:
 - unix
+- note
+image: /img/2017-03-20/01.PNG
 ---
 
 

@@ -4,6 +4,7 @@ date: 2016-10-13 20:34:53
 tags:
 - pbrt
 - c++
+image: /img/2016-10-13/2.png
 ---
 
 有時候在寫 [openGL](https://www.opengl.org/) 或者是類似 [pbrt](http://www.pbrt.org/) 這樣有牽涉到三維空間的程式的時候總是很難除錯...
