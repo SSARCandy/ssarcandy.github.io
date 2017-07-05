@@ -27,11 +27,24 @@
 
 <script type="application/ld+json">
 {
+  "@context": "http://schema.org",
   "@type": "Article",
+  "mainEntityOfPage": "<%- post.permalink %>",
   "headline": "<%- post.title %>",
+  "datePublished": "<%- post.date %>",
+  "dateModified": "<%- post.date %>",
+  "author": "SSARCandy",
   "image": {
     "@type": "ImageObject",
     "url": "https://ssarcandy.tw<%- post.image %>"
-  }
+  },
+  "publisher":{ 
+    "@type" : "Organization",
+    "name": "SSARCandy's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ssarcandy.tw/img/logo.png"
+    }
+  }     
 }
 </script>
