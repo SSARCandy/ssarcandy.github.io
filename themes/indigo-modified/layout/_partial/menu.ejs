@@ -20,7 +20,7 @@
       for (var i in theme.menu) {
         menuItem = theme.menu[i];
       %>
-        <li class="waves-block waves-effect<% if(isActive(menuItem)){ %> active<% } %>" style="line-height:44px">
+        <li class="waves-block waves-effect<% if(isActive(menuItem)){ %> active<% } %>" style="line-height:44px;height:44px;padding:0 10px;">
           <a href="<%- url_for(menuItem.url) %>" <% if(menuItem.target){ %> target="_blank" <% } if(menuItem.turbo === false ){ %> data-turbolinks="false" <% } %> >
             <% if(menuItem.type === 'ml') {%><i class="material-icons icon icon-lg"><%= i %></i><% }
             else {%><i class="icon icon-lg icon-<%= i %>"></i><% } %>
