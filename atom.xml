@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-08-02T19:02:54.394Z</updated>
+  <updated>2017-08-03T19:03:36.227Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2017/07/21/about-taking-case/"/>
     <id>https://ssarcandy.tw/2017/07/21/about-taking-case/</id>
     <published>2017-07-21T11:06:10.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近終於結束了一個搞了很久的 case 。<br>我其實沒什麼接案經驗，這次也是剛好算是學校單位找我做個活動的宣傳網站，我心想既然是學校的應該也不太容易被騙，就來試試看所謂的接案。<br>在這次經驗中其實也是學到不少東西、踩了很多雷，大部份都是因為沒什麼經驗導致踩到的很多很多算專案管理相關的雷。<br>如果還有下次的話，一定要注意一些事情才可以讓整個案子的進行更加順利。</p>
 <a id="more"></a>
@@ -64,7 +64,7 @@
     <link href="https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/"/>
     <id>https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/</id>
     <published>2017-06-25T16:14:38.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>線條藝術畫 (line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。<br> 這篇論文 (Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007) 提出一個全自動的方法，可以將相片轉換成簡單、高品質的線條畫風格圖片。</p>
 <div><img src="/img/2017-06-26/01.jpg" alt="輸入一張影像，即可產生出一張線條藝術風格畫。" data-action="zoom"><span class="image-caption">輸入一張影像，即可產生出一張線條藝術風格畫。</span></div>
@@ -102,7 +102,7 @@
 <h3 id="Iterative-FDoG-filtering"><a href="#Iterative-FDoG-filtering" class="headerlink" title="Iterative FDoG filtering"></a>Iterative FDoG filtering</h3><p>有時候做一次 FDoG 效果並不夠好，所以可以藉由反覆做 FDoG 來達到更良好的效果。<br>要反覆套用 FDoG 也很容易，只要將原圖與 FDoG 的輸出疊合，然後以這新的圖片當作原圖再次套用一次 FDoG 即可。</p>
 <div><img src="/img/2017-06-26/07.jpg" alt="藉由將結果疊合回原圖再做一次 FDoG，可以使的結果品質越來越好。" data-action="zoom"><span class="image-caption">藉由將結果疊合回原圖再做一次 FDoG，可以使的結果品質越來越好。</span></div>
 <p>實作上也很簡單，就是把結果的黑色部分直接覆蓋在原圖然後拿這再做 FDoG。注意雖然原圖改變了，但是使用的 ETF 並沒有重新計算。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Superimposing the black edge pixels of the previous binary output</div><div class="line"> * upon the original image</div><div class="line"> */</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; originalImg.rows; y++) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; originalImg.cols; x++) &#123;</div><div class="line">        <span class="keyword">float</span> H = result.at&lt;uchar&gt;(y, x);</div><div class="line">        <span class="keyword">if</span> (H == <span class="number">0</span>) &#123;</div><div class="line">            originalImg.at&lt;uchar&gt;(y, x) = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Superimposing the black edge pixels of the previous binary output</span></div><div class="line"><span class="comment"> * upon the original image</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; originalImg.rows; y++) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; originalImg.cols; x++) &#123;</div><div class="line">        <span class="keyword">float</span> H = result.at&lt;uchar&gt;(y, x);</div><div class="line">        <span class="keyword">if</span> (H == <span class="number">0</span>) &#123;</div><div class="line">            originalImg.at&lt;uchar&gt;(y, x) = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p>基本上圖片在 512x512 左右的大小可以在 3 秒內產生結果，若平行化則即使是更大張的圖片也可達到 real time。</p>
 <div style="display:flex; align-items:center;"><br><div><img src="/img/2017-06-26/08.jpg" alt="輸入影像。由左上至右下：蔣公、廟、燈塔、老鷹。" data-action="zoom"><span class="image-caption">輸入影像。由左上至右下：蔣公、廟、燈塔、老鷹。</span></div><br><div><img src="/img/2017-06-26/09.jpg" alt="輸出結果。由左上至右下：蔣公、廟、燈塔、老鷹。" data-action="zoom"><span class="image-caption">輸出結果。由左上至右下：蔣公、廟、燈塔、老鷹。</span></div><br></div>
 
@@ -132,7 +132,7 @@
     <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
     <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
     <published>2017-05-25T17:28:09.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>全景照 (panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br> 以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
 <a id="more"></a>
@@ -228,7 +228,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
 <a id="more"></a>
@@ -267,7 +267,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <li>Copy <code>~ssarcandy/mail/</code> to <code>~ssarcandy_fake/mail/</code> if it exist, and chage owner</li>
 </ol>
 <p>寫成 script 大致如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"> </div><div class="line"><span class="comment"># $1=new fake user   -&gt; i.e. ssarcandy_fake</span></div><div class="line"><span class="comment"># $2=correspond user -&gt; i.e. ssarcandy</span></div><div class="line"> </div><div class="line">PASSWORD=<span class="string">'some_password'</span></div><div class="line">HOME_DIR_BASE=<span class="string">'/data/mail_migrate_tmp'</span></div><div class="line">LDAP_BASE=<span class="string">'base dn'</span></div><div class="line">LDAP_DN=<span class="string">'ldap admin dn'</span></div><div class="line">LDAP_PASS=<span class="string">'ldap admin password'</span></div><div class="line">LDAP_HOST=<span class="string">'ip address'</span></div><div class="line"> </div><div class="line"><span class="built_in">echo</span> <span class="string">"dn: uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span></span></div><div class="line">uid: <span class="variable">$1</span></div><div class="line">sn: lastname</div><div class="line">cn: complete name</div><div class="line">mail: <span class="variable">$1</span>@cmlab.csie.ntu.edu.tw</div><div class="line">objectClass: person</div><div class="line">objectClass: organizationalPerson</div><div class="line">objectClass: inetOrgPerson</div><div class="line">objectClass: posixAccount</div><div class="line">objectClass: top</div><div class="line">objectClass: shadowAccount</div><div class="line">userPassword: &#123;crypt&#125;12345</div><div class="line">shadowMax: 99999</div><div class="line">shadowWarning: 7</div><div class="line">loginShell: /bin/bash</div><div class="line">uidNumber: 6577</div><div class="line">gidNumber: 1000</div><div class="line">homeDirectory: <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span>"&gt; tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Create fake account</span></div><div class="line">ldapadd -h <span class="variable">$LDAP_HOST</span> -ZZ -x -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> -f tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Change fake account password</span></div><div class="line">ldappasswd -h <span class="variable">$LDAP_HOST</span> -ZZ -x \</div><div class="line">    -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> \</div><div class="line">    <span class="string">"uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span>"</span> -s <span class="variable">$PASSWORD</span></div><div class="line"> </div><div class="line"><span class="comment"># Create home dir for fake account</span></div><div class="line">mkdir -p <span class="variable">$HOME_DIR_BASE</span></div><div class="line">mkdir <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div><div class="line"> </div><div class="line"><span class="comment"># Copy mails to fake account.</span></div><div class="line">cp /var/spool/mail/<span class="variable">$2</span> /var/spool/mail/<span class="variable">$1</span></div><div class="line">cp -r $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$2</span>)/mail $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$1</span>)</div><div class="line"> </div><div class="line"><span class="comment"># Change owner of copied mails</span></div><div class="line">chown 6577:1000 /var/spool/mail/<span class="variable">$1</span></div><div class="line">chown -R 6577:1000 <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"> </div><div class="line"><span class="comment"># $1=new fake user   -&gt; i.e. ssarcandy_fake</span></div><div class="line"><span class="comment"># $2=correspond user -&gt; i.e. ssarcandy</span></div><div class="line"> </div><div class="line">PASSWORD=<span class="string">'some_password'</span></div><div class="line">HOME_DIR_BASE=<span class="string">'/data/mail_migrate_tmp'</span></div><div class="line">LDAP_BASE=<span class="string">'base dn'</span></div><div class="line">LDAP_DN=<span class="string">'ldap admin dn'</span></div><div class="line">LDAP_PASS=<span class="string">'ldap admin password'</span></div><div class="line">LDAP_HOST=<span class="string">'ip address'</span></div><div class="line"> </div><div class="line"><span class="built_in">echo</span> <span class="string">"dn: uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span></span></div><div class="line"><span class="string">uid: <span class="variable">$1</span></span></div><div class="line"><span class="string">sn: lastname</span></div><div class="line"><span class="string">cn: complete name</span></div><div class="line"><span class="string">mail: <span class="variable">$1</span>@cmlab.csie.ntu.edu.tw</span></div><div class="line"><span class="string">objectClass: person</span></div><div class="line"><span class="string">objectClass: organizationalPerson</span></div><div class="line"><span class="string">objectClass: inetOrgPerson</span></div><div class="line"><span class="string">objectClass: posixAccount</span></div><div class="line"><span class="string">objectClass: top</span></div><div class="line"><span class="string">objectClass: shadowAccount</span></div><div class="line"><span class="string">userPassword: &#123;crypt&#125;12345</span></div><div class="line"><span class="string">shadowMax: 99999</span></div><div class="line"><span class="string">shadowWarning: 7</span></div><div class="line"><span class="string">loginShell: /bin/bash</span></div><div class="line"><span class="string">uidNumber: 6577</span></div><div class="line"><span class="string">gidNumber: 1000</span></div><div class="line"><span class="string">homeDirectory: <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span>"</span>&gt; tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Create fake account</span></div><div class="line">ldapadd -h <span class="variable">$LDAP_HOST</span> -ZZ -x -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> -f tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Change fake account password</span></div><div class="line">ldappasswd -h <span class="variable">$LDAP_HOST</span> -ZZ -x \</div><div class="line">    -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> \</div><div class="line">    <span class="string">"uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span>"</span> -s <span class="variable">$PASSWORD</span></div><div class="line"> </div><div class="line"><span class="comment"># Create home dir for fake account</span></div><div class="line">mkdir -p <span class="variable">$HOME_DIR_BASE</span></div><div class="line">mkdir <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div><div class="line"> </div><div class="line"><span class="comment"># Copy mails to fake account.</span></div><div class="line">cp /var/spool/mail/<span class="variable">$2</span> /var/spool/mail/<span class="variable">$1</span></div><div class="line">cp -r $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$2</span>)/mail $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$1</span>)</div><div class="line"> </div><div class="line"><span class="comment"># Change owner of copied mails</span></div><div class="line">chown 6577:1000 /var/spool/mail/<span class="variable">$1</span></div><div class="line">chown -R 6577:1000 <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div></pre></td></tr></table></figure>
 <p>這就是另一個繞過密碼的方式，這方式的優點是可以不影響使用者的帳戶，也就是在遷移過程中依舊可以登入舊郵件伺服器。<br>但也是有缺點的，就是必須複製一份使用者的 mails，在遷移期間會浪費兩倍的容量。</p>
 <h1 id="遷移策略"><a href="# 遷移策略" class="headerlink" title="遷移策略"></a>遷移策略 </h1><p> 我們要遷移的郵件說多不多，但也不太少，以容量來說大概 600 GB 左右。<br>不過空間上稍微尷尬一點，只剩 50 GB 可以使用。<br>所以基本上是沒辦法讓大家都使用第二種方法(創假帳號並複製郵件)，先使用 fake LDAP 轉移大部分人會是比較適當的方式。</p>
 <p>以時間軸的方式來呈現整個遷移的過程，大致如下:</p>
@@ -302,7 +302,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -381,7 +381,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -489,7 +489,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -558,7 +558,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -630,7 +630,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -648,7 +648,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
 <p>看似像 CSS，但又沒這麼好用，比較像是閹割版的 CSS。</p>
 </blockquote>
 <p>React Native 的 style 是個 javascript 的物件，大概有七成可以跟 CSS 直接對應，寫法就是原本 CSS 改成 camlCase 寫，如果要寫得像 css 的 class 的話還要使用 <code>StyleSheet.create()</code> :</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// css</span></div><div class="line">.name &#123;</div><div class="line">    font-size: <span class="number">20</span>px;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// react native</span></div><div class="line"><span class="keyword">const</span> styles = StyleSheet.create(&#123;</div><div class="line">    <span class="attr">name</span>: &#123;</div><div class="line">        <span class="attr">fontSize</span>: <span class="number">20</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// css</span></div><div class="line">.name &#123;</div><div class="line">    font-size: <span class="number">20</span>px;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// react native</span></div><div class="line"><span class="keyword">const</span> styles = StyleSheet.create(&#123;</div><div class="line">    name: &#123;</div><div class="line">        fontSize: <span class="number">20</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>套用樣式的寫法則是直接用 <code>style={Object}</code> ，若要套用複合樣式，則在 style 中放一個 object array(順序有差):</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">View</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;styles.red&#125;</span>&gt;</span>just red<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;[styles.red,</span> <span class="attr">styles.bigblue</span>]&#125;&gt;</span>red, then bigblue<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">View</span>&gt;</span></div></pre></td></tr></table></figure>
 <h1 id="Animation"><a href="#Animation" class="headerlink" title="Animation"></a>Animation</h1><p>原本 React 版的動畫全都是用 css 做出來的，但這些在 React Native 中就沒辦法用了，官方有提供 Animation 相關的 <a href="https://facebook.github.io/react-native/docs/animations.html" target="_blank" rel="external">API</a>，但說實在的真的有點難搞。<br>後來我是用某大神寫的 library <a href="https://github.com/oblador/react-native-animatable" target="_blank" rel="external">react-native-animatable</a>，比起官方提供的更好用。</p>
@@ -683,7 +683,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -750,7 +750,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -812,7 +812,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -869,7 +869,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
@@ -922,7 +922,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -969,7 +969,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -1027,7 +1027,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -1074,7 +1074,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
     <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
     <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -1168,7 +1168,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
     <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
     <published>2016-09-09T16:28:57.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
 <p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
@@ -1242,7 +1242,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
     <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
     <published>2016-08-17T03:02:10.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
 <p>先來談談用過這三個分別的感想好了：</p>
@@ -1282,7 +1282,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/"/>
     <id>https://ssarcandy.tw/2016/07/29/hexo-auto-deploy/</id>
     <published>2016-07-28T16:51:43.000Z</published>
-    <updated>2017-08-02T19:02:54.394Z</updated>
+    <updated>2017-08-03T19:03:36.227Z</updated>
     
     <content type="html"><![CDATA[<p>其實 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a> 作者 TC 已經有發過 <a href="https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/" target="_blank" rel="external"> 一篇文章 </a> 在講這個主題了，也講得很清楚了，基本上 <del> 矇著眼睛 </del> 照做就行了。<br>而這篇主要是再補充幾個細節。</p>
 <a id="more"></a>
