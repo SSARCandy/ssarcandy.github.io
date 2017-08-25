@@ -53,7 +53,7 @@ image: /img/2017-08-25/1.jpg
 
 {% zoom /img/2017-08-25/2.jpg gpustat sample output %}
 
-所以每一台 GPU server 要做的是「每分鐘回報一次 GPU status 並存自 NFS」，可以透過 `crontab` 註冊:
+所以每一台 GPU server 要做的是「每分鐘回報一次 GPU status 並存至 NFS」，可以透過 `crontab` 註冊:
 
 ```bash
 # crontab on each GPU server
