@@ -1,0 +1,1347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>SSARCandy&#39;s Blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://ssarcandy.tw/"/>
+  <updated>2017-09-11T00:11:48.628Z</updated>
+  <id>https://ssarcandy.tw/</id>
+  
+  <author>
+    <name>許書軒</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Multi-server GPU status monitor</title>
+    <link href="https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/"/>
+    <id>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</id>
+    <published>2017-08-25T15:29:39.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>隨著實驗室 GPU 資源日益增加，<br>有越來越多人在抱怨搶不到 GPU、不知道哪台有空的 GPU 、有人佔用太多 GPU 資源等等問題，<br>這些問題似乎跟沒有一個方法可以「一目瞭然的知道所有 GPU 的狀況」有關。</p>
+<p>對，就像是 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a> 一樣，<br>假設有個 GPU 版的 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a>，應該就可以讓大家更輕易地找到閒置的 GPU，如果有人佔用過多運算資源也容易發現。</p>
+<p>於是 <a href="https://www.cmlab.csie.ntu.edu.tw/status-gpu/" target="_blank" rel="external">CMLab GPU Status</a> 就誕生拉~</p>
+<a id="more"></a>
+<h1 id="現況"><a href="# 現況" class="headerlink" title="現況"></a>現況 </h1><p> 由於我們有數台伺服器是有 GPU 資源的，所以要做出一個網頁版的監控系統大概要有兩個步驟:</p>
+<ol>
+<li>彙整各台資訊到某一台 server</li>
+<li>將這些資訊轉成網頁形式呈現</li>
+</ol>
+<p>對於第一點大概有兩種做法，一是主動去取得資訊，也就是透過 ssh 登入到各個有 GPU 的伺服器詢問資訊；二是各個有 GPU 的伺服器各自回報資訊給某一台來彙整。</p>
+<p>而主動去取得資訊的方法有幾個缺點，</p>
+<ul>
+<li>透過 ssh 登入需要密碼，當然可以透過建立 ssh 認證來省去這一步，但好麻煩 _:(´□`」 ∠):_</li>
+<li>這種方法會使得事情都是一台伺服器在做(又要登入各台又要彙整資訊)，感覺不是很人道…</li>
+</ul>
+<p>另一個方法則是「各自回報，統一呈現」，<br>就是大家各自回報 GPU 狀況，<br>然後由 web server 統一彙整資訊，<br>這種感覺就比較人道一點，大家一起分擔工作~</p>
+<h1 id="各自回報，統一呈現"><a href="# 各自回報，統一呈現" class="headerlink" title="各自回報，統一呈現"></a>各自回報，統一呈現 </h1><p> 決定了大方向的做法以後，可以繼續切分整件事情的流程:</p>
+<ol>
+<li>各台機器如何回報? 回報去哪?</li>
+<li>如何彙整?</li>
+<li>如何以網頁呈現?</li>
+</ol>
+<h2 id="各台機器如何回報、回報去哪？"><a href="# 各台機器如何回報、回報去哪？" class="headerlink" title="各台機器如何回報、回報去哪？"></a>各台機器如何回報、回報去哪？</h2><div><img src="/img/2017-08-25/1.jpg" alt="實驗室每台伺服器都有共用一個 NFS" data-action="zoom"><span class="image-caption">實驗室每台伺服器都有共用一個 NFS</span></div>
+<p>幸好我們的 server 都有用 NFS ，所以各自回報到 NFS 上就可以讓其他台存取到資訊了。<br>那獲得 GPU 資訊的方法不外乎就是下 <code>nvidia-smi</code> 來取得囉，但說真的這指令太豐富了，所以我改用別的神人做的指令 <a href="https://github.com/wookayin/gpustat" target="_blank" rel="external">gpustat</a>，輸出就乾淨多了~</p>
+<div><img src="/img/2017-08-25/2.jpg" alt="gpustat sample output" data-action="zoom"><span class="image-caption">gpustat sample output</span></div>
+<p>所以每一台 GPU server 要做的是「每分鐘回報一次 GPU status 並存至 NFS」，可以透過 <code>crontab</code> 註冊:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># crontab on each GPU server</span></div><div class="line">* * * * * /usr/<span class="built_in">local</span>/bin/gpustat -pcu &gt; /NFS/status-gpu/$(hostname)</div></pre></td></tr></table></figure>
+<h2 id="如何彙整？"><a href="# 如何彙整？" class="headerlink" title="如何彙整？"></a>如何彙整？</h2><p>剛好我們 server 名子都是很沒創意的 cml*，所以彙整相當簡單。<br>由於各自回報的關係，在 NFS 上會有如下的檔案:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-rw-r--r-- 1 root root 875 Aug 25 23:04 cml10</div><div class="line">-rw-r--r-- 1 root root 940 Aug 25 23:04 cml11</div><div class="line">-rw-r--r-- 1 root root 169 Aug 25 23:04 cml14</div><div class="line">-rw-r--r-- 1 root root 682 Aug 25 23:04 cml16</div><div class="line">-rw-r--r-- 1 root root 746 Aug 25 23:04 cml19</div><div class="line">-rw-r--r-- 1 root root 364 Aug 25 23:04 cml21</div><div class="line">-rw-r--r-- 1 root root 169 Aug 25 23:04 cml22</div><div class="line">-rw-r--r-- 1 root root 620 Aug 25 23:04 cml23</div><div class="line">-rw-r--r-- 1 root root 748 Aug 25 23:04 cml24</div><div class="line">-rw-r--r-- 1 root root 747 Aug 25 23:04 cml25</div></pre></td></tr></table></figure>
+<p>那要彙整就下個 <code>cat cml*</code> 就解決了。</p>
+<h2 id="如何以網頁呈現？"><a href="# 如何以網頁呈現？" class="headerlink" title="如何以網頁呈現？"></a>如何以網頁呈現？</h2><p>最後有了彙整後的資訊後該如何呈現置網頁上呢?<br>由於我們的 web server 有 apache，所以基本上只要多搞個資料夾底下有 <code>index.html</code>就可以了。<br>所以只要想辦法將彙整的資訊轉成 html 即可。</p>
+<p>網路上大神很多，我又發現了 <a href="http://www.pixelbeat.org/scripts/ansi2html.sh" target="_blank" rel="external">ansi2html.sh</a> ，這工具可以把 terminal output 轉成 html ，並且連顏色都幫你轉成 css ，太神拉~</p>
+<p>所以要變成網頁呈現就可以註冊個 <code>crontab</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># crontab on web server</span></div><div class="line">* * * * * cat /status-gpu/cml* | /bin/sh ansi2html.sh &gt; index.html</div></pre></td></tr></table></figure>
+<p>每分鐘重新刷新 <code>index.html</code></p>
+<h1 id="BUG"><a href="#BUG" class="headerlink" title="BUG"></a>BUG</h1><p>做好以後還是逃不掉 BUG 的摧殘 QQ<br>有時候會發現彙整的資訊會缺少某幾台 GPU server 的資訊</p>
+<p>查來查去發現原來是因為 <code>crontab</code> 註冊的時間一樣 (都是每分鐘)，再加上 NFS 是透過網路傳輸所以會比較慢，導致各自機器每分鐘回報狀況時檔案還沒寫入，web server 就執行彙整動作，就會出現缺檔的情形。<br> 解決方式很簡單，就是彙整時間稍微延遲一點，讓各自回報有時間完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># crontab on web server</span></div><div class="line">* * * * * sleep 30 &amp;&amp; cat /status-gpu/cml* | /bin/sh ansi2html.sh &gt; index.html</div></pre></td></tr></table></figure>
+<p>用 sleep 即可延遲指令。</p>
+<hr>
+<p>雜談</p>
+<ul>
+<li>差點這個月就要開天窗了…</li>
+<li>大力募集網管中!</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;隨著實驗室 GPU 資源日益增加，&lt;br&gt;有越來越多人在抱怨搶不到 GPU、不知道哪台有空的 GPU 、有人佔用太多 GPU 資源等等問題，&lt;br&gt;這些問題似乎跟沒有一個方法可以「一目瞭然的知道所有 GPU 的狀況」有關。&lt;/p&gt;
+&lt;p&gt;對，就像是 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status/&quot;&gt;cml-status&lt;/a&gt; 一樣，&lt;br&gt;假設有個 GPU 版的 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status/&quot;&gt;cml-status&lt;/a&gt;，應該就可以讓大家更輕易地找到閒置的 GPU，如果有人佔用過多運算資源也容易發現。&lt;/p&gt;
+&lt;p&gt;於是 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status-gpu/&quot;&gt;CMLab GPU Status&lt;/a&gt; 就誕生拉~&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>接案三兩事</title>
+    <link href="https://ssarcandy.tw/2017/07/21/about-taking-case/"/>
+    <id>https://ssarcandy.tw/2017/07/21/about-taking-case/</id>
+    <published>2017-07-21T11:06:10.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近終於結束了一個搞了很久的 case 。<br>我其實沒什麼接案經驗，這次也是剛好算是學校單位找我做個活動的宣傳網站，我心想既然是學校的應該也不太容易被騙，就來試試看所謂的接案。<br>在這次經驗中其實也是學到不少東西、踩了很多雷，大部份都是因為沒什麼經驗導致踩到的很多很多算專案管理相關的雷。<br>如果還有下次的話，一定要注意一些事情才可以讓整個案子的進行更加順利。</p>
+<a id="more"></a>
+<h1 id="一定要寫好合約"><a href="# 一定要寫好合約" class="headerlink" title="一定要寫好合約"></a>一定要寫好合約 </h1><p> 這看起來是基本中的基本，但我當初就是沒做 (掩面<br> 當初只有口頭說好而已。<br>這件事情之所以重要，是因為這是個最基本的保障，不論是對我們或是對客戶方，<br>和約可以說清楚講明白我們到底要做什麼? 哪些是我們的負責範圍、哪些不是?<br>然後當然還有其他的細節，包含價格，時程等等都應該要寫在合約。</p>
+<h1 id="一定要訂好時程"><a href="# 一定要訂好時程" class="headerlink" title="一定要訂好時程"></a>一定要訂好時程 </h1><p> 在這次的案子中我遇到最大的問題就是：我們開發好了 ，但是客戶卻一直沒時間驗收，導致每次來回 feedback 就可能拖了好幾個月。</p>
+<p>這樣造成很多問題一個是實在是拖太久了，隔好幾個月才又重起專案做起來真的很煩；另一方面客戶方也會覺得我們做得很慢。因為我們做出來的東西不一定是客戶想要的，一來一回修正就花掉太多時間，整體而言就會有我們也開發得很慢的感覺。</p>
+<p>如果當初可以在合約中訂好幾次 check point 的時間點，至少就可以確保不會無限期拖延下去。</p>
+<h1 id="一定要找好對口"><a href="# 一定要找好對口" class="headerlink" title="一定要找好對口"></a>一定要找好對口 </h1><p> 我這邊指得對口是指:「 可以快速獲得 feedback 的人」。<br>因為我們這一次的開發包含了所有的設計，都是我們負責。但是呢，扯到設計這種比較主觀的東西，我們做出來的並不一定客戶接受。所以與其等到 check point 再來被客戶打槍要求重做，不如當初就先確保一個客戶方的對口，才可以在我們做 prototype 時就迅速的確認到底是不是符合他們想要的。</p>
+<p>簡單來說，確認對口就是可以使我們少做很多白工。</p>
+<h1 id="不要使用別人不熟悉的工具"><a href="# 不要使用別人不熟悉的工具" class="headerlink" title="不要使用別人不熟悉的工具"></a>不要使用別人不熟悉的工具 </h1><p> 這個點其實跟上一點有一點關係。案子開發到後期勢必是有一些 BUG 或其他要調整的部分。所以也是必須要追蹤這些 issue。<br>那當然大家都認為 github issue tracker 很好用很棒，但事實上客戶這邊根本不會使用這種工具，最後就會變成他們根本沒在看。<br>所以與其用我們工程師覺得好用的工具，不如使用大家都會用的工具。像是在這一次的案子裡我的 issue tracker 是簡單的用 Google sheet 拉一拉表格，這樣反而更能讓客戶清楚知道我們的進度。</p>
+<p>即時通訊也是，工程師可能覺得 Slack 很棒很適合案子的溝通，但事實上就是客戶那邊永遠都不會上線 XD<br>所以反而使用私人的 Facebook Messanger 還比較有效率。</p>
+<h1 id="錢的事情要講清楚"><a href="# 錢的事情要講清楚" class="headerlink" title="錢的事情要講清楚"></a>錢的事情要講清楚 </h1><p> 有一件事情我體會深刻，就是「錢的事情一定要講清楚」。<br>也不要覺得自己的開價會不會太貴，因為會不會太貴是客戶那邊該煩惱的 XD<br>雖然每一個案子可能順利的程度不同，但是我個人認為接案一定會比想像中的麻煩。<br>所以在錢的方面一定要開一個確保自己不會做到覺得「很不划算」。<br>具體而言大概就是你覺得可以的價格再乘以 1.5 倍，到時候你會覺得這才只是「剛剛好的價格」。</p>
+<p>另外，錢也是應該要有先付、後付的部分，才比較有點保障，至少不會一毛錢都拿不到的風險。<br>像我這一次的案子就因為也沒有寫合約所以最後變成是結案了才要付錢，那這樣子其實對於接案方非常虧，因為他們隨時可以突然說案子不要做了，然後我就會變成做一堆但啥都拿不到。</p>
+<p>總而言之，錢的事情就幾個原則：</p>
+<ol>
+<li>開一個比自己覺得 ok 的價格高一點的價格，因為接案的過程肯定會比想像中的麻煩。</li>
+<li>先付後付、怎麼分配都應該於一開始的合約中訂好。</li>
+</ol>
+<hr>
+<p>雜談</p>
+<ul>
+<li>自從決定要弄個部落格以後，就一直督促自己一個月起碼要寫個一篇文章，自今也滿一年了，可喜可賀～</li>
+<li>最近剛修正了身體的一個 BUG，看來要痛苦一陣子了。</li>
+<li>正事依舊沒啥進展，果然我吃草吃太久了 QQ</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近終於結束了一個搞了很久的 case 。&lt;br&gt;我其實沒什麼接案經驗，這次也是剛好算是學校單位找我做個活動的宣傳網站，我心想既然是學校的應該也不太容易被騙，就來試試看所謂的接案。&lt;br&gt;在這次經驗中其實也是學到不少東西、踩了很多雷，大部份都是因為沒什麼經驗導致踩到的很多很多算專案管理相關的雷。&lt;br&gt;如果還有下次的話，一定要注意一些事情才可以讓整個案子的進行更加順利。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="trashtalk" scheme="https://ssarcandy.tw/tags/trashtalk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Coherent Line Drawing</title>
+    <link href="https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/"/>
+    <id>https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/</id>
+    <published>2017-06-25T16:14:38.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>線條藝術畫 (line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。<br> 這篇論文 (Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007) 提出一個全自動的方法，可以將相片轉換成簡單、高品質的線條畫風格圖片。</p>
+<div><img src="/img/2017-06-26/01.jpg" alt="輸入一張影像，即可產生出一張線條藝術風格畫。" data-action="zoom"><span class="image-caption">輸入一張影像，即可產生出一張線條藝術風格畫。</span></div>
+<a id="more"></a>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><p>本篇論文的方法主要流程如下：</p>
+<ol>
+<li>由輸入影像產生邊緣向量流場</li>
+<li>反覆的精煉、平滑化邊緣向量流場</li>
+<li>藉由邊緣向量流場的資訊，對原圖套用高斯差以產生特徵線條</li>
+</ol>
+<div><img src="/img/2017-06-26/02.jpg" alt="整個方法的流程圖： 由原圖產生邊緣向量流場，再藉由流場資訊套用高斯差產生線條畫。" data-action="zoom"><span class="image-caption">整個方法的流程圖： 由原圖產生邊緣向量流場，再藉由流場資訊套用高斯差產生線條畫。</span></div>
+<h2 id="Edge-Tangent-Flow"><a href="#Edge-Tangent-Flow" class="headerlink" title="Edge Tangent Flow"></a>Edge Tangent Flow</h2><p>由於線條畫的特性希望是能夠保留原圖重要的特徵邊緣，所以對應的邊緣向量流場 (Edge Tangent Flow) 必須滿足幾個條件：</p>
+<ol>
+<li>可以描述重要邊緣的流向。</li>
+<li>鄰近的向量必須要平滑(避免鄰近的向量方向差太多)，除非是角落。</li>
+<li>重要的邊緣必須要維持它原本的方向。</li>
+</ol>
+<h3 id="Generate-initial-ETF"><a href="#Generate-initial-ETF" class="headerlink" title="Generate initial ETF"></a>Generate initial ETF</h3><p>而本篇產生 ETF 的方法是藉由反覆的平滑化流場來得到一個符合上述各個條件的 ETF。<br>首先，藉由 原圖產生灰階梯度流場 (Gradient Vector Field)，再逆時鐘旋轉 90 度來 產生初始的邊 緣向量流場 (ETF)。</p>
+<div><img src="/img/2017-06-26/03.jpg" alt="對原圖做適當模糊後即可取得灰階梯度向量(GVF)，再旋轉 90 度可得一個初始的 ETF。" data-action="zoom"><span class="image-caption">對原圖做適當模糊後即可取得灰階梯度向量(GVF)，再旋轉 90 度可得一個初始的 ETF。</span></div>
+<h3 id="Refining-ETF"><a href="#Refining-ETF" class="headerlink" title="Refining ETF"></a>Refining ETF</h3><p>再將這個初始的 ETF 做平滑化，方法如下：</p>
+<p>$$<br>t^{new}=\dfrac {1} {k}\sum _{y\in \Omega \left( x\right) }\phi \left(x,y\right) t^{cur}\left(y\right)w_{s}\left(x,y\right)w_{m}\left(x,y\right)w_{d}\left(x,y\right)<br>$$</p>
+<p>其中，<br>\(w_{s}\left(x,y\right)\) 是一個圓形 box filter function，落在外面的向量權重為零<br>\(w_{m}\left(x,y\right)\) 為 magnitude weight function，用於確保重要的邊緣方向會被保留<br>\(w_{d}\left(x,y\right)\) 為 direction weight function，用於使得鄰居的向量方向不會差距過大<br>\(\phi \left( x,y\right)\) 則是當兩向量夾角過大時會反轉方向以確保夾角不會大於 90 度</p>
+<p>透過以上的方法，只須要決定 kernel size 即可反覆平滑化 即可反覆平滑化 邊緣向量流場 直至夠平 滑為止 。</p>
+<div><img src="/img/2017-06-26/04.jpg" alt="由左至右：原圖、用 GVF 得到之初始 ETF、經過一次平滑化、經過兩次平滑化。 kernel size=7" data-action="zoom"><span class="image-caption">由左至右：原圖、用 GVF 得到之初始 ETF、經過一次平滑化、經過兩次平滑化。 kernel size=7</span></div>
+<h2 id="Line-construction"><a href="#Line-construction" class="headerlink" title="Line construction"></a>Line construction</h2><p>有了 ETF 之後就可以進入下一步：產生線條。<br>比起一般邊緣偵測的方法如 Sobel、Canny 等等固定 kernel size，這篇論文的方法則是使用 flow-based kernel ，也就是 kernel 會沿著流場有著不一樣的形狀。</p>
+<div><img src="/img/2017-06-26/05.jpg" alt="(a)原圖、(b)ETF、(c)沿著流場的 kernel。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">(a)原圖、(b)ETF、(c)沿著流場的 kernel。<sup>[1]</sup></span></div>
+<h3 id="Flow-based-Difference-of-Gaussians"><a href="#Flow-based-Difference-of-Gaussians" class="headerlink" title="Flow-based Difference-of-Gaussians"></a>Flow-based Difference-of-Gaussians</h3><p>根據 flow-based kernel 來進行 Difference-of-Gaussians(DoG) ，藉此來找出足夠符合重要線條的像素們。</p>
+<div><img src="/img/2017-06-26/06.jpg" alt="(d)kernel 詳細圖示、(e)高斯差示意圖。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">(d)kernel 詳細圖示、(e)高斯差示意圖。<sup>[1]</sup></span></div>
+<p>首先先對每個像素沿著 ETF 垂直方向做一維的 DoG，亦即對圖中 -T~T 做 DoG：</p>
+<p>$$<br>F\left(s\right) =\int _{-T}^{T}I\left(l_{s}\left(t\right) \right) f\left(t\right) dt<br>$$</p>
+<p>其中 \(f\left( t\right) = G_{\sigma_{c}}\left(t \right)-\rho G_{\sigma_{s}}\left(t \right)\) 就是高斯差的部分。</p>
+<p>再來再沿著 -S~S 做一維的高斯加權：</p>
+<p>$$<br>G\left(x\right) =\int _{-S}^{S}G_{\sigma}\left(s \right) F\left(s\right) ds<br>$$</p>
+<p>這樣的方法除了可以使邊緣更有一致性 (不會有太多短線) 並且又可以抑制雜訊，使得產生出的結果很符合線條畫的特性。這即是這篇所提出的 Flow-based Difference of Gaussians(FDoG)。</p>
+<h3 id="Iterative-FDoG-filtering"><a href="#Iterative-FDoG-filtering" class="headerlink" title="Iterative FDoG filtering"></a>Iterative FDoG filtering</h3><p>有時候做一次 FDoG 效果並不夠好，所以可以藉由反覆做 FDoG 來達到更良好的效果。<br>要反覆套用 FDoG 也很容易，只要將原圖與 FDoG 的輸出疊合，然後以這新的圖片當作原圖再次套用一次 FDoG 即可。</p>
+<div><img src="/img/2017-06-26/07.jpg" alt="藉由將結果疊合回原圖再做一次 FDoG，可以使的結果品質越來越好。" data-action="zoom"><span class="image-caption">藉由將結果疊合回原圖再做一次 FDoG，可以使的結果品質越來越好。</span></div>
+<p>實作上也很簡單，就是把結果的黑色部分直接覆蓋在原圖然後拿這再做 FDoG。注意雖然原圖改變了，但是使用的 ETF 並沒有重新計算。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Superimposing the black edge pixels of the previous binary output</span></div><div class="line"><span class="comment"> * upon the original image</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; originalImg.rows; y++) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; originalImg.cols; x++) &#123;</div><div class="line">        <span class="keyword">float</span> H = result.at&lt;uchar&gt;(y, x);</div><div class="line">        <span class="keyword">if</span> (H == <span class="number">0</span>) &#123;</div><div class="line">            originalImg.at&lt;uchar&gt;(y, x) = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p>基本上圖片在 512x512 左右的大小可以在 3 秒內產生結果，若平行化則即使是更大張的圖片也可達到 real time。</p>
+<div style="display:flex; align-items:center;"><br><div><img src="/img/2017-06-26/08.jpg" alt="輸入影像。由左上至右下：蔣公、廟、燈塔、老鷹。" data-action="zoom"><span class="image-caption">輸入影像。由左上至右下：蔣公、廟、燈塔、老鷹。</span></div><br><div><img src="/img/2017-06-26/09.jpg" alt="輸出結果。由左上至右下：蔣公、廟、燈塔、老鷹。" data-action="zoom"><span class="image-caption">輸出結果。由左上至右下：蔣公、廟、燈塔、老鷹。</span></div><br></div>
+
+<h1 id="Source-code"><a href="#Source-code" class="headerlink" title="Source code"></a>Source code</h1><p>You can find my implementation source code at <a href="https://github.com/SSARCandy/Coherent-Line-Drawing" target="_blank" rel="external">github</a><br>Or download pre-build version <a href="https://github.com/SSARCandy/Coherent-Line-Drawing/releases" target="_blank" rel="external">here</a></p>
+<div><img src="/img/2017-06-26/10.jpg" alt="Screenshot of my system user interface" data-action="zoom"><span class="image-caption">Screenshot of my system user interface</span></div>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] Image from ‘Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;線條藝術畫(line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。&lt;br&gt;這篇論文(Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007)提出一個全自動的方法，可以將相片轉換成簡單、高品質的線條畫風格圖片。&lt;/p&gt;
+&lt;div&gt;&lt;img src=&quot;/img/2017-06-26/01.jpg&quot; alt=&quot;輸入一張影像，即可產生出一張線條藝術風格畫。&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="opencv" scheme="https://ssarcandy.tw/tags/opencv/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Panorama image stitching</title>
+    <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
+    <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
+    <published>2017-05-25T17:28:09.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>全景照 (panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br> 以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
+<a id="more"></a>
+<h1 id="Warp-images-to-cylinder"><a href="#Warp-images-to-cylinder" class="headerlink" title="Warp images to cylinder"></a>Warp images to cylinder</h1><p>由於 360 全景影像的特性，是利用相機旋轉拍攝出環場影像，所以在做偵測特徵點或將照片接起來之前，必須先投影到圓柱體上才會有比較好的效果。</p>
+<div><img src="/img/2017-05-26/01.jpg" alt="內圈的黑線分別代表六張照片的成像平面，紅線則是要投影到的圓柱面。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">內圈的黑線分別代表六張照片的成像平面，紅線則是要投影到的圓柱面。<sup>[1]</sup></span></div>
+<p>如同上圖所示，真正拍到的影像是內圈的黑線，分別代表六張照片，但是要接起來必須重新投影到外圈紅色才會接得上。</p>
+<div><img src="/img/2017-05-26/02.jpg" alt="右邊的圖木紋的直線都變成有個曲率的彎線。" data-action="zoom"><span class="image-caption">右邊的圖木紋的直線都變成有個曲率的彎線。</span></div>
+<p>這是我將影像投影至圓柱前後的差別，可以看見右邊的圖木紋的直線都變成有個曲率的彎線，這就是投影之後造成的差異。</p>
+<h1 id="Feature-detection"><a href="#Feature-detection" class="headerlink" title="Feature detection"></a>Feature detection</h1><p>要找出兩兩照片中的特徵點才好找出照片間的相對位置，所以首先要找出特徵點，這邊我實作的是 Harris corner detector。</p>
+<div><img src="/img/2017-05-26/03.jpg" alt="左: 用棋盤圖來當作測試資料；右: corner response image" data-action="zoom"><span class="image-caption">左: 用棋盤圖來當作測試資料；右: corner response image</span></div>
+<p>這是利用 Harris corner 找出的 corner response image，可以看到交叉點的值都比較高(紅色點)，而這些就是應該要挑出來的特徵點。</p>
+<h1 id="Feature-descriptor"><a href="#Feature-descriptor" class="headerlink" title="Feature descriptor"></a>Feature descriptor</h1><p>Descriptor 是用來描述特徵點的東西，通常是以高維度的向量來表示，我則是使用 Harris corner 算出 corner response image 之後，將最高的 1% 的點抓出來，以一個 5x5 的 window 來表示成 25 維的向量。</p>
+<div><img src="/img/2017-05-26/04.jpg" alt="以周邊像素的值當作 descriptor。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">以周邊像素的值當作 descriptor。<sup>[1]</sup></span></div>
+<p>這是一個 3x3 window 所表示的 9 維向量，實作上我是使用 5x5。</p>
+<p>找出來以後，我還做了一些處理來減少 feature points 的數目:</p>
+<ol>
+<li>只挑選 corner response 最高的 1%</li>
+<li>切掉上下邊緣(因為投影到圓柱之後會有黑邊)</li>
+<li>做 local suppression</li>
+</ol>
+<div><img src="/img/2017-05-26/05.jpg" alt="由左至右分別是: 前 1% 的 features、切掉上下邊緣、以一個 window size 掃過整張圖，每個 window 中只保留最強的 feature。" data-action="zoom"><span class="image-caption">由左至右分別是: 前 1% 的 features、切掉上下邊緣、以一個 window size 掃過整張圖，每個 window 中只保留最強的 feature。</span></div>
+<p>減少 feature 數目最主要的原因是因為希望加快運算速度。</p>
+<h1 id="Feature-matching"><a href="#Feature-matching" class="headerlink" title="Feature matching"></a>Feature matching</h1><p>再來就是 match 出兩兩圖片中對應的點，我用的方法很簡單，就是將兩個影像中找出的 feature descriptors 互相算出向量距離，找出對應的組合。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(descriptor1)):</div><div class="line">    min_distance = inf</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(descriptor2)):</div><div class="line">        distance = ((descriptor1[i]-descriptor2[j])**<span class="number">2</span>).sum() </div><div class="line">        <span class="keyword">if</span> distance &lt; min_distance:</div><div class="line">            min_distance = distance</div></pre></td></tr></table></figure>
+<p>以 psudo-code 來表示的話就是兩個 for loop 一個一個算距離找出最小的那組合。是最暴力最直覺的方式 XDDD</p>
+<p>其實我也有嘗試對 descriptors 建立 KD-tree 來加速整個 matching 的過程，但是由於 descriptor 是個 25 維的向量，使用 KD-tree 幾乎沒有速度上的優勢，所以最後還是只用這種最單純的算法。<br>另外，為了達到更好以及更快的 matching 效果，我有定一個假設:「前後兩張影像的垂直差異不會過大」，雖說這假設並不一定成立，但是在 360 環場影像的狀況下還算符合。</p>
+<div><img src="/img/2017-05-26/06.jpg" alt="兩張影像中對應的點，以紅色連線來表示。" data-action="zoom"><span class="image-caption">兩張影像中對應的點，以紅色連線來表示。</span></div>
+<h1 id="Find-best-warp-model-using-RANSAC"><a href="#Find-best-warp-model-using-RANSAC" class="headerlink" title="Find best warp model using RANSAC"></a>Find best warp model using RANSAC</h1><p>再來就是要找出最好的 translation model，進而移動影像來讓兩張影像中相同的部分疊在一起，這邊我用 RANSAC 來找出最佳的 translation model。<br>RANSAC 基本精神就是隨機挑兩個點的相對位置當作最好的 translation model，然後讓所有 matched pair 都套用這個 model，再來計算有多少個 pair 套用這 model 之後也是有落在可接受的範圍之內。這樣的過程重複跑個幾百次，就有很高的機率可以找出最佳的 translation model。</p>
+<p>另外，有時候找出的 matched pair 其實並沒有很多，這時候比起使用隨機選點的方式，直接窮盡所有組合相對快上許多。</p>
+<h1 id="Stitch-image-with-Blending"><a href="#Stitch-image-with-Blending" class="headerlink" title="Stitch image with Blending"></a>Stitch image with Blending</h1><p>有了兩張圖的相對位置之後就可以來連接兩張影像，但是直接連起來會有很明顯的縫，所以需要做 blending。<br>我實作了兩種 blend method:</p>
+<ol>
+<li>Linear blend</li>
+<li>Linear blend with constant width</li>
+</ol>
+<p>Linear blend 是最簡單的方式，重疊的部分的顏色由兩張影像加權平均得出，加權的比重如下圖所示，x 軸位置接近哪張影像則權重就比較高。</p>
+<div><img src="/img/2017-05-26/07.jpg" alt="x 軸位置接近哪張影像則權重就比較高" data-action="zoom"><span class="image-caption">x 軸位置接近哪張影像則權重就比較高</span></div>
+<p>不過這樣會有一個問題，如果重疊的區域有棵樹在動，那這樣 blend 就會出現鬼影的問題。<br>所以我就改成第二種方法，Linear blend with constant width，先找出兩張影像重疊部分的中心線，以此左右取個固定寬度再做 linear blend，這樣就能避免鬼影的問題。</p>
+<div><img src="/img/2017-05-26/08.jpg" alt="只在兩張影像重疊部分的中心線左右一點點區間做 linear blend" data-action="zoom"><span class="image-caption">只在兩張影像重疊部分的中心線左右一點點區間做 linear blend</span></div>
+<p>以下是分別用兩種方法所接合的圖，可以看到用第一種方法的左邊的樹明顯糊糊的，右邊的則幾乎沒有鬼影。</p>
+<div><img src="/img/2017-05-26/09.jpg" alt="左: 第一種方法，可看到樹葉糊糊的；右: 第二種方法，沒有鬼影現象。" data-action="zoom"><span class="image-caption">左: 第一種方法，可看到樹葉糊糊的；右: 第二種方法，沒有鬼影現象。</span></div>
+<h1 id="End-to-end-alignment-and-Crop"><a href="#End-to-end-alignment-and-Crop" class="headerlink" title="End to end alignment and Crop"></a>End to end alignment and Crop</h1><p>完成所有影像接合之後，會有一些上下的誤差，這時候可以直接將誤差平均分配給每張影像，就可以得出一張比較平的圖片。</p>
+<p>原始的接起來的影像，可以看到這一張有嚴重的上下飄移。</p>
+<div><img src="/img/2017-05-26/15.jpg" alt="接完以後的原始影像" data-action="zoom"><span class="image-caption">接完以後的原始影像</span></div>
+<p>把誤差平均分配給大家，可以變成比較平的影像。<br><div><img src="/img/2017-05-26/15-aligned.jpg" alt="經過 end to end alignment 修正之後的圖" data-action="zoom"><span class="image-caption">經過 end to end alignment 修正之後的圖</span></div></p>
+<p>最後再把上下的黑邊切除掉，就可以得出一張完整的影像。<br><div><img src="/img/2017-05-26/15-cropped.jpg" alt="裁減掉黑邊的圖。" data-action="zoom"><span class="image-caption">裁減掉黑邊的圖。</span></div></p>
+<h1 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h1><p>這邊展示幾個結果，一張綜覽全貌、一張是原始尺寸（可拖曳）</p>
+<div><img src="/img/2017-05-26/15-cropped.jpg" alt="大雪山登山口。" data-action="zoom"><span class="image-caption">大雪山登山口。</span></div>
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/15-cropped.jpg'); width:5103px; height:921px;"></div></div>
+
+<hr>
+<div><img src="/img/2017-05-26/13-cropped.jpg" alt="台大總圖後面。" data-action="zoom"><span class="image-caption">台大總圖後面。</span></div>
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/13-cropped.jpg'); width:4634px; height:744px;"></div></div>
+
+<hr>
+<div><img src="/img/2017-05-26/17-cropped.jpg" alt="Testing image from internet" data-action="zoom"><span class="image-caption">Testing image from internet</span></div>
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/17-cropped.jpg'); width:4556px; height:497px;"></div></div>
+
+<hr>
+<div><img src="/img/2017-05-26/cropped.jpg" alt="Testing image from internet" data-action="zoom"><span class="image-caption">Testing image from internet</span></div>
+<div class="pano" style="position:relative;"><div style="background-image:url('/img/2017-05-26/cropped.jpg'); width:4120px; height:492px;"></div></div>
+
+
+<p><link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.7.0/css/perfect-scrollbar.min.css" rel="stylesheet"></p>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.7.0/js/perfect-scrollbar.min.js"></script>
+
+<script>
+window.onload = function() {var panoramas = document.getElementsByClassName('pano');
+    Array.prototype.map.call(panoramas, function(pano) {Ps.initialize(pano);
+    });
+};
+</script>
+
+
+<hr>
+<p>Reference:<br>[1] Image from Digital Visual Effects(NTU) slides</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;全景照(panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。&lt;br&gt;以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。&lt;br&gt;但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="opencv" scheme="https://ssarcandy.tw/tags/opencv/"/>
+    
+      <category term="python" scheme="https://ssarcandy.tw/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Migrate mail server to Gmail - migration strategy</title>
+    <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
+    <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
+    <published>2017-04-29T14:56:05.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
+<a id="more"></a>
+<h1 id="概況"><a href="# 概況" class="headerlink" title="概況"></a>概況 </h1><p> 我們的伺服器是透過 LDAP 集中管理身分認證資訊，大致架構如下:</p>
+<div><img src="/img/2017-04-29/01.JPG" alt="伺服器架構: 由 LDAP 來統一管理身分資訊。" data-action="zoom"><span class="image-caption">伺服器架構: 由 LDAP 來統一管理身分資訊。</span></div>
+<p>除了一般工作站以外，郵件伺服器也同樣是利用 LDAP 的資訊來登入，簡單來說就是使用者只須要記得一個密碼，就可以登入各工作站以及郵件伺服器。</p>
+<h1 id="繞過密碼"><a href="# 繞過密碼" class="headerlink" title="繞過密碼"></a>繞過密碼 </h1><p> 想來想去最後想到兩種方法，一是從 LDAP 下手，一是從郵件伺服器下手。</p>
+<h2 id="從 -LDAP- 下手"><a href="# 從 -LDAP- 下手" class="headerlink" title="從 LDAP 下手"></a>從 LDAP 下手 </h2><p> 雖然 root 看不到大家的密碼，但是能直接更改別人的密碼 XD<br>所以呢，我們可以複製出一個假的 LDAP server，就專給郵件伺服器用。</p>
+<div><img src="/img/2017-04-29/02.JPG" alt="複製一個 LDAP，專門給郵件伺服器使用。" data-action="zoom"><span class="image-caption">複製一個 LDAP，專門給郵件伺服器使用。</span></div>
+<p>要複製一個 LDAP 並不困難，只需要安裝好 LDAP 之後把資料 dump 過來就完成了。<br>創造好一個 fake LDAP 之後就要來改改郵件伺服器的設定，讓他改用 fake LDAP 的資訊來做身分認證。</p>
+<p>首先要先更改 <code>/etc/hosts</code> ，把 LDAP 對應的 ip address 改對 (如果有的話)，<br> 如果沒有用 <code>/etc/hosts</code> 的話，則記得要更改 roundcube 設定:</p>
+<p><strong>更改 roundcube ldap</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/roundcube/main.inc.php</div></pre></td></tr></table></figure>
+<p>把 <code>hosts</code> 改成 fake LDAP:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$config[<span class="string">'ldap_public'</span>][<span class="string">'public'</span>] = <span class="keyword">array</span>(</div><div class="line">    <span class="string">'name'</span>              =&gt; <span class="string">'Public LDAP Addressbook'</span>,</div><div class="line">    <span class="string">'hosts'</span>             =&gt; <span class="keyword">array</span>(<span class="string">'fake LDAP'</span>),</div><div class="line">    <span class="string">'port'</span>              =&gt; <span class="number">389</span>,</div><div class="line">    <span class="string">'user_specific'</span>     =&gt; <span class="keyword">false</span>,</div><div class="line">    <span class="string">'base_dn'</span>           =&gt; <span class="string">'ou=public,ou=rcabook,dc=localhost'</span>,</div><div class="line">    <span class="string">'bind_dn'</span>           =&gt; <span class="string">'cn=rcuser,ou=rcabook,dc=localhost'</span>,</div><div class="line">    <span class="string">'bind_pass'</span>         =&gt; <span class="string">'rcpass'</span>,</div><div class="line">    <span class="string">'filter'</span>            =&gt; <span class="string">'(objectClass=inetOrgPerson)'</span>,</div><div class="line">    <span class="string">'groups'</span>            =&gt; <span class="keyword">array</span>(</div><div class="line">        <span class="string">'base_dn'</span>         =&gt; <span class="string">''</span>,</div><div class="line">        <span class="string">'filter'</span>          =&gt; <span class="string">'(objectClass=groupOfNames)'</span>,</div><div class="line">        <span class="string">'object_classes'</span>  =&gt; <span class="keyword">array</span>(<span class="string">"top"</span>, <span class="string">"groupOfNames"</span>),</div><div class="line">    ),</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>詳細可以看 roundcube 說明文件。</p>
+<p>弄好之後記得要刷新 <code>nslcd</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /etc/init.d/nslcd force-reload <span class="comment"># maybe need to reload</span></div></pre></td></tr></table></figure>
+<p>接下來就是要更改大家密碼啦~<br>由於郵件伺服器現在是使用 fake LDAP 驗證資訊了，所以這時候更改密碼只會改到 fake LDAP 上的資訊，而不影響大家登入使用其他工作站。也就是說使用這種方法的壞處只有在遷移的過程中不能登入原郵件伺服器。<br>不過由於收發信件都已經轉移去 gmail 了，暫時不能登入原郵件伺服器其實影響應該不會太大了。</p>
+<p><strong>更改 ldap user password</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ ldappasswd -h &lt;ldap_ip&gt; -x -ZZ \</div><div class="line">        -D <span class="string">"cn=admin,dc=your_base_dn"</span> \</div><div class="line">        <span class="string">"user_distinguished_name"</span> \</div><div class="line">        -s &lt;new_password&gt; \</div><div class="line">        -w &lt;ldap_admin_password&gt;</div></pre></td></tr></table></figure>
+<p>以上是更改一個人 LDAP 密碼的方式，那要批次更改全部人的密碼可以這樣:</p>
+<p>先去 <code>/var/spool/mail/</code> 找誰有郵件帳戶，然後組合成 ldap dn ，輸出到一個檔案:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ ls /var/spool/mail/ -l \</div><div class="line">        | grep rw \</div><div class="line">        | awk &#123;<span class="string">'print $3'</span>&#125; \</div><div class="line">        | xargs -I &#123;&#125; <span class="built_in">echo</span> <span class="string">"uid=&#123;&#125;,ou=people,dc=cmlab,dc=csie,dc=ntu,dc=edu,dc=tw"</span> &gt; ~/mail_all.txt</div></pre></td></tr></table></figure>
+<p>再組合出改密碼的指令並輸出到 <code>change_password.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cat mail_all.txt \</div><div class="line">    | xargs -I &#123;&#125; <span class="built_in">echo</span> <span class="string">"ldappasswd -x -ZZ -D cn=admin,dc=your_base_dn &#123;&#125; -s &lt;new_password&gt; -w &lt;ldap_password&gt;"</span> &gt; change_passwd.sh</div></pre></td></tr></table></figure>
+<p>然後就可以:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./change_password.sh</div></pre></td></tr></table></figure>
+<h2 id="從 -Mail-Account- 下手"><a href="# 從 -Mail-Account- 下手" class="headerlink" title="從 Mail Account 下手"></a>從 Mail Account 下手 </h2><p> 從 LDAP 下手的基本上就可以解決密碼的問題，不過就是會在遷移的期間讓大家無法登入看舊信件(因為大家密碼被改掉了)，雖說影響應該不大，不過依舊是有影響的。</p>
+<p>另一個繞過密碼的方式是從郵件帳戶下手，先創建一個假帳號，再把信件都複製到假帳號那邊，就可以用假帳號存取那個人的信件。</p>
+<p>假設有個帳號 <code>ssarcandy</code>，實際方法如下:</p>
+<ol>
+<li>Add a fake user into ldap, i.e. <code>ssarcandy_fake</code></li>
+<li>Create home dir for it, change the owner to <code>ssarcandy_fake</code></li>
+<li>Copy <code>/var/spool/mail/ssarcandy</code> to <code>/var/spool/mail/ssarcandy_fake</code>, and chage owner</li>
+<li>Copy <code>~ssarcandy/mail/</code> to <code>~ssarcandy_fake/mail/</code> if it exist, and chage owner</li>
+</ol>
+<p>寫成 script 大致如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"> </div><div class="line"><span class="comment"># $1=new fake user   -&gt; i.e. ssarcandy_fake</span></div><div class="line"><span class="comment"># $2=correspond user -&gt; i.e. ssarcandy</span></div><div class="line"> </div><div class="line">PASSWORD=<span class="string">'some_password'</span></div><div class="line">HOME_DIR_BASE=<span class="string">'/data/mail_migrate_tmp'</span></div><div class="line">LDAP_BASE=<span class="string">'base dn'</span></div><div class="line">LDAP_DN=<span class="string">'ldap admin dn'</span></div><div class="line">LDAP_PASS=<span class="string">'ldap admin password'</span></div><div class="line">LDAP_HOST=<span class="string">'ip address'</span></div><div class="line"> </div><div class="line"><span class="built_in">echo</span> <span class="string">"dn: uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span></span></div><div class="line"><span class="string">uid: <span class="variable">$1</span></span></div><div class="line"><span class="string">sn: lastname</span></div><div class="line"><span class="string">cn: complete name</span></div><div class="line"><span class="string">mail: <span class="variable">$1</span>@cmlab.csie.ntu.edu.tw</span></div><div class="line"><span class="string">objectClass: person</span></div><div class="line"><span class="string">objectClass: organizationalPerson</span></div><div class="line"><span class="string">objectClass: inetOrgPerson</span></div><div class="line"><span class="string">objectClass: posixAccount</span></div><div class="line"><span class="string">objectClass: top</span></div><div class="line"><span class="string">objectClass: shadowAccount</span></div><div class="line"><span class="string">userPassword: &#123;crypt&#125;12345</span></div><div class="line"><span class="string">shadowMax: 99999</span></div><div class="line"><span class="string">shadowWarning: 7</span></div><div class="line"><span class="string">loginShell: /bin/bash</span></div><div class="line"><span class="string">uidNumber: 6577</span></div><div class="line"><span class="string">gidNumber: 1000</span></div><div class="line"><span class="string">homeDirectory: <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span>"</span>&gt; tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Create fake account</span></div><div class="line">ldapadd -h <span class="variable">$LDAP_HOST</span> -ZZ -x -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> -f tmp.ldif</div><div class="line"> </div><div class="line"><span class="comment"># Change fake account password</span></div><div class="line">ldappasswd -h <span class="variable">$LDAP_HOST</span> -ZZ -x \</div><div class="line">    -w <span class="variable">$LDAP_PASS</span> -D <span class="variable">$LDAP_DN</span> \</div><div class="line">    <span class="string">"uid=<span class="variable">$1</span>,ou=people,<span class="variable">$LDAP_BASE</span>"</span> -s <span class="variable">$PASSWORD</span></div><div class="line"> </div><div class="line"><span class="comment"># Create home dir for fake account</span></div><div class="line">mkdir -p <span class="variable">$HOME_DIR_BASE</span></div><div class="line">mkdir <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div><div class="line"> </div><div class="line"><span class="comment"># Copy mails to fake account.</span></div><div class="line">cp /var/spool/mail/<span class="variable">$2</span> /var/spool/mail/<span class="variable">$1</span></div><div class="line">cp -r $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$2</span>)/mail $(<span class="built_in">eval</span> <span class="built_in">echo</span> ~<span class="variable">$1</span>)</div><div class="line"> </div><div class="line"><span class="comment"># Change owner of copied mails</span></div><div class="line">chown 6577:1000 /var/spool/mail/<span class="variable">$1</span></div><div class="line">chown -R 6577:1000 <span class="variable">$HOME_DIR_BASE</span>/<span class="variable">$1</span></div></pre></td></tr></table></figure>
+<p>這就是另一個繞過密碼的方式，這方式的優點是可以不影響使用者的帳戶，也就是在遷移過程中依舊可以登入舊郵件伺服器。<br>但也是有缺點的，就是必須複製一份使用者的 mails，在遷移期間會浪費兩倍的容量。</p>
+<h1 id="遷移策略"><a href="# 遷移策略" class="headerlink" title="遷移策略"></a>遷移策略 </h1><p> 我們要遷移的郵件說多不多，但也不太少，以容量來說大概 600 GB 左右。<br>不過空間上稍微尷尬一點，只剩 50 GB 可以使用。<br>所以基本上是沒辦法讓大家都使用第二種方法(創假帳號並複製郵件)，先使用 fake LDAP 轉移大部分人會是比較適當的方式。</p>
+<p>以時間軸的方式來呈現整個遷移的過程，大致如下:</p>
+<ul class="timeline"><li><div class="direction-r"><div class="flag-wrapper"><span class="flag">設定 MX record</span></div><div class="desc">信件收發轉至 Gmail</div></div></li><li><div class="direction-l"><div class="flag-wrapper"><span class="flag">建立 fake LDAP 讓 mail server 使用 </span></div><div class="desc"> 開始遷移大部分使用者，遷移期間使用者無法登入原郵件伺服器 (因密碼不同)。</div></div></li><li><div class="direction-r"><div class="flag-wrapper"><span class="flag"> 讓 mail server 使用原 LDAP</span></div><div class="desc">使用者可以正常登入原郵件伺服器。</div></div></li><li><div class="direction-l"><div class="flag-wrapper"><span class="flag">針對重要使用者建立假帳號 </span></div><div class="desc"> 開始轉移那些信件特多的使用者，使用建立假帳號的方式。</div></div></li><li><div class="direction-r"><div class="flag-wrapper"><span class="flag">善後 </span></div><div class="desc"> 完成轉移，刪除假帳號。</div></div></li></ul>
+
+<p>開始遷移信件的時間點是在已將 MX record 設定完，收發功能已轉至 gmail 之後才開始的。<br>我們基本上分兩階段轉移信件，<br>第一階段是用 fake LDAP 的方式轉移大部分的使用者；<br>第二階段則是用假帳號的方式轉移最重要 (信件特多) 的使用者。</p>
+<p>首先我們先對使用者的信件用量做分群，找出哪些人用量相似、哪些人用量特多等等。<br>可以利用 dovecot 的 admin 工具查詢:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 查詢 ssarcandy 的總信件數目</span></div><div class="line">$ doveadm search -u ssarcandy ALL | wc -l</div><div class="line">14990</div></pre></td></tr></table></figure>
+<p>把大家的郵件數目分佈畫成圖表:</p>
+<div><img src="/img/2017-04-29/04.JPG" alt="帳戶郵件分佈圖" data-action="zoom"><span class="image-caption">帳戶郵件分佈圖</span></div>
+<p>可以看到基本上大部分人都沒甚麼信，只有少數人有超大量的信，而這些少數人會是遷移的 bottleneck，所以應該要挑出來用假帳號的方式轉移信件，才能避免讓原郵件伺服器不能登入的時間拉太長。</p>
+<p>另外，由於 G Suite 遷移工具是一批一批遷移的，所以同一批最好大家的郵件數目都要差不多，才可以減少總體等待時間。</p>
+<hr>
+<p>我們用以上的遷移策略，總共耗時約十天完成大家的所有信件遷移。<br>當初預估一周真是太天真了阿 QQ</p>
+<style>.timeline,.timeline li{padding:1em 0}.timeline{position:relative;width:660px;margin:20px auto 0;list-style-type:none}.timeline:before{position:absolute;left:50%;top:0;content:'';display:block;width:6px;height:100%;margin-left:-3px;background:#505050;background:-moz-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0,rgba(30,87,153,1)),color-stop(100%,rgba(125,185,232,1)));background:-webkit-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-o-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:-ms-linear-gradient(top,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);background:linear-gradient(to bottom,rgba(80,80,80,0) 0,#505050 8%,#505050 92%,rgba(80,80,80,0) 100%);z-index:5}.direction-l,.direction-r{width:300px;position:relative}.timeline li:after{content:"";display:block;height:0;clear:both;visibility:hidden}.direction-l{float:left;text-align:right}.direction-r{float:right}.flag-wrapper{position:relative;display:inline-block;text-align:center}.flag{position:relative;display:inline;background:#eee;padding:6px 10px;border-radius:5px;font-weight:600;text-align:left}.direction-l .flag{-webkit-box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);-moz-box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);box-shadow:-1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15)}.direction-r .flag{-webkit-box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);-moz-box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15);box-shadow:1px 1px 1px rgba(0,0,0,.15),0 0 1px rgba(0,0,0,.15)}.direction-l .flag:before,.direction-r .flag:before{position:absolute;top:50%;right:-36px;content:'';display:block;width:12px;height:12px;margin-top:-10px;background:#eee;border-radius:10px;border:4px solid #ff5050;z-index:10}.direction-l .flag:after,.direction-r .flag:after{content:"";position:absolute;top:50%;height:0;width:0;margin-top:-8px;pointer-events:none}.direction-r .flag:before{left:-36px}.direction-l .flag:after{left:100%;border:solid transparent;border-left-color:#eee;border-width:8px}.direction-r .flag:after{right:100%;border:solid transparent;border-right-color:#eee;border-width:8px}.time-wrapper{display:inline;line-height:1em;font-size:.66666em;color:#fa5050;vertical-align:middle}.direction-l .time-wrapper{float:left}.direction-r .time-wrapper{float:right}.time{display:inline-block;padding:4px 6px;background:#eee}.desc{margin:1em .75em 0 0;line-height:1.5em}.direction-r .desc{margin:1em 0 0 .75em}@media screen and (max-width:660px){.timeline{width:100%;padding:4em 0 1em}.timeline li{padding:2em 0}.direction-l,.direction-r{float:none;width:100%;text-align:center}.flag-wrapper{text-align:center}.flag{background:#eee;z-index:15}.direction-l .flag:before,.direction-r .flag:before{position:absolute;top:-30px;left:calc(50% + 3px);content:'';display:block;width:12px;height:12px;margin-left:-9px;background:#eee;border-radius:10px;border:4px solid #ff5050;z-index:10}.direction-l .flag:after,.direction-r .flag:after{content:"";position:absolute;left:50%;top:-8px;height:0;width:0;margin-left:-8px;border:solid transparent;border-bottom-color:#eee;border-width:8px;pointer-events:none}.time-wrapper{display:block;position:relative;margin:4px 0 0;z-index:14}.direction-l .time-wrapper,.direction-r .time-wrapper{float:none}.desc{position:relative;margin:1em 0 0;padding:1em;background:#f5f5f5;-webkit-box-shadow:0 0 1px rgba(0,0,0,.2);-moz-box-shadow:0 0 1px rgba(0,0,0,.2);box-shadow:0 0 1px rgba(0,0,0,.2);z-index:15}.direction-l .desc,.direction-r .desc{position:relative;margin:1em 1em 0;padding:1em;z-index:15}}@media screen and (min-width:400px ?? max-width:660px){.direction-l .desc,.direction-r .desc{margin:1em 4em 0}}</style>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。&lt;br&gt;一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。&lt;br&gt;而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過(?)密碼這關。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Migrate mail server to Gmail - using migration tool</title>
+    <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
+    <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
+    <published>2017-04-23T11:36:51.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
+<p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
+<ol>
+<li>讓 MX record 指到新的位置</li>
+<li>遷移群組</li>
+<li>遷移舊信</li>
+</ol>
+<p>其中 2, 3 並非必須做的，但為了讓大家可以無痛轉移，我們才決定要搬信以及同步群組。<br>1, 2 十分容易，就照著說明就可以完成，真的不會的話還可以打給 Google 救援 XD<br>而本篇要紀錄的是 <strong>遷移舊信</strong> 的部分，這是其中最麻煩也最繁瑣的部分…</p>
+<a id="more"></a>
+<h1 id="設定資料遷移工具"><a href="# 設定資料遷移工具" class="headerlink" title="設定資料遷移工具"></a>設定資料遷移工具 </h1><p>G Suite 中有提供資料遷移的工具，其中包含遷移舊信件，<br> 他的方法是透過 IMAP 下載 dovecot 信件再匯入至 Gmail.</p>
+<p>遷移設定中，要設定以下幾個東西：</p>
+<ul>
+<li>原郵件伺服器類型 → 我們的例子要選 <strong>其他電子郵件伺服器</strong></li>
+<li>原本的 IMAP server</li>
+<li>管理者帳號 → 這好像沒甚麼重要的，只是他會收到遷移報告書</li>
+</ul>
+<h1 id="Password-mismatch"><a href="#Password-mismatch" class="headerlink" title="Password mismatch"></a>Password mismatch</h1><p>這邊可能會遇到問題(帳號密碼不正確 /password mismatch?)，可以查看 <code>/var/log/mail.log</code> 中的詳細錯誤訊息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Mar 16 19:00:54 cml2 dovecot: auth-worker(10594): pam(ssarcandy@cmlab.csie.ntu.edu.tw,173.194.90.100):</div><div class="line">pam_authenticate() failed: Authentication failure (password mismatch?)</div></pre></td></tr></table></figure>
+<p>這是因為這邊使用 full email address 去登入 IMAP server，而原本我們 dovecot 的設定是只要打 user name 就好(不用加 @domain)，才會造成帳密不正確的問題。</p>
+<p>為了迎合 G suite 的格式，去原郵件伺服器更改 dovecot 設定：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/dovecot/conf.d/10-auth.conf</div><div class="line"> </div><div class="line"><span class="comment"># 找到 auth_username_format</span></div><div class="line"><span class="comment"># 反註解並改成 auth_username_format = %n</span></div></pre></td></tr></table></figure>
+<p>其中 <code>auth_username_format</code> 是指登入的 username 格式，預設是只有 @ 前面的部分。<br>由於 G suite 那邊就是要用 full address 登入，故這邊改成 <code>%n</code> ，亦即捨棄 @ 後面的東西，只留下 @ 前面的部分 。</p>
+<p>改完之後記得重啟 dovecot</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ service dovecot restart</div><div class="line">[ok] Restarting IMAP/POP3 mail server: dovecot.</div></pre></td></tr></table></figure>
+<h1 id="設定遷移範圍"><a href="# 設定遷移範圍" class="headerlink" title="設定遷移範圍"></a>設定遷移範圍 </h1><p> 下一步是要設定要遷移的時間、資料夾等，<br>以我們的例子而言：</p>
+<ul>
+<li>時間選到 cmlab 創立以來的全部 ～(遷移！全都遷移！</li>
+<li>資料夾則選擇忽略幾個特定資料夾，像是 <code>virus-mail</code> , <code>trash-mail</code>, <code>spam-mail</code> 等等</li>
+</ul>
+<div><img src="/img/2017-04-23/01.jpg" alt="完整的資料遷移設定" data-action="zoom"><span class="image-caption">完整的資料遷移設定</span></div>
+<h1 id="選取遷移的使用者"><a href="# 選取遷移的使用者" class="headerlink" title="選取遷移的使用者"></a>選取遷移的使用者 </h1><p> 接下來可以直接上傳一個 csv 檔，其中包含：</p>
+<ul>
+<li>原郵件伺服器帳號</li>
+<li>原郵件伺服器密碼</li>
+<li>對應的 gmail 帳號</li>
+</ul>
+<p>上傳時有個潛規則，csv 檔不可以超過 500 行，超過它就會說未知錯誤(對，這是我們試出來的…</p>
+<p>另外，在遷移時有幾個常見的錯誤：</p>
+<h2 id="驗證失敗"><a href="# 驗證失敗" class="headerlink" title="驗證失敗"></a>驗證失敗 </h2><p> 錯誤 (18017)：驗證失敗。<br> 這表示所提供的原郵件伺服器帳號、密碼不正確，<br>也就是可能這個人不存在原郵件伺服器，或者提供的密碼不正確。</p>
+<p>如果原郵件伺服器的驗證是像我們一樣透過 LDAP 的話，可以用 <code>ldapsearch</code> 確認這人在不在：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ldapsearch -x <span class="string">"uid=??,dc=base_dn"</span></div></pre></td></tr></table></figure>
+<h2 id="連線至來源郵件伺服器時發生錯誤"><a href="# 連線至來源郵件伺服器時發生錯誤" class="headerlink" title="連線至來源郵件伺服器時發生錯誤"></a>連線至來源郵件伺服器時發生錯誤 </h2><p> 錯誤 (18002)：連線至來源郵件伺服器時發生錯誤。<br> 這錯誤是對應到 roundcube 的 <strong>連線到 imap 伺服器失敗</strong> 錯誤，有兩個可能：</p>
+<ol>
+<li>因為那個人沒有家目錄</li>
+<li>uid mismatch → <code>/var/spool/mail/username</code> 的擁有者是錯誤的</li>
+</ol>
+<p>會發生沒有家目錄的情況在我們的狀況而言就是那個人已被停權，那就根本不用遷移了。<br>而 uid mismatch 則是去 <code>/var/spool/mail/username</code> 更改成正確的擁有者就好了。</p>
+<h2 id="信箱錯誤。無法開啟資料夾或郵件"><a href="# 信箱錯誤。無法開啟資料夾或郵件" class="headerlink" title="信箱錯誤。無法開啟資料夾或郵件"></a>信箱錯誤。無法開啟資料夾或郵件 </h2><p> 錯誤 (18006)：信箱錯誤。無法開啟資料夾或郵件。<br> 這應該是屬於暫時性的錯誤，晚一點再重試看看。</p>
+<p>Google 其實有提供一份錯誤一覽表 → <a href="https://support.google.com/a/answer/6254288?hl=zh-Hant&amp;ref_topic=6245212" target="_blank" rel="external">錯誤一覽表</a> (雖然有些有寫跟沒寫一樣…</p>
+<h1 id="怎麼得到大家的密碼"><a href="# 怎麼得到大家的密碼" class="headerlink" title="怎麼得到大家的密碼"></a>怎麼得到大家的密碼 </h1><p> 我想看到這邊應該會發現一個問題：<br>遷移的 csv 檔其中一欄要提供大家的密碼，這是即使是有 root 權限也沒辦法知道的資訊欸！<br>雖然我們最後還是有想到辦法，不過那過程也很繁瑣，就留到下一次介紹吧…</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近 CMLab 終於申請到 G Suite for Education 了～&lt;br&gt;也就是我們不用再維護自己的 mail server 了～灑花～&lt;/p&gt;
+&lt;p&gt;但這也就又多了一件事：Migration…&lt;br&gt;我們要做的事情有以下幾件：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;讓 MX record 指到新的位置&lt;/li&gt;
+&lt;li&gt;遷移群組&lt;/li&gt;
+&lt;li&gt;遷移舊信&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;其中 2, 3 並非必須做的，但為了讓大家可以無痛轉移，我們才決定要搬信以及同步群組。&lt;br&gt;1, 2 十分容易，就照著說明就可以完成，真的不會的話還可以打給 Google 救援 XD&lt;br&gt;而本篇要紀錄的是 &lt;strong&gt;遷移舊信&lt;/strong&gt; 的部分，這是其中最麻煩也最繁瑣的部分…&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>High Dynamic Range Imaging</title>
+    <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
+    <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
+    <published>2017-04-15T17:34:44.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
+</blockquote>
+<p>由於一般數位相機的影像就是每個 pixel 8 bits，能夠表現的能量範圍就是這麼窄 (過暴就全白，太暗就全黑)。<br> 然而真實世界的能量範圍是非常廣的，為了能夠在 0~255 之間表現出最豐富的細節(亮部即暗部的細節)，才有所謂的 HDR 技術。<br>HDR Image 可以從多張不同曝光時間的照片中組合出來，而整個流程大致包含了:</p>
+<ol>
+<li>影像對齊</li>
+<li>計算出真實能量分佈</li>
+<li>把影像壓縮回低動態範圍成像(一般螢幕才能顯示)</li>
+</ol>
+<a id="more"></a>
+<h1 id="Image-Alignment"><a href="#Image-Alignment" class="headerlink" title="Image Alignment"></a>Image Alignment</h1><p>拍攝時，即使有用腳架固定，也無法確保每張照片拍到的都完全沒有晃到，如果晃到的話，到時候的結果就會糊糊的。<br>所以，第一步就是要先對其各張影像。<br>我們可以以第一張照片為標準，其餘的照片都想辦法對齊他。</p>
+<h2 id="Naive-Alignment"><a href="#Naive-Alignment" class="headerlink" title="Naïve Alignment"></a>Naïve Alignment</h2><p>最 naïve 的演算法，就是在一個範圍內移動找出差值最小的 offset，pseudo-code 如下:</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">offset = (<span class="number">0</span>, <span class="number">0</span>)</div><div class="line">difference = infinity</div><div class="line"><span class="keyword">for</span> y <span class="keyword">in</span> [min..max]:</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> [min..max]:</div><div class="line">        diff = find_diff(img[<span class="number">0</span>], offset(img[i], (y, x))</div><div class="line">        <span class="keyword">if</span> diff &lt; difference:</div><div class="line">            difference = diff</div><div class="line">            offset = (y, x)</div></pre></td></tr></table></figure>
+<p>如何訂 min, max 值是個難題，太大會效率差，太小可能會沒找最好的解。<br>不過依據我的經驗，拍攝的時候有搭配腳架以及快門線的話，其實誤差差不多都在 5 pixels 之間，所以可以把 \((min, max) = (-2, 2)\)</p>
+<h2 id="Median-Threshold-Bitmap"><a href="#Median-Threshold-Bitmap" class="headerlink" title="Median Threshold Bitmap"></a>Median Threshold Bitmap</h2><p>Median Threshold Bitmap Alignment<sup>[1]</sup> 演算法，是利用金字塔的方式 (每層圖片都為上一層的四倍) 從最小的開始比對，在九個鄰居內做移動，累計各方向的誤差選擇最小的方向移動之，再向上傳遞到兩倍的圖再做一次。基本上每一張都是去對齊第一張。</p>
+<p>實作的流程大略如下:</p>
+<ol>
+<li><p>產生 binary-threshold image<br>這邊的閾值由影像的中位數值決定。</p>
+ <div><img src="/img/2017-04-16/01.PNG" alt="我實作的 MTB 所產生的 binary-threshold image" data-action="zoom"><span class="image-caption">我實作的 MTB 所產生的 binary-threshold image</span></div>
+</li>
+<li><p>產生 exclude mask<br>由於那些太接近閾值的像素有可能會造成誤差，故將太接近閾值的像素標示出來，在比對時就直接跳過不比對。<br>假設要忽略的是 <strong>閾值 ± 10</strong> ，可以用 opencv 的 <code>cv2.inRange()</code>達成</p>
+ <figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mask_img = cv2.inRange(img, median - <span class="number">10</span>, median + <span class="number">10</span>)</div></pre></td></tr></table></figure>
+ <div><img src="/img/2017-04-16/02.PNG" alt="這是用於跳過過於接近閾值的像素的 MASK" data-action="zoom"><span class="image-caption">這是用於跳過過於接近閾值的像素的 MASK</span></div>
+</li>
+<li><p>由最小至最大的順序比對影像差異 <br> 在每一個層級中，都是往九個鄰居移動，看哪個最小，再往上傳遞繼續做這個比對。<br>由於影像都是 binary image，所以要比對影像差異挺容易的:<br>影像差異 = <code>img1 XOR img2 AND mask</code><br>越小層級的移動的權重越大。</p>
+</li>
+</ol>
+<h1 id="Construct-HDR"><a href="#Construct-HDR" class="headerlink" title="Construct HDR"></a>Construct HDR</h1><p>由於一般數位相機的影像就是每個 pixel 8 bits，所以每台數位相機其實都有自己對應的 response curve<br>Response curve 是在決定接收到多少能量該轉成多少的值 (此值是 [0~255])。<br> 那我就可以透過多張不同曝光時間的影像來反推出這個 response curve，有了 response curve 之後就可以進一步算出真實能量分佈圖。</p>
+<h2 id="Solving-response-curve"><a href="#Solving-response-curve" class="headerlink" title="Solving response curve"></a>Solving response curve</h2><p>我建立 HDR 影像的方法為 1997 Debevec<sup>[2]</sup> 的方法。<br>由於論文很佛心的有提供 MatLab Code，所以我就直接拿他為基底改寫成 python 程式碼，<br>並利用 numpy 提供的 <code>np.linalg.lstsq(A, b)</code> 解 \(Ax = b\) 的 \(x\) 解。</p>
+<p>我將 RGB channel 分別計算 response curve，並全部畫在一圖表上檢視，以下是我做的幾個例子。</p>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/memorial0062.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/test-response-curve.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/DSC_0126.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2-response-curve.png"alt="" data-action="zoom"></div><br></div>
+
+<p>另外，Debevec 論文 <sup>[2]</sup> 所提及的 \(L\) (控制 response curve smoothness 程度)，並不好掌握最好的值，不過依據實驗 \(L\) 值大約在 30~50 就還不錯。</p>
+<hr>
+<p>關於 smaple 點的方式，我試了兩種:</p>
+<ol>
+<li><p><strong>Random 取 50 個點 </strong><br> 好處是很直覺且容易實作，但我發現做出來的 response curve 有時會有很不一樣的結果，比較不可靠。以下圖為例，可以看到在綠色的 channel 就有比較怪異的結果，藍色在頂部也是怪怪的。</p>
+ <div style="display: flex; align-items: center;"><br> <div><img src="/img/2017-04-16/04.PNG" alt="Random sampling 50 points" data-action="zoom"><span class="image-caption">Random sampling 50 points</span></div><br> <div><img src="/img/2017-04-16/05.PNG" alt="Response curve" data-action="zoom"><span class="image-caption">Response curve</span></div><br> </div>
+</li>
+<li><p><strong>把圖片縮成 10x10，全部拿去算 </strong><br> 由於縮小圖片基本上還是能保有圖片的特徵(特亮的、特暗之類的)，所以做出來的效果也比較好一點，左圖是縮放到 10x10 的影像，右為 response curve:</p>
+ <div style="display: flex; align-items: center;"><br> <div><img src="/img/2017-04-16/03.PNG" alt="Shrink original img to 10x10 and use all pixels" data-action="zoom"><span class="image-caption">Shrink original img to 10x10 and use all pixels</span></div><br> <div><img src="/img/2017-04-16/test-response-curve2.png" alt="Response curve" data-action="zoom"><span class="image-caption">Response curve</span></div><br> </div>
+
+</li>
+</ol>
+<p>所以最後我採用第二種方法。</p>
+<h2 id="Construct-radiance-map"><a href="#Construct-radiance-map" class="headerlink" title="Construct radiance map"></a>Construct radiance map</h2><p>再藉由 Debevec 論文 <sup>[2]</sup> 上 Equation(6) 所提的 construct radiance map:<br>透過剛剛產生的 response curve 帶入公式來得到 radiance map。</p>
+<p>$$<br>\ln E_{i}=\dfrac {\sum _{j=1}^{P} w\left(Zij\right) \left(g\left( Zij\right) -\ln \Delta t_{j}\right)} {\sum _{j=1}^{P} w\left(Zij\right)}<br>$$</p>
+<p>其中 \(g\) 函式就是剛剛產生的 response curve。<br>有了 radiance map 之後，就可以套用假色來顯示出真實能量分佈圖，以下是我做的幾的例子(這邊的值都是 log value)</p>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/test-radiance-map.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei-radiance-map.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2-radiance-map.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2-radiance-map.png"alt="" data-action="zoom"></div><br></div>
+
+<h1 id="Tone-mapping"><a href="#Tone-mapping" class="headerlink" title="Tone mapping"></a>Tone mapping</h1><p>到此已經重建出 Radiance map 了，也就是已經知道真實能量分佈了，但這能量範圍太廣，沒辦法直接顯示到一般的顯示器上 (0~255)<br> 所以需要再把這樣 <strong> 高動態範圍成像 </strong> 壓回 <strong> 低動態範圍成像 </strong>，不過這壓縮的方式有其學問，如何才能讓低動態範圍成像<strong> 看起來 </strong> 像高動態範圍成像就是 Tone mapping 在做的事。</p>
+<p>根據不同的 Cases，最適合的演算法不見得相同，所以就是要看情況決定。<br>這邊展示幾個 Tone mapping 之後的結果:</p>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/test-ashikhmin.jpg" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei-drago.jpg"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2-ashikhmin.jpg" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2-gdc.jpg"alt="" data-action="zoom"></div><br></div>
+
+<h1 id="Result-galleries"><a href="#Result-galleries" class="headerlink" title="Result galleries"></a>Result galleries</h1><div><img src="/img/2017-04-16/living_room2-gdc.jpg" alt="Living room, tone map algroithm: gdc, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Living room, tone map algroithm: gdc, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0078.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0079.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0080.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0081.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0082.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0083.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0084.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0085.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/living_room2/DSC_0086.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0087.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0088.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/living_room2/DSC_0089.png"alt="" data-action="zoom"></div><br></div>
+
+<hr>
+<div><img src="/img/2017-04-16/taipei-drago.jpg" alt="Taipei city, tone map algroithm: drago, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Taipei city, tone map algroithm: drago, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/taipei/DSC_0058.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0060.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0061.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0062.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/taipei/DSC_0063.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0064.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0065.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/taipei/DSC_0066.png"alt="" data-action="zoom"></div><br></div>
+
+<hr>
+<div><img src="/img/2017-04-16/street-drago.jpg" alt="Street, tone map algroithm: drago, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Street, tone map algroithm: drago, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street/DSC_0099.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0098.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0097.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0096.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street/DSC_0095.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0094.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0093.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street/DSC_0092.png"alt="" data-action="zoom"></div><br></div>
+
+<hr>
+<div><img src="/img/2017-04-16/street2-ashikhmin.jpg" alt="Street at night, tone map algroithm: ashikhmin, Camera: Nikon D5000" data-action="zoom"><span class="image-caption">Street at night, tone map algroithm: ashikhmin, Camera: Nikon D5000</span></div>
+<div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2/DSC_0123.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0124.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0127.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0128.png"alt="" data-action="zoom"></div><br></div><div style="display: flex; align-items: center;"><br><div><img src="/img/2017-04-16/street2/DSC_0129.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0131.png"alt="" data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0132.png" alt=""data-action="zoom"></div><br><div><img src="/img/2017-04-16/street2/DSC_0133.png"alt="" data-action="zoom"></div><br></div>
+
+
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] Fast, Robust Image Registration for Compositing High Dynamic Range Photographs from Handheld Exposures, G. Ward, JGT 2003<br>[2] Recovering High Dynamic Range Radiance Maps from Photographs, Paul E. Debevec, Jitendra Malik, SIGGRAPH 1997</p>
+<hr>
+<h1 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談</h1><ol>
+<li>結果說真的還是有不少人工的感覺，可能我太廢了吧…QQ</li>
+<li>Latex 配 markdown 要注意該死的 <code>_</code>，在 Hexo 中底線會先被視為斜體字，所以在 Latex 中底線前面要用跳脫字元。</li>
+<li>Hexo 的 markdown 真 robust! 愛怎亂搞都會跟預期中的一樣，也可以亂加 html 語法～(望向 github…</li>
+<li>這篇文章照片真多，竟然要下載 30MB 之多，超不 friendly der~</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;高動態範圍成像（英語：High Dynamic Range Imaging，簡稱HDRI或HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。&lt;br&gt;   – from wikipedia&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;由於一般數位相機的影像就是每個 pixel 8 bits，能夠表現的能量範圍就是這麼窄(過暴就全白，太暗就全黑)。&lt;br&gt;然而真實世界的能量範圍是非常廣的，為了能夠在 0~255 之間表現出最豐富的細節(亮部即暗部的細節)，才有所謂的 HDR 技術。&lt;br&gt;HDR Image 可以從多張不同曝光時間的照片中組合出來，而整個流程大致包含了:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;影像對齊&lt;/li&gt;
+&lt;li&gt;計算出真實能量分佈&lt;/li&gt;
+&lt;li&gt;把影像壓縮回低動態範圍成像(一般螢幕才能顯示)&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+    
+      <category term="opencv" scheme="https://ssarcandy.tw/tags/opencv/"/>
+    
+      <category term="python" scheme="https://ssarcandy.tw/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Setup x11 forwarding on Debian</title>
+    <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
+    <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
+    <published>2017-03-19T18:03:08.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
+<p>Linux 的 GUI 運作模式，其中</p>
+<ul>
+<li>X-client 負責程式的運作</li>
+<li>X-server 負責畫面的顯示</li>
+</ul>
+<p>所以只要把工作站上的圖形顯示丟到本地端 (windows/mac) 的 X-server，就可以顯示出來了。<br>本篇將介紹如何設定才能使 Debian Server 的 GUI 程式的畫面顯示到 client 的電腦上。</p>
+<a id="more"></a>
+<h1 id="Debian-Server"><a href="#Debian-Server" class="headerlink" title="Debian Server"></a>Debian Server</h1><h2 id="安裝 -X-server"><a href="# 安裝 -X-server" class="headerlink" title="安裝 X-server"></a>安裝 X-server</h2><p>如果 server 一開始就是灌沒有桌面環境的，現在就要安裝一下:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ apt-get install xserver-xorg-core</div></pre></td></tr></table></figure>
+<p>也可以裝個 gvim 來測試。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ apt-get install vim-gtk</div></pre></td></tr></table></figure>
+<h2 id="啟用 -X11Forwarding"><a href="# 啟用 -X11Forwarding" class="headerlink" title="啟用 X11Forwarding"></a>啟用 <code>X11Forwarding</code></h2><p>server 這邊，必須要允許 ssh 的連線 forward 這些圖形介面的資訊到 client 端，所以需要去 <code>/etc/ssh/ssh_config</code> 中設定:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/ssh/ssh_config</div><div class="line"> </div><div class="line"><span class="comment"># add this line:</span></div><div class="line">X11Forwarding yes</div></pre></td></tr></table></figure>
+<p>設定好記的重啟 sshd 服務:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ service sshd reload</div></pre></td></tr></table></figure>
+<h1 id="Client-Setup"><a href="#Client-Setup" class="headerlink" title="Client Setup"></a>Client Setup</h1><p>本機端也是要有相應的設定才能正確地接收 server forward 過來的圖形介面，Mac 十分容易，而 Windows 的設定比較麻煩。</p>
+<h2 id="Mac"><a href="#Mac" class="headerlink" title="Mac"></a>Mac</h2><p>打開你的 terminal，用 ssh 連線至主機:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ ssh -X user@example.com</div><div class="line"> </div><div class="line"><span class="comment"># on remote server</span></div><div class="line">$ gvim <span class="comment"># open vim GUI version for testing</span></div></pre></td></tr></table></figure>
+<p>不過最近 Mac 已不再內建 X11<sup>[1]</sup>，<br>所以如果你是最的 Sierra，則必須下載 <a href="https://www.xquartz.org/" target="_blank" rel="external">XQuartz</a>。</p>
+<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><p>在 windows 上需要安裝 X-server 才能使用 x11 forwarding，我推薦使用 Xming。<br>下載並安裝好以後，確認通知列有出現 Xming 的圖示。</p>
+<p>並且要再更改 server 上的 <code>ssh_config</code> :</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ vim /etc/ssh/ssh_config</div><div class="line"> </div><div class="line"><span class="comment"># add these two lines</span></div><div class="line">X11DisplayOffset 10</div><div class="line">X11UseLocalhost yes</div></pre></td></tr></table></figure>
+<p>記得重啟 <code>sshd</code> service</p>
+<p>接下來使用 PuTTy 來連線:</p>
+<ol>
+<li>Session &gt; Host Name: 輸入 server ip</li>
+<li>Connection &gt; SSH &gt; X11:<ul>
+<li>Enable X11 forwarding → 打勾</li>
+<li>x display location: <code>localhost:0</code></li>
+</ul>
+</li>
+</ol>
+<p>連上之後，可以試試輸入以下指令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo $DISPLAY</div><div class="line">localhost:10.0</div></pre></td></tr></table></figure>
+<p>如果看到如上的回傳，就表示一切正常。</p>
+<p>試試 <code>gvim</code> ，就會跳出小巧可愛的視窗:</p>
+<div><img src="/img/2017-03-20/01.PNG" alt="透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows)" data-action="zoom"><span class="image-caption">透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows)</span></div>
+<hr>
+<p>Reference:</p>
+<p>[1] <a href="https://support.apple.com/zh-tw/HT201341" target="_blank" rel="external">Mac 已不再隨附 X11</a><br>[2] <a href="http://cypresslin.web.fc2.com/Memo/M-SSH.html" target="_blank" rel="external">SSH X11 Forwarding</a><br>[3] <a href="http://www.geo.mtu.edu/geoschem/docs/putty_install.html" target="_blank" rel="external">Installing/Configuring PuTTy and Xming</a><br>[4] <a href="https://www.vultr.com/docs/setup-x11-forwarding-over-ssh-on-debian-wheezy" target="_blank" rel="external">Setup X11 Forwarding over SSH on Debian Wheezy</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。&lt;/p&gt;
+&lt;p&gt;Linux 的 GUI 運作模式，其中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;X-client 負責程式的運作&lt;/li&gt;
+&lt;li&gt;X-server 負責畫面的顯示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以只要把工作站上的圖形顯示丟到本地端(windows/mac)的 X-server，就可以顯示出來了。&lt;br&gt;本篇將介紹如何設定才能使 Debian Server 的 GUI 程式的畫面顯示到 client 的電腦上。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>防止 mail server 大量寄信的手段</title>
+    <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
+    <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
+    <published>2017-02-26T13:14:07.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
+<h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
+<ul>
+<li><code>pflogsumm</code></li>
+<li><code>mailgraph</code></li>
+</ul>
+<p>方便監控以及分析 mail server 的狀況:</p>
+<a id="more"></a>
+<h2 id="pflogsumm"><a href="#pflogsumm" class="headerlink" title="pflogsumm"></a>pflogsumm</h2><p><code>pflogsumm</code> 是個可以把 mail.log 整理成一份比較好閱讀的報告，可以一目瞭然這時段內共收發多少信、誰寄最多信、誰收最多信等等的資訊。<br>用法也很簡單:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ apt-get install pflogsumm  <span class="comment"># install</span></div><div class="line">$ pflogsumm /var/<span class="built_in">log</span>/mail.log -d today <span class="comment"># generate today's report</span></div><div class="line"> </div><div class="line">Postfix <span class="built_in">log</span> summaries <span class="keyword">for</span> Feb 26</div><div class="line"> </div><div class="line">Grand Totals</div><div class="line">------------</div><div class="line">messages</div><div class="line">      659   received</div><div class="line">     1047   delivered</div><div class="line">      135   forwarded</div><div class="line">        0   deferred</div><div class="line">        2   bounced</div><div class="line">     3285   rejected (75%)</div><div class="line">        0   reject warnings</div><div class="line">        0   held</div><div class="line">        0   discarded (0%)</div><div class="line">  </div><div class="line">    15378k  bytes received</div><div class="line">    20065k  bytes delivered</div><div class="line">      142   senders</div><div class="line">       88   sending hosts/domains</div><div class="line">      156   recipients</div><div class="line">       15   recipient hosts/domains</div></pre></td></tr></table></figure>
+<p>這邊只列出 report 的一部份，還有很多有用的資訊，可以自己試試看。</p>
+<h2 id="mailgraph"><a href="#mailgraph" class="headerlink" title="mailgraph"></a>mailgraph</h2><p>這是一個視覺化圖表呈現 mail server 狀態的工具，顯示整個時間軸收發了多少信之類的資訊，介面大概長這樣:</p>
+<div><img src="/img/2017-02-26/01.png" alt="mailgrapgh 網頁統計資訊" data-action="zoom"><span class="image-caption">mailgrapgh 網頁統計資訊</span></div>
+<p>這是以網頁來呈現的，原理就是每幾分鐘就會去整理 mail.log 中的資訊，然後產生圖表再呈現在網頁上。<br>安裝流程如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ apt-get install rrdtool mailgraph</div><div class="line">$ dpkg-reconfigure mailgraph</div></pre></td></tr></table></figure>
+<p>然後會問你三個問題</p>
+<ul>
+<li>Should Mailgraph start on boot? &lt;– <strong>Yes</strong></li>
+<li>Logfile used by mailgraph: &lt;– <code>/var/log/mail.log</code></li>
+<li>Count incoming mail as outgoing mail? 這要看你是否有安裝一些過濾器 (amavisd 之類的)，有的話就選 <strong>NO</strong>，反之則選 <strong>YES</strong></li>
+</ul>
+<p>再來就是把對應檔案搬到 web server 下面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ mkdir /var/www/mailgrapgh <span class="comment"># create a folder for mailgraph</span></div><div class="line">$ cp -p /usr/lib/cgi-bin/mailgraph.cgi /var/www/mailgraph </div><div class="line">$ cp -p /usr/lib/cgi-bin/mailgraph.css /var/www/mailgraph</div></pre></td></tr></table></figure>
+<p>然後就可以連上 <code>http://yorurdomain.com/mailgraph/mailgraph.cgi</code> 查看結果。</p>
+<h1 id="看 -mail-log- 揪出亂寄者"><a href="# 看 -mail-log- 揪出亂寄者" class="headerlink" title="看 mail.log 揪出亂寄者"></a>看 mail.log 揪出亂寄者 </h1><p> 通常 mail server 寄信量暴增都是因為有使用者在大量寄信，無論是真人在搞鬼或是有程式在惡意寄信，都應該視情況直接封鎖他寄信的功能。</p>
+<h2 id="找 -nrcpt- 過高者"><a href="# 找 -nrcpt- 過高者" class="headerlink" title="找 nrcpt 過高者"></a>找 <code>nrcpt</code> 過高者</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat mail.log | egrep <span class="string">'nrcpt=[1-9][0-9]'</span></div></pre></td></tr></table></figure>
+<p>nrcpt 是 number of recipients 的縮寫，nrcpt 很大表示這封信要寄給很多人，合不合理還是要看情況，但至少由此下手比較能夠找到搞鬼的人。</p>
+<h2 id="看 -pflogsumm- 誰寄太多信"><a href="# 看 -pflogsumm- 誰寄太多信" class="headerlink" title="看 pflogsumm 誰寄太多信"></a>看 <code>pflogsumm</code> 誰寄太多信</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ pflogsumm /var/<span class="built_in">log</span>/mail.log -d today</div><div class="line"> </div><div class="line">Senders by message count</div><div class="line">------------------------</div><div class="line">    1060   xxx@cmlab.csie.ntu.edu.tw</div><div class="line">      32   xxx@cmlab.csie.ntu.edu.tw</div><div class="line">      12   xxx@cmlab.csie.ntu.edu.tw</div><div class="line">       6   xxx@cml0.csie.ntu.edu.tw</div><div class="line">       2   xxx@cmlab.csie.ntu.edu.tw</div><div class="line">       2   xxx@ntu.edu.tw</div></pre></td></tr></table></figure>
+<p>找到誰很詭異寄很多信之後，就加入 Postfix 的 sender 黑名單中限制寄信。(記得更新 .db 檔)</p>
+<p>在 Postfix <code>main.cf</code> 中加入 <code>sender-access</code> 的黑名單:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">smtpd_sender_restrictions = </div><div class="line">    check_sender_access hash:/etc/postfix/sender-access,</div><div class="line">    ...</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ vim sender-access</div><div class="line"> </div><div class="line"><span class="comment"># add this line to disable sender function</span></div><div class="line"><span class="comment"># xxx@cmlab.csie.ntu.edu.tw REJECT sorry, we don't provide smtp service for you.</span></div><div class="line"> </div><div class="line">$ postmap sender-access <span class="comment"># update .db file</span></div></pre></td></tr></table></figure>
+<h1 id="設定內收外寄流量控制"><a href="# 設定內收外寄流量控制" class="headerlink" title="設定內收外寄流量控制"></a>設定內收外寄流量控制 </h1><p> 有時候單靠黑名單其實有點治標不治本，因為今天鎖了 A 明天可能是 B 在大量寄信，所以若能設定每個使用者一小時允許的寄信量才可以防止這類大量寄信的事情發生。</p>
+<p>Postfix 並沒有相關的設定可以設，必須依靠別的程式，而看起來最好的就是 Policyd 了 <br> 我之前已經有一篇是在講 <a href="https://ssarcandy.tw/2016/12/24/policyd/"> 如何安裝及設定 Policyd</a> 了，可以直接參考那篇。</p>
+<p>不過有幾點是需要注意的，我一開始設定是設定成<strong>「若超過寄信額度，則延後寄信(DEFER)」</strong>，我之所以這樣設是不想讓使用者的信沒寄出去，只是讓他晚一點寄出去。但這樣就又可能造成某人大量寄信結果因為超過額度所以全部都塞在 mail queue 中…. 崩潰….</p>
+<p>所以我現在就直接設成<strong>「若超過寄信額度，則直接拒絕寄信(REJECT)」</strong>，這樣比較乾脆～</p>
+<h1 id="設定重送間隔、生命週期"><a href="# 設定重送間隔、生命週期" class="headerlink" title="設定重送間隔、生命週期"></a>設定重送間隔、生命週期 </h1><p> 有時候信件會寄不出去(可能是對方容量滿了、網路問題等等、或是對方伺服器黑名單我們的信)，Postfix 預設是有重送機制的，但假設信件一直重送而且又一直寄不出去那 mail queue 就會累積越來越多信，最後就會有超大寄信流量，而這時候就會被學校限制 IP 了。</p>
+<p>Postfix 重送的相關設定預設值都相當長，像是一封信他能夠存活在 mail queue 中的時間竟然是五天，這也表示如果有一封信寄不出去的話 Postfix 會鍥而不捨的連試五天…..</p>
+<p>以下列出 Postfix 有關於重送的設定及其預設值，想看每個的詳細說明可以看 <a href="http://www.postfix.org/postconf.5.html" target="_blank" rel="external"> 官方文件</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">minimal_backoff_time (default: 300s)</div><div class="line">maximal_backoff_time (default: 4000s)</div><div class="line">queue_run_delay (default: 300s)</div><div class="line">maximal_queue_lifetime (default: 5d)</div><div class="line">bounce_queue_lifetime (default: 5d)</div></pre></td></tr></table></figure>
+<p>根據我們自己 mail server 的用量，我最後將設定改為如下，這樣應該就可以避免 queue 中塞滿寄不出去的信的狀況了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">minimal_backoff_time = 10m</div><div class="line">maximal_backoff_time = 30m</div><div class="line">queue_run_delay = 10m</div><div class="line">bounce_queue_lifetime = 2h</div><div class="line">maximal_queue_lifetime = 2h</div></pre></td></tr></table></figure>
+<hr>
+<p>最近搞 mail server 真的大崩潰，連帶系上跟者我們一起崩潰 Sorry…QQ<br>果然還是盡快轉移到 G Suite 好了…..</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…&lt;br&gt;為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…&lt;br&gt;本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…&lt;/p&gt;
+&lt;h1 id=&quot;流量分析及監控&quot;&gt;&lt;a href=&quot;#流量分析及監控&quot; class=&quot;headerlink&quot; title=&quot;流量分析及監控&quot;&gt;&lt;/a&gt;流量分析及監控&lt;/h1&gt;&lt;p&gt;先介紹兩個好工具，&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pflogsumm&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mailgraph&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;方便監控以及分析 mail server 的狀況:&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>From React to React Native</title>
+    <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
+    <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
+    <published>2017-02-02T03:04:00.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
+<div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
+<a id="more"></a>
+<p>說真的寫好 React 版本以後要改寫成 React Native 還挺容易的，基本上要改的只有介面的部分，對應到程式碼大概就是每個 Component 中的 <code>render()</code>，當然還有 CSS 要改成 react-native 的 style，Animation 也不能用 CSS 來做了，這也是比較麻煩的地方。</p>
+<h1 id="檔案結構"><a href="# 檔案結構" class="headerlink" title="檔案結構"></a>檔案結構</h1><p>React 版跟 React Native 版的檔案結構其實幾乎都是差不多的，可以看下圖的對應：</p>
+<div><img src="/img/2017-02-02/02.png" alt="左圖是 React 的檔案結構；右圖是 React Native 的檔案結構。" data-action="zoom"><span class="image-caption">左圖是 React 的檔案結構；右圖是 React Native 的檔案結構。</span></div>
+<p>最大的差異是 <code>style/</code> 資料夾不見了，這是因為 React Native 的 style 我都寫在 components 檔案裡面了。React 版本的 <code>index.js</code> 是進入點。其他檔案基本上都維持一樣的結構、React 版本定義的 components 在 react-native 版中都依舊存在。</p>
+<div><img src="/img/2017-02-02/03.png" alt="左為 React 版；右為 React Native 版，元件完全一致。" data-action="zoom"><span class="image-caption">左為 React 版；右為 React Native 版，元件完全一致。</span></div>
+<h1 id="改寫 -render"><a href="# 改寫 -render" class="headerlink" title="改寫 render()"></a>改寫 <code>render()</code></h1><blockquote>
+<p>邏輯可以重用，要改的只有渲染的部分。</p>
+</blockquote>
+<p>我在改寫的時候，反正第一步就是把 <code>&lt;div&gt;</code> 通通改成 <code>&lt;View&gt;</code> ，把包住文字的 <code>&lt;span&gt;</code>、<code>&lt;div&gt;</code> 改成 <code>&lt;Text&gt;</code> ，這樣大概就完成一半了吧 (?)<br> 剩下的一半就是找找最適合的 native component ，這些可以上官方文件尋找。</p>
+<h1 id="改寫 -Style"><a href="# 改寫 -Style" class="headerlink" title="改寫 Style"></a>改寫 Style</h1><blockquote>
+<p>看似像 CSS，但又沒這麼好用，比較像是閹割版的 CSS。</p>
+</blockquote>
+<p>React Native 的 style 是個 javascript 的物件，大概有七成可以跟 CSS 直接對應，寫法就是原本 CSS 改成 camlCase 寫，如果要寫得像 css 的 class 的話還要使用 <code>StyleSheet.create()</code> :</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// css</span></div><div class="line">.name &#123;</div><div class="line">    font-size: <span class="number">20</span>px;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">// react native</span></div><div class="line"><span class="keyword">const</span> styles = StyleSheet.create(&#123;</div><div class="line">    name: &#123;</div><div class="line">        fontSize: <span class="number">20</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>套用樣式的寫法則是直接用 <code>style={Object}</code> ，若要套用複合樣式，則在 style 中放一個 object array(順序有差):</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">View</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;styles.red&#125;</span>&gt;</span>just red<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">Text</span> <span class="attr">style</span>=<span class="string">&#123;[styles.red,</span> <span class="attr">styles.bigblue</span>]&#125;&gt;</span>red, then bigblue<span class="tag">&lt;/<span class="name">Text</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">View</span>&gt;</span></div></pre></td></tr></table></figure>
+<h1 id="Animation"><a href="#Animation" class="headerlink" title="Animation"></a>Animation</h1><p>原本 React 版的動畫全都是用 css 做出來的，但這些在 React Native 中就沒辦法用了，官方有提供 Animation 相關的 <a href="https://facebook.github.io/react-native/docs/animations.html" target="_blank" rel="external">API</a>，但說實在的真的有點難搞。<br>後來我是用某大神寫的 library <a href="https://github.com/oblador/react-native-animatable" target="_blank" rel="external">react-native-animatable</a>，比起官方提供的更好用。</p>
+<h1 id="Divide-and-Conquer"><a href="#Divide-and-Conquer" class="headerlink" title="Divide and Conquer"></a>Divide and Conquer</h1><blockquote>
+<p>改寫要一部份一部份改比較容易，一次要全改只會要你命！</p>
+</blockquote>
+<p>從 React 改成 React Native 雖然好像不用費很大的功夫，但是如果想要一次到位全部改好其實還是很困難的。<br>我這個 Project 已經是很小規模的了 (約 500 多行)，但第一次想一次到位時我花了一兩個小時還是連 build 都沒辦法成功。所以果然還是一部份一部份改起來比較輕鬆。<br> 以我的例子而言，是先改 <code>&lt;StatusPanel/&gt;</code> ，因為只要會倒數就好嘛，單純了自然就比較好寫；再來改 <code>&lt;ArrowKey/&gt;</code> 最後才是改 <code>&lt;QuestionList/&gt;</code> 跟 <code>&lt;Question/&gt;</code> ，這樣分批改前前後後大概只花兩個小時就全部搞定了。</p>
+<h1 id="一些坑以及一些筆記"><a href="# 一些坑以及一些筆記" class="headerlink" title="一些坑以及一些筆記"></a>一些坑以及一些筆記 </h1><h4 id="進入點註冊程式就好"><a href="# 進入點註冊程式就好" class="headerlink" title="進入點註冊程式就好"></a> 進入點註冊程式就好</h4><p>React Native 官方 example 的主程式都是寫在 <code>index.android.js</code> (或 <code>.ios.js</code> ) 裡面，個人感覺是可以把主邏輯拆出來，進入點只負責註冊程式就好:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; AppRegistry &#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</div><div class="line"><span class="keyword">import</span> colorblocksRN <span class="keyword">from</span> <span class="string">'./src/app'</span>; <span class="comment">// 主程式 component</span></div><div class="line">    </div><div class="line"><span class="comment">// 進入點只做 register 的動作</span></div><div class="line">AppRegistry.registerComponent(<span class="string">'colorblocksRN'</span>, () =&gt; colorblocksRN);</div></pre></td></tr></table></figure>
+<h4 id="iOS- 樣式有差"><a href="#iOS- 樣式有差" class="headerlink" title="iOS 樣式有差"></a>iOS 樣式有差 </h4><p> 即使用一模一樣的 code，iOS 跑起來樣式跟 android 的還是有差別，這我也不知道為甚麼，反正最後記得針對 iOS 的樣式再修改修改。</p>
+<h4 id="不能 -react-native-run-ios"><a href="# 不能 -react-native-run-ios" class="headerlink" title="不能 react-native run-ios"></a>不能 <code>react-native run-ios</code></h4><p>假設遇到這問題，首先先檢查 port 8081 有沒有被佔用了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ lsof -n -i4TCP:8081</div><div class="line">$ <span class="built_in">kill</span> &lt;pid&gt;</div></pre></td></tr></table></figure>
+<p>如果問題沒排除，試試</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo react-native run-ios</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個&lt;a href=&quot;https://ssarcandy.tw/colorblocks-react/&quot;&gt;網頁小遊戲&lt;/a&gt;，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.colorblocksrn&quot;&gt;Google play&lt;/a&gt; 上～(iOS app store 費用太高付不起…)&lt;br&gt;算是完成幾個長久以來的小小目標(?)&lt;/p&gt;
+&lt;div&gt;&lt;img src=&quot;/img/2017-02-02/01.jpg&quot; alt=&quot;用 React Native 做出 Android/iOS 原生 app&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
+    
+    </summary>
+    
+    
+      <category term="react" scheme="https://ssarcandy.tw/tags/react/"/>
+    
+      <category term="react native" scheme="https://ssarcandy.tw/tags/react-native/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Light Field Camera</title>
+    <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
+    <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
+    <published>2017-01-18T11:04:29.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
+<p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
+<div><img src="/img/2017-01-18/01.png" alt="圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup>" data-action="zoom"><span class="image-caption">圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源<sup>[1]</sup></span></div>
+<a id="more"></a>
+<p>光場相機每個像素紀錄的則是只有一條光線。由於光場相機這樣的設計，所以光場相機所拍出的原始影像很特別，會是一格一格的，如圖二所示。</p>
+<div><img src="/img/2017-01-18/02.png" alt="圖二：光場相機所拍出的原始影像是一格一格的。" data-action="zoom"><span class="image-caption">圖二：光場相機所拍出的原始影像是一格一格的。</span></div>
+<p>這是因為微透鏡陣列對主透鏡聚集的光再成像的緣故，每一格都是對應的微透鏡的成像。事實上，可以把每個微透鏡都當作一個小小針孔相機，如圖三 (c) 所示。</p>
+<p>另外，藉由對這些微透鏡影像的重新排列，可以生成不同視角的影像。具體來說，就是挑選每個微透鏡的同一格像素，組合出一張長寬分別等同於微透鏡在長邊以及寬邊的數量的影像。而一張光場相機原始影像能夠產生多少不同視角的影像，端看每個微透鏡後面對應到的像素有幾個。</p>
+<div><img src="/img/2017-01-18/03.png" alt="圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。" data-action="zoom"><span class="image-caption">圖三：(a)把每個微透鏡相同位置的像素取出來合成一張圖，可以得出不同視角的影像。(b)由光場影像得出的所有視角一覽。(c)每個微透鏡可以視為一針孔相機。</span></div>
+<h1 id="數位重對焦"><a href="# 數位重對焦" class="headerlink" title="數位重對焦"></a>數位重對焦 </h1><p> 我以之前做的 <a href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"> 真實相機系統 </a> 為基礎，在主透鏡焦距上放置微透鏡陣列，藉此來模擬光場相機的硬體設備。<br>光場相機原始影像紀錄了四維的光線資訊，\(L(u, v, s, t)\) 這個函式代表從主透鏡的 2D 點 \((u, v)\) 射到微透鏡的 2D 點 \((s, t)\) 的光線能量，利用這個資訊，就可以進行數位重對焦。關於如何進行數位重對焦，可以看圖四。</p>
+<div><img src="/img/2017-01-18/04.png" alt="圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">圖四：在 s' 平面重新聚焦，即是讓所有光錐都落在 s'平面上，而對於數位重對焦而言，必須透過蒐集ｓ平面上的資訊來達成。圖源<sup>[2]</sup></span></div>
+<p>原始焦距的比例。假設要重對焦影像至 \(s’\) 平面，可以由已知算出：</p>
+<p>\(s’=as+\left( 1-a\right) u\)</p>
+<p>不過由於光線能量函式是 \(L(u, v, s, t)\) ，所以必須把 \(s’\) 改寫成 \(s\) 的形式：</p>
+<p>\(s=\dfrac {1} {a}\left(s’-\left( 1-a\right) u\right) \)</p>
+<p>所以對於一個重對焦影像的像素而言，能量可以這樣求得：</p>
+<p>\(E\left(s’, t’\right) = \sum _{u} \sum _{v} L\left(u, v, \dfrac {1} {a} \left(s’ - \left(1 - a \right) u\right), \dfrac {1} {a} \left(t’-\left(1-a\right) v\right) \right) \)</p>
+<p>其實應該要寫成積分形式才是真實狀況，但是由於真正得到的資料是離散的(像素)，所以用加總的就可以了。</p>
+<h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我分成兩塊實作:</p>
+<ul>
+<li>模擬光場相機成像，這部分是以 pbrt 為基礎再加新的 class 來實作。</li>
+<li>利用光場相機的原始影像來做數位重對焦，這部分就是另外用 python 來做。</li>
+</ul>
+<p>這樣做也使得我在驗證時可以分別驗證，讓實作上除錯較為容易。</p>
+<p>模擬光場相機的部分，我也是用之前的場景檔為基礎，加以更改後來測試我的模擬效果。微透鏡的數目越多能使之後數位重對焦的影有更高的畫質，而微透鏡的大小則關係著能夠有多少不同的視角（亦即重對焦能力的高低）。</p>
+<div><img src="/img/2017-01-18/05.png" alt="圖五：(a)微透鏡大小較大，但數位重對焦以後會是比較低畫質的影像。(b) 微透鏡大小較小，數位重對焦以後會是比較高畫質的影像。" data-action="zoom"><span class="image-caption">圖五：(a)微透鏡大小較大，但數位重對焦以後會是比較低畫質的影像。(b) 微透鏡大小較小，數位重對焦以後會是比較高畫質的影像。</span></div>
+<div><img src="/img/2017-01-18/06.png" alt="圖六：數位重對焦結果。左上、右上、左下、右下分別對焦點為：遠、中、近、更近。四張皆裁切掉上方黑色區塊。" data-action="zoom"><span class="image-caption">圖六：數位重對焦結果。左上、右上、左下、右下分別對焦點為：遠、中、近、更近。四張皆裁切掉上方黑色區塊。</span></div>
+<p>由圖六可以看出焦距的改變影響清楚的部分，雖然其實沒有十分明顯，但還是可以看到右上角的圖清楚的部分是紅龍的背部及尾部，而左下清楚的則是藍龍的背部。</p>
+<p>另外，利用光場相機的原始影像來做數位重對焦的部分除了拿我自己產生出的光場相機影像來試驗以外，我也利用網路 <sup>[5]</sup> 直接尋找了一張光場相機的影像，並直接拿來當作我數位重對焦的測試資料，這是九個不同字母分別在不同的距離處。可以看見成功的對焦到不同的字母上。</p>
+<div><img src="/img/2017-01-18/07.png" alt="圖七：(a)從網路 <sup>[5]</sup> 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。" data-action="zoom"><span class="image-caption">圖七：(a)從網路 <sup>[5]</sup> 上獲得的第三方光場相機原始影像。(b)用 (a) 來測試我實作的數位重對焦，可以看見成功的對焦到不同的字母上。</span></div>
+<h1 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談</h1><ul>
+<li>其實自己模擬出來的光場影像做數位重對焦的時候效果一直不太理想，搞不懂是哪邊有問題 QQ</li>
+<li>不過用別人的光場影像做數位重對焦很成功阿，肯定是 pbrt 那邊我寫錯了什麼…</li>
+<li>多虧有 CMLab 的眾多強力工作站，讓我免於跑一張圖就要浪費十幾個小時的時間…</li>
+<li>查資料一直看到 Lytro 的開箱文….</li>
+<li>markdown + latex 還真多要注意的，markdown 的 <code>_</code> 會先被轉成 <code>&lt;em&gt;</code> 然後像是 <code>\sum _{u}</code> 的 latex 就會變成<code>\sum &lt;em&gt;{u}</code>…</li>
+</ul>
+<hr>
+<p>註:<br>[1] <a href="http://graphics.stanford.edu/papers/lfcamera/" target="_blank" rel="external">Light Field Photography with a Hand-held Plenoptic Camera</a>, R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan<br>[2] <a href="https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf" target="_blank" rel="external">CS348b Project： Light Field Camera Simulation</a>, Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen<br>[3] <a href="http://graphics.stanford.edu/papers/fourierphoto/" target="_blank" rel="external">Fourier Slice Photography</a>, Ren Ng, ACM Transactions on Graphics, July 2005<br>[4] <a href="http://lightfield.stanford.edu/lfs.html" target="_blank" rel="external">The (New) Stanford Light Field Archive</a><br>[5] <a href="http://blog.csdn.net/endlch/article/details/44539055" target="_blank" rel="external">光場相機原理及仿真實現</a><br>[6] <a href="https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/" target="_blank" rel="external">LYTRO Light Field Camera 原理解析</a><br>$$$$</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。&lt;/p&gt;
+&lt;p&gt;光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：&lt;/p&gt;
+&lt;div&gt;&lt;img src=&quot;/img/2017-01-18/01.png&quot; alt=&quot;圖一：在成像平面前加一個微透鏡的陣列。微透鏡陣列的平面在這裡是 st 平面。在微透鏡陣列後面的感光元件上，每一個像素對應著 uv 平面上一個區域射到此像素對應的微透鏡上光強的和。圖源&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+      <category term="python" scheme="https://ssarcandy.tw/tags/python/"/>
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MSAuto - 玩遊戲也要自動化</title>
+    <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
+    <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
+    <published>2016-12-25T13:12:48.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
+<p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
+<a id="more"></a>
+<div><img src="/img/2016-12-25/4.jpg" alt="有圖有真相，沒作弊打 3204 分" data-action="zoom"><span class="image-caption">有圖有真相，沒作弊打 3204 分</span></div>
+<p>既然他們都這樣玩，我也沒在客氣的，直接發個強一點的分數: 8 萬分。</p>
+<div><img src="/img/2016-12-25/5.png" alt="直接發 request 獲得八萬分" data-action="zoom"><span class="image-caption">直接發 request 獲得八萬分</span></div>
+<p>後來還發現 github 上竟然有自動練等的專案 <a href="https://github.com/ThePeiggy/neverwing" target="_blank" rel="external">neverwing</a> ，做得如此完整，真的是讓我開眼界了哈哈。</p>
+<hr>
+<p>以上是啟發我做個自動解 MSA 任務的程式的起因。</p>
+<p>認識我的人應該都知道我一直有在玩一個手機遊戲 Metal Slug Attack (MSA)，基本上我會玩也只是因為這是小時候玩越南大戰機台的回憶。不過有鑒於這遊戲每日任務實在是有點麻煩又耗時，所以我就想弄成自動化。</p>
+<p>首先還是要先知道這遊戲發 request 發到哪、怎麼發、順序是甚麼、怎麼認證使用者資訊。基本上這些想知道可能要架 Proxy + Postman + 手機 root 才行了。幸好有個好東西 <a href="https://www.charlesproxy.com/" target="_blank" rel="external">Charles</a> 可以輕易的架 Proxy 讓手機的 http request 都先通過電腦再到 remote server。</p>
+<p>知道怎麼發之後，就來開始試試吧！MSA 這遊戲有很多模式，其中一個是 TREASURE HUNT，每隔幾個小時可以領一次獎品這樣(個人覺得很沒意義的模式…)，而我也是從這模式開始下手。</p>
+<div><img src="/img/2016-12-25/1.png" alt="TREASURE HUNT" data-action="zoom"><span class="image-caption">TREASURE HUNT</span></div>
+<p>一般而言我頂多一天進一次遊戲，那像是這種 CD 3 小時的就很浪費(原本一天可以領 8 次的)，我寫的程式邏輯挺簡單的:</p>
+<blockquote>
+<p>每十分鐘檢查一次，冷卻好了就領獎並且重新開始搜尋。</p>
+</blockquote>
+<p>這用 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 加上 crontab 設定一下就可以達成~</p>
+<p><del>這樣我每天都可以多好多體力 XD</del></p>
+<p>接下來挑戰下個模式: COMBAT SCHOOL ，這就是每天可以打電腦三次然後會給你獎品(也是滿沒意義的模式…)</p>
+<div><img src="/img/2016-12-25/2.png" alt="COMBAT SCHOOL" data-action="zoom"><span class="image-caption">COMBAT SCHOOL</span></div>
+<p>在做這模式的自動化時卡滿久的，有個 POST request 的 x-www-form-urlencoded data 長這樣:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"cover=2&amp;deck_no=3&amp;stage_id=706&amp;training_id=1"</span> +</div><div class="line"><span class="string">"&amp;unit_ids[]=15&amp;unit_ids[]=16&amp;unit_ids[]=17&amp;unit_ids[]=18&amp;unit_ids[]=19&amp;unit_ids[]=21&amp;unit_ids[]=84&amp;unit_ids[]=82&amp;unit_ids[]=271&amp;unit_ids[]=340"</span> +</div><div class="line"><span class="string">"&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50&amp;unit_level[]=50"</span></div></pre></td></tr></table></figure>
+<p>可以發現有一大堆 key 都是一樣的 (<code>unit_ids[]</code> , <code>unit_level[]</code> )，這用 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 似乎辦不到，所以我最後決定寫 shell script 直接用 curl 發 request ，再用 cronjob 設定每天幫刷一下關。<br> 恩，就成功了。 </p>
+<p>再挑戰下一個模式: P.O.W RESCUE ，每天可以打 20 關電腦，會給你一些獎品<del>(怎麼每個模式都大同小異 XD)</del>。這是我覺得最浪費時間的模式了，因為一天要打 20 次。</p>
+<div><img src="/img/2016-12-25/3.png" alt="P.O.W RESCUE" data-action="zoom"><span class="image-caption">P.O.W RESCUE</span></div>
+<p>這邏輯稍微複雜一點，因為每次挑戰的 <code>stage_id</code> 都不一樣，要先 GET 下一關 <code>stage_id</code> ，而且又有那種 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 不能發的 request。解法兩種:</p>
+<ol>
+<li>全部用 shell script 寫。</li>
+<li>用 nodejs 寫，要發特殊 request 就另外執行 shell script。</li>
+</ol>
+<p>基於我其實不太會寫 shell script，我決定採用 2 的混和寫法。利用 nodejs 判斷下一關 <code>stage_id</code> 再傳給 shell script 發 request。<br>在 nodejs 中要執行 shell 可以這樣:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</div><div class="line"><span class="keyword">const</span> job = <span class="function">(<span class="params">str, option</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> cp.execSync(str, &#123; <span class="attr">cwd</span>: __dirname &#125;).toString();</div><div class="line">&#125;;</div><div class="line">  </div><div class="line">job(<span class="string">'/bin/bash script.sh'</span>);</div></pre></td></tr></table></figure>
+<p>這模式我並沒有設定 cronjob，因為我有時候想自己玩 XD。</p>
+<p>而其他模式我現階段沒打算自動化，不然就根本都不是我在玩了…</p>
+<hr>
+<p>寫這些東西其實也讓我學到一些新東西以及一些小技巧，這也算是玩 MSA 給我的收穫嗎？哈哈 <br> 其實我 code 寫得亂七八糟，但管他的可以用就好~</p>
+<p>最後還是附上 code: <a href="https://github.com/SSARCandy/MSAuto" target="_blank" rel="external">MSAuto</a></p>
+<p><del>是說這應該算是作弊喔，抓到會被 ban 吧?</del><br><del>不過其實被 ban 也算是一種解脫吧?</del></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….&lt;/p&gt;
+&lt;p&gt;其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~&lt;br&gt;起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="trashtalk" scheme="https://ssarcandy.tw/tags/trashtalk/"/>
+    
+      <category term="automation" scheme="https://ssarcandy.tw/tags/automation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>安裝 Policyd 並設定外寄 Quota</title>
+    <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
+    <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
+    <published>2016-12-23T16:15:40.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
+<p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
+<a id="more"></a>
+<h1 id="安裝"><a href="# 安裝" class="headerlink" title="安裝"></a>安裝 </h1><p> 在 cluebringer 2.0 以前的版本不支援 IPv6，所以基本上只能從官網下載最新版，又，官網安裝說明充滿錯誤，我在弄得時候十分不開心….，所以決定自己整理安裝流程。</p>
+<h2 id="下載並解壓縮"><a href="# 下載並解壓縮" class="headerlink" title="下載並解壓縮"></a>下載並解壓縮</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ wget http://download.policyd.org/v2.0.14/cluebringer-v2.0.14.zip</div><div class="line">$ unzip cluebringer-v2.0.14.zip</div></pre></td></tr></table></figure>
+<h2 id="初始化資料庫"><a href="# 初始化資料庫" class="headerlink" title="初始化資料庫"></a>初始化資料庫 </h2><p> 在 <code>database/</code> 下，執行這段 shell script</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> core.tsql access_control.tsql quotas.tsql amavis.tsql checkhelo.tsql checkspf.tsql greylisting.tsql</div><div class="line"><span class="keyword">do</span></div><div class="line">  ./convert-tsql mysql <span class="variable">$i</span></div><div class="line"><span class="keyword">done</span> &gt; policyd.sql</div></pre></td></tr></table></figure>
+<p>這邊產出的 .sql 會有語法錯誤，用 vim 開啟並下 <code>:%s/TYPE=innondb/ENGINE=innondb/g</code> 指令修改全部。</p>
+<p>建立新資料庫並匯入 <code>policyd.sql</code> :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mysql -u root -p -e <span class="string">'CREATE DATABASE policyd'</span></div><div class="line">$ mysql -u root -p policyd &lt; policyd.sql</div></pre></td></tr></table></figure>
+<h2 id="複製檔案到該放的地方"><a href="# 複製檔案到該放的地方" class="headerlink" title="複製檔案到該放的地方"></a>複製檔案到該放的地方</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cp -r cbp /usr/<span class="built_in">local</span>/lib/cbpolicyd-2.1/</div><div class="line">$ cp cbpadmin /usr/<span class="built_in">local</span>/bin/</div><div class="line">$ cp cbpolicyd /usr/<span class="built_in">local</span>/sbin/</div></pre></td></tr></table></figure>
+<h1 id="啟動"><a href="# 啟動" class="headerlink" title="啟動"></a>啟動</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/bin/perl /usr/<span class="built_in">local</span>/sbin/cbpolicyd --config /etc/cluebringer.conf</div></pre></td></tr></table></figure>
+<p>如果啟動時遇到類似: <code>you may need to install the Mail::SPF module</code>  等等 error，就安裝這個: <code>sudo aptitude install libmail-spf-perl</code></p>
+<p>要查看是否有啟動成功，可以下 <code>ps aux | grep policyd</code> 指令。<br>要查看 port 10031 是否有在 listen，可以下 <code>netstat -pln | grep :10031</code> 指令檢查。</p>
+<h1 id="設定 -Postfix- 使用 -Policyd"><a href="# 設定 -Postfix- 使用 -Policyd" class="headerlink" title="設定 Postfix 使用 Policyd"></a>設定 Postfix 使用 Policyd</h1><p>去 Postfix config 檔設定 <code>check_policy_service</code> :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">smtpd_sender_restrictions = </div><div class="line">  ...,</div><div class="line">  check_policy_service inet:127.0.0.1:10031</div><div class="line">  </div><div class="line">smtpd_recipient_restrictions = </div><div class="line">    ...,</div><div class="line">    check_policy_service inet:127.0.0.1:10031,</div><div class="line">    permit_mynetworks,</div><div class="line">    permit</div><div class="line">  </div><div class="line">smtpd_end_of_data_restrictions = </div><div class="line">    check_policy_service inet:127.0.0.1:10031</div></pre></td></tr></table></figure>
+<p>在 <code>smtpd_recipient_restrictions</code> 中，<code>check_policy_service</code> 需要在 <code>permit_mynetworks</code> 上面才有用。<br>若要設定外寄 Quota 的話則 <code>smtpd_sender_restrictions</code> 也要加上 <code>check_policy_service</code>。</p>
+<p>另外提醒註解不要亂放，會讓設定檔整個壞掉….<br>可以透過 <code>postconf</code> 指令來列出真正 postfix 吃到的設定值</p>
+<h1 id="設定 -Policyd-Web-UI"><a href="# 設定 -Policyd-Web-UI" class="headerlink" title="設定 Policyd Web UI"></a>設定 Policyd Web UI</h1><p>policyd 有提供一個 web 的設定介面，讓我們比較方便設定 policyd。</p>
+<p>複製解壓縮檔裡的 <code>webui/</code> 到 web server</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cp -r webui /var/www/</div><div class="line">$ vim /var/www/webui/include/config <span class="comment"># 填上該填的資訊</span></div></pre></td></tr></table></figure>
+<p>需要把擁有者改成 www-data</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ chown -R webui</div><div class="line">$ chgrp -R webui</div></pre></td></tr></table></figure>
+<p>就可以直接連上 web 介面: <code>http://your.domian/webui/</code></p>
+<h2 id="設定權限"><a href="# 設定權限" class="headerlink" title="設定權限"></a>設定權限 </h2><p> 這 web 介面預設不用登入，大家都可以隨意更改，所以必須利用其他方式加個密碼保護。</p>
+<p>這邊是用 <code>lighthttpd</code> 設定密碼</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> /etc/lighthttpd</div><div class="line">$ vim <span class="built_in">pwd</span> <span class="comment"># user:password</span></div><div class="line">$ vim lighthttpd.conf</div></pre></td></tr></table></figure>
+<p>詳細可以參考: <a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
+<h1 id="設定 -Rate-Limit"><a href="# 設定 -Rate-Limit" class="headerlink" title="設定 Rate Limit"></a>設定 Rate Limit</h1><p>到這邊就簡單了，藉由 web 介面按按按鈕就可以設定各種 Quota，詳細可參考這篇圖文教學:<br><a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a></p>
+<h2 id="驗證"><a href="# 驗證" class="headerlink" title="驗證"></a>驗證 </h2><p> 想確定是不是有成功，可以去 mySQL &gt; policyd &gt; quota_tracking 查看是不是真的有在追蹤大家的流量。</p>
+<p>或者也可以看 mail.log ，會有流量的 log 資訊，包含還剩多少用量等等資訊。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ tail /var/log/mail.log | grep cbpolicyd</div><div class="line">Jan 20 00:02:05 cml2 cbpolicyd[32562]: module=Quotas, mode=update, reason=quota_update,</div><div class="line">policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/200 (0.5%)</div></pre></td></tr></table></figure>
+<hr>
+<p>References:<br>[1] <a href="http://wiki.policyd.org/installing" target="_blank" rel="external">Policyd-Installing</a><br>[2] <a href="https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/" target="_blank" rel="external">Postfix + Centos + Policyd V2 + MySQL</a><br>[3] <a href="http://en.enisozgen.com/policydcluebringer-installation/" target="_blank" rel="external">Policyd(Cluebringer) installation</a><br>[4] <a href="https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/" target="_blank" rel="external">How To Configure Rate Limit Sending Message on PolicyD</a><br>[5] <a href="https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html" target="_blank" rel="external">Lighttpd setup a password protected directory (directories)</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。&lt;/p&gt;
+&lt;p&gt;Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>pbrt - 用多點光源模擬環境光</title>
+    <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
+    <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
+    <published>2016-12-17T17:45:08.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
+<div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
+<a id="more"></a>
+<div><img src="/img/2016-12-18/4.jpg" alt="不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup>" data-action="zoom"><span class="image-caption">不同的環境光會讓場景中物件有不同的渲染結果<sup>[1]</sup></span></div>
+<h1 id="Median-Cut-Alogrithm"><a href="#Median-Cut-Alogrithm" class="headerlink" title="Median Cut Alogrithm"></a>Median Cut Alogrithm</h1><p>直接來看一張圖:</p>
+<div><img src="/img/2016-12-18/2.jpg" alt="用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup>" data-action="zoom"><span class="image-caption">用 median-cut algorithm 把環境光轉成多點光源<sup>[2]</sup></span></div>
+<p>事實上這方法很簡單，就是將整張 environment light probe 切成 x 塊相同能量的區塊(x 是多少開心就好~)，整個邏輯可以分成幾步驟:</p>
+<ol>
+<li>初始狀態 = 整張 env light probe 影像（陣列中只有一個區域）</li>
+<li>對於每個區域，沿著長邊切成兩塊一樣能量的區塊</li>
+<li>如果區塊少於 x ，則繼續做 2.</li>
+<li>把點光源放在每個區域中的能量重心處</li>
+</ol>
+<h1 id="計算能量重心"><a href="# 計算能量重心" class="headerlink" title="計算能量重心"></a>計算能量重心 </h1><p> 能量重心計算其實就是 x, y 軸分別加權平均（權重為點能量）<br>點能量計算方式可以根據 RGB channel 加權平均來計算<br>eg. Y = 0.2125R + 0.7154G + 0.0721B 之類的加權法</p>
+<h1 id="計算區塊能量"><a href="# 計算區塊能量" class="headerlink" title="計算區塊能量"></a>計算區塊能量 </h1><p> 直覺的想法其實就是這區塊中所有點能量和就是這區塊能量了。<br>不過在做 Median-cut 時期時會不斷需要計算區塊的能量，用這種暴力解會使效能突破天際的差。<br>這邊可以利用預先計算 environment light probe 的能量 Sum Area Table(簡稱 SAT)，概念很簡單:<br>一開始先維護一個能量累積的二維陣列，每個點的值就是其左上角區塊的能量和，藉由這個陣列可以使獲得任意區塊能量的時間複雜度為 O(1)。</p>
+<div><img src="/img/2016-12-18/3.jpg" alt="這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。" data-action="zoom"><span class="image-caption">這張圖說明了若要獲得紅色區塊能量和，只需查表四次，計算 D-B-C+A 即可得出。</span></div>
+<h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 渲染出來的結果其實跟原本的環境光還是有些差別，畢竟是用多點光源來模擬環境光，本來就不會一模一樣。</p>
+<div><img src="/img/2016-12-18/new-256-my.jpg" alt="Median cut algorithm" data-action="zoom"><span class="image-caption">Median cut algorithm</span></div>
+<div><img src="/img/2016-12-18/new-256.jpg" alt="Important sampling(original)" data-action="zoom"><span class="image-caption">Important sampling(original)</span></div>
+<p>不過在效能方面，用多點光源模擬所需要的運算時間大概都只有原本算法的 30% ，可以說是大幅加速了!</p>
+<h1 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談</h1><ul>
+<li>這次中間卡了一周跑去 SIGGRAPH ASIA，由於我懶沒帶電腦去，所以也就稍微趕了一點…(幸好這次比較簡單一點點…哈哈)</li>
+<li>我學乖了，用 cmlab 工作站跑 pbrt 整個就是舒爽，Enter 按下去差不多就算完了~</li>
+<li>GA 累積人次快突破 5000 瀏覽了，不過發現還真的有人在看我的文章還是覺得很特別~ 哈哈</li>
+<li>之前 group meeting 座前面學長一直在看我的 <a href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/">realist-camera</a>，害我注意力都被吸走了 XD</li>
+</ul>
+<hr>
+<p>註:<br>[1] 原圖來自 Physically Based Rendering, Second Edition<br>[2] 原圖來自 A Median Cut Algorithm for Light Probe Sampling, SIGGRAPH 2006</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。&lt;br&gt;pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。&lt;/p&gt;
+&lt;div&gt;&lt;img src=&quot;/img/2016-12-18/1.jpg&quot; alt=&quot;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>用 Facebook 聊天機器人當通知系統</title>
+    <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
+    <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
+    <published>2016-11-17T11:57:17.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
+<p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
+<a id="more"></a>
+<h2 id="爬網頁"><a href="# 爬網頁" class="headerlink" title="爬網頁"></a>爬網頁 </h2><p> 最簡單的方式莫過於把網站的內容爬下來，如果有高負載或死機就通知我。<br>我用 nodejs <a href="https://github.com/request/request" target="_blank" rel="external">request</a> 來完成這件事。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div><div class="line">request(<span class="string">'https://www.cmlab.csie.ntu.edu.tw/status/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">error, response, body</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(body) <span class="comment">// Show the HTML</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="facebook-chat-api"><a href="#facebook-chat-api" class="headerlink" title="facebook-chat-api"></a>facebook-chat-api</h2><p><a href="https://github.com/Schmavery/facebook-chat-api" target="_blank" rel="external">facebook-chat-api</a> 可以很容易的操作聊天室相關的行為，我利用這套件來達成通知自己。<br>將爬下來的網頁內容，找出掛掉的機器，配合 <a href="https://github.com/Schmavery/facebook-chat-api" target="_blank" rel="external">facebook-chat-api</a> 就可以用 fb 通知有機器掛掉了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// require modules</span></div><div class="line"> </div><div class="line"><span class="keyword">let</span> deadMachines = [];</div><div class="line">request(<span class="string">'http://www.cmlab.csie.ntu.edu.tw/status/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, res, body</span>) </span>&#123;</div><div class="line">    <span class="keyword">const</span> $ = cheerio.load(body);</div><div class="line">    <span class="keyword">const</span> dead = $(<span class="string">'.dead'</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; dead.length; i++) &#123;</div><div class="line">        <span class="keyword">const</span> machineId = dead.eq(i).text();</div><div class="line">        deadMachines.push(machineId);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// all machines are fine~</span></div><div class="line">    <span class="keyword">if</span> (!deadMachines.length) <span class="keyword">return</span>;</div><div class="line"> </div><div class="line">    <span class="comment">// login to facebook and send msg to unix manager</span></div><div class="line">    loginFacebook(config.account, <span class="function"><span class="keyword">function</span> (<span class="params">err, api</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</div><div class="line"> </div><div class="line">        api.sendMessage(<span class="string">`<span class="subst">$&#123;deadMachines.toString()&#125;</span> is dead.`</span>, <span class="comment">/* channel_id */</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;deadMachines.toString()&#125;</span> is dead.`</span>);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<div><img src="/img/2016-11-17/1.png" alt="透過 Facebook 聊天室告知我有機器掛掉了。" data-action="zoom"><span class="image-caption">透過 Facebook 聊天室告知我有機器掛掉了。</span></div>
+<h2 id="定時檢查"><a href="# 定時檢查" class="headerlink" title="定時檢查"></a>定時檢查 </h2><p> 這隻程式並不是個持續監控的程式，只能算是個 script 而已。所以我用 <code>crontab</code> 設定排程定時檢查機器是不是有狀況。<br>利用 unix 指令 <code>crontab -e</code> 編輯排程。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 每小時執行程式</span></div><div class="line">0 * * * * node index.js</div></pre></td></tr></table></figure>
+<p>crontab 是吃 localtime，系統現在是甚麼時間可以藉由 <code>timedatectl</code> 查看:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ timedatectl</div><div class="line">      Local time: Thu 2016-11-17 22:15:13 CST</div><div class="line">  Universal time: Thu 2016-11-17 14:15:13 UTC</div><div class="line">        RTC time: n/a</div><div class="line">       Time zone: Asia/Taipei (CST, +0800)</div><div class="line"> Network time on: yes</div><div class="line">NTP synchronized: yes</div><div class="line"> RTC <span class="keyword">in</span> <span class="built_in">local</span> TZ: no</div></pre></td></tr></table></figure>
+<p>另外，如果設定了新的 Time Zone，則必須重啟 crontab service 才會讓他吃到正確的時間。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /etc/init.d/cron restart</div></pre></td></tr></table></figure>
+<h2 id="截圖"><a href="# 截圖" class="headerlink" title="截圖"></a>截圖 </h2><p> 直到現在其實已經達成目標了，但是只講句「某某機器掛了。」似乎還是差強人意，為了防範未然，應該要把高負載的機器也告知一下，提早處理以免機器死掉。<br>想想感覺把整個網站截圖下來傳給我不是最快嗎。<br>恩，那就這樣弄吧！</p>
+<p>多虧廣大 nodejs 套件開發者，這件事可以很容易地利用 <a href="https://github.com/brenden/node-webshot" target="_blank" rel="external">webshot</a> 達成。</p>
+<div><img src="/img/2016-11-17/2.png" alt="截下整個表格傳給我。" data-action="zoom"><span class="image-caption">截下整個表格傳給我。</span></div>
+<h2 id="Callback-to-Promise"><a href="#Callback-to-Promise" class="headerlink" title="Callback to Promise"></a>Callback to Promise</h2><p>爬網頁、截圖、傳訊息都是非同步的動作，寫起來就變成 Callback Hell 了。<br>真的是醜爆了…</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Scrap web</span></div><div class="line">request(<span class="string">'url'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, res, body</span>) </span>&#123;</div><div class="line">    <span class="comment">/* do something with 'body' */</span></div><div class="line">    <span class="comment">// Screenshot</span></div><div class="line">    webshot(body, <span class="string">'tmp.png'</span>, options, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">        <span class="comment">// login to facebook and send msg</span></div><div class="line">        loginFacebook(config.account, <span class="function"><span class="keyword">function</span> (<span class="params">err, api</span>) </span>&#123;</div><div class="line">            <span class="comment">// send message</span></div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>利用 <a href="http://bluebirdjs.com/docs/getting-started.html" target="_blank" rel="external">bluebird</a>，可以把 Callback 神奇的轉為 Promise，<br>並且用 es6 的語法改寫，就可以大幅改善程式碼的易讀性～</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">request(<span class="string">'url'</span>)</div><div class="line">    .then(<span class="function"><span class="params">body</span> =&gt;</span> &#123;</div><div class="line">        <span class="comment">/* do something with 'body' */</span></div><div class="line">        <span class="comment">// Screenshot</span></div><div class="line">        <span class="keyword">return</span> webshot(body, <span class="string">'tmp.png'</span>, options);</div><div class="line">    &#125;)</div><div class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> loginFacebook(config.account)) <span class="comment">// login to facebook and send msg</span></div><div class="line">    .then(<span class="function"><span class="params">api</span> =&gt;</span> &#123;</div><div class="line">        <span class="comment">// send message</span></div><div class="line">    &#125;)</div><div class="line">    .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(err));</div></pre></td></tr></table></figure>
+<p>完整的程式碼: <a href="https://github.com/SSARCandy/cml-status-fb-notify" target="_blank" rel="external">https://github.com/SSARCandy/cml-status-fb-notify</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;CMLab 有二十幾台 unix work stations 供大家使用(據說 CMLab 的工作站比資工系工作站還要好…)。&lt;br&gt;雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。&lt;br&gt;實驗室有個 &lt;a href=&quot;https://www.cmlab.csie.ntu.edu.tw/status/&quot;&gt;網站&lt;/a&gt; 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。&lt;/p&gt;
+&lt;p&gt;但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="automation" scheme="https://ssarcandy.tw/tags/automation/"/>
+    
+      <category term="unix" scheme="https://ssarcandy.tw/tags/unix/"/>
+    
+      <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Realistic camera in pbrt</title>
+    <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
+    <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
+    <published>2016-11-09T05:14:41.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
+<a id="more"></a>
+<h1 id="實作真實相機光學系統"><a href="# 實作真實相機光學系統" class="headerlink" title="實作真實相機光學系統"></a>實作真實相機光學系統 </h1><p> 相機的光學系統決定了最終成像的樣貌，比如廣角、魚眼、正交投影等等樣貌， <a href="https://github.com/mmp/pbrt-v2" target="_blank" rel="external">pbrt-v2</a> 中實做了最常見的幾個，包含了 perspective camera, orthographic camera，原始程式碼在 <code>src/camera</code> 之下。</p>
+<p>實際上的相機的光學系統通常都包含了多個透鏡，以此來達成比較複雜的成像(或是減少透鏡的像差)。<br><div><img src="/img/2016-11-09/02.png" alt="真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">真實相機通常都是由多片透鏡組成的光學系統。<sup>[2]</sup></span></div></p>
+<p>上圖是描述光學系統各個透鏡面的相關參數，從成像平面出發的 eye-ray 會在這個光學系統折射多次之後才會進入場景中，而這些光束又會跟場景的物件相交、反射等等，就如同 <a href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"> 這篇 </a> 在做的事。</p>
+<p>所以，要模擬真實相機的光學系統，其實就是幾個步驟：</p>
+<ol>
+<li>在成像平面上與第一個透鏡面上各取一點，相連產生 eye-ray</li>
+<li>找出 eye-ray 與第一個透鏡面的交點，沒交點就結束</li>
+<li>找出折射後的新 eye-ray</li>
+<li>重覆 2, 3 直到 eye-ray 離開光學系統進入場景為止</li>
+</ol>
+<p>以 pseudo-code 表示，大概可以寫成這樣：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">filmP = random point on film</div><div class="line">lensP = random point on first lens</div><div class="line">ray.o = filmP</div><div class="line">ray.d = Vector(lensP - originP)</div><div class="line">  </div><div class="line"><span class="keyword">for</span> l <span class="keyword">in</span> lens:  <span class="comment"># from rear to front</span></div><div class="line">  intersectionP = l.intersect(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> intersectionP:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  newDirection = l.refractRay(ray)</div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> newDirection:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line">  ray.d = newDirection</div></pre></td></tr></table></figure>
+<hr>
+<p>其實也可以借助一些除錯工具來視覺化光束的折射行為，這邊我使用 vdb 來畫出整個光學系統並且追蹤光束的折射行為。<br>(關於如何利用 vdb 除錯，可以參考 <a href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"> 這篇</a>。)<br><div><img src="/img/2016-11-09/03.png" alt="pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。" data-action="zoom"><span class="image-caption">pbrt 模擬從成像平面中點發出光束，經過多次折射直至離開相機鏡頭。</span></div></p>
+<p>除此之外，也需要計算每條 ray 的權重，根據論文 <sup>[2]</sup> 所說是如下公式：</p>
+<p>\(E = A\frac{cos^4\theta}{Z^2}\)</p>
+<p>\(A\): 出射瞳面積<br>\(Z\): 最後透鏡與成像平面的距離<br>\(\theta\): 光束與成像平面法向量夾角</p>
+<h1 id="結果"><a href="# 結果" class="headerlink" title="結果"></a>結果 </h1><p> 我嘗試渲染大張一點的圖並且讓每個像素的採樣夠多次，希望能夠讓結果圖漂亮一點。<br>代價就是一張圖要跑好幾個小時……</p>
+<div><img src="/img/2016-11-09/05.png" alt="dobule-gauss 50mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">dobule-gauss 50mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/06.png" alt="wide 22mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">wide 22mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/07.png" alt="telephoto 250mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">telephoto 250mm with 512 samples per pixel(1024*1024)</span></div>
+<div><img src="/img/2016-11-09/08.png" alt="fisheye 10mm with 512 samples per pixel(1024*1024)" data-action="zoom"><span class="image-caption">fisheye 10mm with 512 samples per pixel(1024*1024)</span></div>
+<h1 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h1><p> 每個透鏡面基本上是以部份的球面來模擬，要求交點很容易，因為 <code>src/shape/shpere.cpp</code> 已經實做求交點了，可以直接創一個 Sphere object ，然後再 <code>s.Intersect(r, &amp;thit, &amp;rayEpsilon, &amp;dg)</code> 來取得交點。</p>
+<p>這樣寫簡單易懂，三兩下解決求交點這件事，但其實效能並不好，因為只為了求一個交點卻建構了一個完整的 shpere shape ，稍微有點浪費……</p>
+<p>改善方式可以藉由複製貼上 <code>Shpere::Intersect()</code> 並加以改寫，就可以省去這樣的 overhead<br>實際上效能大約差 2 倍。</p>
+<h1 id="各種坑"><a href="# 各種坑" class="headerlink" title="各種坑"></a>各種坑</h1><ul>
+<li><strong>RasterToCamera</strong><br>在 <code>GenerateRay()</code> 中，<code>sample.imageX</code> <code>sample.imageY</code> 是在 Raster space 上，需轉至 Camera space，Raster/Camera space 之間關係如圖(省略 z 軸)，可以看出來轉換方式大概就是：上下翻轉、平移、縮小。<div><img src="/img/2016-11-09/04.png" alt="Raster/Camera space 之間關係。" data-action="zoom"><span class="image-caption">Raster/Camera space 之間關係。</span></div></li>
+<li><strong>Ray minT, maxT</strong><br>在 <code>GenerateRay()</code> 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖…</li>
+<li><strong>Total reflection</strong><br>我使用 <a href="https://www.wikiwand.com/en/Snell&#39;s_law" target="_blank" rel="external">Snell’s law</a> 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。<br>所以記得要注意別把負數開根號了。</li>
+</ul>
+<hr>
+<p> 註:<br> [1] 圖片取自維基百科 <a href="https://www.wikiwand.com/en/Ray_tracing_(graphics" target="_blank" rel="external">Ray-tracing</a>)<br> [2] A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995<br>$$$$</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Ray-tracing 中的相機(眼睛)是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計(從光源發出光並追蹤那些存活到相機成像平面的光束)是為了減少計算量。&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-11-09/01.png&quot; alt=&quot;ray-tracing 中，光束是從相機射出來的。&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vdb - Debugging visual programs</title>
+    <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
+    <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
+    <published>2016-10-13T12:34:53.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
+<p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
+<a id="more"></a>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>其實在 <a href="https://github.com/zdevito/vdb/blob/master/README.md" target="_blank" rel="external">vdb README</a> 已經說的滿清楚的了，這邊在整理一下:</p>
+<ol>
+<li>下載 <code>vdb-win.zip</code> 或 <code>vdb-osx.tar.gz</code></li>
+<li>把 <code>vdb.h</code> include 進你要偵錯的程式</li>
+<li>執行 <code>vdb.exe</code> 或 <code>./vdb</code></li>
+<li>在要偵錯的程式中，可以在任何地方插入 <code>vdb_line()</code> 等他所提供的函式</li>
+</ol>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>以 pbrt 為例，由於結果都是一張渲染完成的影像，說實在的這真的很難 debug….<br>那利用 vdb 這工具能有甚麼好處呢？</p>
+<p>藉由他，可以很容易地畫出像是物體的樣子以及他的 Bounding Box，如圖：<br><div><img src="/img/2016-10-13/1.png" alt="heightfield object and its bounding box" data-action="zoom"><span class="image-caption">heightfield object and its bounding box</span></div></p>
+<hr>
+<p>或者是當你在算 Vertex normal 時，不知道到底算的對不對，也可以直接畫出來：<br><div><img src="/img/2016-10-13/2.png" alt="Showing Normals on vertices" data-action="zoom"><span class="image-caption">Showing Normals on vertices</span></div></p>
+<hr>
+<p>我個人覺得 vdb 對我最大的幫助是 object space 以及 world space 之間的關係了，<br>坐標系一個沒弄好就會讓渲染的結果差異甚大，完全摸不著頭緒到底發生什麼事情…..</p>
+<p>藉由 vdb 實際畫出各個 object 時候，很容易就發現 object/world space 之間的 bug<br><div><img src="/img/2016-10-13/3.png" alt="Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方" data-action="zoom"><span class="image-caption">Bounding box 沒有正確的轉換到 object space，導致跑到怪怪的地方</span></div></p>
+<h2 id="Some-tips"><a href="#Some-tips" class="headerlink" title="Some tips"></a>Some tips</h2><p>其實上面說的很簡單，但事實上我剛開始嘗試使用 vdb 時遇到了超多的問題，這邊就來記錄一下：</p>
+<h5 id="Header-files-order"><a href="#Header-files-order" class="headerlink" title="Header files order"></a>Header files order</h5><p><code>#include &quot;vdb.h&quot;</code> 要擺在哪裡？一般來說當然越上面越好，但還是有例外的：</p>
+<figure class="highlight cpp"><figcaption><span>heightfield.cpp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"vdb.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"shapes/heightfieldImproved.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"shapes/trianglemesh.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"paramset.h"</span></span></div></pre></td></tr></table></figure>
+<p>以上面的例子來說，<code>#include &quot;vdb.h&quot;</code>必須放在 <code>#include &quot;stdafx.h&quot;</code>後面。<br><code>stdafx.h</code>是來做 precompiled headers 用的，所以置於他之前的 include 都會被忽略，就會造成找不到 <code>vdb_line()</code> 之類的錯誤。</p>
+<h5 id="Use-ONE-thread"><a href="#Use-ONE-thread" class="headerlink" title="Use ONE thread"></a>Use ONE thread</h5><p>vdb 不支援多執行緒，如果在偵錯的程式是多執行緒的話，有可能會導致畫在 vdb 上的東西不正確 (漏畫)。<br> 解決方法就是在偵錯時使用單一執行緒。</p>
+<h5 id="Using-winsock-instead-of-winsock2"><a href="#Using-winsock-instead-of-winsock2" class="headerlink" title="Using winsock instead of winsock2"></a>Using winsock instead of winsock2</h5><p>這問題應該是只在 Windows 會發生，並且在要偵錯的程式中使用到 <code>windows.h</code>。<br>vdb 中用到了 <code>winsock2.h</code>，這是跟 <code>socket</code> 有關的東西，<br>然而 <code>windows.h</code> 中也有 include 一個叫 <code>winsock.h</code> 的東西。<br><code>winsock.h</code>, <code>winsock2.h</code> 有很多函式都各自有宣告，而同時引用兩者會造成 <strong>redefinition</strong> 錯誤。</p>
+<p>解決方法是把 <code>vdb.h</code> 中，<code>winsock2.h</code>改成 <code>winsock.h</code>。<br> 詳細可查看 <a href="http://stackoverflow.com/questions/39849684/header-correct-but-compile-erroridentifier-not-found" target="_blank" rel="external">stackoverflow 這篇</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有時候在寫 &lt;a href=&quot;https://www.opengl.org/&quot;&gt;openGL&lt;/a&gt; 或者是類似 &lt;a href=&quot;http://www.pbrt.org/&quot;&gt;pbrt&lt;/a&gt; 這樣有牽涉到三維空間的程式的時候總是很難除錯…&lt;br&gt;雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/zdevito/vdb&quot;&gt;vdb&lt;/a&gt; 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>改善 pbrt 中的 heightfield shape</title>
+    <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
+    <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
+    <published>2016-10-10T13:14:41.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
+<a id="more"></a>
+<h2 id="關於 -pbrt- 與 -ray-tracing"><a href="# 關於 -pbrt- 與 -ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指 (因為沒有任何光打到手指並反射到眼中)。<br> 至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
+<p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
+<p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
+<h2 id="實作 -heightfield- 交點測試"><a href="# 實作 -heightfield- 交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 \((x, y)\) 而言只會有一個 \(z\) 值。算是個滿單純的 shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
+<p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~ 哈哈 <br> 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
+<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br><div><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">2D-DDA 邏輯。<sup>[2]</sup></span></div></p>
+<p>可以看到其實可以在一開始就算出 <code>x</code>, <code>y</code> 要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 \((x, y)\) 而言只會有一個 \(z\) 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓 3D 結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
+<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br><div><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。" data-action="zoom"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></div></p>
+<p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
+<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br><div><img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。" data-action="zoom"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></div></p>
+<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br><div><img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。" data-action="zoom"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></div></p>
+<p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
+<p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>\(\underset{Normalize(}{}\underset{TL}{\rightarrow}  \underset{\times}{} \underset{L}{\rightarrow} \underset{+}{} \underset{L}{\rightarrow}  \underset{\times}{} \underset{B}{\rightarrow} \underset{+}{} \underset{B}{\rightarrow}  \underset{\times}{} \underset{BR}{\rightarrow} \underset{+}{} \underset{BR}{\rightarrow}  \underset{\times}{} \underset{R}{\rightarrow} \underset{+}{} \underset{R}{\rightarrow}  \underset{\times}{} \underset{T}{\rightarrow} \underset{+}{} \underset{T}{\rightarrow}  \underset{\times}{} \underset{TL}{\rightarrow} \underset{)}{}\)</p>
+<p>這樣子改進後，就可以讓結果變這樣:<br><div><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果" data-action="zoom"><span class="image-caption">平滑化的結果</span></div></p>
+<h2 id="浮點數精度問題 -10-22- 更新"><a href="# 浮點數精度問題 -10-22- 更新" class="headerlink" title="浮點數精度問題 (10/22 更新)"></a> 浮點數精度問題 (10/22 更新)</h2><p> 做完平滑化之後，感覺海好像怪怪的歐….<br>一開始其實我還沒察覺，過這麼久才發現這問題…</p>
+<p>很顯然只有海有這樣的問題，八成是因為海的 \(z\) 值差距太小，計算法向量時的誤差。<br>用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 <code>Normalize(sumOfNormals)</code>，這步驟造成 \(z\) 值起伏太小的海的計算誤差….<br>把 <code>Normalize()</code> 拔掉之後就正常了～</p>
+ <div><img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果" data-action="zoom"><span class="image-caption">修正浮點數精度問題後的結果</span></div>
+<h2 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h2><p> 很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上…. 嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
+<p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
+<table>
+<thead>
+<tr>
+<th>原因及改善方法</th>
+<th style="text-align:right"><code>Intersect()</code></th>
+<th style="text-align:right">與未最佳化時比較</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未最佳化。</td>
+<td style="text-align:right">90,274</td>
+<td style="text-align:right">100.0%</td>
+</tr>
+<tr>
+<td>發現 <code>ObjectBound()</code> 很慢，改在 Heightfield construction 時就先存 <code>minZ</code>, <code>maxZ</code>。</td>
+<td style="text-align:right">82,731</td>
+<td style="text-align:right">91.6%</td>
+</tr>
+<tr>
+<td>發現在算 Voxel BBox 使用的 <code>Bbox(Union(Bbox, Bbox))</code> 超爆慢，改用 <code>Bbox(Point, Point)</code>。</td>
+<td style="text-align:right">53,408</td>
+<td style="text-align:right">59.1%</td>
+</tr>
+<tr>
+<td>發現有不必要的坐標系轉換，由於在 Voxel 交點測試中會先測與 Voxel Bbox 交點，所以最好直接給他已轉好的 Ray(Object Space)。</td>
+<td style="text-align:right">46,922</td>
+<td style="text-align:right">51.9%</td>
+</tr>
+<tr>
+<td>由於 <code>Bbox(Point, Point)</code> 建構時都要重新判斷 min max，改用先建構空的 Bbox 再直接給值 (<code>pmin</code>, <code>pmax</code>) 省去建構時間。</td>
+<td style="text-align:right">36,768</td>
+<td style="text-align:right">40.7%</td>
+</tr>
+<tr>
+<td>把用不到的 Bbox 給 Voxel 交點測試中再利用，節省 Construction Time(避免重新 relocate 記憶體位置以及建構空 Bbox 的時間)。</td>
+<td style="text-align:right">32,742</td>
+<td style="text-align:right">36.2%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
+<li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
+</ul>
+<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption">效能比較。<sup>[3]</sup></span></div></p>
+<h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
+<hr>
+<p> 註:<br> [1] 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2] 原圖來自 Physically Based Rendering, Second Edition<br> [3] 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測<br>$$$$</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
+    
+      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
+    
+      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一些 Python 筆記</title>
+    <link href="https://ssarcandy.tw/2016/09/10/python-note/"/>
+    <id>https://ssarcandy.tw/2016/09/10/python-note/</id>
+    <published>2016-09-09T16:28:57.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近的專案需要用到 <a href="http://opencv.org/" target="_blank" rel="external">OpenCV</a>，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用 (Python + OpenCV)。<br> 說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)<br><a id="more"></a></p>
+<p>我這次專案是 Python 2.7 + OpenCV 3.1。<br>安裝 OpenCV 一直都是很麻煩的事情，C++ 的免不了要自己 build，詳細的方法在我之前寫的 <a href="https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/"> 另一篇 </a> 有教學；<br>而 Python 安裝 OpenCV 稍微簡單一點，把 <code>cv2.pyd</code> 放到 <code>C:\Python27\Lib\site-packages</code> 就可以了 <sup>[1]</sup>。<br>在 Mac/Linux 上更簡單，可以使用 <a href="https://www.continuum.io/" target="_blank" rel="external">conda</a> <sup>[2]</sup> 來幫你安裝。</p>
+<hr>
+<p>好，接下來就是用到現在所做的一些筆記～</p>
+<h1 id="Coding-style"><a href="#Coding-style" class="headerlink" title="Coding-style"></a>Coding-style</h1><p>Python 的 Coding-style 基本上就是參考 <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">PEP8</a>，簡結一下重點:</p>
+<ul>
+<li>縮排用空格</li>
+<li>一行不要超過 80 個字元，超過就換行。</li>
+<li>除了 ClassName 以外，一律用 snake_case 為命名規則。</li>
+<li>文件首行要加上編碼，一般 <code>utf-8</code> 就是加上這行 <code># -*- coding: utf-8 -*-</code></li>
+</ul>
+<h1 id="Division"><a href="#Division" class="headerlink" title="Division"></a>Division</h1><p>Python2 的除法很特別，竟然只除到整數，意思就是 <code>5 / 2 = 2</code>，不過這其實就跟 C++ 一樣嘛，強制轉型一下就好:</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">print(<span class="number">5</span> / <span class="number">2</span>)        <span class="comment"># 會無條件捨去小數點，印出 2</span></div><div class="line">print(<span class="number">5</span> / <span class="number">2.0</span>)      <span class="comment"># 2.5</span></div><div class="line">print(<span class="number">5</span> / float(<span class="number">2</span>)) <span class="comment"># 2.5</span></div></pre></td></tr></table></figure>
+<p>不過這樣好麻煩，有沒有一勞永逸的方法？<br>有！就是用神奇的 <code>__future__</code></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 在文件開頭處加上這行</span></div><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</div></pre></td></tr></table></figure>
+<p><strong>future</strong> 是 Python2 很特別的東西，感覺上就是抓 Python3 的功能來用，而這邊 <code>import division</code> 就是使除法的行為與 Python3 一致，詳細運作原理可以參考 <a href="http://stackoverflow.com/questions/7075082/what-is-future-in-python-used-for-and-how-when-to-use-it-and-how-it-works" target="_blank" rel="external">stackoverflow</a> 上的說法:</p>
+<blockquote>
+<p>The internal difference is that without that import, <code>/</code> is mapped to the <code>__div__()</code> method, while with it, <code>__truediv__()</code> is used.</p>
+</blockquote>
+<h1 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h1><p>網路上有許多宣告 Class 的教學，不過好像大部分的都不對或過時了。<br>在 Python2 中，Class 宣告方式如下：</p>
+<figure class="highlight py"><figcaption><span>class.py</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.bar1 = <span class="string">'hello'</span></div><div class="line">        self.bar2 = <span class="string">'world'</span></div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">(self)</span>:</span></div><div class="line">        print(self.bar1 + <span class="string">''</span> + self.bar2)</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__private_func</span><span class="params">(self)</span>:</span></div><div class="line">        print(<span class="string">'I am private function'</span>)</div><div class="line">  </div><div class="line">  </div><div class="line">foo = Foo()          <span class="comment"># new 一個新的 Foo</span></div><div class="line">foo.hello_world()    <span class="comment"># 不用帶任何參數</span></div><div class="line">foo.__private_func() <span class="comment"># 無法呼叫，會噴 Error: AttributeError:'Foo'object has no attribute'__private_func'</span></div></pre></td></tr></table></figure>
+<ul>
+<li>第一行的 <code>object</code> 是必須的。</li>
+<li><code>__init__</code> 這個 function 也是必須的，這是 Class Constructor。</li>
+<li>每個 function 的第一個參數必須放 <code>self</code>，這與 C++ Class 中的 <code>this</code> 相似，基本上就是拿來存取 <strong> 自己 </strong> 用的。<ul>
+<li>例如 <code>hello_world()</code> 中就有存取 <code>bar1</code> 跟 <code>bar2</code>，而在呼叫時 <code>self</code> 會被跳過。</li>
+</ul>
+</li>
+<li>如果要寫 private method <sup>[3]</sup>，就在 function name 前加上雙底線 <code>__</code>，如同上面的第 9 行處。</li>
+</ul>
+<h1 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h1><p>檔案路徑也是一個滿麻煩的事情，假設要讀一個檔案，一開始可能會這樣寫：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cv2.imread(<span class="string">'../data/foo.jpg'</span>) <span class="comment"># cv2.imread 是 opencv 的讀圖函式</span></div></pre></td></tr></table></figure>
+<p>這樣當然可以讀的到，但當你換了一個工作環境，像是 Windows，這樣寫就炸了～(因為 Window 路徑是用反斜線 <code>\</code>)<br>Python 提供了個好工具 <code>os.path.join()</code>，簡單來說就是幫忙處理斜線。所以上面那個例子可以改寫成這樣：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line">cv2.imread(os.path.join(<span class="string">'..'</span>, <span class="string">'data'</span>, <span class="string">'foo.jpg'</span>))</div></pre></td></tr></table></figure>
+<p>這樣的寫法就可以順利地在各平台運作～！</p>
+<h1 id="Function-name-and-Variable-name"><a href="#Function-name-and-Variable-name" class="headerlink" title="Function name and Variable name"></a>Function name and Variable name</h1><p>每個程式語言都有保留字，像是 <code>for</code>, <code>while</code>, <code>if</code> 之類的都是常見的保留字，而 Python 也不例外，你可以在 <a href="https://docs.python.org/2.5/ref/keywords.html" target="_blank" rel="external"> 這邊 </a> 看到全部的保留字。<br>而通常 function name 也跟保留字一樣不能當作變數名稱 <sup>[4]</sup>。<br>特別的是 Python 允許變數名稱與 function 名稱一樣，像是：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sum = sum([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])  <span class="comment"># sum() is built-in function for python</span></div><div class="line">print(sum)              <span class="comment"># 15</span></div><div class="line">print(sum([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])) <span class="comment"># 15</span></div></pre></td></tr></table></figure>
+<p>上面的例子可以看到，Python 能夠清楚的分辨這個 <code>sum</code> 是指變數還是內建函式。<br>javascript 就不行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">btoa = btoa(<span class="string">'hello'</span>)       <span class="comment">// btoa() is built-in function for javascript</span></div><div class="line"><span class="built_in">console</span>.log(btoa)          <span class="comment">// aGVsbG8=</span></div><div class="line"><span class="built_in">console</span>.log(btoa(<span class="string">'hello'</span>)) <span class="comment">// Uncaught TypeError: btoa is not a function</span></div></pre></td></tr></table></figure>
+<p>可以發現在第三行就噴錯了，因為 <code>btoa</code> 在第一行已經被蓋掉了，後面要用 <code>btoa()</code> 就會以為你是指那個變數，而變數當然不是 function 囉。</p>
+<h1 id="The-Zen-of-Python"><a href="#The-Zen-of-Python" class="headerlink" title="The Zen of Python"></a>The Zen of Python</h1><p>Python 作者 Tim Peters 把一首詩藏在 <code>import this</code> 中，</p>
+<blockquote>
+<p>Beautiful is better than ugly.<br>Explicit is better than implicit.<br>Simple is better than complex.<br>Complex is better than complicated.<br>Flat is better than nested.<br>Sparse is better than dense.<br>Readability counts.<br>Special cases aren’t special enough to break the rules.<br>Although practicality beats purity.<br>Errors should never pass silently.<br>Unless explicitly silenced.<br>In the face of ambiguity, refuse the temptation to guess.<br>There should be one– and preferably only one –obvious way to do it.<br>Although that way may not be obvious at first unless you’re Dutch.<br>Now is better than never.<br>Although never is often better than <em>right</em> now.<br>If the implementation is hard to explain, it’s a bad idea.<br>If the implementation is easy to explain, it may be a good idea.<br>Namespaces are one honking great idea – let’s do more of those!</p>
+</blockquote>
+<p>寫 Python 就是要追求乾淨、易讀、簡單，這也是我這幾周使用 Python 所感覺到的。<br>再引用 David 老師所言，</p>
+<blockquote>
+<p>寫 Python 就像是在寫 pseudo-code 一樣爽！</p>
+</blockquote>
+<hr>
+<p>註:<br>[1] <code>cv.pyd</code> 可以在 build 好的 opencv 資料夾中找到。<br>[2] OpenCV 不能用 <code>pip</code> 安裝，而 <code>conda</code> 是類似 <code>pip</code> 的 Python 套件管理軟體。<br>[3] Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考 <a href="http：//stackoverflow.com/questions/17193457/private-method-in-python"> 這篇 </a>。<br>[4] 函式名子<strong> 不一定 </strong> 不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近的專案需要用到 &lt;a href=&quot;http://opencv.org/&quot;&gt;OpenCV&lt;/a&gt;，官方有提供 C++ 以及 Python 的版本。我以前都用 C++，這次想說來換換口味使用 Python 好了，如果用的順手以後就都這樣搭配著用(Python + OpenCV)。&lt;br&gt;說是這樣說，但其實我對 Python 根本一竅不通，從來沒在比較大的專案中使用過，所以新手如我自然就遇到很多坑(?)&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="opencv" scheme="https://ssarcandy.tw/tags/opencv/"/>
+    
+      <category term="python" scheme="https://ssarcandy.tw/tags/python/"/>
+    
+      <category term="note" scheme="https://ssarcandy.tw/tags/note/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>談談 vim plugin-manager</title>
+    <link href="https://ssarcandy.tw/2016/08/17/vim-plugin-manager/"/>
+    <id>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</id>
+    <published>2016-08-17T03:02:10.000Z</published>
+    <updated>2017-09-11T00:11:48.628Z</updated>
+    
+    <content type="html"><![CDATA[<p>我用過了幾乎所有有名的 vim plugin-manager，包含 <a href="https://github.com/tpope/vim-pathogen" target="_blank" rel="external">Pathogen</a>, <a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="external">Vundle</a> 以及比較新的 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a>。<br>而以時間序來說也是 Pathogen -&gt; Vundle -&gt; vim-plug</p>
+<p>先來談談用過這三個分別的感想好了：</p>
+<a id="more"></a>
+<h3 id="Pathogen"><a href="#Pathogen" class="headerlink" title="Pathogen"></a>Pathogen</h3><p>簡單好用，與其說是 plugin-manager，個人覺得比較像是個純粹的 run-time loader，沒有什麼其他的功能。<br>但已十分好用，要新增什麼 plugin，只需把 plugin 的資料夾放在 <code>bundle/</code> 底下就完工了！<br>刪除也是，直接砍掉 <code>bundle/</code> 底下對應資料夾就 OK</p>
+<h3 id="Vundle"><a href="#Vundle" class="headerlink" title="Vundle"></a>Vundle</h3><p>目前應該是這三者中 github stars 最多的。<br>plugin 安裝方式是在 <code>.vimrc</code> 中寫你要的 plugin name</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Plugin <span class="string">'tpope/vim-fugitive'</span></div></pre></td></tr></table></figure>
+<p>然後在 vim 中打 <code>:PluginInstall</code> 就會幫你安裝。</p>
+<p>這樣的好處是你裝過什麼一目了然，而且到新環境要重新設置的時候也很方便，直接 <code>:PluginInstall</code> 就完成了。(如果用 Pathogen 就必須自己把要用的 plugins clone 下來。)</p>
+<h3 id="vim-plug"><a href="#vim-plug" class="headerlink" title="vim-plug"></a>vim-plug</h3><p>我目前在使用的 plugin-manager ，給我的感覺就是 Vundle 的加強版。<br>新增 plugin 的方式跟 Vundle 很像(只是關鍵字不同)，都是在 <code>.vimrc</code> 中寫你要的 plugin name</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Plug <span class="string">'tpope/vim-fugitive'</span></div></pre></td></tr></table></figure>
+<p>安裝也是跟 Vundle 差不多，關鍵字不一樣而已 (<code>:PlugInstall</code>)</p>
+<p>比較厲害的是 vim-plug 可以 <strong>on-demand loading</strong>！<br>像是 <a href="https://github.com/fatih/vim-go" target="_blank" rel="external">vim-go</a>(強大的 Golang Dev-plugin)，這種只有在寫 golang 時候才要的 plugin，就應該只在副檔名是 <code>.go</code> 的時候載入就好；<br><a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a> 也是，有時候只是打開一個檔案要編輯而已，用不著這個套件，只有當真的觸發開啟 NERDTree 的時候再載入就好。<br>這些 vim-plug 都可以設定(設定方式詳見 <a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">readme</a>)，大幅提升 vim 開啟速度～</p>
+<h3 id="效能"><a href="# 效能" class="headerlink" title="效能"></a>效能 </h3><p> 我從 Pathogen 換到 Vundle 是為了可以很容易的在新環境設定好 vim，<br>而從 Vundle 換到 vim-plug 則是為了他的 on-demand loading。</p>
+<p>所以說到底效能差多少？<br>其實我並不是個重度 plugins 使用者，有在用的 plugins 大概 20 個吧。<br>所以從 Vundle 換到 vim-plug 說實在並沒有顯著效能差異。<br>不過還是可以看看別人的實驗<br><div><img src="/img/2016-08-17/1.png" alt="不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time" data-action="zoom"><span class="image-caption">不同 plugin-manager 的開啟速度(plug = vim-plug)。圖片出自 vim-plugins-and-startup-time</span></div></p>
+<p>不難發現，有 on-demand loading 的 plugin-manager 開啟速度會快不少，以圖中為例大概都可以快上個 30% ！<br>如果有興趣，也可以自己試試 vim 的開啟速度，可以用以下的方法測量。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ vim --startuptime vim.log</div></pre></td></tr></table></figure>
+<p>詳細開啟資訊都會寫入 <code>vim.log</code></p>
+<hr>
+<p>References:<br>[1] <a href="http://junegunn.kr/2014/07/vim-plugins-and-startup-time/" target="_blank" rel="external">vim-plugins-and-startup-time</a><br>[2] <a href="https://www.facebook.com/groups/vim.tw/" target="_blank" rel="external">vim.tw</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我用過了幾乎所有有名的 vim plugin-manager，包含 &lt;a href=&quot;https://github.com/tpope/vim-pathogen&quot;&gt;Pathogen&lt;/a&gt;, &lt;a href=&quot;https://github.com/VundleVim/Vundle.vim&quot;&gt;Vundle&lt;/a&gt; 以及比較新的 &lt;a href=&quot;https://github.com/junegunn/vim-plug&quot;&gt;vim-plug&lt;/a&gt;。&lt;br&gt;而以時間序來說也是 Pathogen -&amp;gt; Vundle -&amp;gt; vim-plug&lt;/p&gt;
+&lt;p&gt;先來談談用過這三個分別的感想好了：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="vim" scheme="https://ssarcandy.tw/tags/vim/"/>
+    
+  </entry>
+  
+</feed>
