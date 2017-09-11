@@ -25,7 +25,7 @@ before_install:
   - git config --global user.email ssarcandy@gmail.com 
   # Install Hexo
   - yarn global add hexo
-  - mkdir public
+  - yarn
   # Clone the repository
   - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
   - cd .deploy_git && git checkout master
