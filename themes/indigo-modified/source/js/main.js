@@ -31,7 +31,7 @@
                 y: y
             };
         },
-        docEl = ua.indexOf('Firefox') !== -1 ? d.documentElement : body;
+        docEl = ua.indexOf('Edge') == -1 ? d.documentElement : body;
 
     var Blog = {
         goTop: function() {
@@ -92,7 +92,7 @@
             Array.prototype.forEach.call($$('a[href^="#"]'), function (el) {
 
                 el.addEventListener('click', function (e) {
-                    e.preventDefault();
+                    // e.preventDefault();
                     var top = offset($('[id="' + decodeURIComponent(this.hash).substr(1) + '"]')).y - headerH;
                     // animate(Blog.goTop.bind(Blog, top));
                     docEl.scrollTop = top;
