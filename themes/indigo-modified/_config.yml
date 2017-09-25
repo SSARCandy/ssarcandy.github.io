@@ -67,6 +67,8 @@ turbolinks: false
 #是否大屏幕下文章页隐藏导航
 hideMenu: true
 
+mining: true
+
 #是否开启toc
 #toc: true
 toc:
