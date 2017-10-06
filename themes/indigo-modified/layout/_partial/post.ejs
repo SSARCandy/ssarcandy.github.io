@@ -6,7 +6,7 @@
     <div class="post-meat" style="color:grey; font-size:13px;">
         <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
         <% if (typeof popular_posts_pv !== 'undefined') { %>
-        	<%- popular_posts_pv() %>
+        	<%- format_number(popular_posts_pv()) %>
         <% } else { %>
             0
         <% } %>

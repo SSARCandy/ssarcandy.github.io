@@ -68,6 +68,9 @@ gaAnalytics({
 });
 
 hexo.extend.helper.register('visitor_count', function () {
-  return visitor_count
+  return visitor_count;
 });
 
+hexo.extend.helper.register('format_number', function (x) { 
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+});
