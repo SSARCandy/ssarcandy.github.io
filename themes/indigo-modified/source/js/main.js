@@ -61,6 +61,7 @@
                 }
 
             } else {
+                menu.classList.add('hide');
                 menu.classList.remove('show');
                 mask.classList.remove('in');
                 main.classList.remove('offset-main');
