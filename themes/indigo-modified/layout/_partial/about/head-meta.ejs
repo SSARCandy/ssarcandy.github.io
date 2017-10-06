@@ -5,7 +5,17 @@
     </div>
     <hgroup class="about-introduce">
       <div class="about-name">HSU, SHU-HSUAN (許書軒)</div>
-      <div class="about-nickname"><%= theme.email %></div>
+      <!-- <div class="about-nickname"><%= theme.email %></div> -->
+    </hgroup>
+    <hgroup class="about-sociallink">
+      <%
+      for (var i in theme.social_links) {
+        icon = theme.social_links[i];
+      %>
+      <a class="about-social-icon" href="<%- icon.url %>" target="<%- icon.target %>">
+        <i class="icon icon-lg <%- icon.icon %>" aria-hidden="true"></i>
+      </a>
+      <%}%>
     </hgroup>
   </div>
 </div>

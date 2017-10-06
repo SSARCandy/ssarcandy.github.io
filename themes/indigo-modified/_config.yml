@@ -30,11 +30,24 @@ menu:
     type: fa
     url: https://github.com/SSARCandy
     target: _blank
-#   flask:
-#     type: fa
-#     text: CMLAB
-#     url: https://www.cmlab.csie.ntu.edu.tw/new_cml_website/index.php
-#     target: _blank
+
+social_links:
+  email:
+    url: mailto:ssarcandy@gmail.com
+    icon: icon-envelope-square
+    target: 
+  facebook:
+    url: https://www.facebook.com/ssarcandy
+    icon: icon-facebook-square
+    target: _blank
+  twitter:
+    url: https://twitter.com/ssarcandy
+    icon: icon-twitter-square
+    target: _blank
+  github:
+    url: https://github.com/SSARCandy
+    icon: icon-github-square
+    target: _blank
 
 rss: /atom.xml
 
