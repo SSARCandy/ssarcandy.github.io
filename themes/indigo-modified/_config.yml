@@ -36,9 +36,9 @@ social_links:
     url: mailto:ssarcandy@gmail.com
     icon: icon-envelope-square
     target: 
-  facebook:
-    url: https://www.facebook.com/ssarcandy
-    icon: icon-facebook-square
+  linkedin:
+    url: www.linkedin.com/in/ssarcandy
+    icon: icon-linkedin-square
     target: _blank
   twitter:
     url: https://twitter.com/ssarcandy
