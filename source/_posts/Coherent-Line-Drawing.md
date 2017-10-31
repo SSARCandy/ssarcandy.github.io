@@ -5,6 +5,7 @@ tags:
 - c++
 - opencv
 - rendering
+- paper
 image: /img/2017-06-26/01.jpg
 ---
 
