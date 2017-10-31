@@ -33,7 +33,10 @@ source data & target data 各自經過一 shared weight 的 networks 之後會�
 - source task 會算一個 classification loss
 - source 的 `fc8` 及 target 的 `fc8` 會再拿來算 CORAL loss
 
-而總和 loss = class loss + lambda*CORAL loss
+而總和 loss 為兩者相加:
+$$
+loss = l\_{CLASS} + \lambda l\_{CORAL}
+$$
 
 # CORAL Loss
 
