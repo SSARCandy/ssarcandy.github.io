@@ -3,6 +3,7 @@ title: High Dynamic Range Imaging
 date: 2017-04-16 01:34:44
 tags:
 - opencv
+- paper
 - python
 image: /img/2017-04-16/living_room2-radiance-map.png
 ---
