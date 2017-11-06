@@ -1,3 +1,13 @@
+- name: DeepCORAL
+  title: Deep CORAL
+  description: 'A PyTorch implementation of "Deep CORAL: Correlation Alignment for Deep Domain Adaptation." B Sun, K Saenko, ECCV 2016'
+  github: https://github.com/SSARCandy/DeepCORAL
+  preview: https://ssarcandy.tw/DeepCORAL/
+  tags:
+    - Python
+    - PyTorch
+    - Machine_Learning
+    
 - name: Coherent-Line-Drawing
   title: Coherent Line Drawing
   description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007. With an easy-to-use, real-time interactive graphic user interface system.'
