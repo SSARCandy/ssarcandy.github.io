@@ -90,16 +90,6 @@
 
             toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
 
-            Array.prototype.forEach.call($$('a[href^="#"]'), function (el) {
-
-                el.addEventListener('click', function (e) {
-                    // e.preventDefault();
-                    var top = offset($('[id="' + decodeURIComponent(this.hash).substr(1) + '"]')).y - headerH;
-                    // animate(Blog.goTop.bind(Blog, top));
-                    docEl.scrollTop = top;
-                })
-            });
-
             return {
                 fixed: function (top) {
                     top >= bannerH - headerH ? toc.classList.add('fixed') : toc.classList.remove('fixed')

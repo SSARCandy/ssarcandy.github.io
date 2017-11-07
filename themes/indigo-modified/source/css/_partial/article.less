@@ -155,6 +155,22 @@
 
     }
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: @primaryColor;
+        &:hover {
+            .headerlink {
+                visibility: visible
+            }
+        }
+        padding-top: 56px;
+        margin-top: -56px;
+    }
+
     strong {
         font-weight: 600;
         border-bottom: 1px solid @accentColor;
@@ -166,7 +182,6 @@
     h1 {
         font-size: 32px;
         font-weight: 500;
-        padding-top: 35px;
     }
 
     h2 {
@@ -189,11 +204,6 @@
         font-size: 14px;
     }
 
-    h2,
-    h3 {
-        padding-top: 20px;
-    }
-
     h1,
     h2,
     h3,
@@ -208,15 +218,6 @@
     .video-container {
         margin-bottom: 8px;
         margin-top: 8px;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        color: @primaryColor;
     }
 
     blockquote p:first-child,
@@ -361,6 +362,16 @@
         padding: 0;
     }
 
+    .headerlink {
+        visibility: hidden;
+        margin-left: -1em;
+        padding-right: 5px;
+        color: @lightPrimaryColor;
+
+        &:before {
+            content: "#";
+        }
+    }
 }
 
 @media screen and (max-width:760px) {
