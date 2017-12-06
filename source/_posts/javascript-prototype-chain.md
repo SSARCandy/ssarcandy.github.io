@@ -97,7 +97,7 @@ class level2 extends level1 {
   
   getY() { return this.y; }
 }
-
+ 
 let l2 = new level2();
 ```
 
