@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2017-12-05T20:11:11.886Z</updated>
+  <updated>2017-12-06T00:52:50.546Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -16,11 +16,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>搞懂 JavaScript 原型鍊</title>
+    <link href="https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/"/>
+    <id>https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/</id>
+    <published>2017-12-06T00:40:01.000Z</published>
+    <updated>2017-12-06T00:52:50.546Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近突然看到許多關於 js 原型鍊的介紹，這東西我從來沒搞懂過也沒認真想要搞懂過 XD<br>說真的好像不懂也不會影響甚麼，畢竟實戰上基本用不到這些比較底層的東西…<br>但是當作是邊緣冷知識來看看也是挺不錯的~</p>
+<a id="more"></a>
+<h1 id="歷史"><a href="# 歷史" class="headerlink" title="歷史"></a>歷史 </h1><p>JavaScript，一個為了網頁互動而誕生的腳本語言，最早是因為 Netscape 開發了一個比較成熟的瀏覽器 Navigator，但由於沒有可以讓網頁與使用者互動的方式，所以他們就開發了 JavaScript 來當作網頁的腳本語言，其中主要開發者是 <em>Brendan Eich</em>。<br> 由於當時物件導向正夯，Brendan Eich 也決定讓 JavaScript 所有東西都是 Object。<br>如此用途明確的語言，似乎不太需要非常完整的底層架構吧？用不著像 C++, Java 這種泛用式程式語言一樣完整，所以 Brendan Eich 並不打算引入 Class 的概念。但又由於 JavaScript 所有東西都是 Object，勢必要有種方法做到類似 <strong> 繼承 </strong> 這件事。<br>所以原型鍊就出現了！</p>
+<h1 id="JavaScript- 語法背後的運作"><a href="#JavaScript- 語法背後的運作" class="headerlink" title="JavaScript 語法背後的運作"></a>JavaScript 語法背後的運作</h1><p>JavaScript 要建構一個 instance 會用 <code>new</code> 關鍵字，但實際上這 <code>new</code> 跟 C++, Java 的不一樣。<br>JavaScript 的 new 其實後面接的是一個 function，類似於 C++ constroctor</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = name;</div><div class="line">  <span class="keyword">this</span>.sayHi = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Hi'</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">  </div><div class="line"><span class="keyword">var</span> man1 = <span class="keyword">new</span> Person(<span class="string">'Jack'</span>);</div><div class="line"><span class="keyword">var</span> man2 = <span class="keyword">new</span> Person(<span class="string">'Andy'</span>);</div><div class="line">  </div><div class="line"><span class="built_in">console</span>.log(man1.sayHi === man2.sayHi); <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<p>上面這段例子是 JavaScript 創造實例的方式。<br>可以看到 <code>Person</code> 中有兩個東西，一個是 name, 另一個是 Person 的 method <code>sayHi</code>，雖然這樣很好了，但是這樣 <code>man1</code>, <code>man2</code> 中其實包含了一樣的 <code>sayHi</code> function，浪費記憶體空間。</p>
+<p>所以如果要做一個類別共用的方法可以這樣:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">Person.prototype.sayHi = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Hi'</span>);</div><div class="line">&#125;;</div><div class="line">  </div><div class="line"><span class="keyword">var</span> man1 = <span class="keyword">new</span> Person(<span class="string">'Jack'</span>);</div><div class="line"><span class="keyword">var</span> man2 = <span class="keyword">new</span> Person(<span class="string">'Andy'</span>);</div><div class="line">  </div><div class="line"><span class="built_in">console</span>.log(man1.sayHi === man2.sayHi); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>把類別共用的 function 寫在 <code>prototype</code> 中就可以達成共用的效果，而其實這個 <code>prototype</code> 就是原型鍊。</p>
+<h1 id="用原型鍊模擬繼承"><a href="# 用原型鍊模擬繼承" class="headerlink" title="用原型鍊模擬繼承"></a>用原型鍊模擬繼承 </h1><p> 我們用瀏覽器偵錯模式印變數的時候，相信經常看到 <code>__proto__</code> 藏在變數裡，那個東東就是原型鍊。<br>JavaScript 中有幾個預設的類別，像是 Object, Array 等等，我們在宣告變數的時候其實裡面都會藉由原型鍊 <strong>串</strong> 到預設的類別。</p>
+<div><img src="/img/2017-12-06/01.PNG" alt="a 的 __proto__ 指向 Object" data-action="zoom"><span class="image-caption">a 的 __proto__ 指向 Object</span></div>
+<p>所以其實在創造實例時，JavaScript 會把 <code>__proto__</code> 指向他的原型，以空物件 <code>{}</code> 而言，就是預設類別 <code>Object</code>。<br>回到上面 Person 的例子，他的原型鍊就會是長這樣:</p>
+<div><img src="/img/2017-12-06/02.PNG" alt="man 的 sayHi 是定義在他的 __proto__ 中" data-action="zoom"><span class="image-caption">man 的 sayHi 是定義在他的 __proto__ 中</span></div>
+<p>可以發現寫在 <code>Person.prototype</code> 的 <code>sayHi</code> ，實際上是定義在 <code>man.__proto__.sayHi</code> ，也就是 Person 的原型，而在呼叫 <code>man.sayHi()</code> 時，由於找不到，所以 JavaScript 會藉由 <code>__proto__</code> 嘗試往上找，就會在 <code>man.__proto__</code> 中找到。</p>
+<p>而這個一直往上一層原型找的過程，其實就模擬了繼承的效果。</p>
+<h1 id="ES6- 語法糖與原型鍊"><a href="#ES6- 語法糖與原型鍊" class="headerlink" title="ES6 語法糖與原型鍊"></a>ES6 語法糖與原型鍊 </h1><p> 雖說 JavaScript 當初沒有 Class 的概念，但在 ES6 中其實出現 class 關鍵字了，但其實這只是一個語法糖而已，可以藉由幾個例子發現 ES6 背後還是透過原型鍊來運作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">level1</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.x = <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  getX() &#123; <span class="keyword">return</span> <span class="keyword">this</span>.x; &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">level2</span> <span class="keyword">extends</span> <span class="title">level1</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    <span class="keyword">this</span>.y = <span class="number">10</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  getY() &#123; <span class="keyword">return</span> <span class="keyword">this</span>.y; &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="keyword">let</span> l2 = <span class="keyword">new</span> level2();</div></pre></td></tr></table></figure>
+<p>上面這個例子是用 ES6 寫的繼承小程式， level2 繼承 level1 。直接來看看創造出的實例 <code>l2</code> 裡面是什麼:</p>
+<div><img src="/img/2017-12-06/03.PNG" alt="ES6 的繼承其實也是用原型鍊串起來的。" data-action="zoom"><span class="image-caption">ES6 的繼承其實也是用原型鍊串起來的。</span></div>
+<p>又看到原型鍊了！<br><code>l2</code> 的原型鍊串成這樣: <code>l2</code> → <code>level1</code> → <code>Object</code>。<br>看看 <code>getX</code>, <code>getY</code> 就會發現他們定義在不同層級，因為 <code>getX</code> 是父類別的方法，所以在原型鍊中的更上一層。<br>由此就可以看出 ES6 雖然有 class 關鍵字，但其實原理還是原型鍊。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] <a href="http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html" target="_blank" rel="external">Javascript 继承机制的设计思想 </a><br>[2] <a href="http://blog.techbridge.cc/2017/04/22/javascript-prototype/" target="_blank" rel="external"> 該來理解 JavaScript 的原型鍊了</a></p>
+<hr>
+<p><strong>雜談 </strong><br> 除了學校教的 C/C++ 以外，我似乎沒去搞懂過其他語言背後的邏輯，秉持者會用就好的心態活到現在 (X<br> 這次稍微理解原型鍊以後，好像又更了解一點 JavaScript 了呢～！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近突然看到許多關於 js 原型鍊的介紹，這東西我從來沒搞懂過也沒認真想要搞懂過 XD&lt;br&gt;說真的好像不懂也不會影響甚麼，畢竟實戰上基本用不到這些比較底層的東西…&lt;br&gt;但是當作是邊緣冷知識來看看也是挺不錯的~&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="https://ssarcandy.tw/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Deep CORAL: Correlation Alignment for Deep Domain Adaptation</title>
     <link href="https://ssarcandy.tw/2017/10/31/deep-coral/"/>
     <id>https://ssarcandy.tw/2017/10/31/deep-coral/</id>
     <published>2017-10-31T13:18:50.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p> 雖然現在可以透過 Deep neural networks 來訓練出非常強大的能力，但卻難以學到比較通用的知識，通常最後訓練出的 model 會只適合處理類似於 training data 的資料。<br>Domain adaption 是目前在 machine learning 比較新的問題，是希望可以讓 network 學到比較跨領域的 features ，進而使訓練出來的模型可以應用在不同 domain 的資料上。</p>
 <p> 這篇論文 <sup>[1]</sup> (Deep CORAL: Correlation Alignment for Deep Domain Adaptation, B Sun, K Saenko, ECCV 2016) 提出一個 CORAL loss，通過對 source domain 和 target domain 進行線性變換來將他們各自的的二階統計量對齊 (minimizing the difference between source/target correlations).</p>
@@ -101,7 +144,7 @@
     <link href="https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/"/>
     <id>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</id>
     <published>2017-09-27T14:17:32.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.550Z</updated>
     
     <content type="html"><![CDATA[<p>最近開始在使用 PyTorch 寫些東東，他支援 MacOS/Linux 使用，唯獨 Windows 不支援…<br>所以我一直都是使用 Mac 寫相關的東西。</p>
 <p>但是我的桌機都是 Windows，在可以用桌機的環境下卻必須使用小小的 Mac 打字真的不是很高興…<br>正好最近從學長那邊得知有個方法可以讓 Windows 使用 PyTorch ，就趕緊來試試！</p>
@@ -173,7 +216,7 @@
     <link href="https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/"/>
     <id>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</id>
     <published>2017-08-25T15:29:39.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>隨著實驗室 GPU 資源日益增加，<br>有越來越多人在抱怨搶不到 GPU、不知道哪台有空的 GPU 、有人佔用太多 GPU 資源等等問題，<br>這些問題似乎跟沒有一個方法可以「一目瞭然的知道所有 GPU 的狀況」有關。</p>
 <p>對，就像是 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a> 一樣，<br>假設有個 GPU 版的 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a>，應該就可以讓大家更輕易地找到閒置的 GPU，如果有人佔用過多運算資源也容易發現。</p>
@@ -240,7 +283,7 @@
     <link href="https://ssarcandy.tw/2017/07/21/about-taking-case/"/>
     <id>https://ssarcandy.tw/2017/07/21/about-taking-case/</id>
     <published>2017-07-21T11:06:10.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>最近終於結束了一個搞了很久的 case 。<br>我其實沒什麼接案經驗，這次也是剛好算是學校單位找我做個活動的宣傳網站，我心想既然是學校的應該也不太容易被騙，就來試試看所謂的接案。<br>在這次經驗中其實也是學到不少東西、踩了很多雷，大部份都是因為沒什麼經驗導致踩到的很多很多算專案管理相關的雷。<br>如果還有下次的話，一定要注意一些事情才可以讓整個案子的進行更加順利。</p>
 <a id="more"></a>
@@ -284,7 +327,7 @@
     <link href="https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/"/>
     <id>https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/</id>
     <published>2017-06-25T16:14:38.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>線條藝術畫 (line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。<br> 這篇論文 (Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007) 提出一個全自動的方法，可以將相片轉換成簡單、高品質的線條畫風格圖片。</p>
 <div><img src="/img/2017-06-26/01.jpg" alt="輸入一張影像，即可產生出一張線條藝術風格畫。" data-action="zoom"><span class="image-caption">輸入一張影像，即可產生出一張線條藝術風格畫。</span></div>
@@ -354,7 +397,7 @@
     <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
     <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
     <published>2017-05-25T17:28:09.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>全景照 (panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br> 以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
 <a id="more"></a>
@@ -450,7 +493,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過 (?) 密碼這關。</p>
 <a id="more"></a>
@@ -524,7 +567,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -603,7 +646,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱 HDRI 或 HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -713,7 +756,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -782,7 +825,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.550Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="# 流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控 </h1><p> 先介紹兩個好工具，</p>
@@ -854,7 +897,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個 <a href="https://ssarcandy.tw/colorblocks-react/"> 網頁小遊戲 </a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br> 算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -907,7 +950,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -974,7 +1017,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -1036,7 +1079,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.550Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -1093,7 +1136,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt=""data-action="zoom"></div>
@@ -1146,7 +1189,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用 (據說 CMLab 的工作站比資工系工作站還要好…)。<br> 雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
@@ -1193,7 +1236,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/"/>
     <id>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</id>
     <published>2016-11-09T05:14:41.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>Ray-tracing 中的相機 (眼睛) 是所有光束的起點，從相機成像平面出發的光束如果能夠經由折射、反射等等最終到達光源的那些「存活」的光束，才對最終的影像有影響的光束。這種與現實物理相反的設計 (從光源發出光並追蹤那些存活到相機成像平面的光束) 是為了減少計算量。<br><div><img src="/img/2016-11-09/01.png" alt="ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup>" data-action="zoom"><span class="image-caption">ray-tracing 中，光束是從相機射出來的。<sup>[1]</sup></span></div></p>
 <a id="more"></a>
@@ -1251,7 +1294,7 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     <link href="https://ssarcandy.tw/2016/10/13/debug-using-vdb/"/>
     <id>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</id>
     <published>2016-10-13T12:34:53.000Z</published>
-    <updated>2017-12-05T20:11:11.882Z</updated>
+    <updated>2017-12-06T00:52:50.546Z</updated>
     
     <content type="html"><![CDATA[<p>有時候在寫 <a href="https://www.opengl.org/" target="_blank" rel="external">openGL</a> 或者是類似 <a href="http://www.pbrt.org/" target="_blank" rel="external">pbrt</a> 這樣有牽涉到三維空間的程式的時候總是很難除錯…<br>雖然可以設斷點看看變數內容有沒有問題，但說實在的其實這樣看有時候根本看不出所以然，這樣還是難以除錯。</p>
 <p><a href="https://github.com/zdevito/vdb" target="_blank" rel="external">vdb</a> 是一個解決這樣問題的工具，它提供了很多常見的畫線、畫點等等函式，最重要的是他的易用性，可以在幾乎不更動程式碼的狀態下就完成偵錯。</p>
@@ -1288,100 +1331,6 @@ window.onload = function() {var panoramas = document.getElementsByClassName('pan
     
     
       <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
-    
-      <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>改善 pbrt 中的 heightfield shape</title>
-    <link href="https://ssarcandy.tw/2016/10/10/pbrt-heightfield/"/>
-    <id>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</id>
-    <published>2016-10-10T13:14:41.000Z</published>
-    <updated>2017-12-05T20:11:11.886Z</updated>
-    
-    <content type="html"><![CDATA[<p>pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈<br><div><img src="/img/2016-10-10/3.jpg" alt="據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup>" data-action="zoom"><span class="image-caption">據說 IKEA 型錄的圖都是渲染出來的<sup>[1]</sup></span></div></p>
-<a id="more"></a>
-<h2 id="關於 -pbrt- 與 -ray-tracing"><a href="# 關於 -pbrt- 與 -ray-tracing" class="headerlink" title="關於 pbrt 與 ray-tracing"></a>關於 pbrt 與 ray-tracing</h2><p>Ray-tracing 說穿了就是在模擬自然界光線的運作，我們之所以看的到東西，其實就是因為光線打到物體並反射到我們眼睛，這也是為甚麼在無光的地方會伸手不見五指 (因為沒有任何光打到手指並反射到眼中)。<br> 至於電腦要怎麼模擬這件事，大致來說是光線從光源出發，途中遇到障礙物就要算交點，有交點就要根據材質特性反射，反射之後就是一條新的光線，就繼續做交點測試直到進到眼睛中(或直到能量遞減完畢)。可以看出，ray-tracing 最重要的大概就是與物件算交點了，因為 ray 會一直做交點測試，所以與物件的交點測試必須要夠快才行，不然就會算到天荒地老….</p>
-<p>pbrt 除了最基本的 triangleMesh 以外，還實作很多其他一些常見的 shape(球體、圓柱體、圓形、heightfield…)，這其實是拿來給 api 使用的，一般人可以寫 pbrt 專用的描述檔來描述一個場景中的物體、光源等等，再藉由 pbrt 的程式來渲染出整張影像。</p>
-<p>pbrt 中的各種 shape，有些是會先轉成 triangleMesh(對三角形求交點應該是圖學中最基礎的了，如果原本物件太複雜通常就會先把它拆成三角形組合再來算)；而有些是有實作對 shape 交點測試的。由於把物件轉成 triangleMesh 其實就硬是多一個步驟了啊，如果可以與 shape 直接求交點，那速度上當然會大躍進~</p>
-<h2 id="實作 -heightfield- 交點測試"><a href="# 實作 -heightfield- 交點測試" class="headerlink" title="實作 heightfield 交點測試"></a>實作 heightfield 交點測試</h2><p>Heightfield 其實就是平面但是有高低差，也就是說，對每個 \((x, y)\) 而言只會有一個 \(z\) 值。算是個滿單純的 shape。<br>Heightfield 也是原本就有實作的一種 shape，是直接用 <code>Refine()</code> 來把形狀轉為 triangleMesh 再做交點測試的。</p>
-<p>如果能夠跳過三角化而直接與 heightfield 做交點測試，可能可以比較快喔？<br>參考一下別的 shape，包含球體、圓柱體等實作的交點測試的方法都是在幾何意義上直接求交點，也就是算數學求解~ 哈哈 <br> 但 heightfield 似乎是沒辦法從幾何意義上直接解了，需要用更暴力的方法~</p>
-<p>這邊我是使用 <a href="https://www.wikiwand.com/en/Digital_differential_analyzer" target="_blank" rel="external">DDA</a>(digital differential analyzer) 來做交點測試，這東西其實原本是拿來畫線的演算法，因為實際上的線是連續的，但是呈現在電腦上卻必須以 pixel 為單位呈現。而這邊與 heightfield 的交點測試就是將 DDA 擴展至三維空間中(多了 Z 軸)。<br><div><img src="/img/2016-10-10/2.png" alt="2D-DDA 邏輯。<sup>[2]</sup>" data-action="zoom"><span class="image-caption">2D-DDA 邏輯。<sup>[2]</sup></span></div></p>
-<p>可以看到其實可以在一開始就算出 <code>x</code>, <code>y</code> 要走多少會到下一個 pixel，這些都是定值，也讓遍歷整個 Pixel-Grid 變得很容易，而 3D-DDA 就只是再加入 <code>z</code> 軸的資訊，並且每一個 pixel 變成 voxel。<br>3D-DDA 這樣的方式其實在 pbrt 裡面已有實作，是來作為加速結構用途，但是由於 heightfield 本身特性(對每個 \((x, y)\) 而言只會有一個 \(z\) 值)，我們可以讓 Voxel 的高度等於 heightfield 的高度，如此一來就可以讓 3D 結構的 heightfield 套用 2D-DDA 了！耶~~~</p>
-<p>建好 DDA 需要的資訊後，接下來就是要實作 Ray 交點測試了，在遍歷 Voxel 的過程中，需要針對這個 Voxel 做交點測試，如果有交點就結束了；沒有就到下個 Voxel。<br>而關於每個 Voxel 的交點測試其實也是滿單純的，在設計 DDA 的結構時，除了讓 Voxel 高等於 heightfield 高，可以變成 2D-DDA 以外，讓 Voxel 的寬等於一個單位的 <code>x</code> 及 <code>y</code> 也是有很大的好處的，如下圖:<br><div><img src="/img/2016-10-10/4.png" alt="從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。" data-action="zoom"><span class="image-caption">從正上方看下來的 heightfield 樣子，數值為對應 z 值。讓 Voxel 寬度等於一格寬有好處。</span></div></p>
-<p>依據這樣的設計，每次在做 Voxel 交點測試時，可以知道這 Voxel 中就是包含兩個三角形；也就是說分別對這兩個三角形做交點測試就好了~~</p>
-<p>根據這樣的算法，就可以得出與原本直接三角化的做法一模一樣的結果:<br><div><img src="/img/2016-10-10/landsea-big.jpg" alt="用直接求交點的方式取代原本先做三角化的方法。" data-action="zoom"><span class="image-caption">用直接求交點的方式取代原本先做三角化的方法。</span></div></p>
-<h2 id="平滑化"><a href="# 平滑化" class="headerlink" title="平滑化"></a>平滑化 </h2><p> 看看上圖的結果，看得出都是一面一面的三角形面，這是因為同一個面上所有點都是一樣的法向量，所以反射角度也都一樣，自然就成這副德性。<br>如果要做平滑化的話就必須內插三角形內部的點的法向量，使得三角面反射光會看起來滑順一點。<br><div><img src="/img/2016-10-10/1.png" alt="三角化後每個點 M 都有六個鄰居。" data-action="zoom"><span class="image-caption">三角化後每個點 M 都有六個鄰居。</span></div></p>
-<p>這邊我是直接平均法向量來達成這樣的效果，由於三角化之後每個點會有六個鄰居；<br>點 <code>M</code> 的鄰居有 <code>TL</code>、<code>T</code>、<code>R</code>、<code>BR</code>、<code>B</code>、<code>L</code> 六點，點 <code>M</code> 的法向量可以藉由任意兩向量外積得出。</p>
-<p>那我就平均一下六個法向量來當作真正的法向量，以 <code>M</code> 為原點，可算出平均法向量為:<br>\(\underset{Normalize(}{}\underset{TL}{\rightarrow}  \underset{\times}{} \underset{L}{\rightarrow} \underset{+}{} \underset{L}{\rightarrow}  \underset{\times}{} \underset{B}{\rightarrow} \underset{+}{} \underset{B}{\rightarrow}  \underset{\times}{} \underset{BR}{\rightarrow} \underset{+}{} \underset{BR}{\rightarrow}  \underset{\times}{} \underset{R}{\rightarrow} \underset{+}{} \underset{R}{\rightarrow}  \underset{\times}{} \underset{T}{\rightarrow} \underset{+}{} \underset{T}{\rightarrow}  \underset{\times}{} \underset{TL}{\rightarrow} \underset{)}{}\)</p>
-<p>這樣子改進後，就可以讓結果變這樣:<br><div><img src="/img/2016-10-10/landsea-big-smooth.jpg" alt="平滑化的結果" data-action="zoom"><span class="image-caption">平滑化的結果</span></div></p>
-<h2 id="浮點數精度問題 -10-22- 更新"><a href="# 浮點數精度問題 -10-22- 更新" class="headerlink" title="浮點數精度問題 (10/22 更新)"></a> 浮點數精度問題 (10/22 更新)</h2><p> 做完平滑化之後，感覺海好像怪怪的歐….<br>一開始其實我還沒察覺，過這麼久才發現這問題…</p>
-<p>很顯然只有海有這樣的問題，八成是因為海的 \(z\) 值差距太小，計算法向量時的誤差。<br>用這樣的思維去追查程式後，發現我原本在算六個法向量總和後有做 <code>Normalize(sumOfNormals)</code>，這步驟造成 \(z\) 值起伏太小的海的計算誤差….<br>把 <code>Normalize()</code> 拔掉之後就正常了～</p>
- <div><img src="/img/2016-10-10/4.jpg" alt="修正浮點數精度問題後的結果" data-action="zoom"><span class="image-caption">修正浮點數精度問題後的結果</span></div>
-<h2 id="加速"><a href="# 加速" class="headerlink" title="加速"></a>加速 </h2><p> 很可惜的是我做完以後，速度沒有想像中的快速，反而比原本的還慢了兩倍以上…. 嗚嗚嗚….<br>稍微看看別的 shape 的交點測試，其實有很多時候會先跟 Bbox(Bounding Box) 做測試，因為與 Bbox 交點是容易很多的，如果與 Bbox 無交點就也不用繼續做下去了。<br>在 Voxel 交點測試中，也應當先與整個 Voxel 做測試，確定有交點再去試裡面的兩個三角形，這樣就可以省下很大量的做白工。</p>
-<p>但這樣做完還是不夠好，所以我利用 CPU profiling 來測試我的程式的瓶頸到底在哪裡….<br>利用這樣的檢測，我陸續做了幾次優化:</p>
-<table>
-<thead>
-<tr>
-<th>原因及改善方法</th>
-<th style="text-align:right"><code>Intersect()</code></th>
-<th style="text-align:right">與未最佳化時比較</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>未最佳化。</td>
-<td style="text-align:right">90,274</td>
-<td style="text-align:right">100.0%</td>
-</tr>
-<tr>
-<td>發現 <code>ObjectBound()</code> 很慢，改在 Heightfield construction 時就先存 <code>minZ</code>, <code>maxZ</code>。</td>
-<td style="text-align:right">82,731</td>
-<td style="text-align:right">91.6%</td>
-</tr>
-<tr>
-<td>發現在算 Voxel BBox 使用的 <code>Bbox(Union(Bbox, Bbox))</code> 超爆慢，改用 <code>Bbox(Point, Point)</code>。</td>
-<td style="text-align:right">53,408</td>
-<td style="text-align:right">59.1%</td>
-</tr>
-<tr>
-<td>發現有不必要的坐標系轉換，由於在 Voxel 交點測試中會先測與 Voxel Bbox 交點，所以最好直接給他已轉好的 Ray(Object Space)。</td>
-<td style="text-align:right">46,922</td>
-<td style="text-align:right">51.9%</td>
-</tr>
-<tr>
-<td>由於 <code>Bbox(Point, Point)</code> 建構時都要重新判斷 min max，改用先建構空的 Bbox 再直接給值 (<code>pmin</code>, <code>pmax</code>) 省去建構時間。</td>
-<td style="text-align:right">36,768</td>
-<td style="text-align:right">40.7%</td>
-</tr>
-<tr>
-<td>把用不到的 Bbox 給 Voxel 交點測試中再利用，節省 Construction Time(避免重新 relocate 記憶體位置以及建構空 Bbox 的時間)。</td>
-<td style="text-align:right">32,742</td>
-<td style="text-align:right">36.2%</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>Intersect()</code> 欄的數字是指 CPU 採樣時落在這函式的總樣本數，越多表示執行時間越長</li>
-<li>測試的是 <code>landsea-2.pbrt</code>，並且使用 <code>–ncores 1</code> 以減少多執行緒的誤差</li>
-</ul>
-<p>經過幾次最佳化後，成功壓低執行時間(單位為秒)，效能比較如下:<br><div><img src="/img/2016-10-10/5.png" alt="效能比較。<sup>[3]</sup>" data-action="zoom"><span class="image-caption">效能比較。<sup>[3]</sup></span></div></p>
-<h2 id="雜談"><a href="# 雜談" class="headerlink" title="雜談"></a>雜談 </h2><p> 說真的這大概是我做過數一數二難的作業了，而且竟然只是作業一….<br>其實寫的過程也不是我自己想到的，老師也有給提示，甚至網路上其實根本有答案….(不見得是最佳解就是了)<br>為了這作業我甚至還上 Stack overflow 問了人生第一個問題 哈哈 (雖然問題跟演算法沒關係)<br> 只能說不愧是 Stanford 的題目囉？</p>
-<hr>
-<p> 註:<br> [1] 可以看 <a href="http://www.wsj.com/articles/SB10000872396390444508504577595414031195148" target="_blank" rel="external"> 這篇 </a> 介紹 IKEA 渲染型錄<br> [2] 原圖來自 Physically Based Rendering, Second Edition<br> [3] 執行時間用 <code>bash</code> 內建 <code>time</code> 指令來量測<br>$$$$</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;pbrt 是一個基於物理的 ray-tracing libarary，他可以拿來產生接近現實的真實場景，據說 IKEA 的型錄都是用類似方法產生的，而不是真的把產品擺出來拍照。 哈哈&lt;br&gt;&lt;div&gt;&lt;img src=&quot;/img/2016-10-10/3.jpg&quot; alt=&quot;據說 IKEA 型錄的圖都是渲染出來的&lt;sup&gt;[1]&lt;/sup&gt;&quot; data-action=&quot;zoom&quot;&gt;&lt;/div&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="c++" scheme="https://ssarcandy.tw/tags/c/"/>
-    
-      <category term="rendering" scheme="https://ssarcandy.tw/tags/rendering/"/>
     
       <category term="pbrt" scheme="https://ssarcandy.tw/tags/pbrt/"/>
     
