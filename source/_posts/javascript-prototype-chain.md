@@ -88,7 +88,7 @@ class level1 {
   
   getX() { return this.x; }
 }
-
+ 
 class level2 extends level1 {
   constructor() {
     super();
