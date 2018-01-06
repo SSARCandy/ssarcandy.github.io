@@ -141,6 +141,26 @@ def backward(self, grad_output):
 可以看出有 CORAL loss 的確使得 target task 的準確率提升一些。
 不過我做出來的整體準確率並沒有與論文上的一樣有 60% 左右，而是大概在 50% 左右，不知道為甚麼… QQ
 
+# Update
+
+經過 [redhat12345](https://github.com/redhat12345) 的建議後，修正了一下 CORAL Loss 的算法，終於使 Target accuracy 提升到原論文的程度。
+```python
+def CORAL(source, target):
+    d = source.data.shape[1]
+    # source covariance
+    xm = torch.mean(source, 1, keepdim=True) - source
+    xc = torch.matmul(torch.transpose(xm, 0, 1), xm)
+    # target covariance
+    xmt = torch.mean(target, 1, keepdim=True) - target
+    xct = torch.matmul(torch.transpose(xmt, 0, 1), xmt)
+    # frobenius norm between source and target
+    loss = torch.mean(torch.mul((xc - xct), (xc - xct)))
+    loss = loss/(4*d*4)
+    return loss
+```
+
+{% zoom /img/2017-10-31/5.png 修正過後的結果。 %}
+
 # References
 
 [1] Sun, B., Saenko, K.: Deep CORAL: Correlation Alignment for Deep Domain Adaptation. In: ECCV (2016)
