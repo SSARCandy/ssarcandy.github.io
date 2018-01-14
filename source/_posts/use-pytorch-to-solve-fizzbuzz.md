@@ -154,15 +154,15 @@ def training(model, optimizer, training_data):
 
 ```
 ==== Start Training ====
-Epoch  50/300, Loss: 0.90952, Accuracy: 57.29%
-Epoch 100/300, Loss: 0.46165, Accuracy: 85.42%
-Epoch 150/300, Loss: 0.25452, Accuracy: 89.58%
-Epoch 200/300, Loss: 0.23758, Accuracy: 92.71%
-Epoch 250/300, Loss: 0.23392, Accuracy: 92.71%
-Epoch 300/300, Loss: 0.22703, Accuracy: 92.71%
+Epoch  50/300, Loss: 0.78973, Accuracy: 64.58%
+Epoch 100/300, Loss: 0.29299, Accuracy: 91.67%
+Epoch 150/300, Loss: 0.14616, Accuracy: 93.75%
+Epoch 200/300, Loss: 0.10606, Accuracy: 96.88%
+Epoch 250/300, Loss: 0.09937, Accuracy: 96.88%
+Epoch 300/300, Loss: 0.06472, Accuracy: 98.96%
 ```
 
-哇！才 92% 準確率呢… 
+哇！才 98% 準確率呢… 拿去 online judge 解題大概不會過呢 XD
 
 ----------
 
