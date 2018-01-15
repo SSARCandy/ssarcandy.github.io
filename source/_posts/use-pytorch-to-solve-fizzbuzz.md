@@ -2,6 +2,7 @@
 title: Use PyTorch to solve FizzBuzz
 date: 2018-01-15 01:13:49
 tags:
+- machine learning
 - python
 - pytorch
 ---
