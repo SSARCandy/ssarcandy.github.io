@@ -1,3 +1,12 @@
+- name: Breakout_env
+  title: Breakout environment
+  description: 'An OpenAI gym like Breakout environment but with more configurable options.'
+  github: https://github.com/SSARCandy/breakout-env
+  download: https://github.com/SSARCandy/breakout-env#installation
+  tags:
+    - Python
+    - Game
+    
 - name: DeepCORAL
   title: Deep CORAL
   description: 'A PyTorch implementation of "Deep CORAL: Correlation Alignment for Deep Domain Adaptation." B Sun, K Saenko, ECCV 2016'
@@ -7,7 +16,7 @@
     - Python
     - PyTorch
     - Machine_Learning
-    
+
 - name: Coherent-Line-Drawing
   title: Coherent Line Drawing
   description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007. With an easy-to-use, real-time interactive graphic user interface system.'
