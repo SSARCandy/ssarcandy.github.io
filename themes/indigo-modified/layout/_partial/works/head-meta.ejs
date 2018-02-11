@@ -3,7 +3,7 @@
 <ul class="article-tag-list">
 <%
 var tags = site.data.projectTags;
-for (var i in tags) { 
+for (var i in tags.sort()) { 
 %>
     <li class="article-tag-list-item">
         <a class="article-tag-list-link waves-effect waves-button" href="#<%-tags[i]%>"><%- tags[i] %></a>

@@ -3,8 +3,8 @@
         <div class="project-dummy"></div>
 
         <div class="project-img-container">
-            <div class="project-centerer"></div>
             <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" alt='<%- project.description %>' class="preview" data-action="zoom">
+            <div class="project-centerer"></div>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
         </div>
         <div class="project-meta">
             <ul class="article-tag-list">
-                <% for (var i in project.tags) { %>
+                <% for (var i in project.tags.sort()) { %>
                 <li class="article-tag-list-item">
                     <a class="article-tag-list-link waves-effect waves-button" href="#<%-project.tags[i]%>"><%- project.tags[i] %></a>
                 </li>
