@@ -14,25 +14,6 @@
     %>
     <div class="about-container">
         <div class="about-exp">
-            <h3>Educations</h3>
-            <table>
-            <% for (i in edu) { %>
-                <tr>
-                    <td style="width: 50px;">
-                        <img src="/img/aboutMe/<%- edu[i].icon %>.png" height="50px" width="50px">
-                    </td>
-                    <td>
-                    <ul class="about-list">
-                        <li><%- edu[i].time %></li>
-                        <li><%- edu[i].degree %></li>
-                        <li><a href="<%- edu[i].link %>" target="_blank"><%- edu[i].department %> <%- edu[i].name %></a></li>
-                    </ul>
-                    </td> 
-                </tr>
-            <% } %>
-            </table>
-        </div>
-        <div class="about-exp">
             <h3>Experiences</h3>
             <table>
             <% for (i in work) { %>
@@ -47,6 +28,25 @@
                         <li><a href="<%- work[i].link %>" target="_blank"><%- work[i].serviceUnit %></a></li>
                     </ul>
                     </td>
+                </tr>
+            <% } %>
+            </table>
+        </div>
+        <div class="about-exp">
+            <h3>Educations</h3>
+            <table>
+            <% for (i in edu) { %>
+                <tr>
+                    <td style="width: 50px;">
+                        <img src="/img/aboutMe/<%- edu[i].icon %>.png" height="50px" width="50px">
+                    </td>
+                    <td>
+                    <ul class="about-list">
+                        <li><%- edu[i].time %></li>
+                        <li><%- edu[i].degree %></li>
+                        <li><a href="<%- edu[i].link %>" target="_blank"><%- edu[i].department %> <%- edu[i].name %></a></li>
+                    </ul>
+                    </td> 
                 </tr>
             <% } %>
             </table>
