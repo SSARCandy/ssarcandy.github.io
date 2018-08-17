@@ -3,7 +3,7 @@ educations:
     degree: 'Master of Science'
     department: 'Information Management, '
     link: 'http://www.im.ntu.edu.tw/'
-    time: 2016 ~ 
+    time: 2016 ~ 2018
     icon: NTU
 
   - name: 'NCCU'
@@ -27,6 +27,12 @@ educations:
     icon: SSSH
 
 works:
+  - serviceUnit: 'HTC VIVE'
+    link: 'https://www.htc.com/'
+    job: Algorithm Engineer
+    time: '09/2018 ~'
+    icon: hTC
+
   - serviceUnit: 'CMLab, NTU'
     link: 'https://cmlab.csie.ntu.edu.tw/'
     job: UNIX System Manager
