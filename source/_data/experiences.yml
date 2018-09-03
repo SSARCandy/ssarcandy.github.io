@@ -27,11 +27,11 @@ educations:
     icon: SSSH
 
 works:
-  - serviceUnit: 'HTC VIVE'
+  - serviceUnit: 'VIVE, HTC'
     link: 'https://www.htc.com/'
     job: Algorithm Engineer
     time: '09/2018 ~'
-    icon: hTC
+    icon: vive
 
   - serviceUnit: 'CMLab, NTU'
     link: 'https://cmlab.csie.ntu.edu.tw/'
@@ -45,11 +45,11 @@ works:
     time: '09/2015 ~ 08/2016'
     icon: Dcard
 
-  - serviceUnit: '3D Game Programming, NCCU'
-    link: 'http://www.cs.nccu.edu.tw/'
-    job: Teaching Assistant
-    time: '09/2015 ~ 01/2016'
-    icon: NCCUCS
+  # - serviceUnit: '3D Game Programming, NCCU'
+  #   link: 'http://www.cs.nccu.edu.tw/'
+  #   job: Teaching Assistant
+  #   time: '09/2015 ~ 01/2016'
+  #   icon: NCCUCS
 
   - serviceUnit: 'Computer Graphic Lab, NCCU'
     link: 'http://www.cs.nccu.edu.tw/'
@@ -57,9 +57,9 @@ works:
     time: '02/2015 ~ 08/2016'
     icon: NCCUCS
 
-  - serviceUnit: 'Center of Teaching and Learning Development, NCCU'
-    link: 'http://learning.nccu.edu.tw/'
-    job: Systems Engineer Assistant
-    time: '11/2014 ~ 02/2015'
-    icon: NCCUTLD
+  # - serviceUnit: 'Center of Teaching and Learning Development, NCCU'
+  #   link: 'http://learning.nccu.edu.tw/'
+  #   job: Systems Engineer Assistant
+  #   time: '11/2014 ~ 02/2015'
+  #   icon: NCCUTLD
 
