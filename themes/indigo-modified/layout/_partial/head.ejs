@@ -48,4 +48,14 @@
   
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel='manifest' href='/web-app-manifest.json'/>
+
+  <% if (theme.adsense) { %>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-1532347766435780",
+              enable_page_level_ads: true
+        });
+    </script>
+  <% } %>
 </head>
