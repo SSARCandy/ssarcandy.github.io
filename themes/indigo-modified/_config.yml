@@ -80,7 +80,7 @@ turbolinks: false
 #是否大屏幕下文章页隐藏导航
 hideMenu: true
 
-adsense: true
+adsense: false
 
 #是否开启toc
 #toc: true
