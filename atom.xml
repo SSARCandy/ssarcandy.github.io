@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ssarcandy.tw/"/>
-  <updated>2018-10-19T22:56:31.776Z</updated>
+  <updated>2018-10-21T22:57:03.045Z</updated>
   <id>https://ssarcandy.tw/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ssarcandy.tw/2018/08/18/mbpr2015-repair/"/>
     <id>https://ssarcandy.tw/2018/08/18/mbpr2015-repair/</id>
     <published>2018-08-17T20:13:08.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>前陣子我的 Macbook pro 13” (2015) 出現奇怪的問題，突然一直跳出訊息叫我連接藍芽滑鼠，內建觸控板跟鍵盤完全失靈，看著電腦登入畫面我卻什麼都做不了，超級崩潰…</p>
 <p>後來稍微多重開機試幾次發現這種狀況有時候會消失，查一下網路發現大概有幾種可能，一是主機板壞了，二是鍵盤跟滑鼠的連接到主機板的排線壞了。但是這兩種壞法修的價格可差距不少，所以我就堅信只是排線壞了（Ｘ</p>
@@ -71,7 +71,7 @@
     <link href="https://ssarcandy.tw/2018/01/15/use-pytorch-to-solve-fizzbuzz/"/>
     <id>https://ssarcandy.tw/2018/01/15/use-pytorch-to-solve-fizzbuzz/</id>
     <published>2018-01-14T17:13:49.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>FizzBuzz 是一個常見的程式考題，題目很簡單，就是給一個整數，如果可以被 15 整除就回傳 FizzBuzz；可以被 3 整除就回傳 Fizz；被 5 整除就回傳 Buzz；都不能整除就回傳原本的數字。</p>
 <p>用 Python 可以簡單幾行就寫出來：</p>
@@ -134,7 +134,7 @@
     <link href="https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/"/>
     <id>https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/</id>
     <published>2017-12-06T00:40:01.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近突然看到許多關於 js 原型鍊的介紹，這東西我從來沒搞懂過也沒認真想要搞懂過 XD<br>說真的好像不懂也不會影響甚麼，畢竟實戰上基本用不到這些比較底層的東西…<br>但是當作是邊緣冷知識來看看也是挺不錯的~</p>
 <a id="more"></a>
@@ -177,7 +177,7 @@
     <link href="https://ssarcandy.tw/2017/10/31/deep-coral/"/>
     <id>https://ssarcandy.tw/2017/10/31/deep-coral/</id>
     <published>2017-10-31T13:18:50.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>雖然現在可以透過 Deep neural networks 來訓練出非常強大的能力，但卻難以學到比較通用的知識，通常最後訓練出的 model 會只適合處理類似於 training data 的資料。<br>Domain adaption 是目前在 machine learning 比較新的問題，是希望可以讓 network 學到比較跨領域的 features ，進而使訓練出來的模型可以應用在不同 domain 的資料上。</p>
 <p>這篇論文<sup>[1]</sup> (Deep CORAL: Correlation Alignment for Deep Domain Adaptation, B Sun, K Saenko, ECCV 2016) 提出一個 CORAL loss，通過對 source domain 和 target domain 進行線性變換來將他們各自的的二階統計量對齊 (minimizing the difference between source/target correlations).</p>
@@ -260,7 +260,7 @@
     <link href="https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/"/>
     <id>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</id>
     <published>2017-09-27T14:17:32.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近開始在使用 PyTorch 寫些東東，他支援 MacOS/Linux 使用，唯獨 Windows 不支援…<br>所以我一直都是使用 Mac 寫相關的東西。</p>
 <p>但是我的桌機都是 Windows，在可以用桌機的環境下卻必須使用小小的 Mac 打字真的不是很高興…<br>正好最近從學長那邊得知有個方法可以讓 Windows 使用 PyTorch ，就趕緊來試試！</p>
@@ -332,7 +332,7 @@
     <link href="https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/"/>
     <id>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</id>
     <published>2017-08-25T15:29:39.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>隨著實驗室 GPU 資源日益增加，<br>有越來越多人在抱怨搶不到 GPU、不知道哪台有空的 GPU 、有人佔用太多 GPU 資源等等問題，<br>這些問題似乎跟沒有一個方法可以「一目瞭然的知道所有 GPU 的狀況」有關。</p>
 <p>對，就像是 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a> 一樣，<br>假設有個 GPU 版的 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">cml-status</a>，應該就可以讓大家更輕易地找到閒置的 GPU，如果有人佔用過多運算資源也容易發現。</p>
@@ -399,7 +399,7 @@
     <link href="https://ssarcandy.tw/2017/07/21/about-taking-case/"/>
     <id>https://ssarcandy.tw/2017/07/21/about-taking-case/</id>
     <published>2017-07-21T11:06:10.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近終於結束了一個搞了很久的 case 。<br>我其實沒什麼接案經驗，這次也是剛好算是學校單位找我做個活動的宣傳網站，我心想既然是學校的應該也不太容易被騙，就來試試看所謂的接案。<br>在這次經驗中其實也是學到不少東西、踩了很多雷，大部份都是因為沒什麼經驗導致踩到的很多很多算專案管理相關的雷。<br>如果還有下次的話，一定要注意一些事情才可以讓整個案子的進行更加順利。</p>
 <a id="more"></a>
@@ -443,7 +443,7 @@
     <link href="https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/"/>
     <id>https://ssarcandy.tw/2017/06/26/Coherent-Line-Drawing/</id>
     <published>2017-06-25T16:14:38.000Z</published>
-    <updated>2018-10-19T22:56:31.772Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>線條藝術畫(line drawing) 是最簡單的一種視覺呈現圖畫的方式，僅僅是幾條線條即能清楚的表示出圖片中的物件。<br>這篇論文(Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007)提出一個全自動的方法，可以將相片轉換成簡單、高品質的線條畫風格圖片。</p>
 <div><img src="/img/2017-06-26/01.jpg" alt="輸入一張影像，即可產生出一張線條藝術風格畫。" data-action="zoom"><span class="image-caption">輸入一張影像，即可產生出一張線條藝術風格畫。</span></div>
@@ -513,7 +513,7 @@
     <link href="https://ssarcandy.tw/2017/05/26/panorama-image-stitching/"/>
     <id>https://ssarcandy.tw/2017/05/26/panorama-image-stitching/</id>
     <published>2017-05-25T17:28:09.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>全景照(panorama) 現在已普遍存在手機的相機軟體中，是一種可以拍攝數張照片然後接在一起使整個視野變更大的方法，全景照常比較常見的是往同一方向拍攝的，但也是有上下左右都全景的那種(Photo Sphere)。<br>以一般往同方向拍攝的一系列照片來說，要合出一張完整的全景照理論上就是將這一系列的照片重疊的部分對齊就可以了。<br>但實際上還是需要經過一系列的方法，才能接合出比較良好的全景照。</p>
 <a id="more"></a>
@@ -611,7 +611,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/"/>
     <id>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</id>
     <published>2017-04-29T14:56:05.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇講了如何使用 google 提供的 migration tool 來遷移郵件，但需要知道大家的密碼才能用 IMAP 存取郵件資料。<br>一般來說即使是 root 也是看不到密碼的，就算能也只是看到加密過後的密碼。<br>而本篇要紀錄的就是我們遷移策略，包含我們怎麼繞過(?)密碼這關。</p>
 <a id="more"></a>
@@ -685,7 +685,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/"/>
     <id>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</id>
     <published>2017-04-23T11:36:51.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近 CMLab 終於申請到 G Suite for Education 了～<br>也就是我們不用再維護自己的 mail server 了～灑花～</p>
 <p>但這也就又多了一件事：Migration…<br>我們要做的事情有以下幾件：</p>
@@ -764,7 +764,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/"/>
     <id>https://ssarcandy.tw/2017/04/16/High-Dynamic-Range-Imaging/</id>
     <published>2017-04-15T17:34:44.000Z</published>
-    <updated>2018-10-19T22:56:31.772Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>高動態範圍成像（英語：High Dynamic Range Imaging，簡稱HDRI或HDR），在電腦圖形學與電影攝影術中，是用來實現比普通數點陣圖像技術更大曝光動態範圍（即更大的明暗差別）的一組技術。高動態範圍成像的目的就是要正確地表示真實世界中從太陽光直射到最暗的陰影這樣大的範圍亮度。<br>   – from wikipedia</p>
@@ -874,7 +874,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/"/>
     <id>https://ssarcandy.tw/2017/03/20/Setup-x11-forwarding-on-Debian/</id>
     <published>2017-03-19T18:03:08.000Z</published>
-    <updated>2018-10-19T22:56:31.772Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>有時候會需要在 server 上使用有 GUI 介面的程式，像是我們會把 matlab 安裝在運算能力很好的工作站上供大家使用。但透過 ssh 連上工作站的話介面會是 terminal，使用上就會比較不便。</p>
 <p>Linux 的 GUI 運作模式，其中</p>
@@ -943,7 +943,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/"/>
     <id>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</id>
     <published>2017-02-26T13:14:07.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近這幾周都一直被 cmlab 的 mail server 霸凌，覺得難過…<br>為了解決 mail server 時不時會大量寄出信件的問題，嘗試了許多方法，終於得到一點點平靜…<br>本篇整理了我們最近嘗試的方法及一些工具，做個紀錄…</p>
 <h1 id="流量分析及監控"><a href="#流量分析及監控" class="headerlink" title="流量分析及監控"></a>流量分析及監控</h1><p>先介紹兩個好工具，</p>
@@ -1015,7 +1015,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/02/02/from-react-to-react-native/"/>
     <id>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</id>
     <published>2017-02-02T03:04:00.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>接觸 React 其實也一段時間了，總是嚷嚷想做個自己的 Project 但始終沒有動手開始做。最近趁著寒假終於用 React 做了個<a href="https://ssarcandy.tw/colorblocks-react/">網頁小遊戲</a>，之後也改寫成 React Native 做出 Android and iOS 的原生 app，順便把 android 版上架到 <a href="https://play.google.com/store/apps/details?id=com.colorblocksrn" target="_blank" rel="external">Google play</a> 上～(iOS app store 費用太高付不起…)<br>算是完成幾個長久以來的小小目標(?)</p>
 <div><img src="/img/2017-02-02/01.jpg" alt="用 React Native 做出 Android/iOS 原生 app" data-action="zoom"><span class="image-caption">用 React Native 做出 Android/iOS 原生 app</span></div>
@@ -1068,7 +1068,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/"/>
     <id>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</id>
     <published>2017-01-18T11:04:29.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>一般傳統相機都是先對焦好之後拍攝照片，而往往會有些照片事後才發現竟然沒對好焦，甚是可惜。而光場相機(light field camera)，有別於一般傳統相機，是可以記錄相機內部的光線傳輸方向等信息的相機；光場相機就是比傻瓜相機還傻瓜的相機，允許再拍攝後根據拍攝者的需要再重新聚焦到任意的位置光場相機可以做到先拍攝，後對焦這種神奇的事情。</p>
 <p>光場相機其實是在相機主鏡頭後面加了一層微透鏡陣列，讓原本聚焦的光再次分散到各個感光點上，如圖一：</p>
@@ -1135,7 +1135,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2016/12/25/MSAuto/"/>
     <id>https://ssarcandy.tw/2016/12/25/MSAuto/</id>
     <published>2016-12-25T13:12:48.000Z</published>
-    <updated>2018-10-19T22:56:31.772Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近 Facebook messanger 推出了一系列小遊戲，大部分其實都是無腦遊戲，但扯到互相比分總是會變得很激烈….</p>
 <p>其中有個遊戲很特別 EverWing，他是可以升級主角的射擊遊戲，也就是我可以偷練再去挑戰別人，然後分數就會很高~<br>起初我偷練到七等左右去挑戰 David 老師，沒想到他一下就超越我了，後來又浪費我好幾個小時才超越他…。後來跑去挑戰 ball 他們，費盡千辛萬苦打到 3204 分，結果後來才發現他們都在直接發 request 作弊…。</p>
@@ -1197,7 +1197,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2016/12/24/policyd/"/>
     <id>https://ssarcandy.tw/2016/12/24/policyd/</id>
     <published>2016-12-23T16:15:40.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>最近遇到了有人使用 cmlab 的 email 亂寄垃圾信，導致很多外面 mail server 都把我們加入黑名單了…。也因此才想說要設定一個外寄上限，雖然 Postfix 本身已經有許多功能可以設定，但是就是沒辦法設定外寄的 Quota，所以就想說來試試 Policyd。</p>
 <p>Policyd(cluebringer) 是一個可以設定一些規則給 mail server 的一個中間層(像是 middleware 那樣)。</p>
@@ -1254,7 +1254,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/"/>
     <id>https://ssarcandy.tw/2016/12/18/pbrt-mediancut-environment-light/</id>
     <published>2016-12-17T17:45:08.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>環境中總有一些背景光，像是太陽光、遠處大樓窗戶反光之類的，可以看成一整片不均勻分布的光源，有些地方亮；有些地方暗。<br>pbrt 中是用 important sampling 來渲染環境光，不過，其實也可以把環境光轉換成一堆點光源來計算。</p>
 <div><img src="/img/2016-12-18/1.jpg" alt="" data-action="zoom"></div>
@@ -1307,7 +1307,7 @@ window.onload = function() {
     <link href="https://ssarcandy.tw/2016/11/17/cml-fb-bot/"/>
     <id>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</id>
     <published>2016-11-17T11:57:17.000Z</published>
-    <updated>2018-10-19T22:56:31.776Z</updated>
+    <updated>2018-10-21T22:57:03.045Z</updated>
     
     <content type="html"><![CDATA[<p>CMLab 有二十幾台 unix work stations 供大家使用(據說 CMLab 的工作站比資工系工作站還要好…)。<br>雖然這些機器設備都很強悍，但還是有時候會出現某台機器掛掉，或是 CPU, Memory, Swap 用量過高之類的事件。若有這類事發生就必須去處理，不然一直讓機器維持在高負載很容易就死掉了。<br>實驗室有個 <a href="https://www.cmlab.csie.ntu.edu.tw/status/" target="_blank" rel="external">網站</a> 可以查看機器及時狀態，什麼機器有什麼問題一看就知道，超方便的。</p>
 <p>但是不上去看就不會知道有沒有狀況，所以我就決定做個有狀況發生就通知我的 Facebook chat bot。</p>
