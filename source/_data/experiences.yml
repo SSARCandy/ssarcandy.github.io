@@ -27,11 +27,11 @@ educations:
     icon: SSSH
 
 works:
-  - serviceUnit: 'VIVE, HTC'
-    link: 'https://www.htc.com/'
-    job: Algorithm Engineer
-    time: '09/2018 ~'
-    icon: vive
+#   - serviceUnit: 'VIVE, HTC'
+#     link: 'https://www.htc.com/'
+#     job: Algorithm Engineer
+#     time: '09/2018 ~ 10/2018'
+#     icon: vive
 
   - serviceUnit: 'CMLab, NTU'
     link: 'https://cmlab.csie.ntu.edu.tw/'
