@@ -27,6 +27,12 @@ educations:
     icon: SSSH
 
 works:
+  - serviceUnit: 'Kronos Token'
+    link: 'https://kronostoken.com/'
+    job: Full Stack Engineer
+    time: '10/2018 ~ '
+    icon: 'kronos'
+
 #   - serviceUnit: 'VIVE, HTC'
 #     link: 'https://www.htc.com/'
 #     job: Algorithm Engineer
