@@ -12,7 +12,7 @@
       for (var i in theme.social_links) {
         icon = theme.social_links[i];
       %>
-      <a class="about-social-icon" href="<%- icon.url %>" target="<%- icon.target %>">
+      <a class="about-social-icon" href="<%- icon.url %>" target="<%- icon.target %>" rel="noopener">
         <i class="icon icon-lg <%- icon.icon %>" aria-hidden="true"></i>
       </a>
       <%}%>
