@@ -1,1 +1,71 @@
-(function(){"use strict";var n=document.getElementsByClassName("plugin");var e=document.getElementById("plugin-list-count");var t=document.getElementById("plugin-search-input");var a=n.length;var i=lunr.Index.load(window.SEARCH_INDEX);function r(n,e){var t=n.classList;if(!t.contains(e)){t.add(e)}}function o(n,e){var t=n.classList;if(t.contains(e)){t.remove(e)}}function s(e){var t=i.search(e);var s=t.length;var u={};var c=0;for(c=0;c<s;c++){u[t[c].ref]=true}for(c=0;c<a;c++){if(u[c]){r(n[c],"on")}else{o(n[c],"on")}}}function u(){for(var e=0;e<a;e++){r(n[e],"on")}}function c(){var n=location.hash.substring(1);t.value=n;if(n){s(n)}else{u()}}t.addEventListener("input",function(){var n=this.value;if(!n)return u();s(n)});window.addEventListener("hashchange",c);c()})();
+(function(){
+  'use strict';
+
+  var elements = document.getElementsByClassName('plugin');
+  var $count = document.getElementById('plugin-list-count');
+  var $input = document.getElementById('plugin-search-input');
+  var elementLen = elements.length;
+  var index = lunr.Index.load(window.SEARCH_INDEX);
+
+  function addClass(elem, className){
+    var classList = elem.classList;
+
+    if (!classList.contains(className)){
+      classList.add(className);
+    }
+  }
+
+  function removeClass(elem, className){
+    var classList = elem.classList;
+
+    if (classList.contains(className)){
+      classList.remove(className);
+    }
+  }
+
+  function search(value){
+    var result = index.search(value);
+    var len = result.length;
+    var selected = {};
+    var i = 0;
+
+    for (i = 0; i < len; i++){
+      selected[result[i].ref] = true;
+    }
+
+    for (i = 0; i < elementLen; i++){
+      if (selected[i]){
+        addClass(elements[i], 'on');
+      } else {
+        removeClass(elements[i], 'on');
+      }
+    }
+  }
+
+  function displayAll(){
+    for (var i = 0; i < elementLen; i++){
+      addClass(elements[i], 'on');
+    }
+  }
+
+  function hashchange(){
+    var hash = location.hash.substring(1);
+    $input.value = hash;
+
+    if (hash){
+      search(hash);
+    } else {
+      displayAll();
+    }
+  }
+
+  $input.addEventListener('input', function(){
+    var value = this.value;
+
+    if (!value) return displayAll();
+    search(value);
+  });
+
+  window.addEventListener('hashchange', hashchange);
+  hashchange();
+})();
