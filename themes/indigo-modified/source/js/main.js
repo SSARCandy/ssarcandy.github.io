@@ -167,7 +167,7 @@
 
     menu.addEventListener('touchmove', function(e) {
         e.preventDefault();
-    });
+    }, { passive: true });
 
     w.addEventListener('load', function() {
         loading.classList.remove('active');
