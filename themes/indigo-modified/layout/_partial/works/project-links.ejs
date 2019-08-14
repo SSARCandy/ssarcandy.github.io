@@ -1,24 +1,24 @@
 <div class="project-links">
     <% if (project.github) { %>
-        <a class="project-link" href="<%- project.github %>" target="_blank" title="github">
+        <a class="project-link" href="<%- project.github %>" target="_blank" rel="noopener" title="github">
             <i class="icon icon-lg icon-github" aria-hidden="true"></i>
         </a>
     <% } %>
 
     <% if (project.preview) { %>
-        <a class="project-link" href="<%- project.preview %>" target="_blank" title="project website">
+        <a class="project-link" href="<%- project.preview %>" target="_blank" rel="noopener" title="project website">
             <i class="icon icon-lg icon-globe" aria-hidden="true"></i>
         </a>
     <% } %>
 
     <% if (project.youtube) { %>
-        <a class="project-link" href="<%- project.youtube %>" target="_blank" title="video">
+        <a class="project-link" href="<%- project.youtube %>" target="_blank" rel="noopener" title="video">
             <i class="icon icon-lg icon-play-circle" aria-hidden="true"></i>
         </a>
     <% } %>
 
     <% if (project.download) { %>
-        <a class="project-link" href="<%- project.download %>" target="_blank" title="download executable">
+        <a class="project-link" href="<%- project.download %>" target="_blank" rel="noopener" title="download executable">
             <i class="icon icon-lg icon-arrow-circle-down" aria-hidden="true"></i>
         </a>
     <% } %>

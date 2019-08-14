@@ -2,27 +2,27 @@ educations:
   - name: 'NTU'
     degree: 'Master of Science'
     department: 'Information Management, '
-    link: 'http://www.im.ntu.edu.tw/'
+    link: 'https://www.im.ntu.edu.tw/'
     time: 2016 ~ 2018
     icon: NTU
 
   - name: 'NCCU'
     degree: 'Bachelor of Science'
     department: 'Computer Science, '
-    link: 'http://www.cs.nccu.edu.tw/'
+    link: 'https://www.cs.nccu.edu.tw/'
     time: 2012 ~ 2016
     icon: NCCU
 
   - name: 'NCCU'
     degree: 'Bachelor of Science'
     department: 'Management Information Systems, '
-    link: 'http://www.mis2.nccu.edu.tw/'
+    link: 'https://www.mis2.nccu.edu.tw/'
     time: 2012 ~ 2016
     icon: NCCU
 
   - name: 'SONG-SHAN Senior High School'
     degree: 'High school'
-    link: 'http://www.sssh.tp.edu.tw/'
+    link: 'https://www.sssh.tp.edu.tw/'
     time: 2009 ~ 2012
     icon: SSSH
 
@@ -58,7 +58,7 @@ works:
   #   icon: NCCUCS
 
   - serviceUnit: 'Computer Graphic Lab, NCCU'
-    link: 'http://www.cs.nccu.edu.tw/'
+    link: 'https://www.cs.nccu.edu.tw/'
     job: Adjunct Research Assistant
     time: '02/2015 ~ 08/2016'
     icon: NCCUCS
