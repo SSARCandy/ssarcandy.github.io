@@ -24,7 +24,6 @@ before_install:
   - git config --global user.name "bot"
   - git config --global user.email ssarcandy@gmail.com 
   # Install Hexo
-  - npm install -g hexo
   - npm install
   # Clone the repository
   - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
@@ -32,8 +31,8 @@ before_install:
   - cd ..
 
 script:
-  - hexo g
-  - hexo deploy
+  - npm run build
+  - npm run deploy
 
 branches:
   only:
