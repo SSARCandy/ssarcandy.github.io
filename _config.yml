@@ -121,11 +121,6 @@ hfc_img:
   optipng: true
   svgo: true
 
-criticalcss:
-  enable: true
-  critical:
-    minify: true
-
 math:
   engine: 'mathjax' # or 'katex'
   mathjax:
