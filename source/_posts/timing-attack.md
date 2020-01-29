@@ -2,7 +2,7 @@
 title: Timing Attack in String Compare
 date: 2020-01-29 19:28:29
 tags:
-- cpp
+- c++
 - note
 ---
 
