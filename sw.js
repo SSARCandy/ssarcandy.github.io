@@ -24,7 +24,7 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2017/12/06/javascript-prototype-chain/');
+  precacheUrls.push('/2018/08/18/mbpr2015-repair/');
 
   precacheUrls.push('/2017/06/26/Coherent-Line-Drawing/');
 
