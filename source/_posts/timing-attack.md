@@ -7,7 +7,7 @@ tags:
 ---
 
 
-程式語言通常在執行的時候，為了要最佳化執行的速度，常常會利用所謂的 Early Return<sup>[1]</sup>
+程式語言通常在執行的時候，為了要最佳化執行的速度，常常會利用所謂的 Early Return。<sup>[1]</sup>
 比如說條件式裡面 `if (a && b)` 這種判斷式，假設已經知道 A == false，那其實就可以不需要知道 b 的值，如此就可以直接忽略 b 而達到更快的知道這個判斷式是否為真<sup>[2]</sup>。
 同樣的這種作法其實會發生在很多地方，比方說像是比對兩個字串是否一樣：在很多程式語言中的實作其實就是遍歷兩個字串比對每一個字元，那只要過程中有一個字元不一樣那這兩個字串肯定就是不一樣，即可提早返回結果。
 <!-- more -->
@@ -124,3 +124,5 @@ Reference:
 [2] 這個例子其實是所謂的 Order of evaluation, 跟 Early return 有一點不同。[https://en.cppreference.com/w/cpp/language/eval_order](https://en.cppreference.com/w/cpp/language/eval_order)
 [3] [Adding Salt to Hashing: A Better Way to Store Passwords](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/)
 [4] [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) 可以有效避免重送攻擊。 (重送攻擊我常常用，可參考我的另一篇文章 [從奧客玩家視角看遊戲防禦性設計](/2019/10/02/game-design-from-perspective-of-hacker/))
+
+另外補充一篇也是在介紹 Timing Attack 的文 [Using Node.js Event Loop for Timing Attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/)
