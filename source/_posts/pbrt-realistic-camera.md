@@ -90,13 +90,13 @@ for l in lens:  # from rear to front
 - **Ray minT, maxT**
   在 `GenerateRay()` 中產生的 ray 記得參數要給好給滿，之前因為沒給值到 min/maxT 導致結果有坑坑巴巴的破圖...
 - **Total reflection**
-  我使用 [Snell's law](https://www.wikiwand.com/en/Snell's_law) 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。
+  我使用 [Snell's law](https://www.wikiwand.com/en/Snell%27s_law) 計算折射後的新方向，在公式中，若發生全反射時會讓其中一項產生虛數，程式就整個爆炸了。
   所以記得要注意別把負數開根號了。
 
 
 ---
 
  註:
- [1] 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_(graphics))
+ [1] 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_\(graphics\))
  [2] A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995
 $$$$
