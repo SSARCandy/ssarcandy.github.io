@@ -12,7 +12,7 @@ tags:
 同樣的這種作法其實會發生在很多地方，比方說像是比對兩個字串是否一樣：在很多程式語言中的實作其實就是遍歷兩個字串比對每一個字元，那只要過程中有一個字元不一樣那這兩個字串肯定就是不一樣，即可提早返回結果。
 <!-- more -->
 
-底下是 C 的 `strcmp` 程式碼片段實作比較兩個字串是否一樣：
+底下是 C 的 `strcmp` [程式碼片段](https://code.woboq.org/userspace/glibc/string/strcmp.c.html)實作比較兩個字串是否一樣：
 
 ```cpp
 int strcmp(const char *p1, const char *p2)
