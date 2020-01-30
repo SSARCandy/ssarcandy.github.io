@@ -1,81 +1,33 @@
 'use strict';
 
-var _ = require('lodash');
-var lunr = require('lunr');
-var gaAnalytics = require("ga-analytics");
-
-
-hexo.extend.helper.register('lunr_index', function(data){
-  var index = lunr(function(){
-    this.field('tags', {boost: 50});
-    this.ref('id');
-  });
-
- data.forEach(function(item, i){
-    index.add(_.assign({id: i}, item));
-  });
-
-  return JSON.stringify(index.toJSON());
-});
-
-var rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/;
-
-/**
-* zoom tag
-*
-* Syntax:
-*   {% zoom /path/to/image [/path/to/thumbnail] [title] %}
-*/
-
-hexo.extend.tag.register('zoom', function(args){
-  var original = args.shift(),
-    thumbnail = '';
-
-  if (args.length && rUrl.test(args[0])){
-    thumbnail = args.shift();
-  }
-
-  var title = args.join(' ');
-
-  return '<div>' +
-    '<img src="' + (thumbnail || original) + '" alt="' + title + '" data-action="zoom">'+
-    '</div>';
-});
-
-
-var pv_map = {};
-var visitor_count = '';
-
-var date_formatter = function(d) {
-  var mm = d.getMonth() + 1; // getMonth() is zero-based
-  var dd = d.getDate();
-
-  return [d.getFullYear(), (mm > 9 ? '' : '0') + mm, (dd > 9 ? '' : '0') + dd].join('-');
-};
-
-gaAnalytics({
-  metrics: "ga:users",
+const _ = require('lodash');
+const lunr = require('lunr');
+const gaAnalytics = require('ga-analytics');
+const { date_formatter } = require('./util');
+const gaOptions = {
+  metrics: 'ga:users',
   clientId: process.env.GOOGLEAPI_CLIENTID,
   serviceEmail: process.env.GOOGLEAPI_EMAIL,
   key: process.env.GOOGLEAPI_KEY,
   ids: process.env.GOOGLEAPI_ANALYTICS_TABLE,
-  startDate: "2016-07-20",
+  startDate: '2016-07-20',
   endDate: date_formatter(new Date()),
-  dimensions: "ga:pagePath",
-  metrics: "ga:pageviews"
-}, function(err, res) {
+  dimensions: 'ga:pagePath',
+  metrics: 'ga:pageviews'
+};
+
+let pv_map = {};
+let visitor_count = '';
+gaAnalytics(gaOptions, (err, res) => {
   if (err) {
-    console.log(err)
+    console.log(err);
     return;
   }
 
-  for (var i = 0; i < res.rows.length; i++) {
-    var path = res.rows[i][0];
-    var pv = res.rows[i][1];
-
-    var splited = path.split('/');
+  for (let [path, pv] of res.rows) {
+    const splited = path.split('/');
     if (Number(splited[1]) && Number(splited[2]) && Number(splited[3])) {
-      var slug = splited[4].toLowerCase();
+      const slug = splited[4].toLowerCase();
       pv_map[slug] = (pv_map[slug] || 0) + Number(pv);
     }
   }
@@ -84,14 +36,50 @@ gaAnalytics({
   visitor_count = res.totalsForAllResults['ga:pageviews'];
 });
 
-hexo.extend.helper.register('visitor_count', function() {
+hexo.extend.helper.register('visitor_count', () => {
   return visitor_count;
 });
 
-hexo.extend.helper.register('post_pv', function(slug) {
+hexo.extend.helper.register('post_pv', (slug) => {
   return pv_map[slug.toLowerCase()] || 0;
 });
 
-hexo.extend.helper.register('format_number', function(x) { 
+hexo.extend.helper.register('format_number', (x) => { 
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+});
+
+hexo.extend.helper.register('lunr_index', data => {
+  const index = lunr(function() {
+    this.field('tags', { boost: 50 });
+    this.ref('id');
+
+    data.forEach((item, i) => {
+      this.add(_.assign({ id: i }, item));
+    });
+  });
+
+  return JSON.stringify(index.toJSON());
+});
+
+
+/**
+ * zoom tag
+ *
+ * Syntax:
+ *   {% zoom /path/to/image [/path/to/thumbnail] [title] %}
+ */
+const rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/;
+hexo.extend.tag.register('zoom', (args) => {
+  const original = args.shift();
+  
+  let thumbnail = '';
+  if (args.length && rUrl.test(args[0])) {
+    thumbnail = args.shift();
+  }
+
+  const title = args.join(' ');
+
+  return `<div>
+            <img src="${(thumbnail || original)}" alt="${title}" data-action="zoom">
+          </div>`;
 });
