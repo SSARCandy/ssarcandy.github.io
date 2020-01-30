@@ -12,15 +12,23 @@ tags:
 同樣的這種作法其實會發生在很多地方，比方說像是比對兩個字串是否一樣：在很多程式語言中的實作其實就是遍歷兩個字串比對每一個字元，那只要過程中有一個字元不一樣那這兩個字串肯定就是不一樣，即可提早返回結果。
 <!-- more -->
 
-可以用以下的 C++ 程式碼片段實作比較兩個字串是否一樣：
+底下是 C 的 `strcmp` 程式碼片段實作比較兩個字串是否一樣：
 
 ```cpp
-bool string_compare(std::string s1, std::string s2) {
-    // assume s1 and s2 have same length
-    for (auto i = 0; i < s1.size(); ++i) {
-        if (s1[i] != s2[i]) { return false; }
+int strcmp(const char *p1, const char *p2)
+{
+  const unsigned char *s1 = (const unsigned char *) p1;
+  const unsigned char *s2 = (const unsigned char *) p2;
+  unsigned char c1, c2;
+  do
+    {
+      c1 = (unsigned char) *s1++;
+      c2 = (unsigned char) *s2++;
+      if (c1 == '\0')
+        return c1 - c2;
     }
-    return true;
+  while (c1 == c2);
+  return c1 - c2;
 }
 ```
 
@@ -32,9 +40,14 @@ bool string_compare(std::string s1, std::string s2) {
 > Timing Attack 其實就是所謂的時間差攻擊。
 
 ```cpp
-for (auto i = 0; i < s1.size(); ++i) {
-    if (s1[i] != s2[i]) { return false; }
+do
+{
+  c1 = (unsigned char) *s1++;
+  c2 = (unsigned char) *s2++;
+  if (c1 == '\0')
+    return c1 - c2;
 }
+while (c1 == c2);
 ```
 
 再來看一下剛剛字串比對的實作中的迴圈，由於這個迴圈實作的關係我們可以知道不同字串比對其實會花不一樣的時間，這很合理因為有時候比較字串到一半的時候我們就已經知道這兩個字串不一樣，所以提早返回結果。
