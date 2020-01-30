@@ -30,9 +30,9 @@ var precacheUrls = [];
 
   precacheUrls.push('/2017/09/27/using-pytorch-in-windows/');
 
-  precacheUrls.push('/2018/01/15/use-pytorch-to-solve-fizzbuzz/');
-
   precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
+
+  precacheUrls.push('/2018/01/15/use-pytorch-to-solve-fizzbuzz/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
