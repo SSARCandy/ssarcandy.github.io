@@ -43,9 +43,10 @@ hexo.extend.tag.register('zoom', function(args){
 });
 
 
+var pv_map = {};
 var visitor_count = '';
 
-var date_formatter = function (d) {
+var date_formatter = function(d) {
   var mm = d.getMonth() + 1; // getMonth() is zero-based
   var dd = d.getDate();
 
@@ -62,15 +63,35 @@ gaAnalytics({
   endDate: date_formatter(new Date()),
   dimensions: "ga:pagePath",
   metrics: "ga:pageviews"
-}, function (err, res) {
-  if (err) return;
+}, function(err, res) {
+  if (err) {
+    console.log(err)
+    return;
+  }
+
+  for (var i = 0; i < res.rows.length; i++) {
+    var path = res.rows[i][0];
+    var pv = res.rows[i][1];
+
+    var splited = path.split('/');
+    if (Number(splited[1]) && Number(splited[2]) && Number(splited[3])) {
+      var slug = splited[4].toLowerCase();
+      pv_map[slug] = (pv_map[slug] || 0) + Number(pv);
+    }
+  }
+
+  console.table(pv_map);
   visitor_count = res.totalsForAllResults['ga:pageviews'];
 });
 
-hexo.extend.helper.register('visitor_count', function () {
+hexo.extend.helper.register('visitor_count', function() {
   return visitor_count;
 });
 
-hexo.extend.helper.register('format_number', function (x) { 
+hexo.extend.helper.register('post_pv', function(slug) {
+  return pv_map[slug.toLowerCase()] || 0;
+});
+
+hexo.extend.helper.register('format_number', function(x) { 
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 });

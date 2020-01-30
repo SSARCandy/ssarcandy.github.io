@@ -126,17 +126,6 @@ math:
   mathjax:
     src: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
-popularPosts:
-  # (optional) Popular posts options
-  googleAnalyticsAPI:
-    # clientId: *****.apps.googleusercontent.com # get it from google dev-console
-    # serviceEmail: *****@hexo-pv.iam.gserviceaccount.com  # get it from google dev-console
-    # key: /source/ga.pem
-    # viewId: 123456789 # get it from ga
-    expiresDate: 10
-    pvMeasurementsStartDate: 2016/07/20
-
-
 pwa:
   manifest:
     path: /manifest.json

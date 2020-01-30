@@ -5,11 +5,7 @@
     </div>
     <div class="post-meat" style="color:grey; font-size:13px;">
         <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
-        <% if (typeof popular_posts_pv !== 'undefined') { %>
-        	<%- format_number(popular_posts_pv()) %>
-        <% } else { %>
-            0
-        <% } %>
+       	<%- format_number(post_pv(post.slug)) %>
     </div>
     <div class="post-body">
         <div class="post-main">
