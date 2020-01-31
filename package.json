@@ -35,7 +35,7 @@
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
     "lodash": "^4.17.15",
-    "lunr": "^2.3.8",
+    "lunr": "^2.3.7",
     "npm-check": "^5.9.0"
   }
 }

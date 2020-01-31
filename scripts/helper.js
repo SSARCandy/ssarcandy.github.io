@@ -52,6 +52,7 @@ hexo.extend.helper.register('lunr_index', data => {
   const index = lunr(function() {
     this.field('tags', { boost: 50 });
     this.ref('id');
+    this.pipeline.remove(lunr.trimmer);
 
     data.forEach((item, i) => {
       this.add(_.assign({ id: i }, item));
