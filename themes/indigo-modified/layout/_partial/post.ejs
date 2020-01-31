@@ -27,8 +27,8 @@
   "@type": "Article",
   "mainEntityOfPage": "<%- post.permalink %>",
   "headline": "<%- post.title %>",
-  "datePublished": "<%- post.date %>",
-  "dateModified": "<%- post.date %>",
+  "datePublished": "<%- new Date(post.date) %>",
+  "dateModified": "<%- new Date(post.date) %>",
   "author": "SSARCandy",
   "image": {
     "@type": "ImageObject",
