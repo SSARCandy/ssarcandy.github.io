@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
 const lunr = require('lunr');
 const gaAnalytics = require('ga-analytics');
 const { date_formatter } = require('./util');
@@ -55,7 +54,7 @@ hexo.extend.helper.register('lunr_index', data => {
     this.pipeline.remove(lunr.trimmer);
 
     data.forEach((item, i) => {
-      this.add(_.assign({ id: i }, item));
+      this.add({ id: i, ...item});
     });
   });
 
