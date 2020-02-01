@@ -174,6 +174,15 @@
         var top = docEl.scrollTop;
         Blog.toc.fixed(top);
         Blog.toc.actived(top);
+
+        // is /tags page, highlight active tag
+        if (~w.location.pathname.indexOf('tags')) {
+          var special_case_map = { 'c': 'c++' };
+          var tagname = w.location.pathname.split('/')[2].replace('-', ' ');
+
+          tagname = special_case_map[tagname] || tagname;
+          highlightActiveTag(tagname);
+        }
     });
 
     w.addEventListener('resize', function() {

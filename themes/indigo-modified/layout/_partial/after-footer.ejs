@@ -16,6 +16,7 @@ var BLOG_SHARE = {
 <%- partial('post/share', {className: 'global-share'}) %>
 <% } %>
 
+<%- js('js/global') %>
 <% if (page.layout === 'works') { %>
     <%- js('js/lunr.min.js') %>
     <%- js('js/plugins') %>
