@@ -7,22 +7,6 @@
   var elementLen = elements.length;
   var index = lunr.Index.load(window.SEARCH_INDEX);
 
-  function addClass(elem, className){
-    var classList = elem.classList;
-
-    if (!classList.contains(className)){
-      classList.add(className);
-    }
-  }
-
-  function removeClass(elem, className){
-    var classList = elem.classList;
-
-    if (classList.contains(className)){
-      classList.remove(className);
-    }
-  }
-
   function search(value){
     var result = index.search(value);
     var len = result.length;
@@ -42,17 +26,18 @@
     }
   }
 
-  function displayAll(){
+  function displayAll() {
     for (var i = 0; i < elementLen; i++){
       addClass(elements[i], 'on');
     }
   }
 
-  function hashchange(){
+  function hashchange() {
     var hash = location.hash.substring(1);
     $input.value = hash;
 
-    if (hash){
+    if (hash) {
+      highlightActiveTag(hash);
       search(hash);
     } else {
       displayAll();
