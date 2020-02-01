@@ -3,7 +3,7 @@
         <div class="project-dummy"></div>
 
         <div class="project-img-container">
-            <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" alt='<%- project.description %>' class="preview" data-action="zoom">
+            <img src="<%- url_for('img/projects/' + project.name + '.jpg') %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
             <div class="project-centerer"></div>
         </div>
     </div>
