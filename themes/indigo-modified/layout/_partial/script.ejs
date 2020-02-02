@@ -21,3 +21,8 @@
 <% if (theme.turbolinks) { %>
 <%- js('js/turbolinks') %>
 <% } %>
+
+<% if (theme.swipe_guesture) { %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <%- js('js/guesture') %>
+<% } %>
