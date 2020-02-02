@@ -32,7 +32,7 @@
     "hexo-renderer-marked": "^2.0.0",
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
-    "hexo-tag-photozoom": "file:../hexo-tag-photozoom",
+    "hexo-tag-photozoom": "^1.0.0",
     "lunr": "^2.3.7",
     "npm-check": "^5.9.0"
   }
