@@ -74,6 +74,8 @@ deploy:
 
 photozoom:
   enable: true
+  caption: true
+  caption_class: zoom-initial-caption
 
 sitemap:
   path: sitemap.xml
