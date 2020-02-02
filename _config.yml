@@ -72,10 +72,8 @@ deploy:
   repo: git@github.com:SSARCandy/ssarcandy.github.io.git
   branch: master
 
-# add caption for iamges
-image_caption:
-  enable: true  # false to disable
-  class_name: image-caption #if you wanna customize the style for the caption, you can assign a class name, default is 'image-caption'
+photozoom:
+  enable: true
 
 sitemap:
   path: sitemap.xml
