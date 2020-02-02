@@ -14,39 +14,40 @@ image: /img/2016-07-29/2.PNG
 
 ## SSH KEY
 
-  矇著眼照做[那篇](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)，到這行:
+矇著眼照做[那篇](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)，到這行:
 
-  ```
-  $ travis encrypt-file ssh_key --add
-  ```
+```
+$ travis encrypt-file ssh_key --add
+```
 
-  這邊會幫你上傳 ssh_key 到 Travis 上，`--add`這個flag可以幫你插入解密指令到`.travis.yml`的`before_install`。
-  不過這 flag 真的很機車，會把你的`.travis.yml`排版全搞亂，順便把註解刪光光！
-  建議不要加`--add`自己手動插入解密指令，排版就不會亂掉。
-  而且用 Windows 的人會在解密文件時莫名失敗，所以只能用 Mac 或 Unix 環境做這件事([File decryption fails on Windows](https://github.com/travis-ci/travis-ci/issues/4746))，超雷...
+這邊會幫你上傳 ssh_key 到 Travis 上， `--add` 這個 flag 可以幫你插入解密指令到 `.travis.yml` 的 `before_install` 。
+不過這 flag 真的很機車，會把你的 `.travis.yml` 排版全搞亂，順便把註解刪光光！
+建議不要加 `--add` 自己手動插入解密指令，排版就不會亂掉。
+而且用 Windows 的人會在解密文件時莫名失敗，所以只能用 Mac 或 Unix 環境做這件事([File decryption fails on Windows](https://github.com/travis-ci/travis-ci/issues/4746))，超雷...
 
-  另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。
+另外，如果因某種天災人禍導致忘記或沒辦法用指令插入解密指令，還是可以上 Travis 上的設定中看到環境變數名稱。
 
-  {% zoom /img/2016-07-29/2.PNG repository > more options 可以設定、看到 Travis 的環境變數 %}
+{% zoom /img/2016-07-29/2.PNG repository > more options 可以設定、看到 Travis 的環境變數 %}
+
 
 ## USE SSH
 
-  Travis 是用 GitHub 的 [Deploy key](https://developer.github.com/guides/managing-deploy-keys/) 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC [那篇文章](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)做就可以了。
-  如果不幸在`hexo deploy`時遇到錯誤如下:
+Travis 是用 GitHub 的 [Deploy key](https://developer.github.com/guides/managing-deploy-keys/) 來存取 repository 的，關於如何產生以及設定 Deploy key 都照著 TC [那篇文章](https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/)做就可以了。
+如果不幸在`hexo deploy`時遇到錯誤如下:
 
-  ```
-  remote: Invalid username or password.
-  fatal: Authentication failed for "...."
-  ```
+```
+remote: Invalid username or password.
+fatal: Authentication failed for "...."
+```
   
-  那可以檢查一下 hexo 的`_config.yml` `deploy`的部分，要用 ssh 的形式設定 repository
+那可以檢查一下 hexo 的`_config.yml` `deploy`的部分，要用 ssh 的形式設定 repository
 
-  ```title: _config.yml
-  deploy:
-    type: git
-    repo: git@github.com:SSARCandy/ssarcandy.github.io.git
-    branch: master
-  ```
+```title: _config.yml
+deploy:
+  type: git
+  repo: git@github.com:SSARCandy/ssarcandy.github.io.git
+  branch: master
+```
 
 ## SETTING UP .travis.yml
 
@@ -104,5 +105,5 @@ branches:
   - cd ..
 ```
 
-`.deploy_git`是 hexo 會產生的資料夾，用於紀錄 git history，不過由於每次 clone 都是全新的，所以每次`.deploy_git`也都會是新的，這會導致每次更新都會是 forced-update。
+`.deploy_git` 是 hexo 會產生的資料夾，用於紀錄 git history，不過由於每次 clone 都是全新的，所以每次 `.deploy_git` 也都會是新的，這會導致每次更新都會是 forced-update。
 所以，複製一份 repo (at `master` branch)，並改名叫`.deploy_git`就是為了讓新產生出的靜態檔案可以有之前的 git history，就可以避免 forced-update。
