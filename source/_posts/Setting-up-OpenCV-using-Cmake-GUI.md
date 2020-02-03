@@ -10,7 +10,7 @@ image: /img/2016-07-23/2.png
 
 ### Build OpenCV
 
-1. <p>Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)</p>
+1. Download [OpenCV](https://github.com/Itseez/opencv) and [Cmake](https://cmake.org/)
 2. Build opencv with cmake
  {% zoom /img/2016-07-23/1.png Cmake configuration %}
  - Press `configure`, choose `visual studio 2015`, finish
