@@ -14,13 +14,12 @@
       var ny = post.date.year();
       var nm = post.date.month();
 
-      if(ny !== y || nm !== m) {
+      if(ny !== y) {
 
           y = ny;
           m = nm;
 %>
-        <h3 class="archive-separator"><%=dt.format('MMMM, YYYY')%></h3>
-
+        <h3 class="archive-separator"><%=dt.format('YYYY')%></h3>
 <%    } %>
 
      <%- partial('_partial/archive', {post: post}) %>
