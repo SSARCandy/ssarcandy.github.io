@@ -218,13 +218,20 @@
         Blog.share();
     }
 
+    var archive_articles = d.getElementsByClassName('archive-article');
+    for (var i = 0; i < archive_articles.length; i++) {
+      archive_articles[i].onclick = function () {
+        w.location.href = this.getAttribute('to');
+      };      
+    }
+
     Waves.init();
     Waves.attach('.global-share li', ['waves-block']);
     Waves.attach('.article-tag-list-link, #page-nav a, #page-nav span', ['waves-button']);
 
-    document.body.oncopy = function (e) {
-        var origin_text = window.getSelection();
-        var notice_text = origin_text.toString().length > 20 ? '\n\nSource: ' + window.location.href + '\n' : '';
+    d.body.oncopy = function (e) {
+        var origin_text = w.getSelection();
+        var notice_text = origin_text.toString().length > 20 ? '\n\nSource: ' + w.location.href + '\n' : '';
 
         e.clipboardData.setData('text/plain', origin_text + notice_text);
 
