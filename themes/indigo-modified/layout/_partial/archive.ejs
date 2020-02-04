@@ -1,11 +1,9 @@
-<article class="archive-article">
+<article to="<%- url_for(post.path) %>" class="archive-article waves-effect waves-block">
   <div class="archive-article-date">
     <%- partial('post/date', { post: post, date_format: 'MMM D'}) %>
   </div>
   <div class="archive-article-inner">
-    <%- partial('post/title', {
-      hasLink: true
-    }) %>
+    <%- partial('post/title', { hasLink: false }) %>
   </div>
   <%- partial('post/tag') %>
 </article>
