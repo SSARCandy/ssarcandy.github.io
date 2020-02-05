@@ -53,20 +53,19 @@
     &::after {
         content: "";
         position: absolute;
-        width: 100%;
+        width: 0%;
         height: 2px;
         bottom: 0;
         left: 0;
         background-color: @color;
         visibility: hidden;
-        .transform(scaleX(0));
-        .transition(.4s);
+        .transition(.25s, cubic-bezier(0.0, 0.0, 0.2, 1));
     }
 
     &:hover::after,
     &:active::after {
         visibility: visible;
-        .transform(scaleX(1));
+        width: 100%;
     }
 
 }
