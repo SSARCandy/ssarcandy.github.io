@@ -74,6 +74,7 @@ deploy:
 
 photozoom:
   enable: true
+  priority: 100
   caption: true
   caption_class: zoom-initial-caption
 
