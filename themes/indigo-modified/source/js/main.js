@@ -112,37 +112,20 @@
         })(),
         share: function() {
 
-            var share = d.getElementById('global-share'),
-                menuShare = d.getElementById('menu-share'),
-                div = d.createElement('div'),
-                sns = d.getElementsByClassName('share-sns'),
-                summary, api;
-
-            div.innerHTML = BLOG_SHARE.summary;
-            summary = div.innerText;
-            div = undefined;
-
-            api = 'http://www.jiathis.com/send/?webid={service}&url=' + BLOG_SHARE.url + '&title=' + BLOG_SHARE.title + '&summary=' + summary + '&pic=' + location.protocol + '//' + location.host + BLOG_SHARE.pic;
-
-            function goShare(service) {
-                w.open(encodeURI(api.replace('{service}', service)));
-            }
+            var share = d.getElementById('global-share');
+            var menuShare = d.getElementById('menu-share');
 
             function show() {
                 mask.classList.add('in');
+                mask.classList.add('hide');
                 share.classList.add('in');
             }
 
             function hide() {
                 share.classList.remove('in');
                 mask.classList.remove('in');
+                mask.classList.remove('hide');
             }
-
-            [].forEach.call(sns, function(el) {
-                el.addEventListener('click', function() {
-                    goShare(this.dataset.service);
-                }, false);
-            });
 
             menuShare.addEventListener(even, function() {
                 show();
