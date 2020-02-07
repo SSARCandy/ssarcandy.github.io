@@ -4,7 +4,6 @@
 
 .share-icons {
     li {
-        // display: inline-block
         width: 140px;
         padding: 0 16px;
     }
@@ -35,8 +34,6 @@
     right: 10px;
     z-index: 96;
     padding: 8px 0;
-    // width: 260px;
-    // padding: 16px  6px;
     background: #fff;
     border-radius: 3px;
     visibility: hidden;
@@ -58,44 +55,27 @@
         display: none
     }
 
-    // li {
-    //     // width: 80px;
-    //     // text-align: center;
-    // }
-
-
     a {
         position: relative;
         width: 40px;
         height: 40px;
         line-height: 40px;
-        // margin-bottom: 20px;
         font-size: 1.33333333em;
         &:after {
             position: absolute;
-            // bottom: -22px;
-            // left: 50%;
             content: attr(data-title);
             white-space: nowrap;
-            // line-height: 20px;
             font-size: 12px;
             left: 40px;
             color: #757575;
-            // .transform(translateX(-50%));
         }
-
     }
-
 }
 
 .post-share {
     margin-bottom: 24px;
     padding: 8px 12px;
     background: #eee;
-
-    // .tit {
-    //     margin-bottom: .5em;
-    // }
 
     .share-icons {
         a {
@@ -104,12 +84,7 @@
             line-height: 24px;
             .tip();
 
-            // &:before {
-            //     content: '分享到'attr(data-title)
-            // }
-
         }
-
     }
 
     li {
@@ -118,6 +93,4 @@
             margin-left: 0;
         }
     }
-
-
 }
