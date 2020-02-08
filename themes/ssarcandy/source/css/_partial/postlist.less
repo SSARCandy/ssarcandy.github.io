@@ -76,7 +76,7 @@
 }
 
 .active-tag {
-    color: #fff !important;
+    color: @textPrimaryColor !important;
     background: @accentColor !important;
 }
 
@@ -85,14 +85,14 @@
     padding: 0px 10px;
     line-height: 20px;
     font-size: 13px;
-    color: @secondaryTextColor;
-    background: #e8e8e8;
+    color: @primaryTextColor;
+    background: @borderColor;
     border-radius: 5px;
 
     &:hover,
     &:active {
         font-size: 13px;
-        color: #fff;
+        color: @textPrimaryColor;
         background: @accentColor;
     }
 }
