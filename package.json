@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "npx hexo generate",
-    "build": "npx hexo generate",
+    "build": "npx hexo clean && npx hexo generate",
     "clean": "npx hexo clean",
     "deploy": "npx hexo deploy",
     "dev": "npx hexo server --debug",

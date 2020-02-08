@@ -74,7 +74,7 @@ deploy:
 
 photozoom:
   enable: true
-  priority: 100
+  priority: 1
   caption: true
   caption_class: zoom-initial-caption
 
@@ -97,13 +97,10 @@ hfc_css:
 hfc_useref:
   enable: true
   concat: true
-  exclude: 
 
 hfc_js:
   enable: true
   mangle: true
-  output:
-  compress:
   exclude: 
     - '*.min.js'
 

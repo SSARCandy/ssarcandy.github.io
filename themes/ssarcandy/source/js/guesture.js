@@ -21,10 +21,10 @@
     var final_y = e.srcEvent.pageY || e.srcEvent.screenY || 0;
 
     return {
-      delta_x,
-      delta_y,
-      final_x,
-      final_y,
+      delta_x: delta_x,
+      delta_y: delta_y,
+      final_x: final_x,
+      final_y: final_y,
       x: final_x - delta_x,
       y: final_y - delta_y,
     }
