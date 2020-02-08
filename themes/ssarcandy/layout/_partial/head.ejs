@@ -38,7 +38,7 @@
    }
   %>
   <meta name="keywords" content="<%= keyWords %>">
-  <%- open_graph({}) %>
+  <%- open_graph({ image: page_images(page, [theme.avatar]) }) %>
   
   <% if (theme.rss){ %>
     <link rel="alternative" href="<%- theme.rss %>" title="<%= config.title %>" type="application/atom+xml">

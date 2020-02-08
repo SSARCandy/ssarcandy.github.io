@@ -60,3 +60,25 @@ hexo.extend.helper.register('lunr_index', data => {
 
   return JSON.stringify(index.toJSON());
 });
+
+/**
+ * Generate images path in specified "page", and append additional image paths.
+ */
+hexo.extend.helper.register('page_images', (page, additional_imgs) => {
+  const { content } = page;
+  let images = [];
+
+  if (!images.length && content) {
+    images = images.slice();
+
+    if (content.includes('<img')) {
+      let img;
+      const imgPattern = /<img [^>]*src=['"]([^'"]+)([^>]*>)/gi;
+      while ((img = imgPattern.exec(content)) !== null) {
+        images.push(img[1]);
+      }
+    }
+  }
+
+  return images.concat(additional_imgs);
+});
