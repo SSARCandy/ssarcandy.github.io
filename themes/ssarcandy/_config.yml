@@ -1,13 +1,9 @@
-# hexo-theme-indigo
-# https://github.com/yscoder/hexo-theme-indigo
-
-#添加新菜单项遵循以下规则
 # menu:
-#  link:               fontawesome or material-icon 图标
-#    type: 'fa' / 'ml' 哪個系列的圖示 
-#    text: About       菜单显示的文字，如果省略即默认与图标一致，首字母会转大写
-#    url: /about       链接，绝对或相对路径，必须。
-#    target: _blank    是否跳出，省略则在当前页面打开
+#  link:               fontawesome or material-icon.
+#    type: 'fa' / 'ml' Icon set. fa => font-awesome, ml => material design
+#    text: About       The lanel show on menu.
+#    url: /about       Link url
+#    target: _blank    Open new tab or not
 menu:
   person:
     type: ml
@@ -50,16 +46,11 @@ social_links:
     target: _blank
 
 rss: /atom.xml
-
-#你的头像url
 avatar: /img/logo.png
-
-# email
 email: ssarcandy@gmail.com
-
 motto: There is always more than one solution.
 
-# 设置 Android L Chrome 浏览器状态栏颜色
+# Android Chrome status bar color
 color: '#673AB7'
 
 # Content
@@ -69,26 +60,20 @@ tags:
 excerpt_link: more
 mathjax: false
 archive_yearly: true
-
-#是否开启分享
 share: true
-
-#是否开启搜索
 search: true
 
-#是否啟用 turbolinks.js (issue #21)
+# Use turbolinks.js (issue #21)
 turbolinks: false 
 
-#是否大屏幕下文章页隐藏导航
+# Hide meus when screen width is wide
 hideMenu: true
 
 adsense: false
 
-#是否开启toc
 #toc: true
 toc:
-  list_number: false  # 是否显示数字排序
-
+  list_number: false 
 
 # Miscellaneous
 google_analytics: 'UA-81178870-1'
