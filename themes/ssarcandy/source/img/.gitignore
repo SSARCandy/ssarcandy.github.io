@@ -1,4 +1,4 @@
-*.png
-*.ico
-*.xml
-*.json
+android*.png
+apple*.png
+favicon*.png
+mstile*.png
