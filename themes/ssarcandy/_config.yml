@@ -69,7 +69,7 @@ turbolinks: false
 # Hide meus when screen width is wide
 hideMenu: true
 
-adsense: false
+adsense: true
 
 #toc: true
 toc:
