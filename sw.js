@@ -26,13 +26,13 @@ var precacheUrls = [];
 
   precacheUrls.push('/2017/04/23/migrate-to-gmail-using-migration-tool/');
 
+  precacheUrls.push('/2019/03/16/Setup-Slurm-Cluster/');
+
   precacheUrls.push('/2019/08/12/Ways-to-Access-Internal-Network/');
 
+  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
+
   precacheUrls.push('/2020/01/29/timing-attack/');
-
-  precacheUrls.push('/2019/10/02/game-design-from-perspective-of-hacker/');
-
-  precacheUrls.push('/2017/05/26/panorama-image-stitching/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
