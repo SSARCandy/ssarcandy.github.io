@@ -8,13 +8,14 @@
   "scripts": {
     "start": "./node_modules/.bin/hexo generate",
     "build": "./node_modules/.bin/hexo generate",
+    "clean": "./node_modules/.bin/hexo clean",
     "deploy": "./node_modules/.bin/hexo deploy",
     "dev": "./node_modules/.bin/hexo server --debug",
     "check": "./node_modules/.bin/npm-check -u"
   },
   "dependencies": {
     "ga-analytics": "0.0.7",
-    "hexo": "^4.1.1",
+    "hexo": "~4.1.1",
     "hexo-cli": "^3.1.0",
     "hexo-deployer-git": "^2.1.0",
     "hexo-filter-cleanup": "^1.2.2",
