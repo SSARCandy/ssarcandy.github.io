@@ -6,12 +6,12 @@
     "version": "4.1.1"
   },
   "scripts": {
-    "start": "./node_modules/.bin/hexo generate",
-    "build": "./node_modules/.bin/hexo generate",
-    "clean": "./node_modules/.bin/hexo clean",
-    "deploy": "./node_modules/.bin/hexo deploy",
-    "dev": "./node_modules/.bin/hexo server --debug",
-    "check": "./node_modules/.bin/npm-check -u"
+    "start": "npx hexo generate",
+    "build": "npx hexo generate",
+    "clean": "npx hexo clean",
+    "deploy": "npx hexo deploy",
+    "dev": "npx hexo server --debug",
+    "check": "npx npm-check -u"
   },
   "dependencies": {
     "ga-analytics": "0.0.7",
