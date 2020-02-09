@@ -46,12 +46,12 @@ hexo.extend.tag.register('zoom', (args) => {
 # Move to Seperate Module
 
 原本的作法是直接在 layout 中引用 `zoom.{js,css}` library，這當然可行，但當要把這功能模組化時，是沒辦法直接接觸 layout 的 (除非你要在 readme 裡面叫使用者自己引用...)，所以必須要有個方式把這些必要的外部資源塞進去使用者的 html 裡面。
-關於這段「如何把外部資源塞到使用者的靜態檔中」，我參考了其他 plugin 的做法，發現大笨份都是使用 `hexo.extend.generator` 來達成。不過我最後選擇其他做法來完成這件事。
+關於這段「如何把外部資源塞到使用者的靜態檔中」，我參考了其他 plugin 的做法，發現大部份都是使用 `hexo.extend.generator` 來達成。不過我最後選擇其他做法來完成這件事。
 
 ## Use Hexo Generator
 
 Hexo 在編譯資源時，提供多種方式註冊自己的程式，來達到高度客製化。
-其中 `Generator` 是用來產生檔案對應的路由，所以 `Generator` 都是回傳 `{ path: 'foo', data: 'foo' }` 的格式，代表者 path 對應的 data 是什麼。
+其中 `Generator` 是用來產生檔案對應的路由，所以 `Generator` 都是回傳 `{ path: 'foo', data: 'foo' }` 的格式，代表著 path 對應的 data 是什麼。
 透過 `Generator` 可以做到 copy file 的功能，官方網站也有提供[範例](https://hexo.io/api/generator.html#Copy-Files)，再搭配註冊 tag ，就可以達成動態插入必要的外部資源。
 
 ```js
