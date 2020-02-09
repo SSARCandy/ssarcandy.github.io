@@ -1,6 +1,5 @@
 'use strict';
 
-const lunr = require('lunr');
 const gaAnalytics = require('ga-analytics');
 const { date_formatter } = require('./util');
 const gaOptions = {
@@ -45,20 +44,6 @@ hexo.extend.helper.register('post_pv', (slug) => {
 
 hexo.extend.helper.register('format_number', (x) => { 
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-});
-
-hexo.extend.helper.register('lunr_index', data => {
-  const index = lunr(function() {
-    this.field('tags', { boost: 50 });
-    this.ref('id');
-    this.pipeline.remove(lunr.trimmer);
-
-    data.forEach((item, i) => {
-      this.add({ id: i, ...item});
-    });
-  });
-
-  return JSON.stringify(index.toJSON());
 });
 
 /**
