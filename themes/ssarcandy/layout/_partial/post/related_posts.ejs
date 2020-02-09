@@ -3,11 +3,11 @@ var kw = post.tags.data.map(t => t.name).join(' ');
 var related_posts = lunr_related_posts(site.posts.data, kw);
 related_posts = JSON.parse(related_posts);
 %>
-<div>相關文章</div>
+<div class="article related-post-label">相關文章</div>
 <ul>
 <% for (var i=0; i < related_posts.length; i++) { %>
   <li>
-      <a href="<%- url_for(related_posts[i].path) %>" class="post-title"><%= related_posts[i].title %></a>
+      <a href="<%- url_for(related_posts[i].path) %>" class="post-title related-post"><%= related_posts[i].title %></a>
   </li>
 <% } %>
 </ul>
