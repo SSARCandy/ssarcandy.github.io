@@ -1,3 +1,13 @@
+- name: hexo-tag-photozoom
+  title: Hexo Photo Zoom
+  description: 'A hexo tag plugin for image zooming, with a zooming effect similar to Medium.'
+  github: https://github.com/SSARCandy/hexo-tag-photozoom
+  download: https://www.npmjs.com/package/hexo-tag-photozoom
+  preview: https://ssarcandy.tw/2020/02/09/develop-hexo-plugin/
+  img_ext: .gif
+  tags:
+    - Node.js
+
 - name: Breakout_env
   title: Breakout environment
   description: 'An OpenAI gym like Breakout environment but with more configurable options.'
