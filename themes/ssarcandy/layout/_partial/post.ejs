@@ -12,8 +12,9 @@
             <div class="post-content" id="post-content" itemprop="postContent">
             <%- post.content %>
             </div>
+            <hr/>
+            <%- partial('post/related_posts') %>
             <%- partial('post/nav') %>
-            
             <%- partial('post/comment') %>
         </div>
     </div>
