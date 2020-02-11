@@ -90,6 +90,3 @@ less:
 
 # swipe guesture using hammer.js
 swipe_guesture: false
-
-floating_btn:
-  enable: false
