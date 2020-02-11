@@ -73,7 +73,7 @@ adsense:
   enable: true
   slot:
     post_bottom: true
-    archive_list: true
+    archive_list: false
 
 #toc: true
 toc:
@@ -90,3 +90,6 @@ less:
 
 # swipe guesture using hammer.js
 swipe_guesture: false
+
+floating_btn:
+  enable: false
