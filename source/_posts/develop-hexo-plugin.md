@@ -81,7 +81,7 @@ hexo.extend.tag.register('zoom', (args) => {
 如此一來，每當使用者插入 `{% raw %}{% zoom %}{% endraw %}` 時，就會被展開成包含 include 外部資源的 html code，來達成目的。
 
 
-## Use Hexo Filer Inject Code
+## Use Hexo Filter Inject Code
 
 然而剛剛的方式有些小缺點，比方說當使用者插入很多 `{% raw %}{% zoom %}{% endraw %}` 的 tag 時，就會出現很多重複引用的程式碼，感覺也是怪怪的。
 所以我最後利用另一種方式達到塞 code 的效果 － `Filter`。
