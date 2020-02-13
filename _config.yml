@@ -119,11 +119,6 @@ hfc_img:
   optipng: true
   svgo: true
 
-math:
-  engine: 'mathjax' # or 'katex'
-  mathjax:
-    src: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-
 pwa:
   manifest:
     path: /manifest.json

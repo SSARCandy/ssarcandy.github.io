@@ -58,7 +58,7 @@ tags:
   title: 標籤
 
 excerpt_link: more
-mathjax: false
+mathjax: true
 archive_yearly: true
 share: true
 search: true
