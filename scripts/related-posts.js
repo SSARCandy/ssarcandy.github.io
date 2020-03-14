@@ -28,5 +28,5 @@ hexo.extend.helper.register('lunr_related_posts', (data, kw, result_len = 5) => 
   const related_posts = index.search(kw).map(r => filtered_data[r.ref]);
 
   // slice from 1 because first one always is itself.
-  return JSON.stringify(related_posts.slice(1, result_len + 1));
+  return JSON.stringify(related_posts.slice(0, result_len + 1));
 })
