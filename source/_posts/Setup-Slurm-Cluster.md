@@ -3,6 +3,8 @@ title: Setup Slurm Cluster
 date: 2019-03-16 23:06:53
 tags:
 - unix
+- slurm
+- note
 ---
 
 Slurm 是一個專門拿來做分散式平行運算的平台，已被各式超級運算電腦群集採用<sup>[1]</sup>。跟 Hadoop 其實有點像，但是我個人感覺是 Slurm 好用太多，更穩定更快速，而且不用會 Java...XD
@@ -34,10 +36,12 @@ $ killall munged; usermod munge -u 150; groupmod -g 150 munge; chown munge:munge
 
 # Setup Slurm Controller
 
-從 apt-get 安裝：
+下載原始碼來編譯然後安裝
 
 ```sh
-$ sudo apt-get install slurm-wlm slurm-wlm-basic-plugins
+cd /tmp; wget https://download.schedmd.com/slurm/slurm-18.08.2.tar.bz2; tar xvjf slurm-18.08.2.tar.bz2; cd slurm-18.08.2/
+(./configure --prefix=/usr && make && make install) | tee /tmp/slurm.setup.log 2>&1
+
 ```
 
 雖然 `apt-get install slurm` 有東西，但那個不是對的...
@@ -45,8 +49,14 @@ $ sudo apt-get install slurm-wlm slurm-wlm-basic-plugins
 安裝好以後，可以透過一個網頁來設定基本的 config 檔，預設位置在 `/usr/share/doc/slurmctld/slurm-wlm-configurator.html`，設定好以後存檔並放至 `/etc/slurm-llnl/slurm.conf`。記得更改權限。然後就可以啟用。
 
 ```sh
-$ sudo chown slurm /var/lib/slurm-llnl/slurmctld
-$ sudo /etc/init.d/slurmctld start
+# set slurmctld & slurmdbd auto start via systemd (only for the controller)
+cp /tmp/slurm-18.08.2/etc/slurmctld.service /lib/systemd/system/slurmctld.service
+cp /tmp/slurm-18.08.2/etc/slurmdbd.service /lib/systemd/system/slurmdbd.service
+systemctl daemon-reload                  # force systemd reload unit
+systemctl enable slurmdbd slurmctld      # force slurmdbd & slurmctld start after the machine is ready
+systemctl start slurmdbd slurmctld       # start slurmdbd & slurmctld
+systemctl status slurmdbd slurmctld      # check slurmdbd & slurmctld status
+systemctl is-enabled slurmdbd slurmctld  # check slurmdbd & slurmctld enabled
 ```
 
 # Setup Slurm Compute Nodes
@@ -78,6 +88,14 @@ $ (./configure && make && make install) | tee /tmp/slurm.setup.log 2>&1
 $ mkdir /usr/etc /var/spool/slurmctld /var/spool/slurmd
 $ scp controller:/usr/etc/slurm.conf /usr/etc/slurm.conf
 $ useradd slurm; usermod slurm -u 151; groupmod -g 151 slurm; chown slurm:slurm -R /var/log/slurm* /run/slurm* /var/lib/slurm* /etc/slurm* /var/spool/slurm*
+
+# set slurmd auto start via system (for the controller and workers)
+cp /tmp/slurm-18.08.2/etc/slurmd.service /lib/systemd/system/slurmd.service
+systemctl daemon-reload     # force systemd reload unit
+systemctl enable slurmd     # force slurmd start when the machine is ready.
+systemctl start slurmd      # start slurmd
+systemctl status slurmd     # check slurmd status
+systemctl is-enabled slurmd # check slurmd enabled 
 ```
 
 到此基本完成 Slurm Cluster 的設定，可以透過一些指令來檢查 slurm 的狀態。
