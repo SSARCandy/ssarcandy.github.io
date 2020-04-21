@@ -123,7 +123,7 @@ cloud-slurm-login0             compute.v1.instance  COMPLETED  []
 
 {% zoom /img/2020-04-22/3.png 完成後可以在 console 上看到 %}
 
-接下來就可以登入試試，可以看到 `slurm_nfs` 也有掛載在上面：
+待一切就序之後就可以登入試試，可以看到 `slurm_nfs` 也有掛載在上面：
 
 ```sh
 $ gcloud compute ssh cloud-slurm-login0 --zone=asia-east1-b
@@ -162,8 +162,6 @@ fast*        up   infinite    100  idle~ cloud-slurm-compute-0-[0-99]
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=10:00
-#SBATCH --mem-per-cpu=100
 f=`hostname`
 rand=`head /dev/urandom | tr -dc A-Z | head -c 5 ; echo ''`
 sync && dd if=/dev/zero of=/j/root/testfile_${f}_${rand} bs=10M count=100 oflag=direct 2>&1 | cat
@@ -172,15 +170,15 @@ sync && dd if=/dev/zero of=/j/root/testfile_${f}_${rand} bs=10M count=100 oflag=
 然後透過 sbatch 發 jobs，關於 slurm 用法可參考這個[小抄](https://slurm.schedmd.com/pdfs/summary.pdf)
 
 ```sh
-# send 10 parallel jobs that write file to NFS
-$ for i in `seq 5`; do sbatch slurm_filewriter ; done
+# send 5 parallel jobs that write file to NFS
+$ for i in `seq 5`; do sbatch slurm_filewriter.sh ; done
 Submitted batch job 203
 Submitted batch job 204
 Submitted batch job 205
 Submitted batch job 206
 Submitted batch job 207
  
-# after squeue shows no job, can see that file has been written to NFS
+# after squeue shows no job, can see that files has been written to NFS
 $ ls -1 /j/root
 testfile_cloud-slurm-compute-0-0_CIDCR
 testfile_cloud-slurm-compute-0-0_GKCQM
