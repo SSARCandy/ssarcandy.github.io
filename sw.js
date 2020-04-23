@@ -30,9 +30,9 @@ var precacheUrls = [];
 
   precacheUrls.push('/2017/12/06/javascript-prototype-chain/');
 
-  precacheUrls.push('/2016/12/25/MSAuto/');
+  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
 
-  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
+  precacheUrls.push('/2017/09/27/using-pytorch-in-windows/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
