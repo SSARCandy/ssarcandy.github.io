@@ -35,7 +35,7 @@
     "hexo-server": "^1.0.0",
     "hexo-tag-photozoom": "^1.0.2",
     "lunr": "^2.3.7",
-    "npm-check": "^5.9.0"
+    "npm-check": "^5.9.2"
   },
   "devDependencies": {
     "hexo-browsersync": "^0.3.0"
