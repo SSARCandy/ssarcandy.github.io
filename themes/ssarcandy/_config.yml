@@ -73,7 +73,7 @@ adsense:
   enable: true
   slot:
     post_bottom: true
-    post_toc: true
+    post_toc: false
     archive_list: false
 
 #toc: true
