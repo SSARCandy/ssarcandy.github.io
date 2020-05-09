@@ -1,16 +1,17 @@
-<article id="<%= post.layout %>-<%= post.slug %>" 
-  class="article article-type-<%= post.layout %>" itemprop="blogPost">
-    <div class="post-meat flex-row">
-        <%- partial('post/tag') %>
-    </div>
-    <div class="post-meat" style="color:grey; font-size:13px;">
-        <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
-       	<%- format_number(post_pv(post.slug)) %>
-    </div>
+<article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemprop="blogPost">
     <div class="post-body">
         <div class="post-main">
-            <div class="post-content" id="post-content" itemprop="postContent">
-            <%- post.content %>
+            <div class="post-content-style">
+              <div class="post-meat flex-row">
+                  <%- partial('post/tag') %>
+              </div>
+              <div class="post-meat" style="color:grey; font-size:13px; margin-bottom: 30px;">
+                  <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
+                  <%- format_number(post_pv(post.slug)) %>
+              </div>
+              <div class="post-content" id="post-content" itemprop="postContent">
+                <%- post.content %>
+              </div>
             </div>
             <hr/>
             <%- partial('post/related_posts') %>
