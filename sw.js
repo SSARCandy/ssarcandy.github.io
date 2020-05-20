@@ -28,11 +28,11 @@ var precacheUrls = [];
 
   precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
 
-  precacheUrls.push('/2018/08/18/mbpr2015-repair/');
+  precacheUrls.push('/2017/12/06/javascript-prototype-chain/');
 
-  precacheUrls.push('/2017/05/26/panorama-image-stitching/');
+  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
 
-  precacheUrls.push('/2017/09/27/using-pytorch-in-windows/');
+  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
