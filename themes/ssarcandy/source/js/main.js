@@ -2,8 +2,6 @@
 
     var body = d.body,
         $ = d.querySelector.bind(d),
-        $$ = d.querySelectorAll.bind(d),
-        gotop = d.getElementById('gotop'),
         menu = d.getElementById('menu'),
         main = d.getElementById('main'),
         header = d.getElementById('header'),
@@ -34,22 +32,6 @@
         docEl = ua.indexOf('Edge') == -1 ? d.documentElement : body;
 
     var Blog = {
-        goTop: function() {
-            var top = docEl.scrollTop;
-            if (top > 400) {
-                docEl.scrollTop = top - 400;
-                animate(arguments.callee);
-            } else {
-                docEl.scrollTop = 0;
-            }
-        },
-        toggleGotop: function(top) {
-            if (top > w.innerHeight / 2) {
-                gotop.classList.add('in');
-            } else {
-                gotop.classList.remove('in');
-            }
-        },
         toggleMenu: function(flag) {
             if (flag) {
                 menu.classList.remove('hide');
@@ -171,10 +153,6 @@
         Blog.toggleMenu();
     });
 
-    gotop.addEventListener(even, function() {
-        animate(Blog.goTop);
-    }, false);
-
     menuToggle.addEventListener(even, function(e) {
         Blog.toggleMenu(true);
         e.preventDefault();
@@ -191,15 +169,12 @@
 
     d.addEventListener('scroll', function() {
         var top = docEl.scrollTop;
-        Blog.toggleGotop(top);
         Blog.fixedHeader(top);
         Blog.toc.fixed(top);
         Blog.toc.actived(top);
     }, false);
 
-    if (typeof BLOG_SHARE !== 'undefined') {
-        Blog.share();
-    }
+    Blog.share();
 
     var archive_articles = d.getElementsByClassName('archive-article');
     for (var i = 0; i < archive_articles.length; i++) {
