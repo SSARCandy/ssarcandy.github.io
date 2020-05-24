@@ -1,5 +1,6 @@
 <div style="padding: 0 16px;">
     <div class="about-intro">
+        <h3><%- __('about.introduction') %></h3>
         <%- page.content %>
     </div>
 
@@ -9,7 +10,7 @@
     %>
     <div class="about-container">
         <div class="about-exp">
-            <h3>Experiences</h3>
+            <h3><%- __('about.experience') %></h3>
             <table>
             <% for (i in work) { %>
                 <tr>
@@ -28,7 +29,7 @@
             </table>
         </div>
         <div class="about-exp">
-            <h3>Educations</h3>
+            <h3><%- __('about.education') %></h3>
             <table>
             <% for (i in edu) { %>
                 <tr>

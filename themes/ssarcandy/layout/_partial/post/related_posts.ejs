@@ -3,7 +3,7 @@ var kw = post.tags.data.map(t => t.name).join(' ');
 var related_posts = lunr_related_posts(site.posts.data, kw, 5);
 related_posts = JSON.parse(related_posts);
 %>
-<div class="article related-post-label">相關文章</div>
+<div class="article related-post-label"><%- __('post.related_post') %></div>
 <ul style="padding: 0px;">
 <% for (var i=0; i < related_posts.length; i++) { %>
   <% if (related_posts[i].title !== post.title) { %>

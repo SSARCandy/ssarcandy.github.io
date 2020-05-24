@@ -1,0 +1,29 @@
+menu:
+    about: About
+    post: Post
+    archive: Archives
+    project: Projects
+    github: Github
+    total_visitor: Total visitors
+
+about:
+    introduction: Introduction
+    experience: Experiences
+    education: Educations
+
+page:
+    next: Next
+    prev: Prev
+
+post:
+    title: Posts
+    read_more: Read More...
+    toc_title: Contents
+    related_post: Related Posts
+
+project:
+    title: Projects
+    intro: Here listed my open source projects.
+    
+archive:
+    title: Archives

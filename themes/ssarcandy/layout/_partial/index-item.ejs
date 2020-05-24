@@ -15,7 +15,7 @@
         <%- post.content %>
     <% } %>
     </div>
-    <a href="<%- url_for(post.path) %>" class="article post-title-link">Read More...</a>
+    <a href="<%- url_for(post.path) %>" class="article post-title-link"><%- __('post.read_more') %></a>
     <hr/>
     <%- partial('post/tag') %>
 </article>

@@ -1,29 +1,30 @@
 # menu:
 #  link:               fontawesome or material-icon.
 #    type: 'fa' / 'ml' Icon set. fa => font-awesome, ml => material design
-#    text: About       The lanel show on menu.
+#    text: About       The label show on menu (using :lang.yml file).
 #    url: /about       Link url
 #    target: _blank    Open new tab or not
 menu:
   person:
     type: ml
-    text: About
+    text: menu.about
     url: /about
   description:
     type: ml
-    text: Posts
+    text: menu.post
     url: /
     # turbo: false
   view_list:
     type: ml
-    text: Archives
+    text: menu.archive
     url: /archives
   code:
     type: ml
-    text: Projects
+    text: menu.project
     url: /projects
   github:
     type: fa
+    text: menu.github
     url: https://github.com/SSARCandy
     target: _blank
 
