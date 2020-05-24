@@ -26,7 +26,7 @@
             <% } else { %>
               <i class="icon icon-lg icon-<%= i %>"></i>
             <% } %>
-            <span><%-(menuItem.text || _.startCase(i)) %></span>
+            <span><%- (__(menuItem.text) || _.startCase(i)) %></span>
           </a>
         </li>
     <% } %>
