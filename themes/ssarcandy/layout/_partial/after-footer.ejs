@@ -1,23 +1,11 @@
 <div class="mask" id="mask"></div>
 
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light" aria-label="go to top" style="display: none">
-    <i class="material-icons icon icon-lg" style="font-size: 36px;">arrow_upward</i>
-</a>
+<%- js('js/global') %>
 
-<% if(theme.share){ %>
-<script>
-var BLOG_SHARE = {
-    title: "<%-(page.title || config.title) %>",
-    pic: "<%=theme.avatar %>",
-    summary: document.getElementsByName('summary')[0].content,
-    url: "<%=url %>"
-};
-</script>
-
-<%- partial('post/share', {className: 'global-share'}) %>
+<% if (theme.share) { %>
+    <%- partial('post/share', { className: 'global-share' }) %>
 <% } %>
 
-<%- js('js/global') %>
 <% if (page.layout === 'works') { %>
     <%- js('js/lunr.min.js') %>
     <%- js('js/plugins') %>
