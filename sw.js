@@ -24,13 +24,13 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2016/07/29/hexo-auto-deploy/');
+  precacheUrls.push('/2018/08/18/mbpr2015-repair/');
 
   precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
 
-  precacheUrls.push('/2017/12/06/javascript-prototype-chain/');
+  precacheUrls.push('/2017/04/29/migrate-to-gmail-migration-strategy/');
 
-  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
+  precacheUrls.push('/2019/03/16/Setup-Slurm-Cluster/');
 
   precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
 
