@@ -1,1 +1,47 @@
-<%- partial('_partial/post', {post: page }) %>
+<% post = page %>
+
+<article id="<%= post.layout %>-<%= post.slug %>" 
+  class="article article-type-<%= post.layout %>" itemprop="blogPost">
+    <div class="post-meat flex-row">
+        <%- partial('_partial/post/tag') %>
+    </div>
+    <div class="post-meat" style="color:grey; font-size:13px;">
+        <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
+       	<%- format_number(post_pv(post.slug)) %>
+    </div>
+    <div class="post-body">
+        <div class="post-main">
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <%- post.content %>
+            </div>
+            <hr/>
+            <%- partial('_partial/post/related_posts') %>
+            <%- partial('_partial/ads/post-bottom') %>
+            <%- partial('_partial/post/comment') %>
+        </div>
+    </div>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": "<%- post.permalink %>",
+  "headline": "<%- post.title %>",
+  "datePublished": "<%- new Date(post.date) %>",
+  "dateModified": "<%- new Date(post.date) %>",
+  "author": "SSARCandy",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://ssarcandy.tw<%- post.image %>"
+  },
+  "publisher":{ 
+    "@type" : "Organization",
+    "name": "SSARCandy's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ssarcandy.tw/img/logo.png"
+    }
+  }     
+}
+</script>

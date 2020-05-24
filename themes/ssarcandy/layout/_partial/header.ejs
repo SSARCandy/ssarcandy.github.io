@@ -48,7 +48,7 @@
         <% } else if (page.layout === 'works') { %>
             <%- partial('works/head-meta') %>
         <% } else if (is_archive() || is_tag()) { %>
-            <%- partial('archive/head-meta') %>
+            <%- list_tags({ show_count: false, class: 'article-tag' }) %> 
         <% } else { %>
             <%= config.subtitle %>
         <% } %>

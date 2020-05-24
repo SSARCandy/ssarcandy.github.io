@@ -3,7 +3,7 @@
 
   <% for (i in site.data.works) { %>
     <li class="project-list-item plugin on">
-        <%- partial('_partial/work-item', {
+        <%- partial('_partial/works/work-item', {
             project: site.data.works[i]
         }) %>
     </li>
