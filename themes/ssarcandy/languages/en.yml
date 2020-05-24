@@ -18,6 +18,7 @@ page:
 post:
     title: Posts
     read_more: Read More...
+    toc_title: Contents
     related_post: Related Posts
 
 project:
