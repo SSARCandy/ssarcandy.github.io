@@ -1,6 +1,6 @@
 <%- partial('_partial/head') %>
 <body>
-  <%- partial('_partial/loading') %>
+  <div id="loading" class="active" <% if (theme.turbolinks) { %> style="display:none;" <% } %> ></div>
   <nav id="menu" <% if(is_post() || page.layout === 'aboutMe' && theme.hideMenu){ %>class="hide"<% } %> >
    <%- partial('_partial/menu') %>
   </nav>

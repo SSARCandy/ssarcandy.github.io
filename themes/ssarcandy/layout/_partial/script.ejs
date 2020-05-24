@@ -1,20 +1,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js"></script>
 
 <%- js('js/main') %>
-
-<% if (theme.search){ %>
-<%- partial('search') %>
-<%- js('js/search') %>
-<% } %>
-
-<% if (theme.mathjax){ %>
-<%- partial('mathjax') %>
-<% } %>
-
 <%- partial('google-analytics') %>
 
+<% if (theme.search) { %>
+    <%- partial('search') %>
+    <%- js('js/search') %>
+<% } %>
+
+<% if (theme.mathjax) { %>
+    <%- partial('mathjax') %>
+<% } %>
+
 <% if (theme.turbolinks) { %>
-<%- js('js/turbolinks') %>
+    <%- js('js/turbolinks') %>
 <% } %>
 
 <% if (theme.swipe_guesture) { %>
