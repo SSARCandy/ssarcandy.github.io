@@ -7,3 +7,6 @@ public/
 .deploy*/
 *.swp
 .vscode/
+
+/themes/ssarcandy/source/js/
+/themes/ssarcandy/layout/layout.ejs
