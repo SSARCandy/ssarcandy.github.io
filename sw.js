@@ -28,11 +28,11 @@ var precacheUrls = [];
 
   precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
 
-  precacheUrls.push('/2017/04/29/migrate-to-gmail-migration-strategy/');
+  precacheUrls.push('/2020/02/09/develop-hexo-plugin/');
+
+  precacheUrls.push('/2017/09/27/using-pytorch-in-windows/');
 
   precacheUrls.push('/2019/03/16/Setup-Slurm-Cluster/');
-
-  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
