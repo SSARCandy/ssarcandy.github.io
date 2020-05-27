@@ -24,15 +24,15 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2018/08/18/mbpr2015-repair/');
+  precacheUrls.push('/2016/07/29/hexo-auto-deploy/');
 
   precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
 
-  precacheUrls.push('/2020/02/09/develop-hexo-plugin/');
+  precacheUrls.push('/2017/12/06/javascript-prototype-chain/');
 
-  precacheUrls.push('/2017/09/27/using-pytorch-in-windows/');
+  precacheUrls.push('/2017/04/23/migrate-to-gmail-using-migration-tool/');
 
-  precacheUrls.push('/2019/03/16/Setup-Slurm-Cluster/');
+  precacheUrls.push('/2018/01/15/use-pytorch-to-solve-fizzbuzz/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
