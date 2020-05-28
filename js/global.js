@@ -1,1 +1,0 @@
-function addClass(a,t){var s=a.classList;s.contains(t)||s.add(t)}function removeClass(a,t){var s=a.classList;s.contains(t)&&s.remove(t)}function highlightActiveTag(a){for(var t=document.getElementsByClassName("article-tag-list-link"),s=0;s<t.length;s++)t[s].innerText===a?addClass(t[s],"active-tag"):removeClass(t[s],"active-tag")}
