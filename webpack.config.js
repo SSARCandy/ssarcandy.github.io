@@ -12,8 +12,8 @@ module.exports = {
   mode: NODE_ENV,
   devtool: isProd ? '' : 'cheap-module-source-map',
   entry: {
-    app: './themes/ssarcandy/js/App.js',
-    projectPage: './themes/ssarcandy/js/ProjectPage.js',
+    app: path.join(THEME_DIR,'js/App.js'),
+    projectPage: path.join(THEME_DIR, 'js/ProjectPage.js'),
   },
   output: {
     filename: 'js/[name].bundle.js',
