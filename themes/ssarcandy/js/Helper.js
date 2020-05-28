@@ -1,5 +1,5 @@
 function addClass(elem, className) {
-  var classList = elem.classList;
+  const classList = elem.classList;
 
   if (!classList.contains(className)) {
     classList.add(className);
@@ -7,7 +7,7 @@ function addClass(elem, className) {
 }
 
 function removeClass(elem, className) {
-  var classList = elem.classList;
+  const classList = elem.classList;
 
   if (classList.contains(className)) {
     classList.remove(className);
@@ -15,8 +15,8 @@ function removeClass(elem, className) {
 }
 
 function highlightActiveTag(tagname) {
-  var tags = document.getElementsByClassName('article-tag-list-link');
-  for (var i = 0; i < tags.length; i++) {
+  const tags = document.getElementsByClassName('article-tag-list-link');
+  for (let i = 0; i < tags.length; i++) {
     if (tags[i].innerText === tagname) {
       addClass(tags[i], 'active-tag');
     } else {
@@ -24,3 +24,9 @@ function highlightActiveTag(tagname) {
     }
   }
 }
+
+export {
+  addClass,
+  removeClass,
+  highlightActiveTag,
+};

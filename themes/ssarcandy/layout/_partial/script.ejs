@@ -1,22 +1,9 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js"></script>
-
-<%- js('js/main') %>
 <%- partial('google-analytics') %>
 
 <% if (theme.search) { %>
     <%- partial('search') %>
-    <%- js('js/search') %>
 <% } %>
 
 <% if (theme.mathjax) { %>
     <%- partial('mathjax') %>
-<% } %>
-
-<% if (theme.turbolinks) { %>
-    <%- js('js/turbolinks') %>
-<% } %>
-
-<% if (theme.swipe_guesture) { %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
-    <%- js('js/guesture') %>
 <% } %>

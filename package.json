@@ -6,14 +6,22 @@
     "version": "4.1.1"
   },
   "scripts": {
-    "start": "npx hexo generate",
-    "build": "npx hexo clean && npx hexo generate",
-    "clean": "npx hexo clean",
-    "deploy": "npx hexo deploy",
-    "dev": "npx hexo server --debug",
-    "check": "npx npm-check -u"
+    "start": "hexo server",
+    "build": "npm-run-all build:*",
+    "build:webpack": "NODE_ENV=production webpack --mode production",
+    "build:hexo": "hexo generate",
+    "clean": "hexo clean",
+    "deploy": "hexo deploy",
+    "lint": "./node_modules/.bin/eslint themes/ssarcandy/js",
+    "dev": "hexo server --debug",
+    "check": "npm-check -u"
   },
   "dependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^7.1.0",
     "ga-analytics": "0.0.7",
     "hexo": "~4.1.1",
     "hexo-cli": "^3.1.0",
@@ -34,10 +42,15 @@
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
     "hexo-tag-photozoom": "^1.0.2",
-    "lunr": "^2.3.7",
-    "npm-check": "^5.9.2"
+    "html-webpack-plugin": "^4.3.0",
+    "lunr": "^2.3.8",
+    "node-waves": "^0.7.6",
+    "npm-check": "^5.9.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
-    "hexo-browsersync": "^0.3.0"
+    "hexo-browsersync": "^0.3.0",
+    "npm-run-all": "^4.1.5"
   }
 }
