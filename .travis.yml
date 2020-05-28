@@ -37,4 +37,5 @@ jobs:
         - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
         - cd .deploy_git && git checkout master
         - cd ..
+        - npm run build:webpack
         - npm run deploy

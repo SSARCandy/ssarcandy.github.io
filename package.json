@@ -11,7 +11,7 @@
     "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
-    "deploy": "npm run build && hexo deploy",
+    "deploy": "hexo deploy",
     "lint": "./node_modules/.bin/eslint themes/ssarcandy/js",
     "dev": "hexo server --debug",
     "check": "npm-check -u"
