@@ -8,7 +8,7 @@
   "scripts": {
     "start": "hexo server",
     "build": "npm-run-all build:*",
-    "build:webpack": "webpack --progress --mode production",
+    "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",

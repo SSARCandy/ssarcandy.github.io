@@ -10,10 +10,10 @@ const isProd = NODE_ENV === 'production';
 
 module.exports = {
   mode: NODE_ENV,
-  devtool: isProd ? 'source-map' : 'cheap-module-source-map',
+  devtool: isProd ? '' : 'cheap-module-source-map',
   entry: {
-    app: path.join(THEME_DIR, 'js/App.js'),
-    projectPage: path.join(THEME_DIR, 'js/ProjectPage.js'),
+    app: './themes/ssarcandy/js/App.js',
+    projectPage: './themes/ssarcandy/js/ProjectPage.js',
   },
   output: {
     filename: 'js/[name].bundle.js',
