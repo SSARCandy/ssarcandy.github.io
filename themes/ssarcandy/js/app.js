@@ -1,5 +1,3 @@
-import './global';
-import './main';
-import './ProjectTags';
+import './MainUI';
 import './Search';
 import './NodeWaves';

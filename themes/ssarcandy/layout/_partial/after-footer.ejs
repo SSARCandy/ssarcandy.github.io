@@ -1,12 +1,8 @@
 <div class="mask" id="mask"></div>
 
-<%- js('js/bundle.js') %>
 
 <% if (theme.share) { %>
     <%- partial('post/share', { className: 'global-share' }) %>
 <% } %>
 
-<% if (page.layout === 'works') { %>
-    <%- js('js/lunr.min.js') %>
-    <%- js('js/plugins') %>
-<% } %>
+<%- js('js/app.bundle.js') %>

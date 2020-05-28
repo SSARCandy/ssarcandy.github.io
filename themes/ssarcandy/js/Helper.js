@@ -16,7 +16,7 @@ function removeClass(elem, className) {
 
 function highlightActiveTag(tagname) {
   const tags = document.getElementsByClassName('article-tag-list-link');
-  for (const i = 0; i < tags.length; i++) {
+  for (let i = 0; i < tags.length; i++) {
     if (tags[i].innerText === tagname) {
       addClass(tags[i], 'active-tag');
     } else {
@@ -24,3 +24,9 @@ function highlightActiveTag(tagname) {
     }
   }
 }
+
+export {
+  addClass,
+  removeClass,
+  highlightActiveTag,
+};

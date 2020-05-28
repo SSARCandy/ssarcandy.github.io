@@ -1,4 +1,5 @@
 import lunr from 'lunr';
+import { addClass, removeClass,highlightActiveTag } from './Helper';
 
 const elements = document.getElementsByClassName('plugin');
 const $input = document.getElementById('plugin-search-input');
@@ -9,7 +10,7 @@ function search(value) {
   const result = index.search(value);
   const len = result.length;
   const selected = {};
-  const i = 0;
+  let i = 0;
 
   for (i = 0; i < len; i++) {
     selected[result[i].ref] = true;
@@ -25,7 +26,7 @@ function search(value) {
 }
 
 function displayAll() {
-  for (const i = 0; i < elementLen; i++) {
+  for (let i = 0; i < elementLen; i++) {
     addClass(elements[i], 'on');
   }
 }
