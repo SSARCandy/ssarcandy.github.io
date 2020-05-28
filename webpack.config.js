@@ -10,22 +10,22 @@ const isProd = NODE_ENV === 'production';
 
 module.exports = {
   mode: NODE_ENV,
-  devtool: isProd ? 'source-map' : 'cheap-module-source-map',
+//   devtool: isProd ? 'source-map' : 'cheap-module-source-map',
   entry: {
     app: path.join(THEME_DIR, 'js/app.js')
   },
   output: {
-    filename: 'js/[name].[contenthash].js',
+    filename: 'js/bundle.js',
     path: path.join(THEME_DIR, 'source'),
     publicPath: '/'
   },
-  optimization: {
-    runtimeChunk: 'single',
-    moduleIds: 'hashed',
-    splitChunks: {
-      chunks: 'all'
-    }
-  },
+//   optimization: {
+//     runtimeChunk: 'single',
+//     moduleIds: 'hashed',
+//     splitChunks: {
+//       chunks: 'all'
+//     }
+//   },
   module: {
     rules: [
       {
@@ -55,11 +55,11 @@ module.exports = {
     //       path.join(THEME_DIR, 'source/**/*.ejs')
     //     ]
     // }),  
-    new HtmlWebpackPlugin({
-        filename: 'layout.ejs',
-        template: path.join(THEME_DIR, 'layout/_layout.ejs'),
-        alwaysWriteToDisk: true,
-        scriptLoading: 'defer'
-      }),
+    // new HtmlWebpackPlugin({
+    //     filename: 'layout.ejs',
+    //     template: path.join(THEME_DIR, 'layout/_layout.ejs'),
+    //     alwaysWriteToDisk: true,
+    //     scriptLoading: 'defer'
+    //   }),
   ]
 };
