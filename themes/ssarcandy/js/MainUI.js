@@ -165,7 +165,7 @@ d.addEventListener('scroll', function () {
   blog.fixedHeader(top);
   blog.toc().fixed(top);
   blog.toc().actived(top);
-}, false);
+}, { passive: true });
 
 const archive_articles = d.getElementsByClassName('archive-article');
 for (let i = 0; i < archive_articles.length; i++) {
