@@ -33,6 +33,7 @@ const offset = function (el) {
 
 class Blog {
   constructor() {
+    this.share();
   }
 
   toggleMenu(flag) {
@@ -114,19 +115,8 @@ class Blog {
       mask.classList.remove('hide');
     }
 
-    menuShare.addEventListener(even, function () { show(); }, false);
-    mask.addEventListener(even, function () { hide(); }, false);
-  }
-
-  search() {
-    const searchWrap = d.getElementById('search-wrap');
-
-    function toggleSearch() {
-      searchWrap.classList.toggle('in');
-    }
-
-    d.getElementById('search').addEventListener(even, toggleSearch);
-    d.getElementById('search').addEventListener(even, toggleSearch);
+    menuShare.addEventListener(even, show, false);
+    mask.addEventListener(even, hide, false);
   }
 }
 
