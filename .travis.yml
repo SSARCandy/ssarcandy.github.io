@@ -16,6 +16,7 @@ jobs:
     - stage: build
       if: branch != develop
       script:
+        - npm run lint
         - npm install
         - npm run build
     - stage: deploy
@@ -37,5 +38,6 @@ jobs:
         - git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
         - cd .deploy_git && git checkout master
         - cd ..
+        - npm run lint
         - npm run build:webpack
         - npm run deploy
