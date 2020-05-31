@@ -2,6 +2,7 @@
   title: INI C++ Parser
   description: '📑 Yet another ini config parser for modern C++. It is a header only implementation, easy to install and simple to use.'
   github: https://github.com/SSARCandy/ini-cpp
+  download: https://github.com/SSARCandy/ini-cpp/releases
   img_ext: .png
   tags:
     - C++
