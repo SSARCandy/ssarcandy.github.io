@@ -1,6 +1,15 @@
+- name: ini-cpp
+  title: INI C++ Parser
+  description: '📑 Yet another ini config parser for modern C++. It is a header only implementation, easy to install and simple to use.'
+  github: https://github.com/SSARCandy/ini-cpp
+  download: https://github.com/SSARCandy/ini-cpp/releases
+  img_ext: .png
+  tags:
+    - C++
+
 - name: hexo-tag-photozoom
   title: Hexo Photo Zoom
-  description: 'A hexo tag plugin for image zooming, with a zooming effect similar to Medium.'
+  description: 'A hexo tag plugin for image zooming, with a zooming effect similar to Medium.🔍'
   github: https://github.com/SSARCandy/hexo-tag-photozoom
   download: https://www.npmjs.com/package/hexo-tag-photozoom
   preview: https://ssarcandy.tw/2020/02/09/develop-hexo-plugin/
@@ -10,7 +19,7 @@
 
 - name: Breakout_env
   title: Breakout environment
-  description: 'An OpenAI gym like Breakout environment but with more configurable options.'
+  description: 'An OpenAI gym like Breakout environment but with more configurable options.🎮'
   github: https://github.com/SSARCandy/breakout-env
   download: https://github.com/SSARCandy/breakout-env#installation
   tags:
