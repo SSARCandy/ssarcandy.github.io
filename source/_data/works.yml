@@ -128,6 +128,7 @@
   title: 3D Telescope Simulator
   description: A 3D Telescope simulator (with equatorial mount) implement with openGL.
   github: https://github.com/SSARCandy/openGL_Telescope_Model
+  youtube: https://www.youtube.com/watch?v=4K1NK4ALQOY
   tags:
     - C++
     - OpenGL
