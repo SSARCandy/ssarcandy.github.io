@@ -63,6 +63,9 @@ class Blog {
 
   toc() {
     const toc = $('#post-toc');
+    const bannerH = $('.content-header').clientHeight;
+    const headerH = header.clientHeight;
+    const titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
 
     if (!toc || !toc.children.length) {
       return {
@@ -71,28 +74,24 @@ class Blog {
       };
     }
 
-    const bannerH = $('.content-header').clientHeight;
-    const headerH = header.clientHeight;
-    const titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
 
     toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
 
     return {
       fixed: function (top) {
         const margin = 20 - Math.min(top, bannerH-headerH );
-        console.log(margin);
-
         toc.setAttribute('style', `margin-top: ${margin}px;`);
       },
       actived: function (top) {
         let activate_idx = -1;
         for (let i = 0; i < titles.length; i++) {
           const a = toc.querySelector('li.active');
-          if (a) {a.classList.remove('active');}
+          if (a) { a.classList.remove('active'); }
           if (activate_idx == -1 && top < offset(titles[i]).y - 5) {
             activate_idx = Math.max(0, i-1);
           }
         }
+        activate_idx = activate_idx === -1 ? titles.length - 1: activate_idx;
         const active = toc.querySelector('a[href="#' + titles[activate_idx].id + '"]').parentNode;
         active.classList.add('active');
       },
