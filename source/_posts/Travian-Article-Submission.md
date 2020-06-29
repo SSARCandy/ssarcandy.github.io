@@ -3,7 +3,6 @@ title: Travian 對人類行為的影響
 date: 2008-10-28 22:00:43
 tags:
 - trashtalk
-hidden: true
 ---
 
 
