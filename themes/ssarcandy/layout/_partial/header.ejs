@@ -52,6 +52,8 @@
             <%- partial('works/head-meta') %>
         <% } else if (is_archive() || is_tag()) { %>
             <%- list_tags({ show_count: false, class: 'article-tag' }) %> 
+        <% } else if (is_home()) { %>
+            <%- __('post.intro') %>
         <% } else { %>
             <%= config.subtitle %>
         <% } %>

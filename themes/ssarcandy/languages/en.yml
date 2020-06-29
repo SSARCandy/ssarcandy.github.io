@@ -17,6 +17,7 @@ page:
 
 post:
     title: Posts
+    intro: If I didn't write it down, I'll forget eventually.
     read_more: Read More...
     toc_title: Contents
     related_post: Related Posts
