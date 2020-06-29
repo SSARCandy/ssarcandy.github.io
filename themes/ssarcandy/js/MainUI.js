@@ -63,9 +63,6 @@ class Blog {
 
   toc() {
     const toc = $('#post-toc');
-    const bannerH = $('.content-header').clientHeight;
-    const headerH = header.clientHeight;
-    const titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
 
     if (!toc || !toc.children.length) {
       return {
@@ -74,6 +71,9 @@ class Blog {
       };
     }
 
+    const bannerH = $('.content-header').clientHeight;
+    const headerH = header.clientHeight;
+    const titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
 
     toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
 
