@@ -1,9 +1,10 @@
 'use strict';
 
-const gaAnalytics = require('ga-analytics');
+const util = require('util');
 const { date_formatter } = require('./util');
+
+const fetchGoogleAnalytic = util.promisify(require('ga-analytics'));
 const gaOptions = {
-  metrics: 'ga:users',
   clientId: process.env.GOOGLEAPI_CLIENTID,
   serviceEmail: process.env.GOOGLEAPI_EMAIL,
   key: process.env.GOOGLEAPI_KEY,
@@ -11,28 +12,30 @@ const gaOptions = {
   startDate: '2016-07-20',
   endDate: date_formatter(new Date()),
   dimensions: 'ga:pagePath',
-  metrics: 'ga:pageviews'
+  metrics: 'ga:pageviews',
 };
 
 let pv_map = {};
 let visitor_count = '';
-gaAnalytics(gaOptions, (err, res) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
+(async () => {
+  try {
+    const res = await fetchGoogleAnalytic(gaOptions);
 
-  for (let [path, pv] of res.rows) {
-    const splited = path.split('/');
-    if (Number(splited[1]) && Number(splited[2]) && Number(splited[3])) {
-      const slug = splited[4].toLowerCase();
-      pv_map[slug] = (pv_map[slug] || 0) + Number(pv);
+    for (let [path, pv] of res.rows) {
+      const splited = path.split('/');
+      if (Number(splited[1]) && Number(splited[2]) && Number(splited[3])) {
+        const slug = splited[4].toLowerCase();
+        pv_map[slug] = (pv_map[slug] || 0) + Number(pv);
+      }
     }
-  }
+    visitor_count = res.totalsForAllResults['ga:pageviews'];
 
-  console.table(pv_map);
-  visitor_count = res.totalsForAllResults['ga:pageviews'];
-});
+    const report = Object.entries(pv_map).sort((a, b) => b[1] - a[1]);
+    console.table(report);
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 hexo.extend.helper.register('visitor_count', () => {
   return visitor_count;
