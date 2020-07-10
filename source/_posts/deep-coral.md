@@ -6,6 +6,7 @@ tags:
 - python
 - pytorch
 - machine learning
+mathjax: true
 ---
 
 雖然現在可以透過 Deep neural networks 來訓練出非常強大的能力，但卻難以學到比較通用的知識，通常最後訓練出的 model 會只適合處理類似於 training data 的資料。

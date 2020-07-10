@@ -7,6 +7,7 @@ tags:
 - python
 - c++
 image: /img/2017-01-18/02.png
+mathjax: true
 ---
 
 

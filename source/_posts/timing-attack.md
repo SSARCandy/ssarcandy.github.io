@@ -4,6 +4,7 @@ date: 2020-01-29 19:28:29
 tags:
 - c++
 - note
+mathjax: true
 ---
 
 
