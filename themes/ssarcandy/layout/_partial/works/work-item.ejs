@@ -3,7 +3,13 @@
         <div class="project-dummy"></div>
 
         <div class="project-img-container">
-            <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
+            <picture>
+                <% if (project.img_ext !== '.gif') { %>
+                     <source srcset="<%- url_for('img/projects/' + project.name + '.webp') %>" type="image/webp">
+                <% } %>
+                <source srcset="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" type="image/<%=project.img_ext%>">
+                <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
+            </picture>
             <div class="project-centerer"></div>
         </div>
     </div>

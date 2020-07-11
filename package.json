@@ -10,6 +10,7 @@
     "build": "npm-run-all build:*",
     "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
+    "build:imagemin": "node imagemin.js",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "lint": "./node_modules/.bin/eslint themes/ssarcandy/js",
@@ -42,6 +43,8 @@
     "hexo-server": "^1.0.0",
     "hexo-tag-photozoom": "^1.0.1",
     "html-webpack-plugin": "^4.3.0",
+    "imagemin": "^7.0.1",
+    "imagemin-webp": "^6.0.0",
     "lunr": "^2.3.8",
     "node-waves": "^0.7.6",
     "npm-check": "^5.9.2",
@@ -51,6 +54,7 @@
   "devDependencies": {
     "eslint": "^7.4.0",
     "hexo-browsersync": "^0.3.0",
+    "imagemin-webp-webpack-plugin": "^3.3.2",
     "npm-run-all": "^4.1.5"
   }
 }
