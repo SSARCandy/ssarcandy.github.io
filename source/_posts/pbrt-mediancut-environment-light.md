@@ -60,7 +60,7 @@ eg. Y = 0.2125R + 0.7154G + 0.0721B 之類的加權法
 - 這次中間卡了一周跑去 SIGGRAPH ASIA，由於我懶沒帶電腦去，所以也就稍微趕了一點...(幸好這次比較簡單一點點...哈哈)
 - 我學乖了，用 cmlab 工作站跑 pbrt 整個就是舒爽，Enter 按下去差不多就算完了~
 - GA 累積人次快突破 5000 瀏覽了，不過發現還真的有人在看我的文章還是覺得很特別~哈哈
-- 之前 group meeting 座前面學長一直在看我的 [realist-camera](https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/)，害我注意力都被吸走了 XD
+- 之前 group meeting 座前面學長一直在看我的文章 {% post_link pbrt-realistic-camera %}，害我注意力都被吸走了 XD
 
 ---
 
