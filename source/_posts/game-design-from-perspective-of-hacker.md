@@ -3,6 +3,7 @@ title: 從奧客玩家視角看遊戲防禦性設計
 date: 2019-10-02 23:31:16
 tags:
 - trashtalk
+mathjax: true
 ---
 
 
