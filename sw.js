@@ -28,11 +28,11 @@ var precacheUrls = [];
 
   precacheUrls.push('/2017/06/26/Coherent-Line-Drawing/');
 
-  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
-
   precacheUrls.push('/2016/12/25/MSAuto/');
 
-  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
+  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
+
+  precacheUrls.push('/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
