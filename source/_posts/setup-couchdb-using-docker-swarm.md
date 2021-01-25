@@ -162,7 +162,7 @@ configs:
 services:
   couchdb:
     # ...skip
-	entrypoint: /bin/bash -c "cp -f /couchdb_conf /opt/couchdb/etc/local.d/couch.ini && tini -- /docker-entrypoint.sh /opt/couchdb/bin/couchdb"
+    entrypoint: /bin/bash -c "cp -f /couchdb_conf /opt/couchdb/etc/local.d/couch.ini && tini -- /docker-entrypoint.sh /opt/couchdb/bin/couchdb"
     configs:
       - couchdb_conf
  
@@ -171,7 +171,7 @@ configs:
     file: ./config.ini
 ```
 
-這樣改意思是先把 config 掛載至別的地方，然後在 entrypoint 時先 copy 至正確位置之後再執行原本的指令。
+這樣改意思是先把 config 掛載至別的地方，然後在執行 entrypoint 時先 copy 至正確位置之後再執行原本的指令。
 
 ### Join All CouchDB Instances as a Cluster
 
@@ -261,7 +261,7 @@ $ curl "http://admin:admin123@<IP>:5984/_membership"
 
 ## Test High Availability
 
-設定好 cluster 之後就要來驗證 HA 是否正常，這邊測試的方法會是先在某台 CouchDB 新增資料，理論上其他台也會可以存取這筆資料:
+設定好 cluster 之後就要來驗證 HA 是否正常，這邊測試的方法會是先在某台 CouchDB 新增資料，理論上其他台也會可以存取這筆資料：
 
 先建立一個新 database 以及一個新 document：
 
