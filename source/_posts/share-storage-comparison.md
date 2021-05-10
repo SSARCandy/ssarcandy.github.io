@@ -96,11 +96,11 @@ $ bash test.sh
 
 <br>
 
-|                   | Gluster    | Ceph     | GCP     | IBM       | AWS EFS |
-|-------------------|------------|----------|---------|-----------|---------|
-| 100x10MB, 10 jobs | 43.6       | 12.1     | 67.2    | 76.5      | 13.6    |
-| 100x10MB, 20 jobs | 12.0       | 6.2      | 29.3    | 66.1      | 6.1     |
-| 100x10MB, 40 jobs | 9.0        | 6.0      | 21.1    | 33.9      | 2.8     |
+|                   | Gluster   | Ceph     | GCP     | IBM       | AWS |
+|-------------------|-----------|----------|---------|-----------|-----|
+| 100x10MB, 10 jobs | 43.6      | 12.1     | 67.2    | 76.5      | 13.6|
+| 100x10MB, 20 jobs | 12.0      | 6.2      | 29.3    | 66.1      | 6.1 |
+| 100x10MB, 40 jobs | 9.0       | 6.0      | 21.1    | 33.9      | 2.8 |
 
 ▲ 不同 storage 寫入效能比較<sup>[1][2]</sup>
 
@@ -119,20 +119,26 @@ AWS 的 EFS 的讀寫流量是有做限制的，基本上就是如果存越多�
 [3] [AWS EFS - Scale and performance](https://aws.amazon.com/efs/faq/?nc1=h_ls)
 
 <style>
+table {
+  font-size: 14px;
+}
 #mychart {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 #mychart .data {
-    position: relative;
-    top: -20px;
+  position: relative;
+  top: -20px;
 }
 #mychart tr {
   height: 250px;
   margin: 0 auto;
 }
 #mychart .legend {
-    flex-direction: row;
-    justify-content: space-between;
-    border: initial;
+  flex-direction: row;
+  justify-content: space-between;
+  border: initial;
+}
+.charts-css.column.show-labels {
+  --labels-size: 3rem;
 }
 </style>
