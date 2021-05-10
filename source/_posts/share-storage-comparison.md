@@ -109,13 +109,14 @@ $ bash test.sh
 
 **AWS EFS**
 
-AWS 的 EFS 的讀寫流量是有做限制的，基本上就是如果存越多資料在 EFS 裡面，則讀寫流量越高 (bursting mode)，這也造成基礎流量超低，如果用的儲存空間只有 100G，則讀寫流量大概落在 5 MB/s，每增加 100GB 的空間用量會增加 5 MB/s 的速度，是個很妙的設計。在我這次的測試中，由於 EFS 基本上是空的，所以讀寫效能自然低下。
+AWS 的 EFS 的讀寫流量是有做限制的，基本上就是如果存越多資料在 EFS 裡面，則讀寫流量越高 (bursting mode)，這也造成基礎流量超低，如果用的儲存空間只有 100G，則讀寫流量大概落在 5 MB/s，每增加 100GB 的空間用量會增加 5 MB/s 的速度<sup>[3]</sup>，是個很妙的設計。在我這次的測試中，由於 EFS 基本上是空的，所以讀寫效能自然低下。
 
 
 ---
 
 [1] 單位為 MB/s
 [2] jobs 意指同時執行幾個寫入腳本，故若同時執行 10jobs，平均寫入可有 20MBps，則瞬時寫入速度為 200 MBps
+[3] [AWS EFS - Scale and performance](https://aws.amazon.com/efs/faq/?nc1=h_ls)
 
 <style>
 #mychart {
