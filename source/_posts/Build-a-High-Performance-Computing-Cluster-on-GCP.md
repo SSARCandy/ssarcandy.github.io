@@ -5,6 +5,7 @@ tags:
 - unix
 - slurm
 - note
+- cloud
 ---
 
 敝司長久以來都是自建 Cluster 來做為日常運算資源使用的，長時間一直都被擴充性、I/O 效能所卡住，若是卡在運算資源不夠光是採買新機器動輒要幾個月；被 share storage 的 I/O 效能卡住更慘，整個系統會慢到爆 job 都卡住…
