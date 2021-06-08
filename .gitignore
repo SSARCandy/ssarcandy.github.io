@@ -7,5 +7,6 @@ public/
 .deploy*/
 *.swp
 .vscode/
+pageview.json
 
 /themes/ssarcandy/source/js/
