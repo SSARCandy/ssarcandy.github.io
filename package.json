@@ -8,6 +8,7 @@
   "scripts": {
     "start": "hexo server",
     "build": "npm-run-all build:*",
+    "build:pageview": "node ./scripts/ga_pageview.js > pageview.json",
     "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
