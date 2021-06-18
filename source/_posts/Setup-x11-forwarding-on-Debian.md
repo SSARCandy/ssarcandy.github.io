@@ -72,7 +72,7 @@ server 這邊，必須要允許 ssh 的連線 forward 這些圖形介面的資�
 ```
 
 不過最近 Mac 已不再內建 X11<sup>[1]</sup>，
-所以如果你是最的 Sierra，則必須下載 [XQuartz](https://www.xquartz.org/)。
+所以如果你系統版本高於 Sierra，則必須下載 [XQuartz](https://www.xquartz.org/)。
 
 
 ## Windows
