@@ -24,9 +24,9 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2017/06/26/Coherent-Line-Drawing/');
-
   precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
+
+  precacheUrls.push('/2017/06/26/Coherent-Line-Drawing/');
 
   precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
 
