@@ -1,38 +1,48 @@
 'use strict';
+const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 
-const util = require('util');
-const { date_formatter } = require('./util');
+const property = 'properties/323014967';
+const startDate = '2016-07-20';
 
-const fetchGoogleAnalytic = util.promisify(require('ga-analytics'));
-const gaOptions = {
-  clientId: process.env.GOOGLEAPI_CLIENTID,
-  serviceEmail: process.env.GOOGLEAPI_EMAIL,
-  key: process.env.GOOGLEAPI_KEY,
-  ids: process.env.GOOGLEAPI_ANALYTICS_TABLE,
-  startDate: '2016-07-20',
-  endDate: date_formatter(new Date()),
-  dimensions: 'ga:pagePath',
-  metrics: 'ga:pageviews',
-};
+async function runReport() {
+  const analyticsDataClient = new BetaAnalyticsDataClient();
+  const [response] = await analyticsDataClient.runReport({
+    property,
+    dateRanges: [{
+      startDate,
+      endDate: 'today',
+    }],
+    dimensions: [{
+      name: 'pagePath',
+    }],
+    metrics: [{
+      name: 'screenPageViews',
+    }],
+  });
+
+  const path2view = {
+    visitor_count: 0,
+    pv_map: {},
+  };
+  response.rows.forEach(row => {
+    const path = row.dimensionValues[0].value;
+    const views = +row.metricValues[0].value;
+    path2view.visitor_count += views;
+    if (!path.startsWith('/20')) return;
+    const title = path.split('/')[4].toLocaleLowerCase();
+    path2view.pv_map[title] = views;
+  });
+  return path2view;
+}
 
 (async () => {
-  const result = {
-      visitor_count: 0,
-      pv_map: {},
-  };
-  try {
-    const res = await fetchGoogleAnalytic(gaOptions);
-
-    for (let [path, pv] of res.rows) {
-      const splited = path.split('/');
-      if (Number(splited[1]) && Number(splited[2]) && Number(splited[3])) {
-        const slug = splited[4].toLowerCase();
-        result.pv_map[slug] = (result.pv_map[slug] || 0) + Number(pv);
-      }
-    }
-    result.visitor_count = res.totalsForAllResults['ga:pageviews'];
-    console.log(JSON.stringify(result));
-  } catch (err) {
-    console.log(JSON.stringify(result));
+  const pageviews_v4 = await runReport();
+  const pageviews_sum = require('../source/GAv3-pageview.json');
+  pageviews_sum.visitor_count += pageviews_v4.visitor_count;
+  for (const [k, v] of Object.entries(pageviews_v4.pv_map)) {
+    pageviews_sum.pv_map[k] = pageviews_sum.pv_map[k]
+      ? pageviews_sum.pv_map[k] + v
+      : v;
   }
+  console.log(JSON.stringify(pageviews_sum))
 })();
