@@ -24,15 +24,15 @@ var precacheUrls = [];
 
   precacheUrls.push('/');
 
-  precacheUrls.push('/2020/04/22/Build-a-High-Performance-Computing-Cluster-on-GCP/');
+  precacheUrls.push('/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/');
 
-  precacheUrls.push('/2017/06/26/Coherent-Line-Drawing/');
+  precacheUrls.push('/2017/06/25/Coherent-Line-Drawing/');
 
-  precacheUrls.push('/2017/04/16/High-Dynamic-Range-Imaging/');
+  precacheUrls.push('/2017/04/15/High-Dynamic-Range-Imaging/');
 
   precacheUrls.push('/2016/12/25/MSAuto/');
 
-  precacheUrls.push('/2019/06/11/Monitoring-from-Handcraft-to-Prometheus/');
+  precacheUrls.push('/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/');
 
 toolbox.precache(precacheUrls);
 toolbox.options = {"networkTimeoutSeconds":5};
