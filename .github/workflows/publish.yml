@@ -14,12 +14,12 @@ jobs:
     environment: github-pages
     runs-on: ubuntu-latest
     steps:
-    # - uses: actions/checkout@v3
-    # - name: Use Node.js v12
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: 12.x
-    #     cache: 'npm'
+    - uses: actions/checkout@v3
+    - name: Use Node.js v12
+      uses: actions/setup-node@v3
+      with:
+        node-version: 12.x
+        cache: 'npm'
     - name: Setup Environment
       run: |
         git config --global user.name "bot"
@@ -28,13 +28,12 @@ jobs:
         cd .deploy_git && git checkout master
         cd ..
         echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}" > ./hexo-pv-c7938b2e210b.json
-        cat ./hexo-pv-c7938b2e210b.json
-    # - name: npm install
-    #   run: npm install
-    # - name: lint
-    #   run: npm run lint
-    # - name: Deploy
-    #   run: |
-    #     npm run build:pageview
-    #     npm run build:webpack
-    #     npm run deploy
+    - name: npm install
+      run: npm install
+    - name: lint
+      run: npm run lint
+    - name: Deploy
+      run: |
+        npm run build:pageview
+        npm run build:webpack
+        npm run deploy
