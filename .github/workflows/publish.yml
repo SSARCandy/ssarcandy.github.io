@@ -6,11 +6,9 @@ name: Publish Static Website
 on:
   push:
     branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
 
 jobs:
-  build:
+  publish:
     environment: github-pages
     runs-on: ubuntu-latest
     steps:
@@ -27,13 +25,16 @@ jobs:
         git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
         cd .deploy_git && git checkout master
         cd ..
-        echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}" > ./hexo-pv-c7938b2e210b.json
     - name: npm install
       run: npm install
     - name: lint
       run: npm run lint
     - name: Deploy
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}
       run: |
+        echo "${GOOGLE_APPLICATION_CREDENTIALS_CONTENT}" > ./hexo-pv-c7938b2e210b.json
+        cat ./hexo-pv-c7938b2e210b.json
         npm run build:pageview
         npm run build:webpack
         npm run deploy
