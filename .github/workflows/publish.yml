@@ -26,13 +26,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: |
+      run: |
+        npm install
+    - name: setup git environment
+      run: |
         git config --global user.name "bot"
         git config --global user.email ssarcandy@gmail.com 
         git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
         cd .deploy_git && git checkout master
         cd ..
-        npm install
+        echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > ./hexo-pv-c7938b2e210b.json
+    - name: npm insatll
+      run: |
         npm run lint
         npm run build:pageview
         npm run build:webpack
