@@ -13,6 +13,8 @@ jobs:
   publish:
     environment: github-pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js v12
@@ -20,23 +22,30 @@ jobs:
       with:
         node-version: 12.x
         cache: 'npm'
+    - name: Cache NPM dependencies
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-npm-cache
+        restore-keys: |
+          ${{ runner.OS }}-npm-cache
     - name: Setup Environment
       run: |
         git config --global user.name "bot"
         git config --global user.email ssarcandy@gmail.com 
-        git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
-        cd .deploy_git && git checkout master
-        cd ..
     - name: npm install
       run: npm install
     - name: lint
       run: npm run lint
-    - name: Deploy
+    - name: Build
       env:
         GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}
       run: |
         echo "${GOOGLE_APPLICATION_CREDENTIALS_CONTENT}" > ./hexo-pv-c7938b2e210b.json
-        cat ./hexo-pv-c7938b2e210b.json
         npm run build:pageview
         npm run build:webpack
-        npm run deploy
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public

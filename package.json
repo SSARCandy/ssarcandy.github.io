@@ -8,7 +8,7 @@
   "scripts": {
     "start": "hexo server",
     "build": "npm-run-all build:*",
-    "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./scripts/ga_pageview.js > pageview.json",
+    "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./helper/ga_pageview.js > pageview.json",
     "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
