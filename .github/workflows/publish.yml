@@ -12,17 +12,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
     # - uses: actions/checkout@v3
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    #     cache: 'npm'
+    - name: Use Node.js v12
+      uses: actions/setup-node@v3
+      with:
+        node-version: 12.x
+        cache: 'npm'
     - name: setup git environment
       run: |
         git config --global user.name "bot"
@@ -30,7 +26,7 @@ jobs:
         git clone https://github.com/SSARCandy/ssarcandy.github.io .deploy_git
         cd .deploy_git && git checkout master
         cd ..
-        echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > ./hexo-pv-c7938b2e210b.json
+        echo "${{ secrets.APISecret }}" > ./hexo-pv-c7938b2e210b.json
         cat ./hexo-pv-c7938b2e210b.json
     # - name: npm install
     #   run: npm install
