@@ -8,7 +8,7 @@
   "scripts": {
     "start": "hexo server",
     "build": "npm-run-all build:*",
-    "build:pageview": "node ./scripts/ga_pageview.js > pageview.json",
+    "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./helper/ga_pageview.js > pageview.json",
     "build:webpack": "NODE_ENV=production webpack --mode production",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
@@ -43,6 +43,7 @@
     "hexo-server": "^1.0.0",
     "hexo-tag-photozoom": "^1.0.2",
     "html-webpack-plugin": "^4.3.0",
+    "lodash": "^4.17.21",
     "lunr": "^2.3.8",
     "node-waves": "^0.7.6",
     "npm-check": "^5.9.2",
