@@ -44,8 +44,10 @@ jobs:
         echo "${GOOGLE_APPLICATION_CREDENTIALS_CONTENT}" > ./hexo-pv-c7938b2e210b.json
         npm run build:pageview
         npm run build:webpack
+        npm run build:hexo
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./public
+        publish_branch: master
