@@ -5,7 +5,10 @@ name: Publish Static Website
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: 
+    - "develop"
+  schedule:
+  - cron: "0 0 * * *"
 
 jobs:
   publish:
