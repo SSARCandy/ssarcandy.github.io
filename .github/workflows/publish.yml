@@ -11,13 +11,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
@@ -26,8 +23,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-      run: |
-        npm install
     - name: setup git environment
       run: |
         git config --global user.name "bot"
@@ -37,8 +32,11 @@ jobs:
         cd ..
         echo "$GOOGLE_APPLICATION_CREDENTIALS_CONTENT" > ./hexo-pv-c7938b2e210b.json
     - name: npm insatll
+      run: npm install
+    - name: lint
+      run: npm run lint
+    - name: deploy
       run: |
-        npm run lint
         npm run build:pageview
         npm run build:webpack
         npm run deploy
