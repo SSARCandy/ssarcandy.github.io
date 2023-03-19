@@ -43,6 +43,7 @@
     "hexo-server": "^1.0.0",
     "hexo-tag-photozoom": "^1.0.2",
     "html-webpack-plugin": "^4.3.0",
+    "lodash": "^4.17.21",
     "lunr": "^2.3.8",
     "node-waves": "^0.7.6",
     "npm-check": "^5.9.2",
