@@ -6,6 +6,8 @@ name: Publish Static Website
 on:
   push:
     branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
 jobs:
   publish:
