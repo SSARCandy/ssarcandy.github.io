@@ -33,7 +33,7 @@ jobs:
       run: npm run lint
     - name: Deploy
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}
+        GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}
       run: |
         echo "${GOOGLE_APPLICATION_CREDENTIALS_CONTENT}" > ./hexo-pv-c7938b2e210b.json
         cat ./hexo-pv-c7938b2e210b.json

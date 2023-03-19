@@ -1,9 +1,9 @@
 # my blog - [ssarcandy.tw](https://ssarcandy.tw/)
 
-[![Build Status](https://travis-ci.com/SSARCandy/ssarcandy.github.io.svg?branch=develop)](https://travis-ci.com/SSARCandy/ssarcandy.github.io)
+[![Static Website](https://github.com/SSARCandy/ssarcandy.github.io/actions/workflows/publish.yml/badge.svg)](https://github.com/SSARCandy/ssarcandy.github.io/actions/workflows/publish.yml)
 
 - Powered by [Hexo](https://hexo.io/)
-- Theme based on [indigo](https://github.com/yscoder/hexo-theme-indigo)
+- Theme based on and modifed by me [indigo](https://github.com/yscoder/hexo-theme-indigo)
 
 **Development**
 
