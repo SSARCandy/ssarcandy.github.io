@@ -74,8 +74,8 @@ class Blog {
     const bannerH = $('.content-header').clientHeight;
     const headerH = header.clientHeight;
     const titles = $('#post-content').querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-    toc.querySelector('a[href="#' + titles[0].id + '"]').parentNode.classList.add('active');
+    const encoded = encodeURIComponent(titles[0].id);
+    toc.querySelector('a[href="#' + encoded + '"]').parentNode.classList.add('active');
 
     return {
       fixed: function (top) {
@@ -92,7 +92,8 @@ class Blog {
           }
         }
         activate_idx = activate_idx === -1 ? titles.length - 1: activate_idx;
-        const active = toc.querySelector('a[href="#' + titles[activate_idx].id + '"]').parentNode;
+        const encoded = encodeURIComponent(titles[activate_idx].id);
+        const active = toc.querySelector('a[href="#' + encoded + '"]').parentNode;
         active.classList.add('active');
       },
     };
