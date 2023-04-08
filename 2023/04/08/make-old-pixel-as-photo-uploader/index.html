@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="zh"><head><link rel="manifest" href="/manifest.json">
+  <meta charset="utf-8">
+  
+  <title>把舊的 Pixel 改造成無限照片上傳機 | SSARCandy's Blog</title>
+  <meta name="google-site-verification" content="uUti8Shw9zIz5j2Rs_nwYT9VusmIOXijBuf2bBNYm78">
+  <meta http-equiv="Cache-control" content="public">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  
+  <meta name="theme-color" content="#673AB7">
+  
+  
+  <meta name="keywords" content="trashtalk">
+  <meta name="description" content="自從 Google Photos 養套殺，取消高畫質無限上傳以後[1]，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="把舊的 Pixel 改造成無限照片上傳機">
+<meta property="og:url" content="https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/index.html">
+<meta property="og:site_name" content="SSARCandy's Blog">
+<meta property="og:description" content="自從 Google Photos 養套殺，取消高畫質無限上傳以後[1]，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Go">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ssarcandy.tw/img/2023-04-08/01.png">
+<meta property="og:image" content="https://ssarcandy.tw/img/logo.png">
+<meta property="article:published_time" content="2023-04-08T07:48:18.000Z">
+<meta property="article:modified_time" content="2023-04-08T16:16:56.390Z">
+<meta property="article:author" content="許書軒">
+<meta property="article:tag" content="trashtalk">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ssarcandy.tw/img/2023-04-08/01.png">
+  
+  
+    <link rel="alternative" href="/atom.xml" title="SSARCandy's Blog" type="application/atom+xml">
+  
+  <meta name="summary" content="自從 Google Photos 養套殺，取消高畫質無限上傳以後[1]，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Google Photos，即使換了新手機，也應該想辦法由舊裝置來上傳相片。">
+  <meta name="Description" content="ssarcandy's blog. There is always more than one solution.">
+  <link rel="shortcut icon" href="/img/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <link async="" href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="manifest" href="/web-app-manifest.json">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="loading" class="active"></div>
+  <nav id="menu" class="hide">
+   <div class="inner flex-row-vertical">
+  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+      <i class="icon icon-lg material-icons">close</i>
+  </a>
+  <div class="brand-wrap">
+    <div class="brand">
+      <a href="/about" class="avatar"><img alt="ssarcandy" src="/img/logo.png"></a>
+      <hgroup class="introduce">
+        <div class="mail">There is always more than one solution.</div>
+      </hgroup>
+    </div>
+  </div>
+  <ul class="nav flex-col">
+    
+        <li class="waves-block waves-effect" style="line-height:44px;height:44px;padding:0 0px;">
+          <a href="/about">
+            
+              <i class="material-icons icon icon-lg">person</i>
+            
+            <span>About</span>
+          </a>
+        </li>
+    
+        <li class="waves-block waves-effect" style="line-height:44px;height:44px;padding:0 0px;">
+          <a href="/">
+            
+              <i class="material-icons icon icon-lg">description</i>
+            
+            <span>Post</span>
+          </a>
+        </li>
+    
+        <li class="waves-block waves-effect" style="line-height:44px;height:44px;padding:0 0px;">
+          <a href="/archives">
+            
+              <i class="material-icons icon icon-lg">view_list</i>
+            
+            <span>Archives</span>
+          </a>
+        </li>
+    
+        <li class="waves-block waves-effect" style="line-height:44px;height:44px;padding:0 0px;">
+          <a href="/projects">
+            
+              <i class="material-icons icon icon-lg">code</i>
+            
+            <span>Projects</span>
+          </a>
+        </li>
+    
+        <li class="waves-block waves-effect" style="line-height:44px;height:44px;padding:0 0px;">
+          <a href="https://github.com/SSARCandy" target="_blank" rel="noopener">
+            
+              <i class="icon icon-lg icon-github"></i>
+            
+            <span>Github</span>
+          </a>
+        </li>
+    
+  </ul>
+
+  <footer class="footer">
+  <p>Total visitors: 100,287</p>
+  <p>SSARCandy © 2016 - 2023</p>
+  <a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a>
+</footer>
+
+</div>
+
+  </nav>
+  <main id="main">
+    <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg material-icons">menu</i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+         
+            把舊的 Pixel 改造成無限照片上傳機 
+        
+        </div>
+
+        
+            <div class="search-wrap" id="search-wrap">
+                <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                    <i class="icon icon-lg material-icons">navigate_before</i>
+                </a>
+                <input type="text" id="key" class="search-input" aria-label="search-box" autocomplete="off" placeholder="Keywords">
+                <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                    <i class="icon icon-lg material-icons">search</i>
+                </a>
+            </div>
+        
+
+        
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-share">
+                <i class="icon icon-lg material-icons">share</i>
+            </a>
+        
+
+    </div>
+</header>
+<header class="content-header">
+  
+  <div class="container">
+    <h1 class="author">
+         
+            把舊的 Pixel 改造成無限照片上傳機 
+        
+    </h1>
+    <h5 class="subtitle">
+        
+            <time datetime="2023-04-08T07:48:18.000Z" itemprop="datePublished" class="page-time">
+  Apr 08 2023
+</time>
+        
+    </h5>
+  </div>
+  
+</header>
+
+      
+      
+    
+    <div class="container body-wrap" id="body-wrap">
+      
+
+<article id="post-make-old-pixel-as-photo-uploader" class="article article-type-post" itemprop="blogPost">
+    <div class="post-meat flex-row">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/trashtalk/" rel="tag">trashtalk</a></li></ul>
+
+    </div>
+    <div class="post-meat" style="color:grey; font-size:13px;">
+        <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
+       	0
+    </div>
+    <div class="post-body">
+        <div class="post-main">
+            <div class="post-content" id="post-content" itemprop="postContent">
+            <p>自從 Google Photos 養套殺，取消高畫質無限上傳以後<sup>[1]</sup>，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Google Photos，即使換了新手機，也應該想辦法由舊裝置來上傳相片。</p>
+<span id="more"></span>
+
+<p>這邊所謂 <strong>”高畫質”</strong> (Storage Saver) 其實是有壓縮的，目前只有 Pixel 1 可以免費 <strong>”原始畫質”</strong> (Original) 上傳，但對我而言有免費高畫質就很好了，直接省下訂閱 Google One 的費用。</p>
+<p>如何達成這個任務呢？基本上的流程會是以下三個步驟：</p>
+<ol>
+<li>新手機拍攝照片</li>
+<li>新手機將照片同步至舊手機</li>
+<li>舊手機自動備份至 Google Photos</li>
+</ol>
+<p>但在這裡，需要注意的是，新手機不要開啟 Google Photos 備份功能，以免佔用雲端空間。</p>
+<p>接下來，我們需要尋找一個雲端相片同步服務來當作中繼站，讓新手機拍攝的照片同步至舊手機的暫存空間，以利後續的備份。<br>在我的實作中，我選擇了 Mega 和 <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.ttxapps.megasync">MegaSync</a>。</p>
+
+    <div>
+      <img src="/img/2023-04-08/01.png" alt="流程圖。" data-action="zoom" class="photozoom">
+      <span class="zoom-initial-caption">流程圖。</span>
+    </div>
+
+<p>上面流程圖簡單的展示了整個流程，接下來就是把需要的東西準備好：</p>
+<ul>
+<li>Pixel 5 or an earlier device</li>
+<li>Google Photos 需安裝於新、舊手機</li>
+<li>Mega 需安裝於新、舊手機</li>
+<li><a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.ttxapps.megasync">MegaSync</a> 需安裝於舊手機</li>
+</ul>
+<p>Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間，註冊且下載至新手機以後以後，只要開啟 Camera Upload <sup>[2]</sup> 功能即可。空間方面也不用擔心耗盡，一方面是他有 50 GB，另一方面是我只是要將它當作一個暫存中繼站，只要後續備份完成，這邊的照片即可清空。</p>
+<p>而 <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.ttxapps.megasync">MegaSync</a> 是一個第三方 app，功能類似於 <code>rsync</code> ，可以將 Mega 上面的指定資料夾下的檔案同步至手機地端，所以只要設定好要同步 Camera Upload 資料夾，就可以利用這個機制去下載我新手機所拍攝的照片到舊手機上。</p>
+<p>至此，新手機拍攝的相片已經同步至舊手機，這時候只需要在舊手機的 Google Photos 開啟 <strong>“高畫質”</strong> 備份選項，一切就大功告成。</p>
+<p>另外為了維持整個流程穩定，最好要把</p>
+<ul>
+<li>舊手機上將 <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.ttxapps.megasync">MegaSync</a> 的電池最佳化關閉，</li>
+<li>新手機上將 Mega 的電池最佳化關閉</li>
+</ul>
+<p>才不會導致被系統限制無法在背景執行這些程式。</p>
+<p>總結來說，透過這樣的改造，我們可以輕鬆地享有 Google Photos 的高畫質無限免費上傳功能，並且也能賦予舊裝置一個新的功能而非擺在抽屜閒置。只要按照以上的步驟進行操作，就可以輕鬆地完成一台無限照片上傳機的改造。</p>
+<hr>
+<p>[1] <a target="_blank" rel="noopener" href="https://support.google.com/photos/answer/10100180?hl=zh-Hant">Google 相簿儲存空間政策更新</a><br>[2] <a target="_blank" rel="noopener" href="https://help.mega.io/installs-apps/mobile/camera-uploads">How to use camera uploads?</a></p>
+
+            </div>
+            <hr>
+            
+<div class="article related-post-label">Related Posts</div>
+<ul style="padding: 0px;">
+
+  
+
+  
+    <li class="related-post-list">
+      <a href="/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/" class="post-title related-post">用手機拍攝日食到底可不可行</a>
+    </li>
+  
+
+  
+    <li class="related-post-list">
+      <a href="/2019/10/02/game-design-from-perspective-of-hacker/" class="post-title related-post">從奧客玩家視角看遊戲防禦性設計</a>
+    </li>
+  
+
+  
+    <li class="related-post-list">
+      <a href="/2018/08/17/mbpr2015-repair/" class="post-title related-post">Mac 維修小記</a>
+    </li>
+  
+
+  
+    <li class="related-post-list">
+      <a href="/2017/07/21/about-taking-case/" class="post-title related-post">接案三兩事</a>
+    </li>
+  
+
+  
+    <li class="related-post-list">
+      <a href="/2008/10/28/Travian-Article-Submission/" class="post-title related-post">Travian 對人類行為的影響</a>
+    </li>
+  
+
+</ul>
+
+            
+    
+        <script data-ad-client="ca-pub-1532347766435780" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1532347766435780" data-ad-slot="3786040804"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    
+
+            
+
+        </div>
+    </div>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": "https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/",
+  "headline": "把舊的 Pixel 改造成無限照片上傳機",
+  "datePublished": "Sat Apr 08 2023 07:48:18 GMT+0000 (Coordinated Universal Time)",
+  "dateModified": "Sat Apr 08 2023 07:48:18 GMT+0000 (Coordinated Universal Time)",
+  "author": "SSARCandy",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://ssarcandy.tw"
+  },
+  "publisher":{ 
+    "@type" : "Organization",
+    "name": "SSARCandy's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ssarcandy.tw/img/logo.png"
+    }
+  }     
+}
+</script>
+    </div>
+  </main>
+
+<!-- Google Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-4YMNTX9S2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4YMNTX9S2Q');
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+    
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+
+
+
+<div class="mask" id="mask"></div>
+
+
+
+    <div class="global-share" id="global-share">
+    <ul class="reset share-icons">
+      <li class="waves-block waves-effect">
+        <a class="share-sns" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/index.html" data-title="Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li class="waves-block waves-effect">
+        <a class="share-sns" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/index.html" data-title="Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+
+<script src="/js/app.bundle.js"></script>
+
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1680970645647')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script>
+
+<script type="text/javascript">/**
+ * Pure JavaScript implementation of zoom.js.
+ *
+ * Original preamble:
+ * zoom.js - It's the best way to zoom an image
+ * @version v0.0.2
+ * @link https://github.com/fat/zoom.js
+ * @license MIT
+ *
+ * This is a fork of the original zoom.js implementation by @fat.
+ * Copyrights for the original project are held by @fat. All other copyright
+ * for changes in the fork are held by Nishanth Shanmugham.
+ *
+ * Copyright (c) 2013 @fat
+ * The MIT License. Copyright © 2016 Nishanth Shanmugham.
+ */
+!function(){"use strict";var t=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}();function e(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}!function(t){var e={};function n(i){if(e[i])return e[i].exports;var o=e[i]={i:i,l:!1,exports:{}};return t[i].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=t,n.c=e,n.i=function(t){return t},n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:i})},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=3)}([function(t,e,n){n.d(e,"a",function(){return i}),n.d(e,"b",function(){return o}),n.d(e,"c",function(){return r}),n.d(e,"d",function(){return a});var i=function(){return document.documentElement.clientWidth},o=function(){return document.documentElement.clientHeight},r=function(t){var e=t.getBoundingClientRect(),n=document.documentElement,i=window;return{top:e.top+i.pageYOffset-n.clientTop,left:e.left+i.pageXOffset-n.clientLeft}},a=function(t,e,n){t.addEventListener(e,function t(i){i.target.removeEventListener(e,t),n()})}},function(t,e,n){var i=n(2),o=n(0);n.d(e,"a",function(){return g});var r=null,a=-1,s=-1,c=function(t){document.body.classList.contains("zoom-overlay-open")||(t.metaKey||t.ctrlKey?window.open(t.target.getAttribute("data-original")||t.target.src,"_blank"):t.target.width>=n.i(o.a)()-80||(u(!0),(r=new i.a(t.target,80)).zoom(),l()))},u=function(t){null!=r&&(t?r.dispose():r.close(),d(),r=null)},l=function(){document.addEventListener("scroll",m),document.addEventListener("keyup",f),document.addEventListener("touchstart",h),document.addEventListener("click",v,!0)},d=function(){document.removeEventListener("scroll",m),document.removeEventListener("keyup",f),document.removeEventListener("touchstart",h),document.removeEventListener("click",v,!0)},m=function(){-1==a&&(a=window.pageYOffset),Math.abs(a-window.pageYOffset)>=40&&u()},f=function(t){27==t.keyCode&&u()},h=function(t){var e=t.touches[0];null!=e&&(s=e.pageY,t.target.addEventListener("touchmove",p))},p=function t(e){var n=e.touches[0];null!=n&&Math.abs(n.pageY-s)>10&&(u(),e.target.removeEventListener("touchmove",t))},v=function(){u()},g=Object.create(null);g.setup=function(t){t.addEventListener("click",c)}},function(n,i,o){var r=o(0),a=function t(n,i){e(this,t),this.w=n,this.h=i},s=function(){function n(t,i){e(this,n),this.img=t,this.preservedTransform=t.style.transform,this.wrap=null,this.caption=null,this.overlay=null,this.offset=i}return t(n,[{key:"forceRepaint",value:function(){this.img.offsetWidth}},{key:"zoom",value:function(){var t=new a(this.img.naturalWidth,this.img.naturalHeight);this.wrap=document.createElement("div"),this.wrap.classList.add("zoom-img-wrap"),this.img.parentNode.insertBefore(this.wrap,this.img),this.wrap.appendChild(this.img),this.img.classList.add("zoom-img"),this.img.setAttribute("data-action","zoom-out"),this.overlay=document.createElement("div"),this.overlay.classList.add("zoom-overlay"),this.caption=document.createElement("span"),this.caption.innerHTML=this.img.getAttribute("alt"),this.caption.classList.add("zoom-caption"),this.overlay.appendChild(this.caption),document.body.appendChild(this.overlay),this.forceRepaint();var e=this.calculateScale(t);this.forceRepaint(),this.animate(e),document.body.classList.add("zoom-overlay-open")}},{key:"calculateScale",value:function(t){var e=t.w/this.img.width,n=o.i(r.a)()-this.offset,i=o.i(r.b)()-this.offset,a=t.w/t.h,s=n/i;return t.w<n&&t.h<i?e:a<s?i/t.h*e:n/t.w*e}},{key:"animate",value:function(t){var e=o.i(r.c)(this.img),n=window.pageYOffset,i=o.i(r.a)()/2,a=n+o.i(r.b)()/2,s="scale("+t+")",c="translate3d("+(i-(e.left+this.img.width/2))+"px, "+(a-(e.top+this.img.height/2))+"px, 0px)";this.img.style.transform=s,this.wrap.style.transform=c}},{key:"dispose",value:function(){null!=this.wrap&&null!=this.wrap.parentNode&&(this.img.classList.remove("zoom-img"),this.img.setAttribute("data-action","zoom"),this.wrap.parentNode.insertBefore(this.img,this.wrap),this.wrap.parentNode.removeChild(this.wrap),document.body.removeChild(this.overlay),document.body.classList.remove("zoom-overlay-transitioning"))}},{key:"close",value:function(){var t=this;document.body.classList.add("zoom-overlay-transitioning"),this.img.style.transform=this.preservedTransform,0===this.img.style.length&&this.img.removeAttribute("style"),this.wrap.style.transform="none",o.i(r.d)(this.img,"transitionend",function(){t.dispose(),document.body.classList.remove("zoom-overlay-open")})}}]),n}();i.a=s},function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0});var i=n(1);document.addEventListener("DOMContentLoaded",function(){for(var t=document.querySelectorAll("img[data-action='zoom']"),e=0;e<t.length;e++)i.a.setup(t[e])})}])}();</script><style>img[data-action=zoom]{cursor:pointer;cursor:-webkit-zoom-in;cursor:-moz-zoom-in}.zoom-img,.zoom-img-wrap{position:relative;z-index:666;-webkit-transition:all .3s;-o-transition:all .3s;transition:all .3s}img.zoom-img{cursor:pointer;cursor:-webkit-zoom-out;cursor:-moz-zoom-out}.zoom-overlay{z-index:420;text-align:center;background:#fff;position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;filter:"alpha(opacity=0)";opacity:0;-webkit-transition:opacity .3s;-o-transition:opacity .3s;transition:opacity .3s}.zoom-overlay-open .zoom-overlay{filter:"alpha(opacity=100)";opacity:1}.zoom-overlay-open,.zoom-overlay-transitioning{cursor:default}.body-wrap-zoom{width:100vw}.zoom-caption{z-index:667;bottom:10px;position:fixed;left:10px;right:10px}.zoom-initial-caption{color:#999;display:block;font-size:.9em;margin-top:.5em;position:relative;text-align:center;}</style></body></html>
