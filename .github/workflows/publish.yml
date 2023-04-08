@@ -32,6 +32,7 @@ jobs:
           ${{ runner.OS }}-npm-cache
     - name: Setup Environment
       run: |
+        export NODE_OPTIONS=--openssl-legacy-provider
         git config --global user.name "bot"
         git config --global user.email ssarcandy@gmail.com 
     - name: npm install
