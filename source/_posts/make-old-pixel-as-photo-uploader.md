@@ -3,6 +3,7 @@ title: 把舊的 Pixel 改造成無限照片上傳機
 date: 2023-04-08 15:48:18
 tags:
 - trashtalk
+- automation
 ---
 
 自從 Google Photos 養套殺，取消高畫質無限上傳以後<sup>[1]</sup>，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Google Photos，即使換了新手機，也應該想辦法由舊裝置來上傳相片。
