@@ -31,7 +31,6 @@ skip_render:
 new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
@@ -41,7 +40,7 @@ highlight:
   enable: true
   line_number: true
   auto_detect: false
-  tab_replace: true
+  tab_replace: ''
 
 # Category & Tag
 default_category: uncategorized
@@ -82,42 +81,6 @@ sitemap:
   path: sitemap.xml
 
 disqus_shortname: ssarcandy
-
-hfc_favicons:
-  enable: true
-  src: img/favico.png
-  target: img/
-
-hfc_html:
-  enable: true
-
-hfc_css:
-  enable: true
-
-hfc_useref:
-  enable: true
-  concat: true
-
-hfc_js:
-  enable: true
-  mangle: true
-  exclude: 
-    - '*.min.js'
-
-hfc_img:
-  enable: true
-  interlaced: false
-  multipass: false
-  optimizationLevel: 2
-  pngquant: false
-  progressive: false
-  webp: false
-  gifslice: true
-  jpegtran: true
-  jpegrecompress: false
-  jpegrecompressQuality: 'medium'
-  optipng: true
-  svgo: true
 
 pwa:
   manifest:

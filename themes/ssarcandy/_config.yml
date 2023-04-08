@@ -86,8 +86,7 @@ favicon: /img/favicon.ico
 
 # less
 less:
-  paths:
-    - source/css/style.less
+  paths: ['source/css/style.less']
 
 # swipe guesture using hammer.js
 swipe_guesture: false

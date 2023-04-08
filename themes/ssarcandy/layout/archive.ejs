@@ -3,8 +3,12 @@
     page.posts.each(function(post){
         posts.push(post);
     });
+    const sortBy = (key) => {
+        return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
+    };
+    var sortPosts = posts.concat().sort(sortBy("date"));
+    sortPosts.reverse();
 
-    var sortPosts = _[_.orderBy ? 'orderBy' : 'sortByOrder'](posts, ['date'], ['desc']);
 %>
 
 <%

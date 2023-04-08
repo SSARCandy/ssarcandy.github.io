@@ -31,7 +31,7 @@
     if(page.tags){
       keyWords = [];
 
-      _.isArray(page.tags) ? ( keyWords = page.tags )
+      Array.isArray(page.tags) ? ( keyWords = page.tags )
         : page.tags.each(function(k){
             keyWords.push(k.name);
           });
