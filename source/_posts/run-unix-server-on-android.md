@@ -7,7 +7,7 @@ tags:
 - note
 ---
 
-{% zoom /img/2023-04-09/01.png 隨便一台手機的性能都比低階的雲端虛擬機來的強大不少。%}
+{% zoom /img/2023-04-09/01.png 手機的硬體作為伺服器其實相當夠用。 %}
 
 <!-- more -->
 
@@ -18,8 +18,8 @@ tags:
 要用手機來取代雲端虛擬機器，其實還是有一些困難，首先家裡並沒有固定 IP，也就是說用手機來當作伺服器的話沒辦法在外面存取，如果有架設網站的需求的話那這肯定是行不通。
 不過我的情況剛好不需要固定 IP，我要的其實是一個開發機兼永不停機的伺服器讓我可以在上面跑一些定時的工作或者是跑一些需要長時間運作的程式。
 
-那接下來就是要來思考我需要什麼，主流在安卓設備上面跑 unix Server 有兩種方式，一種是使用 Termux<sup>[1]</sup>，另一種是直接安裝完整的系統在手機上<sup>[2]</sup>。
-Termux 的好處是安裝十分容易也不需要 root，壞處是他雖然是 unix-like 的系統，但是算是閹割版，可能有少數一些指令或者 package 是沒辦法使用的；反之，直接安裝完整的系統那當然可以獲得最像是 Ubuntu 的體驗，但相對來講比較難裝較複雜，可能也免不了需要取得 root。
+那接下來就是要來思考我需要什麼，主流在安卓設備上面跑 Unix Server 有兩種方式，一種是使用 Termux<sup>[1]</sup>，另一種是直接安裝完整的系統在手機上<sup>[2]</sup>。
+Termux 的好處是安裝十分容易也不需要 root，壞處是他雖然是 Unix-like 的系統，但是算是閹割版，可能有少數一些指令或者 package 是沒辦法使用的；反之，直接安裝完整的系統那當然可以獲得最像是 Ubuntu 的體驗，但相對來講比較難裝較複雜，可能也免不了需要取得 root。
 
 考量到基本上我只需要有可以開發及部屬 Python, node.js, C++ 的應用程式，所以我選擇使用 Termux 就好了。
 
@@ -127,7 +127,7 @@ $ vim ~/.local/share/code-server/Machine/settings.json
 htop 在 non-root Termux 是半殘的，看不到 CPU loading，這是由於 Android 系統級別的設定，讓一般應用程式 (Termux 也算應用程式) 無法存取到 `/proc`。
 所以可以改安裝 `pkg install neofetch`，他可以正確展示 CPU 使用量 (如本文首圖)，不知怎辦到的 哈哈。
 
-## Turn off System Task killer
+## Turn off System Task Killer
 在安裝好所有東西以後，隔天我就發現無法 ssh 到手機上了，一看才發現被系統殺掉了。現在比較新版本的 Android OS (12+) 都有嚴格的執行緒限制，應該是 32 左右，這數字太小了會導致 Termux 經常被殺掉。
 所以需要透過 adb 去把這個東西關掉<sup>[6]</sup>：
 
@@ -139,23 +139,66 @@ htop 在 non-root Termux 是半殘的，看不到 CPU loading，這是由於 And
 ./adb shell "/system/bin/device_config set_sync_disabled_for_tests persistent; /system/bin/device_config put activity_manager max_phantom_processes 2147483647"
 ```
 
-## Adjust Time
+## Adjust System Time 
 Server 通常都要是 UTC 時間會比較方便，結果這其實不需要在 Termux 內用指令調整，只需要去手機 設定>時間>選擇時區 即可。
 
-## Bind mac address to private IP
+## Bind MAC address to Private IP
 由於手機是透過 WiFi 連上家用網路，private IP 是透過 DHCP 分配，但如果 IP 經常改變很不方便。
 可以通過家用 router 去設定 mac address 綁定分配的 private IP 來避免 IP 跑掉。
 (ASUS router 有這功能<sup>[7]</sup>，不確定其他廠牌有沒有)
 
-# 效能
+# Compare with Cloud VM
 
+我原先在用的是 **Nanode 1 GB** (1 shared CPU + 1GB RAM)。記憶體只有 1GB 有時候會 Out of Memory 很不開心，效能方面我倒是覺得堪用。價格方面則是一個月 $5 USD，是 Linode 提供的虛擬機中最便宜的選擇<sup>[9]</sup>。
+做了一些簡單的效能測試，看看 **Nanode 1 GB** v.s. **Pixel 4a** 是誰贏？
+
+```ini
+[Task1. Compile libboost v1.81.0]
+Nanode =  705.27s user  48.27s system  96% cpu 12:57.18 total
+Pixel4a= 4236.25s user 218.47s system 691% cpu 10:44.36 total
+
+[Task2. Python check prime number]
+Nanode = 19.27s user 0.00s system 99% cpu 19.305 total
+Pixel4a= 25.62s user 0.01s system 99% cpu 25.681 total
+```
+
+Task1 測試的所有 CPU 都滿載時的效能，很合理的 Pixel4a 有多顆 CPU 自然會贏過 Nanode;
+Task2 是用 Python 寫的 `is_prime` script<sup>[10]</sup> ，用於測試單一 CPU 的性能，就可以發現其實手機的 CPU 還是偏爛，有差到 30%
 
 # Reference
 
-[1] [Termux Wiki](https://wiki.termux.com/wiki/Main_Page)
-[2] [連筆電都懶得帶? 那就在 Android 上跑 VS Code 吧! | Termux , PRoot , VS Code Server](https://home.gamer.com.tw/artwork.php?sn=5533738)
-[3] [Remote host prerequisites](https://code.visualstudio.com/docs/remote/linux#_remote-host-container-wsl-linux-prerequisites)
-[4] [SSH to Termux not working.](https://github.com/microsoft/vscode-remote-release/issues/3769)
-[5] [[Bug]: Terminal is not working on Termux.](https://github.com/coder/code-server/issues/5496)
-[6] [Fix [Process completed (signal 9) - press Enter] for Termux on Android 12+ devices](https://ivonblog.com/en-us/posts/fix-termux-signal9-error/)
-[7] [[Wireless Router] How to manually assign IP around the DHCP list?](https://www.asus.com/support/FAQ/1000906/)
+1. [Termux Wiki](https://wiki.termux.com/wiki/Main_Page)
+2. [連筆電都懶得帶? 那就在 Android 上跑 VS Code 吧! | Termux , PRoot , VS Code Server](https://home.gamer.com.tw/artwork.php?sn=5533738)
+3. [Remote host prerequisites](https://code.visualstudio.com/docs/remote/linux#_remote-host-container-wsl-linux-prerequisites)
+4. [SSH to Termux not working.](https://github.com/microsoft/vscode-remote-release/issues/3769)
+5. [[Bug]: Terminal is not working on Termux.](https://github.com/coder/code-server/issues/5496)
+6. [Fix [Process completed (signal 9) - press Enter] for Termux on Android 12+ devices](https://ivonblog.com/en-us/posts/fix-termux-signal9-error/)
+7. [[Wireless Router] How to manually assign IP around the DHCP list?](https://www.asus.com/support/FAQ/1000906/)
+8. [Akamai’s Cloud Computing Services: Pricing Update](https://www.linode.com/blog/linode/akamai_cloud_computing_price_update/)
+9. [Linode Pricing List](https://www.linode.com/pricing/)
+10. [Python check prime number](https://gist.github.com/SSARCandy/14f339cf0d5b5b4a2069b0a51fbbc2b1)
+
+<style>
+/* Initialize a counter */
+h1+ol {
+  list-style-type: none;
+  counter-reset: list-counter;
+  padding-left: 0;
+}
+
+/* Style the list items */
+h1+ol li {
+  position: relative;
+  padding-left: 3em;
+}
+
+/* Add the counter before the list item */
+h1+ol li::before {
+  counter-increment: list-counter;
+  content: "[" counter(list-counter) "] ";
+  position: absolute;
+  left: 0;
+  width: 25px; /* Set a fixed width */
+  text-align: right; /* Align the content to the right */
+}
+</style>
