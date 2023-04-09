@@ -20,6 +20,69 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2019/03/16/Setup-Slurm-Cluster/</loc>
     
     <lastmod>2023-04-09</lastmod>
@@ -335,79 +398,16 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/about/index.html</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</loc>
-    
-    <lastmod>2023-04-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
+    
+    <lastmod>2023-04-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/about/index.html</loc>
     
     <lastmod>2023-04-09</lastmod>
     
