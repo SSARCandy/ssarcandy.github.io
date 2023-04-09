@@ -1,18 +1,15 @@
 'use strict';
 
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const THEME_DIR = path.join(__dirname, 'themes/ssarcandy');
 const isProd = NODE_ENV === 'production';
 
 module.exports = {
   mode: NODE_ENV,
-  devtool: isProd ? '' : 'cheap-module-source-map',
+  devtool: isProd ? false : 'cheap-module-source-map',
   entry: {
-    app: path.join(THEME_DIR,'js/App.js'),
+    app: path.join(THEME_DIR, 'js/App.js'),
     projectPage: path.join(THEME_DIR, 'js/ProjectPage.js'),
   },
   output: {
@@ -20,13 +17,6 @@ module.exports = {
     path: path.join(THEME_DIR, 'source'),
     publicPath: '/'
   },
-  // optimization: {
-  //   runtimeChunk: 'single',
-  //   moduleIds: 'hashed',
-  //   splitChunks: {
-  //     chunks: 'all'
-  //   }
-  // },
   module: {
     rules: [
       {
@@ -51,16 +41,5 @@ module.exports = {
     ]
   },
   plugins: [
-    // new CleanWebpackPlugin({
-    //     cleanAfterEveryBuildPatterns: [
-    //       path.join(THEME_DIR, 'source/**/*.ejs')
-    //     ]
-    // }),  
-    // new HtmlWebpackPlugin({
-    //     filename: 'layout.ejs',
-    //     template: path.join(THEME_DIR, 'layout/_layout.ejs'),
-    //     alwaysWriteToDisk: true,
-    //     scriptLoading: 'defer'
-    //   }),
   ]
 };
