@@ -80,8 +80,6 @@ photozoom:
 sitemap:
   path: sitemap.xml
 
-disqus_shortname: ssarcandy
-
 pwa:
   manifest:
     path: /manifest.json

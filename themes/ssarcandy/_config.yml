@@ -90,3 +90,5 @@ less:
 
 # swipe guesture using hammer.js
 swipe_guesture: false
+
+disqus_shortname: ssarcandy
