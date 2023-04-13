@@ -16,7 +16,7 @@ CouchDB，一個主打安裝好之後就可以直接有原生 Http API 進行 CR
 
 <!-- more -->
 
-## Prerequisites
+# Prerequisites
 
 在開始之前，由於我是打算要用 docker swarm 做跨機佈署，所以首先要先準備好環境：
 
@@ -44,7 +44,7 @@ ID                            HOSTNAME            STATUS              AVAILABILI
 7zj2xk3up7ce34atj2nme9rf9     docker-node-3       Ready               Active              Reachable           19.03.13
 ```
 
-## Setup CouchDB as Single Node
+# Setup CouchDB as Single Node
 
 我們要使用的會是官方的 docker image — `couchdb:3.1.1`
 
@@ -84,7 +84,7 @@ couchdb_couchdb_1   tini -- /docker-entrypoint ...   Up      0.0.0.0:4369->4369/
 
 至此就完成 Single Node CouchDB 的安裝，可喜可賀。
 
-## Deploy as CouchDB Cluster Mode
+# Deploy as CouchDB Cluster Mode
 
 剛剛嘗試了一鍵佈署 single node 的 CouchDB，那接下來就來嘗試主角吧 — Cluster Mode 
 
@@ -96,7 +96,7 @@ CouchDB 的 cluster mode 設定比起 single node 來的複雜非常多，而且
 - 每個 CouchDB 必須要可以透過 `NODENAME` 來互相溝通
 - 每個 CouchDB 必須要有同樣的 uuid
 
-### Prepare config.ini
+## Prepare config.ini
 
 為了要保證大家的 Config 一致，這邊我要用事先準備好的 `config.ini`，而非透過 yml 的 environment 傳參數，這個方法也是[官方建議的方法](https://github.com/apache/couchdb-docker#configuring-couchdb)<sup>[1]</sup>:
 
@@ -127,7 +127,7 @@ $ PASS="admin123" SALT="8a3bfe04b1f4294d89d9e9d250fce77a" ITER=10 \
 -pbkdf2-07fe7c8d94281cafdfa065c0f9dd9b6fae56b649,8a3bfe04b1f4294d89d9e9d250fce77a,10
 ```
 
-### Using same config across nodes
+## Using same config across nodes
 
 官方說了三種方式提供 ini 檔：
 
@@ -259,7 +259,7 @@ $ curl "http://admin:admin123@<IP>:5984/_membership"
 
 這樣就設定完成啦🎉 (記得再去管理介面 verifyinstall 檢查一次)
 
-## Test High Availability
+# Test High Availability
 
 設定好 cluster 之後就要來驗證 HA 是否正常，這邊測試的方法會是先在某台 CouchDB 新增資料，理論上其他台也會可以存取這筆資料：
 
@@ -290,14 +290,15 @@ $ curl "http://admin:admin123@<server03>:5984/mydatabase/01"
 
 (實務上再去疊一層 Load Balancer 讓 Http endpoint 統一會更方便)
 
-## Conclusion
+# Conclusion
 
 設定 single node 很簡單，但設定 cluster mode 頗複雜，我個人覺得 error log 沒有非常完整，很多各式各樣的坑都會直接死掉根本不會有任何 log，很崩潰...😱。
 
----
 
-References:
+# Reference
 
-[1] [Configuring CouchDB](https://github.com/apache/couchdb-docker#configuring-couchdb)
-[2] [How to generate password hash for CouchDB administrator](https://blog.sleeplessbeastie.eu/2020/03/13/how-to-generate-password-hash-for-couchdb-administrator/)
-[3] [Configuration from docker config or secret? #73](https://github.com/apache/couchdb-docker/issues/73#issuecomment-766179802)
+1. [Configuring CouchDB](https://github.com/apache/couchdb-docker#configuring-couchdb)
+2. [How to generate password hash for CouchDB administrator](https://blog.sleeplessbeastie.eu/2020/03/13/how-to-generate-password-hash-for-couchdb-administrator/)
+3. [Configuration from docker config or secret? #73](https://github.com/apache/couchdb-docker/issues/73#issuecomment-766179802)
+
+{% ref_style %}

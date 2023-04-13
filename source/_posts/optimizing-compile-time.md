@@ -197,6 +197,8 @@ Time variable                                   usr           sys          wall 
 
 # Reference
 
-- [Improving Compilation Time of C/C++ Projects](https://interrupt.memfault.com/blog/improving-compilation-times-c-cpp-projects)
-- ["variable tracking" is eating my compile time!](https://stackoverflow.com/questions/2954473/variable-tracking-is-eating-my-compile-time)
-- [CMake Unity Build](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD.html#prop_tgt:UNITY_BUILD)
+1. [Improving Compilation Time of C/C++ Projects](https://interrupt.memfault.com/blog/improving-compilation-times-c-cpp-projects)
+2. ["variable tracking" is eating my compile time!](https://stackoverflow.com/questions/2954473/variable-tracking-is-eating-my-compile-time)
+3. [CMake Unity Build](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD.html#prop_tgt:UNITY_BUILD)
+
+{% ref_style %}

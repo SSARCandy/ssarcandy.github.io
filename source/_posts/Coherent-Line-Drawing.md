@@ -131,4 +131,6 @@ Or download pre-build version [here](https://github.com/SSARCandy/Coherent-Line-
 
 # Reference
 
-[1] Image from 'Coherent Line Drawing' by Kang et al, Proc. NPAR 2007
+1. Image from 'Coherent Line Drawing' by Kang et al, Proc. NPAR 2007
+
+{% ref_style %}

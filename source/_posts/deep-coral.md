@@ -162,9 +162,10 @@ def CORAL(source, target):
 
 {% zoom /img/2017-10-31/5.png 修正過後的結果。 %}
 
-# References
+# Reference
 
-[1] Sun, B., Saenko, K.: Deep CORAL: Correlation Alignment for Deep Domain Adaptation. In: ECCV (2016)
-[2] Sun, B., Feng, J., Saenko, K.: Return of frustratingly easy domain adaptation. In: AAAI (2016)
-[3] [Domain Adaptation Project](https://people.eecs.berkeley.edu/~jhoffman/domainadapt/#datasets_code)
+1. Sun, B., Saenko, K.: Deep CORAL: Correlation Alignment for Deep Domain Adaptation. In: ECCV (2016)
+2. Sun, B., Feng, J., Saenko, K.: Return of frustratingly easy domain adaptation. In: AAAI (2016)
+3. [Domain Adaptation Project](https://people.eecs.berkeley.edu/~jhoffman/domainadapt/#datasets_code)
 
+{% ref_style %}

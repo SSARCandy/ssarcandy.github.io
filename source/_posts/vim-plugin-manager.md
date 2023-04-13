@@ -11,12 +11,12 @@ image: /img/2016-08-17/1.png
 先來談談用過這三個分別的感想好了：
 
 <!-- more -->
-### Pathogen
+# Pathogen
 簡單好用，與其說是 plugin-manager，個人覺得比較像是個純粹的 run-time loader，沒有什麼其他的功能。
 但已十分好用，要新增什麼 plugin，只需把 plugin 的資料夾放在 `bundle/` 底下就完工了！
 刪除也是，直接砍掉 `bundle/` 底下對應資料夾就OK
 
-### Vundle
+# Vundle
 目前應該是這三者中 github stars 最多的。
 plugin 安裝方式是在 `.vimrc` 中寫你要的 plugin name
 
@@ -27,7 +27,7 @@ Plugin 'tpope/vim-fugitive'
 
 這樣的好處是你裝過什麼一目了然，而且到新環境要重新設置的時候也很方便，直接`:PluginInstall`就完成了。(如果用 Pathogen 就必須自己把要用的 plugins clone 下來。)
 
-### vim-plug
+# vim-plug
 我目前在使用的 plugin-manager ，給我的感覺就是 Vundle 的加強版。
 新增 plugin 的方式跟 Vundle 很像(只是關鍵字不同)，都是在 `.vimrc` 中寫你要的 plugin name
 
@@ -41,7 +41,7 @@ Plug 'tpope/vim-fugitive'
 [NERDTree](https://github.com/scrooloose/nerdtree) 也是，有時候只是打開一個檔案要編輯而已，用不著這個套件，只有當真的觸發開啟 NERDTree 的時候再載入就好。
 這些 vim-plug 都可以設定(設定方式詳見 [readme](https://github.com/junegunn/vim-plug))，大幅提升 vim 開啟速度～
 
-### 效能
+# 效能
 我從 Pathogen 換到 Vundle 是為了可以很容易的在新環境設定好 vim，
 而從 Vundle 換到 vim-plug 則是為了他的 on-demand loading。
 
@@ -60,8 +60,8 @@ $ vim --startuptime vim.log
 
 詳細開啟資訊都會寫入 `vim.log`
 
----
+# Reference
+1. [vim-plugins-and-startup-time](http://junegunn.kr/2014/07/vim-plugins-and-startup-time/)
+2. [vim.tw](https://www.facebook.com/groups/vim.tw/)
 
-References:
-[1] [vim-plugins-and-startup-time](http://junegunn.kr/2014/07/vim-plugins-and-startup-time/)
-[2] [vim.tw](https://www.facebook.com/groups/vim.tw/)
+{% ref_style %}

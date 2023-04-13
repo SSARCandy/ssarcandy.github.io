@@ -19,7 +19,7 @@ tags:
 
 - A client VM
 - Slurm controller
-- N 個 Slurm computing nodes
+- N nodes of Slurm computing node
 - NFS that mount on all computing nodes
 
 整體圖大概長這樣，基本上參考 google 的架構<sup>[2]</sup>，只是加上一個 NFS
@@ -28,8 +28,7 @@ tags:
 {% zoom /img/2020-04-22/2.png 架構圖。Client VM 也需要掛載 NFS %}
 
 
-
-## Create a Share Storage
+# Create a Share Storage
 
 首先先來建立一個儲存空間來當作 NFS ，用於掛載在所有 Nodes 上，這樣才可以在任何地方存取同樣的資料，我這邊選用 Google Filestore 因為他的 I/O 會比一般 Google 的 pd-standard 或 pd-ssd 來的好<sup>[3]</sup>
 
@@ -39,7 +38,7 @@ tags:
 {% zoom /img/2020-04-22/1.png 案案案就會得到這個 %}
 
 
-## Setup Slurm Cluster
+# Setup Slurm Cluster
 
 接下來要來佈屬 Slurm controller, compute nodes, client VM 到 GCP 上，這邊其實已經有整個模板了，[github 連結](https://github.com/SchedMD/slurm-gcp)。
 這個可以直接用 `gcloud` 佈署，但在此之前需要先改改 config ，主要要改的是 `slurm-cluster.yaml`
@@ -102,7 +101,7 @@ PACKAGES=(
 我個人認為最大的雷就是 filestore 跟 slurm cluster 必須在同一個 VPC 才能掛載，然後這個 slurm template 不指定 vpc 他會幫你建一個 (不是用 default)，所以我一開始搞一直不同 vpc 掛不起來…
 
 
-## Deploy & Test It
+# Deploy & Test It
 
 設定通通解決後接下來就是佈署上 GCP 了，基本上透過 gcloud 就可以了:
 這邊可以 clone 我改過的設定檔 (跟上面說的設定一樣)，記得要填 nfs IP
@@ -193,11 +192,13 @@ testfile_cloud-slurm-compute-0-2_VPSEW
 NFS I/O 根據我的測試也是完勝自架的分散式儲存系統！
 壞處則是可能也許會有些貴...(?)
 
-## Reference
+# Reference
 
-[1] https://slurm.schedmd.com/documentation.html
-[2] https://codelabs.developers.google.com/codelabs/hpc-slurm-on-gcp
-[3] https://cloud.google.com/compute/docs/disks
+1. https://slurm.schedmd.com/documentation.html
+2. https://codelabs.developers.google.com/codelabs/hpc-slurm-on-gcp
+3. https://cloud.google.com/compute/docs/disks
+
+{% ref_style %}
 
 --- 
 

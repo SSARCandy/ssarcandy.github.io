@@ -114,13 +114,11 @@ server 這邊，必須要允許 ssh 的連線 forward 這些圖形介面的資�
 {% zoom /img/2017-03-20/01.PNG 透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows) %}
 
 
+# Reference
 
-----------
+1. [Mac 已不再隨附 X11](https://support.apple.com/zh-tw/HT201341)
+2. [SSH X11 Forwarding](http://cypresslin.web.fc2.com/Memo/M-SSH.html)
+3. [Installing/Configuring PuTTy and Xming](http://www.geo.mtu.edu/geoschem/docs/putty_install.html)
+4. [Setup X11 Forwarding over SSH on Debian Wheezy](https://www.vultr.com/docs/setup-x11-forwarding-over-ssh-on-debian-wheezy)
 
-Reference:
-
-[1] [Mac 已不再隨附 X11](https://support.apple.com/zh-tw/HT201341)
-[2] [SSH X11 Forwarding](http://cypresslin.web.fc2.com/Memo/M-SSH.html)
-[3] [Installing/Configuring PuTTy and Xming](http://www.geo.mtu.edu/geoschem/docs/putty_install.html)
-[4] [Setup X11 Forwarding over SSH on Debian Wheezy](https://www.vultr.com/docs/setup-x11-forwarding-over-ssh-on-debian-wheezy)
-
+{% ref_style %}

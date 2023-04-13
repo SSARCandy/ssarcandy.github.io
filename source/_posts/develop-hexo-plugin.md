@@ -125,5 +125,7 @@ hexo.extend.filter.register('after_generate', () => {
 
 # Reference
 
-- [Hexo Filter](https://hexo.io/api/filter)
-- [Develop a plugin for Hexo - Github Card](https://blog.gisonrg.me/2016/04/develop-hexo-github-card/)
+1. [Hexo Filter](https://hexo.io/api/filter)
+2. [Develop a plugin for Hexo - Github Card](https://blog.gisonrg.me/2016/04/develop-hexo-github-card/)
+
+{% ref_style %}

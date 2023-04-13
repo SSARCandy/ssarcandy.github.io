@@ -225,14 +225,16 @@ $$
 
 # Reference
 
-[1] Fast, Robust Image Registration for Compositing High Dynamic Range Photographs from Handheld Exposures, G. Ward, JGT 2003
-[2] Recovering High Dynamic Range Radiance Maps from Photographs, Paul E. Debevec, Jitendra Malik, SIGGRAPH 1997
+1. Fast, Robust Image Registration for Compositing High Dynamic Range Photographs from Handheld Exposures, G. Ward, JGT 2003
+2. Recovering High Dynamic Range Radiance Maps from Photographs, Paul E. Debevec, Jitendra Malik, SIGGRAPH 1997
+
+{% ref_style %}
 
 ---
 
 # 雜談
 
-1. 結果說真的還是有不少人工的感覺，可能我太廢了吧...QQ
-2. Latex 配 markdown 要注意該死的 `_`，在 Hexo 中底線會先被視為斜體字，所以在 Latex 中底線前面要用跳脫字元。
-3. Hexo 的 markdown 真 robust! 愛怎亂搞都會跟預期中的一樣，也可以亂加 html 語法～(望向 github...
-4. 這篇文章照片真多，竟然要下載 30MB 之多，超不 friendly der~
+- 結果說真的還是有不少人工的感覺，可能我太廢了吧...QQ
+- Latex 配 markdown 要注意該死的 `_`，在 Hexo 中底線會先被視為斜體字，所以在 Latex 中底線前面要用跳脫字元。
+- Hexo 的 markdown 真 robust! 愛怎亂搞都會跟預期中的一樣，也可以亂加 html 語法～(望向 github...
+- 這篇文章照片真多，竟然要下載 30MB 之多，超不 friendly der~

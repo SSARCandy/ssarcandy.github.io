@@ -31,3 +31,29 @@ hexo.extend.helper.register('page_images', (page, additional_imgs) => {
 
   return images.concat(additional_imgs);
 });
+
+hexo.extend.tag.register('ref_style', () => {
+  return `
+  <style>
+  h1+ol {
+    list-style-type: none;
+    counter-reset: list-counter;
+    padding-left: 0;
+  }
+  h1+ol li {
+    position: relative;
+    padding-left: 3em;
+  }
+  h1+ol li::before {
+    counter-increment: list-counter;
+    content: "[" counter(list-counter) "] ";
+    position: absolute;
+    left: 0;
+    width: 25px;
+    text-align: right;
+  }
+  </style>
+  `;
+});
+
+

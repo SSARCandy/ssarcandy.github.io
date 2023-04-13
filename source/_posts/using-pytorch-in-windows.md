@@ -114,7 +114,9 @@ torch-xxx.whl is not a supported wheel on this platform.
 $ pip install --upgrade pip
 ```
 
-# References
+# Reference
 
-[1] [Windows Subsystem for Linux (WSL) 安裝教學 & 初體驗](https://blog.birkhoff.me/bash_on_windows_installation/)
-[2] [Configuring Remote Interpreters via WSL](https://www.jetbrains.com/help/pycharm/configuring-remote-interpreters-via-wsl.html)
+1. [Windows Subsystem for Linux (WSL) 安裝教學 & 初體驗](https://blog.birkhoff.me/bash_on_windows_installation/)
+2. [Configuring Remote Interpreters via WSL](https://www.jetbrains.com/help/pycharm/configuring-remote-interpreters-via-wsl.html)
+
+{% ref_style %}

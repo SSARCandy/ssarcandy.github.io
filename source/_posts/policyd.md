@@ -142,12 +142,13 @@ Jan 20 00:02:05 cml2 cbpolicyd[32562]: module=Quotas, mode=update, reason=quota_
 policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/200 (0.5%)
 ```
 
-----------
 
-References:
-[1] [Policyd-Installing](http://wiki.policyd.org/installing)
-[2] [Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
-[3] [Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
-[4] [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
-[5] [Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
+# Reference
+1. [Policyd-Installing](http://wiki.policyd.org/installing)
+2. [Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
+3. [Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
+4. [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
+5. [Lighttpd setup a password protected directory (directories)](https://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html)
+
+{% ref_style %}
 

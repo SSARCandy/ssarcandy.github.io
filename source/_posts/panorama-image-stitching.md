@@ -153,7 +153,8 @@ window.onload = function() {
 </script>
 
 
----
+# Reference
 
-Reference:
-[1] Image from Digital Visual Effects(NTU) slides
+1. Image from Digital Visual Effects(NTU) slides
+
+{% ref_style %}

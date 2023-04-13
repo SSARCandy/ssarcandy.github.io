@@ -88,8 +88,10 @@ Messanger 兩年前推出可以在聊天室內玩籃球的彩蛋，浪費了我�
 
 
 
-References:
+# Reference
 
-[1] [Cryptographic nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce)
-[2] [How do I prevent memory-modification cheats?](https://gamedev.stackexchange.com/questions/48629/how-do-i-prevent-memory-modification-cheats)
+1. [Cryptographic nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce)
+2. [How do I prevent memory-modification cheats?](https://gamedev.stackexchange.com/questions/48629/how-do-i-prevent-memory-modification-cheats)
+
+{% ref_style %}
 

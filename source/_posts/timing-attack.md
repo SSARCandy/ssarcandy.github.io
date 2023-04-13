@@ -131,12 +131,11 @@ $$
 講白了這個攻擊手段我個人覺得看起來很厲害但其實沒這麼可怕。除非是菜鳥工程師，不然實務上不太可能做出會被這個攻擊手段影響的系統...
 
 
----
 
-Reference:
-[1] Return early and clearly [https://arne-mertz.de/2016/12/early-return/](https://arne-mertz.de/2016/12/early-return/)
-[2] 這個例子其實是所謂的 Order of evaluation, 跟 Early return 有一點不同。[https://en.cppreference.com/w/cpp/language/eval_order](https://en.cppreference.com/w/cpp/language/eval_order)
-[3] [Adding Salt to Hashing: A Better Way to Store Passwords](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/)
-[4] [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) 可以有效避免重送攻擊。 (重送攻擊我常常用，可參考我的另一篇文章 [從奧客玩家視角看遊戲防禦性設計](/2019/10/02/game-design-from-perspective-of-hacker/))
-
-另外補充一篇也是在介紹 Timing Attack 的文 [Using Node.js Event Loop for Timing Attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/)
+# Reference
+1. Return early and clearly [https://arne-mertz.de/2016/12/early-return/](https://arne-mertz.de/2016/12/early-return/)
+2. 這個例子其實是所謂的 Order of evaluation, 跟 Early return 有一點不同。[https://en.cppreference.com/w/cpp/language/eval_order](https://en.cppreference.com/w/cpp/language/eval_order)
+3. [Adding Salt to Hashing: A Better Way to Store Passwords](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/)
+4. [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) 可以有效避免重送攻擊。 (重送攻擊我常常用，可參考我的另一篇文章 [從奧客玩家視角看遊戲防禦性設計](/2019/10/02/game-design-from-perspective-of-hacker/))
+5. 另外補充一篇也是在介紹 Timing Attack 的文 [Using Node.js Event Loop for Timing Attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/)
+{% ref_style %}

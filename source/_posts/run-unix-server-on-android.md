@@ -178,27 +178,4 @@ Task2 是用 Python 寫的 `is_prime` script<sup>[10]</sup> ，用於測試單�
 9. [Linode Pricing List](https://www.linode.com/pricing/)
 10. [Python check prime number](https://gist.github.com/SSARCandy/14f339cf0d5b5b4a2069b0a51fbbc2b1)
 
-<style>
-/* Initialize a counter */
-h1+ol {
-  list-style-type: none;
-  counter-reset: list-counter;
-  padding-left: 0;
-}
-
-/* Style the list items */
-h1+ol li {
-  position: relative;
-  padding-left: 3em;
-}
-
-/* Add the counter before the list item */
-h1+ol li::before {
-  counter-increment: list-counter;
-  content: "[" counter(list-counter) "] ";
-  position: absolute;
-  left: 0;
-  width: 25px; /* Set a fixed width */
-  text-align: right; /* Align the content to the right */
-}
-</style>
+{% ref_style %}
