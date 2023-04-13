@@ -110,8 +110,6 @@ $ chgrp -R webui
 
 就可以直接連上 web 介面: `http://your.domian/webui/`
 
-## 設定權限
-
 這 web 介面預設不用登入，大家都可以隨意更改，所以必須利用其他方式加個密碼保護。
 
 這邊是用 `lighthttpd` 設定密碼
@@ -130,7 +128,7 @@ $ vim lighthttpd.conf
 到這邊就簡單了，藉由 web 介面按按按鈕就可以設定各種 Quota，詳細可參考這篇圖文教學:
 [How To Configure Rate Limit Sending Message on PolicyD](https://imanudin.net/2014/09/09/zimbra-tips-how-to-configure-rate-limit-sending-message-on-policyd/)
 
-## 驗證
+# 驗證
 
 想確定是不是有成功，可以去 mySQL > policyd > quota_tracking 查看是不是真的有在追蹤大家的流量。
 
