@@ -10,10 +10,6 @@ hexo.extend.helper.register('post_pv', (slug) => {
   return pageview.pv_map[slug.toLowerCase()] || 0;
 });
 
-hexo.extend.helper.register('format_number', (x) => { 
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-});
-
 /**
  * Generate images path in specified "page", and append additional image paths.
  */
