@@ -6,8 +6,11 @@
         <%- partial('_partial/post/tag') %>
     </div>
     <div class="post-meat" style="color:grey; font-size:13px;">
-        <i class="icon icon-sm icon-eye" aria-hidden="true"></i>
+        <i class="icon icon-sm icon-bar-chart" aria-hidden="true"></i>
         <%- number_format(post_pv(post.slug)) %>
+        <span style="margin-left: 10px;"></span>
+        <i class="icon icon-sm icon-clock-o" aria-hidden="true"></i>
+        <%- readingTime(page.content, 'min.', 150) %>
     </div>
     <div class="post-body">
         <div class="post-main">

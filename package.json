@@ -36,6 +36,7 @@
     "hexo-generator-tag": "2.0.0",
     "hexo-html-minifier": "^1.0.0",
     "hexo-pwa": "git@github.com:Doracoin/hexo-pwa.git",
+    "hexo-reading-time": "^1.0.3",
     "hexo-renderer-ejs": "2.0.0",
     "hexo-renderer-less": "4.0.0",
     "hexo-renderer-marked": "6.0.0",
