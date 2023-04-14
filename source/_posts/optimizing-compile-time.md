@@ -195,7 +195,7 @@ Time variable                                   usr           sys          wall 
 
 在爬文時網友提及 pre-compiled headers 以及 explicit (extern) template 也對減少編譯時間有幫助，但實測並未有顯著差異，故本文未提及，也許實際上是有用只是剛好不適用於我的環境之類的。
 
-# Reference
+# References
 
 1. [Improving Compilation Time of C/C++ Projects](https://interrupt.memfault.com/blog/improving-compilation-times-c-cpp-projects)
 2. ["variable tracking" is eating my compile time!](https://stackoverflow.com/questions/2954473/variable-tracking-is-eating-my-compile-time)

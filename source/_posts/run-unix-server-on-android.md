@@ -165,7 +165,7 @@ Pixel4a= 25.62s user 0.01s system 99% cpu 25.681 total
 Task1 測試的所有 CPU 都滿載時的效能，很合理的 Pixel4a 有多顆 CPU 自然會贏過 Nanode;
 Task2 是用 Python 寫的 `is_prime` script<sup>[10]</sup> ，用於測試單一 CPU 的性能，就可以發現其實手機的 CPU 還是偏爛，有差到 30%
 
-# Reference
+# References
 
 1. [Termux Wiki](https://wiki.termux.com/wiki/Main_Page)
 2. [連筆電都懶得帶? 那就在 Android 上跑 VS Code 吧! | Termux , PRoot , VS Code Server](https://home.gamer.com.tw/artwork.php?sn=5533738)

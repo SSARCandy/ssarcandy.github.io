@@ -147,7 +147,7 @@ $ scontrol update nodename=research04 state=resume
 
 ---
 
-# Reference
+# References
 1. https://en.wikipedia.org/wiki/Slurm_Workload_Manager
 2. https://slurm.schedmd.com/overview.html
 

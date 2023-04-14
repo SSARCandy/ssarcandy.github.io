@@ -295,7 +295,7 @@ $ curl "http://admin:admin123@<server03>:5984/mydatabase/01"
 設定 single node 很簡單，但設定 cluster mode 頗複雜，我個人覺得 error log 沒有非常完整，很多各式各樣的坑都會直接死掉根本不會有任何 log，很崩潰...😱。
 
 
-# Reference
+# References
 
 1. [Configuring CouchDB](https://github.com/apache/couchdb-docker#configuring-couchdb)
 2. [How to generate password hash for CouchDB administrator](https://blog.sleeplessbeastie.eu/2020/03/13/how-to-generate-password-hash-for-couchdb-administrator/)

@@ -114,7 +114,7 @@ server 這邊，必須要允許 ssh 的連線 forward 這些圖形介面的資�
 {% zoom /img/2017-03-20/01.PNG 透過 X11-forwarding 讓 server 上的 gvim 顯示到本機(windows) %}
 
 
-# Reference
+# References
 
 1. [Mac 已不再隨附 X11](https://support.apple.com/zh-tw/HT201341)
 2. [SSH X11 Forwarding](http://cypresslin.web.fc2.com/Memo/M-SSH.html)

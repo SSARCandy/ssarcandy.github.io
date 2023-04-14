@@ -123,7 +123,7 @@ hexo.extend.filter.register('after_generate', () => {
 且這作法同時兼顧如果有使用者想在非文章內容的地方使用 `zoom.js` 的效果，只需要在 `<img>` 中加上 `photozoom` class name，在每次編譯時都會掃到並在需要的地方插入程式碼。
 
 
-# Reference
+# References
 
 1. [Hexo Filter](https://hexo.io/api/filter)
 2. [Develop a plugin for Hexo - Github Card](https://blog.gisonrg.me/2016/04/develop-hexo-github-card/)

@@ -153,7 +153,7 @@ window.onload = function() {
 </script>
 
 
-# Reference
+# References
 
 1. Image from Digital Visual Effects(NTU) slides
 

@@ -192,7 +192,7 @@ testfile_cloud-slurm-compute-0-2_VPSEW
 NFS I/O 根據我的測試也是完勝自架的分散式儲存系統！
 壞處則是可能也許會有些貴...(?)
 
-# Reference
+# References
 
 1. https://slurm.schedmd.com/documentation.html
 2. https://codelabs.developers.google.com/codelabs/hpc-slurm-on-gcp

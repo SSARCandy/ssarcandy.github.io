@@ -129,7 +129,7 @@ Or download pre-build version [here](https://github.com/SSARCandy/Coherent-Line-
 
 {% zoom /img/2017-06-26/10.jpg Screenshot of my system user interface %}
 
-# Reference
+# References
 
 1. Image from 'Coherent Line Drawing' by Kang et al, Proc. NPAR 2007
 

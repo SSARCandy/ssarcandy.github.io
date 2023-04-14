@@ -110,7 +110,7 @@ let l2 = new level2();
 看看 `getX`, `getY` 就會發現他們定義在不同層級，因為 `getX` 是父類別的方法，所以在原型鍊中的更上一層。
 由此就可以看出 ES6 雖然有 class 關鍵字，但其實原理還是原型鍊。
 
-# Reference
+# References
 
 1. [Javascript继承机制的设计思想](http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html)
 2. [該來理解 JavaScript 的原型鍊了](http://blog.techbridge.cc/2017/04/22/javascript-prototype/)

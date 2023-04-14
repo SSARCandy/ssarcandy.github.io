@@ -223,7 +223,7 @@ $$
 </div>
 
 
-# Reference
+# References
 
 1. Fast, Robust Image Registration for Compositing High Dynamic Range Photographs from Handheld Exposures, G. Ward, JGT 2003
 2. Recovering High Dynamic Range Radiance Maps from Photographs, Paul E. Debevec, Jitendra Malik, SIGGRAPH 1997

@@ -132,7 +132,7 @@ $$
 
 
 
-# Reference
+# References
 1. Return early and clearly [https://arne-mertz.de/2016/12/early-return/](https://arne-mertz.de/2016/12/early-return/)
 2. 這個例子其實是所謂的 Order of evaluation, 跟 Early return 有一點不同。[https://en.cppreference.com/w/cpp/language/eval_order](https://en.cppreference.com/w/cpp/language/eval_order)
 3. [Adding Salt to Hashing: A Better Way to Store Passwords](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/)

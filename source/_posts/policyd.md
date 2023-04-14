@@ -141,7 +141,7 @@ policy=6, quota=3, limit=4, track=Sender:xxx, counter=MessageCount, quota=1.00/2
 ```
 
 
-# Reference
+# References
 1. [Policyd-Installing](http://wiki.policyd.org/installing)
 2. [Postfix + Centos + Policyd V2 + MySQL](https://www.kutukupret.com/2009/09/13/postfix-centos-policyd-v2-mysql/)
 3. [Policyd(Cluebringer) installation](http://en.enisozgen.com/policydcluebringer-installation/)
