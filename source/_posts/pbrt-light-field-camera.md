@@ -81,11 +81,14 @@ mathjax: true
 
 ---
 
-註:
-[1] [Light Field Photography with a Hand-held Plenoptic Camera](http://graphics.stanford.edu/papers/lfcamera/), R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan
-[2] [CS348b Project： Light Field Camera Simulation](https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf), Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen
-[3] [Fourier Slice Photography](http://graphics.stanford.edu/papers/fourierphoto/), Ren Ng, ACM Transactions on Graphics, July 2005
-[4] [The (New) Stanford Light Field Archive](http://lightfield.stanford.edu/lfs.html)
-[5] [光場相機原理及仿真實現](http://blog.csdn.net/endlch/article/details/44539055)
-[6] [LYTRO Light Field Camera 原理解析](https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/)
+# References
+1. [Light Field Photography with a Hand-held Plenoptic Camera](http://graphics.stanford.edu/papers/lfcamera/), R Ng, M Levoy, M Brédif, G Duval, M Horowitz, P Hanrahan
+2. [CS348b Project： Light Field Camera Simulation](https://graphics.stanford.edu/courses/cs348b-competition/cs348b-14/second_report.pdf), Zahid Hossain, Adam Spilfogel Backery, Yanlin Chen
+3. [Fourier Slice Photography](http://graphics.stanford.edu/papers/fourierphoto/), Ren Ng, ACM Transactions on Graphics, July 2005
+4. [The (New) Stanford Light Field Archive](http://lightfield.stanford.edu/lfs.html)
+5. [光場相機原理及仿真實現](http://blog.csdn.net/endlch/article/details/44539055)
+6. [LYTRO Light Field Camera 原理解析](https://phychai.wordpress.com/2011/06/24/lytro-light-field-camera/)
+
+{% ref_style %}
+
 $$$$

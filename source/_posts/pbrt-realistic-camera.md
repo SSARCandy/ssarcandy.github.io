@@ -95,9 +95,10 @@ for l in lens:  # from rear to front
   所以記得要注意別把負數開根號了。
 
 
----
+# References
+1. 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_\(graphics\))
+2. A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995
 
- 註:
- [1] 圖片取自維基百科 [Ray-tracing](https://www.wikiwand.com/en/Ray_tracing_\(graphics\))
- [2] A Realistic Camera Model for Computer Graphics, SIGGRAPH 1995
+{% ref_style %}
+
 $$$$

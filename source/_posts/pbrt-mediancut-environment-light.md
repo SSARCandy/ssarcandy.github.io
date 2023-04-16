@@ -64,6 +64,9 @@ eg. Y = 0.2125R + 0.7154G + 0.0721B 之類的加權法
 
 ---
 
-註:
-[1] 原圖來自 Physically Based Rendering, Second Edition
-[2] 原圖來自 A Median Cut Algorithm for Light Probe Sampling, SIGGRAPH 2006
+# References
+
+1. 原圖來自 Physically Based Rendering, Second Edition
+2. 原圖來自 A Median Cut Algorithm for Light Probe Sampling, SIGGRAPH 2006
+
+{% ref_style %}

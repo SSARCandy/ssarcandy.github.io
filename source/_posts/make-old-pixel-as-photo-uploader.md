@@ -32,7 +32,7 @@ tags:
 - Mega 需安裝於新、舊手機
 - [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync) 需安裝於舊手機
 
-Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間，註冊且下載至新手機以後以後，只要開啟 Camera Upload <sup>[2]</sup> 功能即可。空間方面也不用擔心耗盡，一方面是他有 50 GB，另一方面是我只是要將它當作一個暫存中繼站，只要後續備份完成，這邊的照片即可清空。
+Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間<sup>[2]</sup>，註冊且下載至新手機以後以後，只要開啟 Camera Upload <sup>[3]</sup> 功能即可。空間方面也不用擔心耗盡，一方面是他有 50 GB，另一方面是我只是要將它當作一個暫存中繼站，只要後續備份完成，這邊的照片即可清空。
 
 而 [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync) 是一個第三方 app，功能類似於 `rsync` ，可以將 Mega 上面的指定資料夾下的檔案同步至手機地端，所以只要設定好要同步 Camera Upload 資料夾，就可以利用這個機制去下載我新手機所拍攝的照片到舊手機上。
 
@@ -49,5 +49,10 @@ Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間，註冊且
 
 ---
 
-[1] [Google 相簿儲存空間政策更新](https://support.google.com/photos/answer/10100180?hl=zh-Hant)
-[2] [How to use camera uploads?](https://help.mega.io/installs-apps/mobile/camera-uploads)
+# References
+
+1. [Google 相簿儲存空間政策更新](https://support.google.com/photos/answer/10100180?hl=zh-Hant)
+2. 2020 年以後註冊的新帳戶，免費空間改為 20GB，[可透過一些任務升級至 50GB](https://help.mega.io/plans-storage/achievements/free-space)
+3. [How to use camera uploads?](https://help.mega.io/installs-apps/mobile/camera-uploads)
+
+{% ref_style %}

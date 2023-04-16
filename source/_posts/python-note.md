@@ -153,9 +153,12 @@ Python 作者 Tim Peters 把一首詩藏在 `import this` 中，
 >寫 Python 就像是在寫 pseudo-code 一樣爽！
 
 
----
-註:
-[1] `cv.pyd` 可以在 build 好的 opencv 資料夾中找到。
-[2] OpenCV 不能用 `pip` 安裝，而 `conda` 是類似 `pip` 的 Python 套件管理軟體。
-[3] Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考[這篇](http：//stackoverflow.com/questions/17193457/private-method-in-python)。 
-[4] 函式名子**不一定**不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。
+
+# References
+
+1. `cv.pyd` 可以在 build 好的 opencv 資料夾中找到。
+2. OpenCV 不能用 `pip` 安裝，而 `conda` 是類似 `pip` 的 Python 套件管理軟體。
+3. Python 是沒有 private function 的，只是在 runtime 藉由更改 function name 來達到這樣的效果，詳細可以參考[這篇](http：//stackoverflow.com/questions/17193457/private-method-in-python)。 
+4. 函式名子**不一定**不能當作變數名稱，在 C/C++ 中會有 Compile-time Error，在 javascript 中是可以的，但是會覆蓋其內容。
+
+{% ref_style %}
