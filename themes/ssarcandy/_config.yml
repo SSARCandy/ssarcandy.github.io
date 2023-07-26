@@ -33,14 +33,14 @@ social_links:
     url: mailto:ssarcandy@gmail.com
     icon: icon-envelope-square
     target: 
-  linkedin:
-    url: https://www.linkedin.com/in/ssarcandy
-    icon: icon-linkedin-square
-    target: _blank
-  twitter:
-    url: https://twitter.com/ssarcandy
-    icon: icon-twitter-square
-    target: _blank
+  # linkedin:
+  #   url: https://www.linkedin.com/in/ssarcandy
+  #   icon: icon-linkedin-square
+  #   target: _blank
+  # twitter:
+  #   url: https://twitter.com/ssarcandy
+  #   icon: icon-twitter-square
+  #   target: _blank
   github:
     url: https://github.com/SSARCandy
     icon: icon-github-square
