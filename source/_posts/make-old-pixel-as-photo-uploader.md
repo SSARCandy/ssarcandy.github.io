@@ -21,7 +21,7 @@ tags:
 但在這裡，需要注意的是，新手機不要開啟 Google Photos 備份功能，以免佔用雲端空間。
 
 接下來，我們需要尋找一個雲端相片同步服務來當作中繼站，讓新手機拍攝的照片同步至舊手機的暫存空間，以利後續的備份。
-在我的實作中，我選擇了 Mega 和 [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync)。
+在我的實作中，我選擇了 [Mega](https://mega.io/mobile?aff=u4TkijWNntg) 和 [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync)。
 
 {% zoom /img/2023-04-08/01.png 流程圖。 %}
 
@@ -29,7 +29,7 @@ tags:
 
 - Pixel 5 or an earlier device
 - Google Photos 需安裝於新、舊手機
-- Mega 需安裝於新、舊手機
+- [Mega](https://mega.io/mobile?aff=u4TkijWNntg) 需安裝於新、舊手機
 - [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync) 需安裝於舊手機
 
 Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間<sup>[2]</sup>，註冊且下載至新手機以後以後，只要開啟 Camera Upload <sup>[3]</sup> 功能即可。空間方面也不用擔心耗盡，一方面是他有 50 GB，另一方面是我只是要將它當作一個暫存中繼站，只要後續備份完成，這邊的照片即可清空。
@@ -41,7 +41,7 @@ Mega 是一個雲端儲存服務，提供免費的 50GB 儲存空間<sup>[2]</su
 另外為了維持整個流程穩定，最好要把
 
 - 舊手機上將 [MegaSync](https://play.google.com/store/apps/details?id=com.ttxapps.megasync) 的電池最佳化關閉，
-- 新手機上將 Mega 的電池最佳化關閉
+- 新手機上將 [Mega](https://mega.io/mobile?aff=u4TkijWNntg) 的電池最佳化關閉
 
 才不會被系統限制導致無法在背景執行這些程式。
 
