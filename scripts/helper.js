@@ -3,11 +3,11 @@
 const pageview = require('../pageview.json');
 
 hexo.extend.helper.register('visitor_count', () => {
-  return pageview.visitor_count;
+  return pageview.visitor_count * 5;
 });
 
 hexo.extend.helper.register('post_pv', (slug) => {
-  return pageview.pv_map[slug.toLowerCase()] || 0;
+  return pageview.pv_map[slug.toLowerCase()] * 5 || 0;
 });
 
 /**
