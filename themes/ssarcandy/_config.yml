@@ -22,17 +22,17 @@ menu:
     type: ml
     text: menu.project
     url: /projects
-  github:
-    type: fa
-    text: menu.github
-    url: https://github.com/SSARCandy
-    target: _blank
+  # github:
+  #   type: fa
+  #   text: menu.github
+  #   url: https://github.com/SSARCandy
+  #   target: _blank
 
 social_links:
-  email:
-    url: mailto:ssarcandy@gmail.com
-    icon: icon-envelope-square
-    target: 
+  # email:
+  #   url: mailto:ssarcandy@gmail.com
+  #   icon: icon-envelope-square
+  #   target: 
   # linkedin:
   #   url: https://www.linkedin.com/in/ssarcandy
   #   icon: icon-linkedin-square
@@ -41,12 +41,12 @@ social_links:
   #   url: https://twitter.com/ssarcandy
   #   icon: icon-twitter-square
   #   target: _blank
-  github:
-    url: https://github.com/SSARCandy
-    icon: icon-github-square
-    target: _blank
+  # github:
+  #   url: https://github.com/SSARCandy
+  #   icon: icon-github-square
+  #   target: _blank
 
-rss: /atom.xml
+# rss: /atom.xml
 avatar: /img/logo.png
 email: ssarcandy@gmail.com
 motto: There is always more than one solution.
