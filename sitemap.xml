@@ -20,25 +20,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
-    
-    <lastmod>2024-04-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
-    
-    <lastmod>2024-04-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -119,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/07/21/about-taking-case/</loc>
+    <loc>https://ssarcandy.tw/2016/07/26/bot-battle/</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -128,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/07/26/bot-battle/</loc>
+    <loc>https://ssarcandy.tw/2017/07/21/about-taking-case/</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -272,7 +254,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
+    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -281,7 +263,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
+    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -398,7 +380,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
+    <loc>https://ssarcandy.tw/about/index.html</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -407,7 +389,25 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/about/index.html</loc>
+    <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
+    
+    <lastmod>2024-04-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
+    
+    <lastmod>2024-04-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
     
     <lastmod>2024-04-23</lastmod>
     
@@ -453,7 +453,21 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/tags/c/</loc>
+    <lastmod>2024-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/tags/opencv/</loc>
+    <lastmod>2024-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/tags/rendering/</loc>
     <lastmod>2024-04-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -468,20 +482,6 @@
   
   <url>
     <loc>https://ssarcandy.tw/tags/python/</loc>
-    <lastmod>2024-04-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/tags/c/</loc>
-    <lastmod>2024-04-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/tags/rendering/</loc>
     <lastmod>2024-04-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
