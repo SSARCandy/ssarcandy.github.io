@@ -121,3 +121,6 @@ hide_posts:
   public_generators: []
   # Add "noindex" meta tag to prevent hidden posts from being indexed by search engines
   noindex: true
+
+feed:
+  enable: false
