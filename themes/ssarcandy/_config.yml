@@ -46,7 +46,7 @@ social_links:
   #   icon: icon-github-square
   #   target: _blank
 
-# rss: /atom.xml
+rss: false
 avatar: /img/logo.png
 email: ssarcandy@gmail.com
 motto: There is always more than one solution.
