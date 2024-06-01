@@ -227,7 +227,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
+    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
     
     <lastmod>2024-06-01</lastmod>
     
@@ -236,7 +236,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
+    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
     
     <lastmod>2024-06-01</lastmod>
     
@@ -254,7 +254,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
+    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
     
     <lastmod>2024-06-01</lastmod>
     
@@ -263,7 +263,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
+    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
     
     <lastmod>2024-06-01</lastmod>
     
@@ -371,15 +371,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
-    
-    <lastmod>2024-06-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
     
     <lastmod>2024-06-01</lastmod>
@@ -389,7 +380,25 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
+    
+    <lastmod>2024-06-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
+    
+    <lastmod>2024-06-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2024/06/01/z/</loc>
     
     <lastmod>2024-06-01</lastmod>
     
