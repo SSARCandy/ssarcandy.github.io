@@ -27,8 +27,6 @@ var precacheUrls = [
 
   '/',
 
-  '/2024/06/01/z/',
-
   '/2023/04/09/run-unix-server-on-android/',
 
   '/2023/04/08/make-old-pixel-as-photo-uploader/',
@@ -36,6 +34,8 @@ var precacheUrls = [
   '/2022/06/11/optimizing-compile-time/',
 
   '/2021/05/10/share-storage-comparison/',
+
+  '/2021/01/25/setup-couchdb-using-docker-swarm/',
 
 ];
 toolbox.precache(precacheUrls);
