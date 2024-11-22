@@ -344,15 +344,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
-    
-    <lastmod>2024-11-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
     
     <lastmod>2024-11-22</lastmod>
@@ -380,6 +371,15 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
+    
+    <lastmod>2024-11-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
     
     <lastmod>2024-11-22</lastmod>
@@ -398,7 +398,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/about/index.html</loc>
+    <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
     
     <lastmod>2024-11-22</lastmod>
     
@@ -407,7 +407,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
+    <loc>https://ssarcandy.tw/about/index.html</loc>
     
     <lastmod>2024-11-22</lastmod>
     
