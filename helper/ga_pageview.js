@@ -20,19 +20,19 @@ async function runReport() {
     }],
   });
 
-  const path2view = {
+  const title2view = {
     visitor_count: 0,
     pv_map: {},
   };
   response.rows.forEach(row => {
     const path = row.dimensionValues[0].value;
     const views = +row.metricValues[0].value;
-    path2view.visitor_count += views;
+    title2view.visitor_count += views;
     if (!path.startsWith('/20')) return;
     const title = path.split('/')[4].toLocaleLowerCase();
-    path2view.pv_map[title] = views;
+    title2view.pv_map[title] = (title2view.pv_map[title] || 0) + views;
   });
-  return path2view;
+  return title2view;
 }
 
 (async () => {
