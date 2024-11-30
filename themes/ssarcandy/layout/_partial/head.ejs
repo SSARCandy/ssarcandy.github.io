@@ -47,6 +47,9 @@
   <meta name="Description" content="<%=config.description%>">
   <%- favicon_tag(theme.favicon) %>
   <%- css('css/style') %>
+  <% if (theme.adsense.enable) { %>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1532347766435780" crossorigin="anonymous"></script>
+  <% } %>
   
   <link async href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel='manifest' href='/web-app-manifest.json'/>
