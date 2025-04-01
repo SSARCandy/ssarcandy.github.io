@@ -4,7 +4,7 @@
   <url>
     <loc>https://ssarcandy.tw/web-app-manifest.json</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +13,7 @@
   <url>
     <loc>https://ssarcandy.tw/projects/index.html</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -22,7 +22,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -31,7 +31,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -40,16 +40,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
     
-    <lastmod>2025-03-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
-    
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -58,7 +49,16 @@
   <url>
     <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
+    
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -67,7 +67,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -76,7 +76,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -85,7 +85,7 @@
   <url>
     <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -94,7 +94,7 @@
   <url>
     <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -103,7 +103,7 @@
   <url>
     <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -112,7 +112,7 @@
   <url>
     <loc>https://ssarcandy.tw/2020/01/29/timing-attack/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -121,7 +121,7 @@
   <url>
     <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -130,7 +130,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -139,7 +139,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -148,16 +148,7 @@
   <url>
     <loc>https://ssarcandy.tw/about/index.html</loc>
     
-    <lastmod>2025-03-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2019/08/11/Ways-to-Access-Internal-Network/</loc>
-    
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -166,7 +157,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/07/21/about-taking-case/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -175,7 +166,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/07/26/bot-battle/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -184,7 +175,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/11/17/cml-fb-bot/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -193,7 +184,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/10/13/debug-using-vdb/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -202,7 +193,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/10/31/deep-coral/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -211,7 +202,7 @@
   <url>
     <loc>https://ssarcandy.tw/2020/02/09/develop-hexo-plugin/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -220,7 +211,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/02/02/from-react-to-react-native/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -229,7 +220,7 @@
   <url>
     <loc>https://ssarcandy.tw/2019/10/02/game-design-from-perspective-of-hacker/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -238,7 +229,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -247,7 +238,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -256,7 +247,7 @@
   <url>
     <loc>https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -265,7 +256,7 @@
   <url>
     <loc>https://ssarcandy.tw/2018/08/17/mbpr2015-repair/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -274,7 +265,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -283,7 +274,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -292,7 +283,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -301,7 +292,7 @@
   <url>
     <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -310,7 +301,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -319,7 +310,7 @@
   <url>
     <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -328,7 +319,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -337,7 +328,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -346,16 +337,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
     
-    <lastmod>2025-03-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
-    
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -364,7 +346,16 @@
   <url>
     <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
+    
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -373,7 +364,7 @@
   <url>
     <loc>https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -382,7 +373,7 @@
   <url>
     <loc>https://ssarcandy.tw/2019/03/16/Setup-Slurm-Cluster/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -391,7 +382,7 @@
   <url>
     <loc>https://ssarcandy.tw/2017/03/19/Setup-x11-forwarding-on-Debian/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -400,7 +391,16 @@
   <url>
     <loc>https://ssarcandy.tw/2008/10/28/Travian-Article-Submission/</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2019/08/11/Ways-to-Access-Internal-Network/</loc>
+    
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -409,7 +409,7 @@
   <url>
     <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
     
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -418,7 +418,7 @@
 
   <url>
     <loc>https://ssarcandy.tw/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -426,154 +426,154 @@
   
   <url>
     <loc>https://ssarcandy.tw/tags/unix/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/slurm/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/note/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/cloud/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/c/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/opencv/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/rendering/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/paper/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/python/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/trashtalk/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/automation/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/cmake/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/nodejs/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/pbrt/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/pytorch/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/machine-learning/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/hexo/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/javascript/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/react/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/react-native/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/docker/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ssarcandy.tw/tags/vim/</loc>
-    <lastmod>2025-03-31</lastmod>
+    <lastmod>2025-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
