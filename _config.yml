@@ -121,3 +121,9 @@ hide_posts:
   public_generators: []
   # Add "noindex" meta tag to prevent hidden posts from being indexed by search engines
   noindex: true
+
+# Hexo browsersync configuration (using 3080 to avoid Windows EACCES port conflict)
+browsersync:
+  port: 3080
+  ui:
+    port: 3081
