@@ -1,3 +1,14 @@
+- name: TWSE-eVoting
+  title: TWSE Auto eVoting
+  description: '🗳️ 股東會電子投票自動化小幫手'
+  github: https://github.com/SSARCandy/TWSE-eVoting
+  download: https://github.com/SSARCandy/TWSE-eVoting/releases
+  img_ext: .png
+  tags:
+    - Node.js
+    - Electron
+    - Automation
+
 - name: ini-cpp
   title: INI C++ Parser
   description: '📑 Yet another ini config parser for modern C++. It is a header only implementation, easy to install and simple to use.'
