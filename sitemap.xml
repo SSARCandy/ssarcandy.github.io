@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://ssarcandy.tw/photography/index.html</loc>
-    
-    <lastmod>2026-05-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/web-app-manifest.json</loc>
     
     <lastmod>2026-05-29</lastmod>
@@ -20,34 +11,16 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/photography/index.html</loc>
+    
+    <lastmod>2026-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/projects/index.html</loc>
-    
-    <lastmod>2026-05-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
-    
-    <lastmod>2026-05-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
-    
-    <lastmod>2026-05-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
@@ -83,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
+    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
@@ -92,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
+    <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
@@ -353,7 +326,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
+    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
@@ -362,7 +335,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
+    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
@@ -407,7 +380,34 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
+    
+    <lastmod>2026-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
+    
+    <lastmod>2026-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
+    
+    <lastmod>2026-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
     
     <lastmod>2026-05-29</lastmod>
     
