@@ -53,6 +53,8 @@ social_links:
     url: https://www.flickr.com/photos/200681089@N06/
     icon: icon-flickr
     target: _blank
+    user_id: 200681089@N06
+    api_key: 7a611ddaf1e5864e04c418cf09085fda
 
 rss: /atom.xml
 avatar: /img/logo.png

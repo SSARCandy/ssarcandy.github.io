@@ -1,4 +1,12 @@
 <div class="photography-container">
+    <div class="photography-toolbar">
+        <div class="sort-group">
+            <span class="sort-label">Sort by:</span>
+            <button class="sort-btn active" data-sort="date">Date</button>
+            <button class="sort-btn" data-sort="views" id="sort-views-btn" style="display: none;">Views</button>
+            <button class="sort-btn" data-sort="random">Random</button>
+        </div>
+    </div>
     <div id="photography-grid" class="photography-grid">
         <div class="loading-status">Loading photos from Flickr...</div>
     </div>
@@ -8,15 +16,47 @@
 .photography-container {
     padding: 0 16px;
 }
+.photography-toolbar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+.sort-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.sort-label {
+    font-size: 13px;
+    color: #727272;
+}
+.sort-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #444;
+}
+.sort-btn:hover {
+    background: #eeeeee;
+}
+.sort-btn.active {
+    background: #673AB7;
+    color: #fff;
+    border-color: #673AB7;
+}
 .photography-grid {
     margin: 0 auto;
     width: 100%;
 }
 .grid-item {
-    width: 48%;
+    width: calc(50% - 8px);
     margin-bottom: 16px;
     float: left;
-    position: relative; /* For absolute positioning of title */
+    position: relative;
     overflow: hidden;
     border-radius: 4px;
 }
@@ -36,19 +76,30 @@
     width: 100%;
     padding: 20px 12px 10px;
     color: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    text-align: left;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
-    pointer-events: none; /* Let clicks pass through to link */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    background: linear-gradient(to top, rgba(0,0,0) 0%, rgba(0,0,0,0) 100%);
+    pointer-events: none;
     opacity: 0.9;
     transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 .grid-item:hover .photo-title {
     opacity: 1;
+}
+.photo-name {
+    font-size: 13px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 8px;
+}
+.photo-views {
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    opacity: 0.8;
 }
 .loading-status {
     text-align: center;
@@ -66,45 +117,144 @@
 
 <script>
 (function() {
-    const USER_ID = '200681089@N06'; 
+    const USER_ID = '<%= theme.social_links.flickr.user_id %>';
+    const API_KEY = '<%= theme.social_links.flickr.api_key %>';
     const container = document.querySelector('#photography-grid');
+    let allPhotos = [];
+    let currentIsRestApi = false;
+    let currentSort = 'date'; // 'date' or 'views'
+    let masonryInstance = null;
 
-    window.jsonFlickrFeed = function(data) {
-        let photos = data.items;
-        for (let i = photos.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [photos[i], photos[j]] = [photos[j], photos[i]];
+    function sortPhotos(photos, type) {
+        if (type === 'views') {
+            return [...photos].sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
         }
-        container.innerHTML = ''; 
-        photos.forEach(item => {
+        if (type === 'random') {
+            let shuffled = [...photos];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        // Default: date (Flickr REST returns newest first by default)
+        return photos; 
+    }
+
+    function renderPhotos(photos, isRestApi) {
+        allPhotos = photos;
+        currentIsRestApi = isRestApi;
+        
+        const sortedPhotos = sortPhotos(allPhotos, currentSort);
+        
+        container.innerHTML = '';
+        sortedPhotos.forEach(item => {
             const div = document.createElement('div');
             div.className = 'grid-item';
-            const highResUrl = item.media.m.replace('_m.jpg', '_c.jpg');
+            
+            let imgUrl, link, title, views;
+            if (isRestApi) {
+                // REST API format: _c is medium 800
+                imgUrl = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
+                link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
+                title = item.title;
+                views = item.views;
+            } else {
+                // Feed API format
+                imgUrl = item.media.m.replace('_m.jpg', '_c.jpg');
+                link = item.link;
+                title = item.title;
+                views = null;
+            }
+
+            const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
             div.innerHTML = `
-                <a href="${item.link}" target="_blank">
-                    <img src="${highResUrl}" alt="${item.title}">
-                    <span class="photo-title">${item.title}</span>
+                <a href="${link}" target="_blank">
+                    <img src="${imgUrl}" alt="${title}">
+                    <div class="photo-title">
+                        <span class="photo-name">${title}</span>
+                        ${viewsHtml}
+                    </div>
                 </a>
             `;
             container.appendChild(div);
         });
+
+        if (isRestApi) {
+            document.querySelector('#sort-views-btn').style.display = 'inline-block';
+        }
+
         imagesLoaded(container, function() {
-            new Masonry(container, {
+            if (masonryInstance) {
+                masonryInstance.destroy();
+            }
+            masonryInstance = new Masonry(container, {
                 itemSelector: '.grid-item',
+                columnWidth: '.grid-item',
                 percentPosition: true,
                 gutter: 16
             });
         });
+    }
+
+    // Sort event listeners
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.classList.contains('active')) return;
+            
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentSort = this.dataset.sort;
+            if (allPhotos.length > 0) {
+                renderPhotos(allPhotos, currentIsRestApi);
+            }
+        });
+    });
+
+    // Fallback: Feed API
+    window.jsonFlickrFeed = function(data) {
+        console.log('Flickr: Using Feed API Fallback');
+        renderPhotos(data.items, false);
     };
 
-    const script = document.createElement('script');
-    script.src = `https://www.flickr.com/services/feeds/photos_public.gne?id=${USER_ID}&format=json`;
-    document.head.appendChild(script);
+    // Primary: REST API
+    window.jsonFlickrApi = function(data) {
+        if (data.stat === 'ok') {
+            renderPhotos(data.photos.photo, true);
+        } else {
+            console.error('Flickr REST API failed:', data.message);
+            loadFeedApi();
+        }
+    };
+
+    function loadFeedApi() {
+        const script = document.createElement('script');
+        script.src = `https://www.flickr.com/services/feeds/photos_public.gne?id=${USER_ID}&format=json`;
+        document.head.appendChild(script);
+    }
+
+    function loadRestApi() {
+        const script = document.createElement('script');
+        // Get 100 photos, sorted by date-posted-desc, including views
+        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views&format=json&jsoncallback=jsonFlickrApi`;
+        script.onerror = loadFeedApi;
+        document.head.appendChild(script);
+    }
+
+    // Start with REST API
+    loadRestApi();
+
+    window.addEventListener('resize', () => {
+        if (masonryInstance) {
+            masonryInstance.layout();
+        }
+    });
 
     setTimeout(() => {
         if (container && container.innerText.includes('Loading')) {
             container.innerHTML = '<div class="loading-status">Error: Request timed out.</div>';
         }
-    }, 5000);
+    }, 8000);
 })();
 </script>
