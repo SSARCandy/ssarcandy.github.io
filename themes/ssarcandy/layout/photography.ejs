@@ -7,17 +7,17 @@
 <div class="photography-container">
     <div class="photography-toolbar">
         <div class="view-group" id="view-group" style="display: none;">
-            <button class="view-btn active" data-view="grid"><i class="icon icon-th"></i></button>
-            <button class="view-btn" data-view="map"><i class="icon icon-map-marker"></i></button>
+            <button class="view-btn active" data-view="grid" aria-label="Grid View"><i class="icon icon-th"></i></button>
+            <button class="view-btn" data-view="map" aria-label="Map View"><i class="icon icon-map-marker"></i></button>
         </div>
         <div class="sort-group" id="sort-group">
-            <span class="sort-label">Sort by:</span>
             <button class="sort-btn" data-sort="date">Date</button>
             <button class="sort-btn" data-sort="views" id="sort-views-btn" style="display: none;">Views</button>
             <button class="sort-btn active" data-sort="random">Random</button>
         </div>
     </div>
-    <div id="photography-grid" class="photography-grid" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+    <div id="photography-grid" class="photography-grid">
+        <div class="grid-sizer"></div>
         <div class="grid-item skeleton"></div>
         <div class="grid-item skeleton"></div>
         <div class="grid-item skeleton"></div>
@@ -25,6 +25,7 @@
         <div class="grid-item skeleton"></div>
         <div class="grid-item skeleton"></div>
     </div>
+    <div id="photography-map" style="display: none; height: 600px; width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 20px;"></div>
 </div>
 
 <style>
@@ -34,6 +35,7 @@
     background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
     background-size: 200% 100%;
     animation: 1.5s shine linear infinite;
+    opacity: 1 !important;
 }
 @keyframes shine {
     to { background-position-x: -200%; }
@@ -109,13 +111,20 @@
     margin: 0 auto;
     width: 100%;
 }
-.grid-item {
+.grid-sizer, .grid-item {
     width: calc(50% - 8px);
+}
+.grid-item {
     margin-bottom: 16px;
     float: left;
     position: relative;
     overflow: hidden;
     border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in, transform 0.3s ease;
+}
+.grid-item.revealed {
+    opacity: 1;
 }
 .grid-item img {
     display: block;
@@ -175,12 +184,6 @@
 .leaflet-container {
     background: #fff !important;
 }
-.loading-status {
-    text-align: center;
-    padding: 40px;
-    font-size: 18px;
-    color: #727272;
-}
 .map-marker-icon {
     border: 2px solid #673AB7;
     border-radius: 4px;
@@ -200,8 +203,8 @@
     background-color: #673AB7 !important;
     color: white !important;
 }
-@media (max-width: 600px) {
-    .grid-item { width: 100%; }
+@media (max-width: 760px) {
+    .grid-sizer, .grid-item { width: 100% !important; }
 }
 </style>
 
@@ -214,7 +217,8 @@
     const API_KEY = '<%= theme.social_links.flickr.api_key %>';
     const container = document.querySelector('#photography-grid');
     const mapContainer = document.querySelector('#photography-map');
-    let allPhotos = [];
+    
+    let masterPhotos = []; // Keep original order
     let currentIsRestApi = false;
     let currentSort = 'random'; // 'date', 'views', or 'random'
     let masonryInstance = null;
@@ -230,7 +234,6 @@
             attributionControl: false
         }).setView([23.5, 121], 7); // Default to Taiwan
         
-        // Enable scroll wheel zoom only when user clicks/focuses the map
         mapInstance.on('focus', () => mapInstance.scrollWheelZoom.enable());
         mapInstance.on('blur', () => mapInstance.scrollWheelZoom.disable());
 
@@ -260,7 +263,7 @@
                 
                 const customIcon = L.divIcon({
                     className: 'map-marker-icon',
-                    html: `<img src="${imgUrl}" alt="${item.title}">`,
+                    html: `<img src="${imgUrl}" alt="${item.title}" loading="lazy">`,
                     iconSize: [70, 70],
                     iconAnchor: [30, 30]
                 });
@@ -269,7 +272,7 @@
                 marker.bindPopup(`
                     <div style="text-align:center; display:flex; flex-direction:column; align-items:center; width:150px;">
                         <a href="${link}" target="_blank" style="display:block; width:150px; height:150px; margin-bottom:8px;">
-                            <img src="${imgUrl}" style="width:150px;height:150px;object-fit:cover;display:block;border-radius:2px;">
+                            <img src="${imgUrl}" style="width:150px;height:150px;object-fit:cover;display:block;border-radius:2px;" loading="lazy">
                         </a>
                         <a href="${link}" target="_blank" style="text-decoration:none; color:#673AB7; font-size:12px; font-weight:500; display:block; text-align:center; word-wrap:break-word; white-space:normal;">
                             ${item.title}
@@ -287,41 +290,48 @@
     }
 
     function sortPhotos(photos, type) {
+        let sorted = [...photos];
         if (type === 'views') {
-            return [...photos].sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
-        }
-        if (type === 'random') {
-            let shuffled = [...photos];
-            for (let i = shuffled.length - 1; i > 0; i--) {
+            sorted.sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
+        } else if (type === 'random') {
+            for (let i = sorted.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
             }
-            return shuffled;
+        } else {
+            // Default: newest first (restore from master list order)
+            return [...masterPhotos];
         }
-        // Default: date (Flickr REST returns newest first by default)
-        return photos; 
+        return sorted;
     }
 
-    function renderPhotos(photos, isRestApi) {
-        allPhotos = photos;
+    function renderPhotos(photos, isRestApi, isInitialLoad = false) {
+        if (isInitialLoad) {
+            masterPhotos = [...photos];
+        }
+        const sortedPhotos = sortPhotos(masterPhotos, currentSort);
         currentIsRestApi = isRestApi;
         
-        const sortedPhotos = sortPhotos(allPhotos, currentSort);
+        container.innerHTML = '<div class="grid-sizer"></div>';
+        if (masonryInstance) {
+            masonryInstance.destroy();
+            masonryInstance = null;
+        }
+
+        const fragment = document.createDocumentFragment();
+        const newItems = [];
         
-        container.innerHTML = '';
         sortedPhotos.forEach(item => {
             const div = document.createElement('div');
             div.className = 'grid-item';
             
             let imgUrl, link, title, views;
             if (isRestApi) {
-                // REST API format: _c is medium 800
                 imgUrl = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
                 link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
                 title = item.title;
                 views = item.views;
             } else {
-                // Feed API format
                 imgUrl = item.media.m.replace('_m.jpg', '_c.jpg');
                 link = item.link;
                 title = item.title;
@@ -338,26 +348,31 @@
                     </div>
                 </a>
             `;
-            container.appendChild(div);
+            fragment.appendChild(div);
+            newItems.push(div);
+        });
+        
+        container.appendChild(fragment);
+        
+        imagesLoaded(container, function() {
+            masonryInstance = new Masonry(container, {
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer',
+                percentPosition: true,
+                gutter: 16,
+                transitionDuration: 0
+            });
+            
+            requestAnimationFrame(() => {
+                newItems.forEach(item => item.classList.add('revealed'));
+            });
         });
 
         if (isRestApi) {
             document.querySelector('#view-group').style.display = 'flex';
             document.querySelector('#sort-views-btn').style.display = 'flex';
-            updateMarkers(photos);
+            updateMarkers(masterPhotos);
         }
-
-        imagesLoaded(container, function() {
-            if (masonryInstance) {
-                masonryInstance.destroy();
-            }
-            masonryInstance = new Masonry(container, {
-                itemSelector: '.grid-item',
-                columnWidth: '.grid-item',
-                percentPosition: true,
-                gutter: 16
-            });
-        });
     }
 
     // View toggle event listeners
@@ -378,8 +393,10 @@
                 mapContainer.style.display = 'block';
                 document.querySelector('#sort-group').style.display = 'none';
                 initMap();
-                updateMarkers(allPhotos);
-                setTimeout(() => mapInstance.invalidateSize(), 100);
+                updateMarkers(masterPhotos);
+                setTimeout(() => {
+                    if (mapInstance) mapInstance.invalidateSize();
+                }, 100);
             }
         });
     });
@@ -388,13 +405,12 @@
     document.querySelectorAll('.sort-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.classList.contains('active')) return;
-            
             document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
             currentSort = this.dataset.sort;
-            if (allPhotos.length > 0) {
-                renderPhotos(allPhotos, currentIsRestApi);
+            if (masterPhotos.length > 0) {
+                renderPhotos(masterPhotos, currentIsRestApi);
             }
         });
     });
@@ -402,13 +418,13 @@
     // Fallback: Feed API
     window.jsonFlickrFeed = function(data) {
         console.log('Flickr: Using Feed API Fallback');
-        renderPhotos(data.items, false);
+        renderPhotos(data.items, false, true);
     };
 
     // Primary: REST API
     window.jsonFlickrApi = function(data) {
         if (data.stat === 'ok') {
-            renderPhotos(data.photos.photo, true);
+            renderPhotos(data.photos.photo, true, true);
         } else {
             console.error('Flickr REST API failed:', data.message);
             loadFeedApi();
@@ -423,26 +439,15 @@
 
     function loadRestApi() {
         const script = document.createElement('script');
-        // Get 100 photos, sorted by date-posted-desc, including views and geo
         script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo&format=json&jsoncallback=jsonFlickrApi`;
         script.onerror = loadFeedApi;
         document.head.appendChild(script);
     }
 
-    // Start with REST API
     loadRestApi();
 
     window.addEventListener('resize', () => {
-        if (masonryInstance) {
-            masonryInstance.layout();
-        }
+        if (masonryInstance) masonryInstance.layout();
     });
-
-    setTimeout(() => {
-        if (container && container.innerText.includes('Loading')) {
-            container.innerHTML = '<div class="loading-status">Error: Request timed out.</div>';
-        }
-    }, 8000);
 })();
 </script>
-
