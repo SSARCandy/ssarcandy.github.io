@@ -191,6 +191,9 @@
 .leaflet-container {
     background: #fff !important;
 }
+.leaflet-popup-content {
+    margin: 15px !important;
+}
 .map-marker-icon {
     box-sizing: border-box !important;
     width: 100%;
@@ -336,6 +339,7 @@
 
         markersLayer = L.markerClusterGroup({
             showCoverageOnHover: false,
+            zoomToBoundsOnClick: false, // Custom slow zoom
             maxClusterRadius: 40,
             iconCreateFunction: function(cluster) {
                 const childCount = cluster.getChildCount();
@@ -360,6 +364,14 @@
                 });
             }
         }).addTo(mapInstance);
+
+        markersLayer.on('clusterclick', function(a) {
+            mapInstance.flyToBounds(a.layer.getBounds(), {
+                padding: [50, 50],
+                duration: 0.75, // Noticeably slower and smoother
+                easeLinearity: 0.1
+            });
+        });
 
         L.Control.ResetView = L.Control.extend({
             options: { position: 'topleft' },
@@ -408,7 +420,7 @@
                             ${item.title}
                         </a>
                     </div>
-                `);
+                `, { closeButton: false });
                 markersLayer.addLayer(marker);
                 bounds.push([lat, lng]);
             }
