@@ -41,9 +41,14 @@
     to { background-position-x: -200%; }
 }
 .photography-container {
-    padding: 0 16px;
+    padding: 0;
     max-width: 1200px;
     margin: 0 auto;
+}
+@media (max-width: 760px) {
+    .photography-container {
+        padding: 0 16px;
+    }
 }
 .photography-toolbar {
     margin-bottom: 20px;
@@ -245,7 +250,7 @@
 
         markersLayer = L.markerClusterGroup({
             showCoverageOnHover: false,
-            maxClusterRadius: 50
+            maxClusterRadius: 30
         }).addTo(mapInstance);
     }
 
