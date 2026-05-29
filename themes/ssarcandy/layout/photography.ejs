@@ -192,23 +192,101 @@
     background: #fff !important;
 }
 .map-marker-icon {
-    border: 2px solid #673AB7;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.3);
-    overflow: hidden;
-    background: white;
-}
-.map-marker-icon img {
+    box-sizing: border-box !important;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border: 2px solid #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    background: white;
+    transition: transform 0.2s ease;
+    padding: 0 !important;
+    position: relative;
 }
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-    background-color: rgba(103, 58, 183, 0.4) !important;
+.map-marker-icon:hover {
+    transform: scale(1.15) !important;
+    z-index: 1000 !important;
 }
-.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-    background-color: #673AB7 !important;
-    color: white !important;
+.map-marker-icon img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 4px;
+}
+.custom-cluster-icon {
+    background: transparent;
+    border: none;
+}
+.custom-photo-cluster {
+    box-sizing: border-box !important;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    position: relative;
+    background: #fff;
+    transition: transform 0.2s ease;
+    padding: 0 !important;
+}
+.custom-photo-cluster:hover {
+    transform: scale(1.15) !important;
+    z-index: 1000 !important;
+}
+.custom-photo-cluster::before, .custom-photo-cluster::after {
+    content: '';
+    position: absolute;
+    box-sizing: border-box;
+    top: -2px; left: -2px; width: calc(100% + 4px); height: calc(100% + 4px);
+    background: #fff;
+    border-radius: 6px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.custom-photo-cluster::before {
+    transform: rotate(6deg);
+    z-index: -1;
+}
+.custom-photo-cluster::after {
+    transform: rotate(-6deg);
+    z-index: -2;
+}
+.custom-photo-cluster img {
+    position: absolute;
+    top: 0; left: 0;
+    border-radius: 4px;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1;
+}
+.cluster-badge {
+    box-sizing: border-box;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #673AB7;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    padding: 0 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    border: 2px solid #fff;
+    z-index: 10;
 }
 @media (max-width: 760px) {
     .grid-sizer, .grid-item { width: 100% !important; }
@@ -258,8 +336,47 @@
 
         markersLayer = L.markerClusterGroup({
             showCoverageOnHover: false,
-            maxClusterRadius: 30
+            maxClusterRadius: 40,
+            iconCreateFunction: function(cluster) {
+                const childCount = cluster.getChildCount();
+                const markers = cluster.getAllChildMarkers();
+                let imgHtml = '';
+                if (markers.length > 0) {
+                    const firstMarkerHtml = markers[0].options.icon.options.html;
+                    const match = firstMarkerHtml.match(/src="([^"]+)"/);
+                    if (match && match[1]) {
+                        imgHtml = '<img src="' + match[1] + '" loading="lazy">';
+                    }
+                }
+                
+                return L.divIcon({
+                    html: '<div class="custom-photo-cluster">' +
+                            imgHtml +
+                            '<div class="cluster-badge">' + childCount + '</div>' +
+                          '</div>',
+                    className: 'custom-cluster-icon',
+                    iconSize: L.point(60, 60),
+                    iconAnchor: L.point(30, 30)
+                });
+            }
         }).addTo(mapInstance);
+
+        L.Control.ResetView = L.Control.extend({
+            options: { position: 'topleft' },
+            onAdd: function(map) {
+                const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+                container.innerHTML = '<a href="#" title="Reset View" role="button" aria-label="Reset View" style="display: flex; justify-content: center; align-items: center; width: 30px; height: 30px; text-decoration: none; color: #444;"><i class="icon icon-refresh"></i></a>';
+                L.DomEvent.disableClickPropagation(container);
+                container.onclick = function(e) {
+                    e.preventDefault();
+                    if (markersLayer && markersLayer.getBounds().isValid()) {
+                        map.fitBounds(markersLayer.getBounds(), { padding: [50, 50] });
+                    }
+                };
+                return container;
+            }
+        });
+        mapInstance.addControl(new L.Control.ResetView());
     }
 
     function updateMarkers(photos) {
@@ -275,9 +392,9 @@
                 const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
                 
                 const customIcon = L.divIcon({
-                    className: 'map-marker-icon',
-                    html: `<img src="${imgUrl}" alt="${item.title}" loading="lazy">`,
-                    iconSize: [70, 70],
+                    className: 'custom-cluster-icon',
+                    html: `<div class="map-marker-icon"><img src="${imgUrl}" alt="${item.title}" loading="lazy"></div>`,
+                    iconSize: [60, 60],
                     iconAnchor: [30, 30]
                 });
 
