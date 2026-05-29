@@ -1,6 +1,11 @@
 'use strict';
 
-const pageview = require('../pageview.json');
+let pageview = { visitor_count: 0, pv_map: {} };
+try {
+  pageview = require('../pageview.json');
+} catch (e) {
+  console.warn('pageview.json not found, using default values.');
+}
 
 hexo.extend.helper.register('visitor_count', () => {
   return pageview.visitor_count;
