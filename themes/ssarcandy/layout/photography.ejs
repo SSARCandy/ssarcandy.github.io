@@ -325,7 +325,8 @@
             scrollWheelZoom: false, // Prevent scroll trapping
             tap: true,              // Ensure tap works well on mobile
             touchZoom: 'center',
-            attributionControl: false
+            attributionControl: false,
+            maxZoom: 15
         }).setView([23.5, 121], 7); // Default to Taiwan
         
         mapInstance.on('focus', () => mapInstance.scrollWheelZoom.enable());
@@ -341,6 +342,7 @@
             showCoverageOnHover: false,
             zoomToBoundsOnClick: false, // Custom slow zoom
             maxClusterRadius: 40,
+            spiderfyOnMaxZoom: true,
             iconCreateFunction: function(cluster) {
                 const childCount = cluster.getChildCount();
                 const markers = cluster.getAllChildMarkers();
@@ -366,11 +368,17 @@
         }).addTo(mapInstance);
 
         markersLayer.on('clusterclick', function(a) {
-            mapInstance.flyToBounds(a.layer.getBounds(), {
-                padding: [50, 50],
-                duration: 0.75, // Noticeably slower and smoother
-                easeLinearity: 0.2
-            });
+            const bounds = a.layer.getBounds();
+            // If already at max zoom or all markers in cluster have same position, spiderfy
+            if (mapInstance.getZoom() === mapInstance.getMaxZoom() || bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                a.layer.spiderfy();
+            } else {
+                mapInstance.flyToBounds(bounds, {
+                    padding: [50, 50],
+                    duration: 0.75, // Noticeably slower and smoother
+                    easeLinearity: 0.2
+                });
+            }
         });
 
         L.Control.ResetView = L.Control.extend({
