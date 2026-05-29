@@ -1,0 +1,110 @@
+<div class="photography-container">
+    <div id="photography-grid" class="photography-grid">
+        <div class="loading-status">Loading photos from Flickr...</div>
+    </div>
+</div>
+
+<style>
+.photography-container {
+    padding: 0 16px;
+}
+.photography-grid {
+    margin: 0 auto;
+    width: 100%;
+}
+.grid-item {
+    width: 48%;
+    margin-bottom: 16px;
+    float: left;
+    position: relative; /* For absolute positioning of title */
+    overflow: hidden;
+    border-radius: 4px;
+}
+.grid-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+.grid-item:hover img {
+    transform: scale(1.05);
+}
+.photo-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 12px 10px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    pointer-events: none; /* Let clicks pass through to link */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+.grid-item:hover .photo-title {
+    opacity: 1;
+}
+.loading-status {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #727272;
+}
+@media (max-width: 600px) {
+    .grid-item { width: 100%; }
+}
+</style>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+
+<script>
+(function() {
+    const USER_ID = '200681089@N06'; 
+    const container = document.querySelector('#photography-grid');
+
+    window.jsonFlickrFeed = function(data) {
+        let photos = data.items;
+        for (let i = photos.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [photos[i], photos[j]] = [photos[j], photos[i]];
+        }
+        container.innerHTML = ''; 
+        photos.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'grid-item';
+            const highResUrl = item.media.m.replace('_m.jpg', '_c.jpg');
+            div.innerHTML = `
+                <a href="${item.link}" target="_blank">
+                    <img src="${highResUrl}" alt="${item.title}">
+                    <span class="photo-title">${item.title}</span>
+                </a>
+            `;
+            container.appendChild(div);
+        });
+        imagesLoaded(container, function() {
+            new Masonry(container, {
+                itemSelector: '.grid-item',
+                percentPosition: true,
+                gutter: 16
+            });
+        });
+    };
+
+    const script = document.createElement('script');
+    script.src = `https://www.flickr.com/services/feeds/photos_public.gne?id=${USER_ID}&format=json`;
+    document.head.appendChild(script);
+
+    setTimeout(() => {
+        if (container && container.innerText.includes('Loading')) {
+            container.innerHTML = '<div class="loading-status">Error: Request timed out.</div>';
+        }
+    }, 5000);
+})();
+</script>

@@ -2,6 +2,7 @@ menu:
     about: About
     post: Post
     archive: Archives
+    photography: Photography
     project: Projects
     github: Github
     total_visitor: Total visitors
@@ -25,6 +26,9 @@ post:
 project:
     title: Projects
     intro: These projects, gifts to the world.
+
+photography:
+    intro: Capturing the beauty of the universe through my lens.
     
 archive:
     title: Archives
