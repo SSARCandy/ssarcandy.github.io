@@ -1,6 +1,16 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
 <div class="photography-container">
     <div class="photography-toolbar">
-        <div class="sort-group">
+        <div class="view-group" id="view-group" style="display: none;">
+            <button class="view-btn active" data-view="grid"><i class="icon icon-th"></i></button>
+            <button class="view-btn" data-view="map"><i class="icon icon-map-marker"></i></button>
+        </div>
+        <div class="sort-group" id="sort-group">
             <span class="sort-label">Sort by:</span>
             <button class="sort-btn active" data-sort="date">Date</button>
             <button class="sort-btn" data-sort="views" id="sort-views-btn" style="display: none;">Views</button>
@@ -10,16 +20,45 @@
     <div id="photography-grid" class="photography-grid">
         <div class="loading-status">Loading photos from Flickr...</div>
     </div>
+    <div id="photography-map" style="display: none; height: 600px; width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 20px;"></div>
 </div>
 
 <style>
 .photography-container {
     padding: 0 16px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 .photography-toolbar {
     margin-bottom: 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.view-group {
+    display: flex;
+    gap: 8px;
+}
+.view-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0;
+    width: 36px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #444;
+    transition: all 0.2s ease;
+}
+.view-btn.active {
+    background: #673AB7;
+    color: #fff;
+    border-color: #673AB7;
 }
 .sort-group {
     display: flex;
@@ -33,14 +72,18 @@
 .sort-btn {
     background: #f5f5f5;
     border: 1px solid #ddd;
-    padding: 4px 12px;
+    padding: 0 12px;
+    height: 32px;
     font-size: 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
     color: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.sort-btn:hover {
+.sort-btn:hover, .view-btn:hover {
     background: #eeeeee;
 }
 .sort-btn.active {
@@ -76,7 +119,7 @@
     width: 100%;
     padding: 20px 12px 10px;
     color: #fff;
-    background: linear-gradient(to top, rgba(0,0,0) 0%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
     pointer-events: none;
     opacity: 0.9;
     transition: opacity 0.3s ease;
@@ -101,11 +144,47 @@
     flex-shrink: 0;
     opacity: 0.8;
 }
+#photography-map {
+    display: none; 
+    height: 600px; 
+    width: 100%; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+@media (max-width: 600px) {
+    #photography-map {
+        height: 450px;
+    }
+}
+.leaflet-container {
+    background: #fff !important;
+}
 .loading-status {
     text-align: center;
     padding: 40px;
     font-size: 18px;
     color: #727272;
+}
+.map-marker-icon {
+    border: 2px solid #673AB7;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.3);
+    overflow: hidden;
+    background: white;
+}
+.map-marker-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+    background-color: rgba(103, 58, 183, 0.4) !important;
+}
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+    background-color: #673AB7 !important;
+    color: white !important;
 }
 @media (max-width: 600px) {
     .grid-item { width: 100%; }
@@ -120,10 +199,78 @@
     const USER_ID = '<%= theme.social_links.flickr.user_id %>';
     const API_KEY = '<%= theme.social_links.flickr.api_key %>';
     const container = document.querySelector('#photography-grid');
+    const mapContainer = document.querySelector('#photography-map');
     let allPhotos = [];
     let currentIsRestApi = false;
-    let currentSort = 'date'; // 'date' or 'views'
+    let currentSort = 'date'; // 'date', 'views', or 'random'
     let masonryInstance = null;
+    let mapInstance = null;
+    let markersLayer = null;
+
+    function initMap() {
+        if (mapInstance) return;
+        mapInstance = L.map('photography-map', {
+            scrollWheelZoom: false, // Prevent scroll trapping
+            tap: true,              // Ensure tap works well on mobile
+            touchZoom: 'center',
+            attributionControl: false
+        }).setView([23.5, 121], 7); // Default to Taiwan
+        
+        // Enable scroll wheel zoom only when user clicks/focuses the map
+        mapInstance.on('focus', () => mapInstance.scrollWheelZoom.enable());
+        mapInstance.on('blur', () => mapInstance.scrollWheelZoom.disable());
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(mapInstance);
+
+        markersLayer = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            maxClusterRadius: 50
+        }).addTo(mapInstance);
+    }
+
+    function updateMarkers(photos) {
+        if (!markersLayer) return;
+        markersLayer.clearLayers();
+        const bounds = [];
+        
+        photos.forEach(item => {
+            if (item.latitude && item.longitude && parseFloat(item.latitude) !== 0) {
+                const lat = parseFloat(item.latitude);
+                const lng = parseFloat(item.longitude);
+                const imgUrl = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
+                const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
+                
+                const customIcon = L.divIcon({
+                    className: 'map-marker-icon',
+                    html: `<img src="${imgUrl}" alt="${item.title}">`,
+                    iconSize: [70, 70],
+                    iconAnchor: [30, 30]
+                });
+
+                const marker = L.marker([lat, lng], { icon: customIcon });
+                marker.bindPopup(`
+                    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; width:150px;">
+                        <a href="${link}" target="_blank" style="display:block; width:150px; height:150px; margin-bottom:8px;">
+                            <img src="${imgUrl}" style="width:150px;height:150px;object-fit:cover;display:block;border-radius:2px;">
+                        </a>
+                        <a href="${link}" target="_blank" style="text-decoration:none; color:#673AB7; font-size:12px; font-weight:500; display:block; text-align:center; word-wrap:break-word; white-space:normal;">
+                            ${item.title}
+                        </a>
+                    </div>
+                `);
+                markersLayer.addLayer(marker);
+                bounds.push([lat, lng]);
+            }
+        });
+        
+        if (bounds.length > 0) {
+            mapInstance.fitBounds(bounds, { padding: [50, 50] });
+        }
+    }
 
     function sortPhotos(photos, type) {
         if (type === 'views') {
@@ -181,7 +328,9 @@
         });
 
         if (isRestApi) {
-            document.querySelector('#sort-views-btn').style.display = 'inline-block';
+            document.querySelector('#view-group').style.display = 'flex';
+            document.querySelector('#sort-views-btn').style.display = 'flex';
+            updateMarkers(photos);
         }
 
         imagesLoaded(container, function() {
@@ -196,6 +345,30 @@
             });
         });
     }
+
+    // View toggle event listeners
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.classList.contains('active')) return;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const view = this.dataset.view;
+            if (view === 'grid') {
+                container.style.display = 'block';
+                mapContainer.style.display = 'none';
+                document.querySelector('#sort-group').style.display = 'flex';
+                if (masonryInstance) masonryInstance.layout();
+            } else {
+                container.style.display = 'none';
+                mapContainer.style.display = 'block';
+                document.querySelector('#sort-group').style.display = 'none';
+                initMap();
+                updateMarkers(allPhotos);
+                setTimeout(() => mapInstance.invalidateSize(), 100);
+            }
+        });
+    });
 
     // Sort event listeners
     document.querySelectorAll('.sort-btn').forEach(btn => {
@@ -236,8 +409,8 @@
 
     function loadRestApi() {
         const script = document.createElement('script');
-        // Get 100 photos, sorted by date-posted-desc, including views
-        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views&format=json&jsoncallback=jsonFlickrApi`;
+        // Get 100 photos, sorted by date-posted-desc, including views and geo
+        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo&format=json&jsoncallback=jsonFlickrApi`;
         script.onerror = loadFeedApi;
         document.head.appendChild(script);
     }
