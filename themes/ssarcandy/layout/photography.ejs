@@ -29,6 +29,15 @@
 </div>
 
 <style>
+/* --- 新增：優化圖磚載入的視覺效果 --- */
+.leaflet-tile {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+.leaflet-tile-loaded {
+    opacity: 1;
+}
+
 .skeleton {
     height: 300px;
     background: #eee;
@@ -301,10 +310,10 @@
     const container = document.querySelector('#photography-grid');
     const mapContainer = document.querySelector('#photography-map');
     
-    let masterPhotos = []; // Keep original order
+    let masterPhotos = []; 
     let sortedPhotosList = [];
     let currentIsRestApi = false;
-    let currentSort = 'random'; // 'date', 'views', or 'random'
+    let currentSort = 'random'; 
     let masonryInstance = null;
     let mapInstance = null;
     let markersLayer = null;
@@ -317,25 +326,32 @@
     function initMap() {
         if (mapInstance) return;
         mapInstance = L.map('photography-map', {
-            scrollWheelZoom: false, // Prevent scroll trapping
-            tap: true,              // Ensure tap works well on mobile
+            scrollWheelZoom: false,
+            tap: true,
             touchZoom: 'center',
             attributionControl: false,
-            maxZoom: 15
-        }).setView([23.5, 121], 7); // Default to Taiwan
+            maxZoom: 15,
+            /* --- 新增：地圖動畫優化 --- */
+            fadeAnimation: true,
+            zoomAnimation: true,
+            markerZoomAnimation: true
+        }).setView([23.5, 121], 7); 
         
         mapInstance.on('focus', () => mapInstance.scrollWheelZoom.enable());
         mapInstance.on('blur', () => mapInstance.scrollWheelZoom.disable());
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             subdomains: 'abcd',
-            maxZoom: 20
+            maxZoom: 20,
+            /* --- 新增：增加快取與預載範圍 --- */
+            keepBuffer: 4,
+            updateWhenIdle: false
         }).addTo(mapInstance);
 
         markersLayer = L.markerClusterGroup({
             showCoverageOnHover: false,
-            zoomToBoundsOnClick: false, // Custom slow zoom
+            zoomToBoundsOnClick: false, 
             maxClusterRadius: 40,
             spiderfyOnMaxZoom: true,
             iconCreateFunction: function(cluster) {
@@ -364,13 +380,12 @@
 
         markersLayer.on('clusterclick', function(a) {
             const bounds = a.layer.getBounds();
-            // If already at max zoom or all markers in cluster have same position, spiderfy
             if (mapInstance.getZoom() === mapInstance.getMaxZoom() || bounds.getNorthEast().equals(bounds.getSouthWest())) {
                 a.layer.spiderfy();
             } else {
                 mapInstance.flyToBounds(bounds, {
                     padding: [50, 50],
-                    duration: 0.75, // Noticeably slower and smoother
+                    duration: 0.75, 
                     easeLinearity: 0.2
                 });
             }
@@ -444,7 +459,6 @@
                 [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
             }
         } else {
-            // Default: newest first (restore from master list order)
             return [...masterPhotos];
         }
         return sorted;
@@ -531,11 +545,9 @@
             masonryInstance.appended(newItems);
         }
 
-        // Layout immediately. Images with aspect-ratio will take correct space.
         masonryInstance.layout();
         revealItems(newItems);
 
-        // For images without aspect-ratio or delayed loading, update layout on progress
         imagesLoaded(container).on('progress', function() {
             if (masonryInstance) {
                 masonryInstance.layout();
@@ -573,7 +585,6 @@
         loadMorePhotos();
     }
 
-    // View toggle event listeners
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.classList.contains('active')) return;
@@ -601,7 +612,6 @@
         });
     });
 
-    // Sort event listeners
     document.querySelectorAll('.sort-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.classList.contains('active')) return;
@@ -615,18 +625,14 @@
         });
     });
 
-    // Fallback: Feed API
     window.jsonFlickrFeed = function(data) {
-        console.log('Flickr: Using Feed API Fallback');
         renderPhotos(data.items, false, true);
     };
 
-    // Primary: REST API
     window.jsonFlickrApi = function(data) {
         if (data.stat === 'ok') {
             renderPhotos(data.photos.photo, true, true);
         } else {
-            console.error('Flickr REST API failed:', data.message);
             loadFeedApi();
         }
     };
