@@ -224,11 +224,17 @@
     const mapContainer = document.querySelector('#photography-map');
     
     let masterPhotos = []; // Keep original order
+    let sortedPhotosList = [];
     let currentIsRestApi = false;
     let currentSort = 'random'; // 'date', 'views', or 'random'
     let masonryInstance = null;
     let mapInstance = null;
     let markersLayer = null;
+
+    let renderedCount = 0;
+    const CHUNK_SIZE = 12;
+    let observer = null;
+    let sentinel = null;
 
     function initMap() {
         if (mapInstance) return;
@@ -263,7 +269,7 @@
             if (item.latitude && item.longitude && parseFloat(item.latitude) !== 0) {
                 const lat = parseFloat(item.latitude);
                 const lng = parseFloat(item.longitude);
-                const imgUrl = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
+                const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
                 const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
                 
                 const customIcon = L.divIcon({
@@ -310,32 +316,51 @@
         return sorted;
     }
 
-    function renderPhotos(photos, isRestApi, isInitialLoad = false) {
-        if (isInitialLoad) {
-            masterPhotos = [...photos];
+    function initSentinel() {
+        if (!sentinel) {
+            sentinel = document.createElement('div');
+            sentinel.className = 'sentinel';
+            sentinel.style.width = '100%';
+            sentinel.style.height = '10px';
+            sentinel.style.clear = 'both';
+            container.parentNode.insertBefore(sentinel, container.nextSibling);
+            
+            observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    loadMorePhotos();
+                }
+            }, { rootMargin: '400px' });
         }
-        const sortedPhotos = sortPhotos(masterPhotos, currentSort);
-        currentIsRestApi = isRestApi;
-        
-        container.innerHTML = '<div class="grid-sizer"></div>';
-        if (masonryInstance) {
-            masonryInstance.destroy();
-            masonryInstance = null;
+        observer.observe(sentinel);
+    }
+
+    function loadMorePhotos() {
+        if (renderedCount >= sortedPhotosList.length) {
+            if (sentinel && observer) observer.unobserve(sentinel);
+            return;
         }
+
+        const nextChunk = sortedPhotosList.slice(renderedCount, renderedCount + CHUNK_SIZE);
+        if (nextChunk.length === 0) return;
 
         const fragment = document.createDocumentFragment();
         const newItems = [];
-        
-        sortedPhotos.forEach(item => {
+
+        nextChunk.forEach(item => {
             const div = document.createElement('div');
             div.className = 'grid-item';
             
             let imgUrl, link, title, views;
-            if (isRestApi) {
-                imgUrl = `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
+            let aspectRatioStyle = '';
+            
+            if (currentIsRestApi) {
+                imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
                 link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
                 title = item.title;
                 views = item.views;
+                if (item.width_c && item.height_c) {
+                    aspectRatioStyle = `aspect-ratio: ${item.width_c} / ${item.height_c};`;
+                }
             } else {
                 imgUrl = item.media.m.replace('_m.jpg', '_c.jpg');
                 link = item.link;
@@ -346,7 +371,7 @@
             const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
             div.innerHTML = `
                 <a href="${link}" target="_blank">
-                    <img src="${imgUrl}" alt="${title}">
+                    <img src="${imgUrl}" alt="${title}" loading="lazy" style="${aspectRatioStyle}">
                     <div class="photo-title">
                         <span class="photo-name">${title}</span>
                         ${viewsHtml}
@@ -356,10 +381,11 @@
             fragment.appendChild(div);
             newItems.push(div);
         });
-        
+
         container.appendChild(fragment);
-        
-        imagesLoaded(container, function() {
+        renderedCount += nextChunk.length;
+
+        if (!masonryInstance) {
             masonryInstance = new Masonry(container, {
                 itemSelector: '.grid-item',
                 columnWidth: '.grid-sizer',
@@ -367,17 +393,50 @@
                 gutter: 16,
                 transitionDuration: 0
             });
-            
-            requestAnimationFrame(() => {
-                newItems.forEach(item => item.classList.add('revealed'));
-            });
-        });
-
-        if (isRestApi) {
-            document.querySelector('#view-group').style.display = 'flex';
-            document.querySelector('#sort-views-btn').style.display = 'flex';
-            updateMarkers(masterPhotos);
+        } else {
+            masonryInstance.appended(newItems);
         }
+
+        // Layout immediately. Images with aspect-ratio will take correct space.
+        masonryInstance.layout();
+        revealItems(newItems);
+
+        // For images without aspect-ratio or delayed loading, update layout on progress
+        imagesLoaded(container).on('progress', function() {
+            if (masonryInstance) {
+                masonryInstance.layout();
+            }
+        });
+    }
+
+    function revealItems(items) {
+        requestAnimationFrame(() => {
+            items.forEach(item => item.classList.add('revealed'));
+        });
+    }
+
+    function renderPhotos(photos, isRestApi, isInitialLoad = false) {
+        if (isInitialLoad) {
+            masterPhotos = [...photos];
+            if (isRestApi) {
+                document.querySelector('#view-group').style.display = 'flex';
+                document.querySelector('#sort-views-btn').style.display = 'flex';
+                updateMarkers(masterPhotos);
+            }
+        }
+        
+        currentIsRestApi = isRestApi;
+        sortedPhotosList = sortPhotos(masterPhotos, currentSort);
+        
+        container.innerHTML = '<div class="grid-sizer"></div>';
+        if (masonryInstance) {
+            masonryInstance.destroy();
+            masonryInstance = null;
+        }
+        renderedCount = 0;
+        
+        initSentinel();
+        loadMorePhotos();
     }
 
     // View toggle event listeners
@@ -390,11 +449,13 @@
             const view = this.dataset.view;
             if (view === 'grid') {
                 container.style.display = 'block';
+                if (sentinel) sentinel.style.display = 'block';
                 mapContainer.style.display = 'none';
                 document.querySelector('#sort-group').style.display = 'flex';
                 if (masonryInstance) masonryInstance.layout();
             } else {
                 container.style.display = 'none';
+                if (sentinel) sentinel.style.display = 'none';
                 mapContainer.style.display = 'block';
                 document.querySelector('#sort-group').style.display = 'none';
                 initMap();
@@ -444,7 +505,7 @@
 
     function loadRestApi() {
         const script = document.createElement('script');
-        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo&format=json&jsoncallback=jsonFlickrApi`;
+        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo,url_c&format=json&jsoncallback=jsonFlickrApi`;
         script.onerror = loadFeedApi;
         document.head.appendChild(script);
     }
