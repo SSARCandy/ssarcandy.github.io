@@ -15,6 +15,15 @@ hexo.extend.helper.register('post_pv', (slug) => {
   return pageview.pv_map[slug.toLowerCase()] || 0;
 });
 
+hexo.extend.helper.register('flickr_api_key', () => {
+  try {
+    const flickrKey = require('../flickr_key.json');
+    return flickrKey.api_key;
+  } catch (e) {
+    return '';
+  }
+});
+
 /**
  * Generate images path in specified "page", and append additional image paths.
  */

@@ -43,6 +43,7 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_CONTENT }}
       run: |
         echo "${GOOGLE_APPLICATION_CREDENTIALS_CONTENT}" > ./hexo-pv-c7938b2e210b.json
+        npm run build:flickr
         npm run build:pageview
         npm run build:webpack
         npm run build:hexo
