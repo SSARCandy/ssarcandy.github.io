@@ -1,8 +1,11 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+<link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js"></script>
 
 <div class="photography-container">
     <div class="photography-toolbar">
@@ -186,7 +189,7 @@
     }
 }
 .leaflet-container {
-    background: #fff !important;
+    background: #f8f9fa !important;
 }
 /* Material Design Leaflet Popups */
 .leaflet-popup {
@@ -380,16 +383,17 @@
             tap: true,              // Ensure tap works well on mobile
             touchZoom: 'center',
             attributionControl: false,
-            maxZoom: 15
+            maxZoom: 15,
+            zoomSnap: 0.1,          // Allow fractional zooming
+            wheelPxPerZoomLevel: 100 // Smoother wheel zoom
         }).setView([23.5, 121], 7); // Default to Taiwan
-        
+
         mapInstance.on('focus', () => mapInstance.scrollWheelZoom.enable());
         mapInstance.on('blur', () => mapInstance.scrollWheelZoom.disable());
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20
+        L.maplibreGL({
+            style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(mapInstance);
 
         markersLayer = L.markerClusterGroup({
@@ -408,7 +412,7 @@
                         imgHtml = '<img src="' + match[1] + '" loading="lazy">';
                     }
                 }
-                
+
                 return L.divIcon({
                     html: '<div class="custom-photo-cluster">' +
                             imgHtml +
@@ -429,8 +433,8 @@
             } else {
                 mapInstance.flyToBounds(bounds, {
                     padding: [50, 50],
-                    duration: 0.75, // Noticeably slower and smoother
-                    easeLinearity: 0.2
+                    duration: 2,
+                    easeLinearity: 0.1 
                 });
             }
         });
@@ -444,7 +448,11 @@
                 container.onclick = function(e) {
                     e.preventDefault();
                     if (markersLayer && markersLayer.getBounds().isValid()) {
-                        map.fitBounds(markersLayer.getBounds(), { padding: [50, 50] });
+                        map.flyToBounds(markersLayer.getBounds(), {
+                            padding: [50, 50],
+                            duration: 1.5,
+                            easeLinearity: 0.1
+                        });
                     }
                 };
                 return container;
@@ -457,14 +465,14 @@
         if (!markersLayer) return;
         markersLayer.clearLayers();
         const bounds = [];
-        
+
         photos.forEach(item => {
             if (item.latitude && item.longitude && parseFloat(item.latitude) !== 0) {
                 const lat = parseFloat(item.latitude);
                 const lng = parseFloat(item.longitude);
                 const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
                 const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
-                
+
                 const customIcon = L.divIcon({
                     className: 'custom-cluster-icon',
                     html: `<div class="map-marker-icon"><img src="${imgUrl}" alt="${item.title}" loading="lazy"></div>`,
@@ -489,12 +497,11 @@
                 bounds.push([lat, lng]);
             }
         });
-        
+
         if (bounds.length > 0) {
             mapInstance.fitBounds(bounds, { padding: [50, 50] });
         }
     }
-
     function sortPhotos(photos, type) {
         let sorted = [...photos];
         if (type === 'views') {
