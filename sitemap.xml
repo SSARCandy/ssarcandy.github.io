@@ -11,6 +11,15 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/photography/index.html</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/projects/index.html</loc>
     
     <lastmod>2026-05-30</lastmod>
@@ -20,7 +29,151 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/photography/index.html</loc>
+    <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/about/index.html</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2020/01/29/timing-attack/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
+    
+    <lastmod>2026-05-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
     
     <lastmod>2026-05-30</lastmod>
     
@@ -47,7 +200,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
+    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
     
     <lastmod>2026-05-30</lastmod>
     
@@ -56,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
+    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
     
     <lastmod>2026-05-30</lastmod>
     
@@ -272,159 +425,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2020/01/29/timing-attack/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/about/index.html</loc>
-    
-    <lastmod>2026-05-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/GAv3-pageview.json</loc>
     
     <lastmod>2026-05-30</lastmod>
@@ -499,13 +499,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/tags/python/</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/tags/trashtalk/</loc>
     <lastmod>2026-05-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -514,6 +507,13 @@
   
   <url>
     <loc>https://ssarcandy.tw/tags/automation/</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/tags/python/</loc>
     <lastmod>2026-05-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
