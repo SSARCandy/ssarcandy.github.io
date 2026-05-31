@@ -10,13 +10,13 @@
 <div class="photography-container">
     <div class="photography-toolbar">
         <div class="view-group" id="view-group" style="display: none;">
-            <button class="view-btn active" data-view="grid" aria-label="Grid View"><i class="icon icon-th-large"></i></button>
-            <button class="view-btn" data-view="map" aria-label="Map View"><i class="icon icon-map-marker"></i></button>
+            <button class="view-btn waves-effect active" data-view="grid" aria-label="Grid View"><i class="icon icon-th-large"></i></button>
+            <button class="view-btn waves-effect" data-view="map" aria-label="Map View"><i class="icon icon-map-marker"></i></button>
         </div>
         <div class="sort-group" id="sort-group">
-            <button class="sort-btn active" data-sort="random">Random</button>
-            <button class="sort-btn" data-sort="date">Latest</button>
-            <button class="sort-btn" data-sort="views" id="sort-views-btn" style="display: none;">Popular</button>
+            <button class="sort-btn waves-effect active" data-sort="random">Random</button>
+            <button class="sort-btn waves-effect" data-sort="date">Latest</button>
+            <button class="sort-btn waves-effect" data-sort="views" id="sort-views-btn" style="display: none;">Popular</button>
         </div>
     </div>
     <div id="photography-grid" class="photography-grid">
@@ -32,12 +32,15 @@
 </div>
 
 <style>
+:root {
+    scrollbar-gutter: stable;
+}
 .photography-container {
     padding: 0;
     max-width: 1200px;
     margin: 0 auto;
 }
-@media (max-width: 820px) {
+@media (max-width: 860px) {
     .photography-container {
         padding: 0 16px;
     }
