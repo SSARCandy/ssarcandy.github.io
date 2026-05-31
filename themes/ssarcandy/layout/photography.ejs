@@ -147,6 +147,37 @@
 .grid-item.revealed {
     opacity: 1;
 }
+.blur-up {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #f6f7f8;
+}
+.blur-up .img-small {
+    filter: blur(20px);
+    transform: scale(1.1);
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.4s ease;
+}
+.blur-up .img-large {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+    display: block;
+}
+.blur-up.loaded .img-large {
+    opacity: 1;
+}
+.blur-up.loaded .img-small {
+    opacity: 0;
+}
 .grid-item:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -566,13 +597,14 @@
 
         nextChunk.forEach(item => {
             const div = document.createElement('div');
-            div.className = 'grid-item';
+            div.className = 'grid-item skeleton';
             
-            let imgUrl, link, title, views;
+            let imgUrl, thumbUrl, link, title, views;
             let aspectRatioStyle = '';
             
             if (currentIsRestApi) {
                 imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
+                thumbUrl = item.url_t || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`;
                 link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
                 title = item.title;
                 views = item.views;
@@ -581,6 +613,7 @@
                 }
             } else {
                 imgUrl = item.media.m.replace('_m.jpg', '_c.jpg');
+                thumbUrl = item.media.m;
                 link = item.link;
                 title = item.title;
                 views = null;
@@ -589,10 +622,13 @@
             const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
             div.innerHTML = `
                 <a href="${link}" target="_blank">
-                    <img src="${imgUrl}" alt="${title}" loading="lazy" style="${aspectRatioStyle}">
-                    <div class="photo-title">
-                        <span class="photo-name">${title}</span>
-                        ${viewsHtml}
+                    <div class="blur-up" style="${aspectRatioStyle}">
+                        <img src="${thumbUrl}" class="img-small" alt="${title}" onload="this.closest('.grid-item').classList.remove('skeleton')">
+                        <img src="${imgUrl}" class="img-large" alt="${title}" loading="lazy" onload="this.parentElement.classList.add('loaded')">
+                        <div class="photo-title">
+                            <span class="photo-name">${title}</span>
+                            ${viewsHtml}
+                        </div>
                     </div>
                 </a>
             `;
@@ -723,7 +759,7 @@
 
     function loadRestApi() {
         const script = document.createElement('script');
-        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo,url_c&format=json&jsoncallback=jsonFlickrApi`;
+        script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo,url_c,url_t&format=json&jsoncallback=jsonFlickrApi`;
         script.onerror = loadFeedApi;
         document.head.appendChild(script);
     }
