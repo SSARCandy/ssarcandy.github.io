@@ -517,35 +517,35 @@
         const bounds = [];
 
         photos.forEach(item => {
-            if (item.latitude && item.longitude && parseFloat(item.latitude) !== 0) {
-                const lat = parseFloat(item.latitude);
-                const lng = parseFloat(item.longitude);
-                const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
-                const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
+            if (!item.latitude || !item.longitude || parseFloat(item.latitude) === 0) return;
 
-                const customIcon = L.divIcon({
-                    className: 'custom-cluster-icon',
-                    html: `<div class="map-marker-icon"><img src="${imgUrl}" alt="${item.title}" loading="lazy"></div>`,
-                    iconSize: [60, 60],
-                    iconAnchor: [30, 30]
-                });
+            const lat = parseFloat(item.latitude);
+            const lng = parseFloat(item.longitude);
+            const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
+            const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
 
-                const marker = L.marker([lat, lng], { icon: customIcon });
-                marker.bindPopup(`
-                    <div class="material-popup">
-                        <a href="${link}" target="_blank" class="material-popup-img">
-                            <img src="${imgUrl}" loading="lazy" alt="${item.title}">
+            const customIcon = L.divIcon({
+                className: 'custom-cluster-icon',
+                html: `<div class="map-marker-icon"><img src="${imgUrl}" alt="${item.title}" loading="lazy"></div>`,
+                iconSize: [60, 60],
+                iconAnchor: [30, 30]
+            });
+
+            const marker = L.marker([lat, lng], { icon: customIcon });
+            marker.bindPopup(`
+                <div class="material-popup">
+                    <a href="${link}" target="_blank" class="material-popup-img">
+                        <img src="${imgUrl}" loading="lazy" alt="${item.title}">
+                    </a>
+                    <div class="material-popup-content">
+                        <a href="${link}" target="_blank" class="material-popup-title" title="${item.title}">
+                            ${item.title}
                         </a>
-                        <div class="material-popup-content">
-                            <a href="${link}" target="_blank" class="material-popup-title" title="${item.title}">
-                                ${item.title}
-                            </a>
-                        </div>
                     </div>
-                `, { closeButton: false });
-                markersLayer.addLayer(marker);
-                bounds.push([lat, lng]);
-            }
+                </div>
+            `, { closeButton: false });
+            markersLayer.addLayer(marker);
+            bounds.push([lat, lng]);
         });
 
         if (bounds.length > 0) {
@@ -553,36 +553,41 @@
         }
     }
     function sortPhotos(photos, type) {
-        let sorted = [...photos];
-        if (type === 'views') {
-            sorted.sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
-        } else if (type === 'random') {
+        if (type === 'random') {
+            const sorted = [...photos];
             for (let i = sorted.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
             }
-        } else {
-            // Default: newest first (restore from master list order)
-            return [...masterPhotos];
+            return sorted;
         }
-        return sorted;
+
+        if (type === 'views') {
+            return [...photos].sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
+        }
+
+        // Default: newest first (restore from master list order)
+        return [...masterPhotos];
     }
 
     function initSentinel() {
-        if (!sentinel) {
-            sentinel = document.createElement('div');
-            sentinel.className = 'sentinel';
-            sentinel.style.width = '100%';
-            sentinel.style.height = '10px';
-            sentinel.style.clear = 'both';
-            container.parentNode.insertBefore(sentinel, container.nextSibling);
-            
-            observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    loadMorePhotos();
-                }
-            }, { rootMargin: '400px' });
+        if (sentinel) {
+            observer.observe(sentinel);
+            return;
         }
+
+        sentinel = document.createElement('div');
+        sentinel.className = 'sentinel';
+        sentinel.style.width = '100%';
+        sentinel.style.height = '10px';
+        sentinel.style.clear = 'both';
+        container.parentNode.insertBefore(sentinel, container.nextSibling);
+        
+        observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                loadMorePhotos();
+            }
+        }, { rootMargin: '400px' });
         observer.observe(sentinel);
     }
 
@@ -660,13 +665,13 @@
 
         // For images without aspect-ratio or delayed loading, update layout on progress
         imagesLoaded(container).on('progress', function() {
-            if (masonryInstance) {
-                masonryInstance.layout();
-            }
+            if (!masonryInstance) return;
+            masonryInstance.layout();
         });
     }
 
     function revealItems(items) {
+        if (!items || items.length === 0) return;
         requestAnimationFrame(() => {
             items.forEach(item => item.classList.add('revealed'));
         });
@@ -710,18 +715,19 @@
                 mapContainer.style.display = 'none';
                 document.querySelector('#sort-group').style.display = 'flex';
                 if (masonryInstance) masonryInstance.layout();
-            } else {
-                container.style.display = 'none';
-                if (sentinel) sentinel.style.display = 'none';
-                mapContainer.style.display = 'block';
-                document.querySelector('#sort-group').style.display = 'none';
-                initMap();
-                setTimeout(() => {
-                    if (!mapInstance || masterPhotos.length === 0) return;
-                    mapInstance.invalidateSize();
-                    updateMarkers(masterPhotos);
-                }, 100);
+                return;
             }
+
+            container.style.display = 'none';
+            if (sentinel) sentinel.style.display = 'none';
+            mapContainer.style.display = 'block';
+            document.querySelector('#sort-group').style.display = 'none';
+            initMap();
+            setTimeout(() => {
+                if (!mapInstance || masterPhotos.length === 0) return;
+                mapInstance.invalidateSize();
+                updateMarkers(masterPhotos);
+            }, 100);
         });
     });
 
@@ -733,9 +739,8 @@
             this.classList.add('active');
             
             currentSort = this.dataset.sort;
-            if (masterPhotos.length > 0) {
-                renderPhotos(masterPhotos, currentIsRestApi);
-            }
+            if (masterPhotos.length === 0) return;
+            renderPhotos(masterPhotos, currentIsRestApi);
         });
     });
 
@@ -747,12 +752,12 @@
 
     // Primary: REST API
     window.jsonFlickrApi = function(data) {
-        if (data.stat === 'ok') {
-            renderPhotos(data.photos.photo, true, true);
-        } else {
+        if (data.stat !== 'ok') {
             console.error('Flickr REST API failed:', data.message);
             loadFeedApi();
+            return;
         }
+        renderPhotos(data.photos.photo, true, true);
     };
 
     function loadFeedApi() {
