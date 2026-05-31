@@ -716,9 +716,10 @@
                 mapContainer.style.display = 'block';
                 document.querySelector('#sort-group').style.display = 'none';
                 initMap();
-                updateMarkers(masterPhotos);
                 setTimeout(() => {
-                    if (mapInstance) mapInstance.invalidateSize();
+                    if (!mapInstance || masterPhotos.length === 0) return;
+                    mapInstance.invalidateSize();
+                    updateMarkers(masterPhotos);
                 }, 100);
             }
         });
@@ -771,6 +772,9 @@
 
     window.addEventListener('resize', () => {
         if (masonryInstance) masonryInstance.layout();
+        if (mapInstance && mapContainer.style.display !== 'none') {
+            mapInstance.invalidateSize();
+        }
     });
 })();
 </script>
