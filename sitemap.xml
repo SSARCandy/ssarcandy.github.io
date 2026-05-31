@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/photography/index.html</loc>
+    <loc>https://ssarcandy.tw/projects/index.html</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/projects/index.html</loc>
+    <loc>https://ssarcandy.tw/photography/index.html</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -65,15 +65,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
-    
-    <lastmod>2026-05-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
     
     <lastmod>2026-05-31</lastmod>
@@ -84,6 +75,15 @@
   
   <url>
     <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
+    
+    <lastmod>2026-05-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -110,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
+    <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/</loc>
+    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -155,15 +155,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
-    
-    <lastmod>2026-05-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/</loc>
     
     <lastmod>2026-05-31</lastmod>
@@ -173,7 +164,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
+    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -183,6 +174,15 @@
   
   <url>
     <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
+    
+    <lastmod>2026-05-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -236,7 +236,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2019/08/11/Ways-to-Access-Internal-Network/</loc>
+    <loc>https://ssarcandy.tw/2017/07/21/about-taking-case/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -245,7 +245,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/07/21/about-taking-case/</loc>
+    <loc>https://ssarcandy.tw/2019/08/11/Ways-to-Access-Internal-Network/</loc>
     
     <lastmod>2026-05-31</lastmod>
     
@@ -471,7 +471,21 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/tags/c/</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/tags/opencv/</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/tags/rendering/</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -486,20 +500,6 @@
   
   <url>
     <loc>https://ssarcandy.tw/tags/python/</loc>
-    <lastmod>2026-05-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/tags/c/</loc>
-    <lastmod>2026-05-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/tags/rendering/</loc>
     <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
