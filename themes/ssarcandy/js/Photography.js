@@ -197,7 +197,7 @@
     const fragment = document.createDocumentFragment();
     const newItems = [];
 
-    nextChunk.forEach(item => {
+    nextChunk.forEach((item, index) => {
       const div = document.createElement('div');
       div.className = 'grid-item skeleton';
             
@@ -222,11 +222,14 @@
       }
 
       const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
+      const isPriority = renderedCount === 0 && index < 4;
+      const fetchPriority = isPriority ? 'fetchpriority="high"' : 'loading="lazy"';
+
       div.innerHTML = `
                 <a href="${link}" target="_blank">
                     <div class="blur-up" style="${aspectRatioStyle}">
-                        <img src="${thumbUrl}" class="img-small" alt="${title}" onload="this.closest('.grid-item').classList.remove('skeleton')">
-                        <img src="${imgUrl}" class="img-large" alt="${title}" loading="lazy" onload="this.parentElement.classList.add('loaded')">
+                        <img src="${thumbUrl}" class="img-small" decoding="async" alt="${title}" onload="this.closest('.grid-item').classList.remove('skeleton')">
+                        <img src="${imgUrl}" class="img-large" decoding="async" alt="${title}" ${fetchPriority} onload="this.parentElement.classList.add('loaded')">
                         <div class="photo-title">
                             <span class="photo-name">${title}</span>
                             ${viewsHtml}
@@ -277,7 +280,6 @@
       if (isRestApi) {
         document.querySelector('#view-group').style.display = 'flex';
         document.querySelector('#sort-views-btn').style.display = 'flex';
-        updateMarkers(masterPhotos);
       }
     }
         
@@ -316,6 +318,7 @@
       if (sentinel) sentinel.style.display = 'none';
       mapContainer.style.display = 'block';
       document.querySelector('#sort-group').style.display = 'none';
+      
       initMap();
       setTimeout(() => {
         if (!mapInstance || masterPhotos.length === 0) return;
