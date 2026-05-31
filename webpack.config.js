@@ -11,6 +11,7 @@ module.exports = {
   entry: {
     app: path.join(THEME_DIR, 'js/App.js'),
     projectPage: path.join(THEME_DIR, 'js/ProjectPage.js'),
+    photography: path.join(THEME_DIR, 'js/Photography.js'),
   },
   output: {
     filename: 'js/[name].bundle.js',
