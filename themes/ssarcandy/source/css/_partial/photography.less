@@ -190,13 +190,12 @@
     flex-shrink: 0;
 }
 #photography-map {
-    display: none; 
-    height: 600px; 
-    width: 100%; 
-    border-radius: 4px; 
-    overflow: hidden; 
+    display: none;
+    height: 600px;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
     margin-bottom: 20px;
-    border: none;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     position: relative;
     z-index: 1;
@@ -206,25 +205,24 @@
         height: 450px;
     }
 }
-.leaflet-container {
-    background: #f8f9fa !important;
+
+/* MapLibre 覆寫與 Material Popups */
+.maplibregl-map {
+    font-family: inherit;
 }
-/* Material Design Leaflet Popups */
-.leaflet-popup {
+.maplibregl-popup {
     filter: drop-shadow(0 3px 6px rgba(0,0,0,0.16)) drop-shadow(0 3px 6px rgba(0,0,0,0.23));
+    z-index: 1000;
 }
-.leaflet-popup-content-wrapper {
+.maplibregl-popup-content {
     box-shadow: none !important;
     border-radius: 6px !important;
     padding: 0 !important;
     overflow: hidden;
 }
-.leaflet-popup-tip {
-    box-shadow: none !important;
-}
-.leaflet-popup-content {
-    margin: 0 !important;
-    width: auto !important;
+.maplibregl-popup-tip {
+    border-top-color: #fff;
+    border-bottom-color: #fff;
 }
 .material-popup {
     width: 180px;
@@ -269,53 +267,52 @@
 .material-popup-title:hover {
     color: #673AB7;
 }
-.map-marker-icon {
+
+/* ---------------------------------------------------
+   終極修復：Marker Wrapper 設定為 0x0 點，徹底消除對齊誤差
+   --------------------------------------------------- */
+.marker-wrapper {
+    width: 0px;  /* 鎖死中心點 */
+    height: 0px; /* 鎖死中心點 */
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+}
+.marker-wrapper:hover {
+    z-index: 1000 !important;
+}
+
+/* 將內部元素手動向上、向左位移一半大小 (30px)，達到 100% 絕對置中 */
+.map-marker-icon, .custom-photo-cluster {
     box-sizing: border-box !important;
-    width: 100%;
-    height: 100%;
+    width: 60px; 
+    height: 60px;
+    position: absolute;
+    top: -30px;  /* 關鍵置中：負一半高度 */
+    left: -30px; /* 關鍵置中：負一半寬度 */
     border: 2px solid #fff;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     background: white;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     padding: 0 !important;
-    position: relative;
+    display: block;
 }
-.map-marker-icon:hover {
-    transform: scale(1.15) !important;
-    z-index: 1000 !important;
+.marker-wrapper:hover .map-marker-icon, .marker-wrapper:hover .custom-photo-cluster {
+    transform: scale(1.15); /* Hover 動畫正常發揮，不干擾定位 */
 }
-.map-marker-icon img {
+.map-marker-icon img, .custom-photo-cluster img {
     position: absolute;
     top: 0; left: 0;
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
     display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
     border-radius: 4px;
+    z-index: 1;
 }
-.custom-cluster-icon {
-    background: transparent;
-    border: none;
-}
-.custom-photo-cluster {
-    box-sizing: border-box !important;
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    position: relative;
-    background: #fff;
-    transition: transform 0.2s ease;
-    padding: 0 !important;
-}
-.custom-photo-cluster:hover {
-    transform: scale(1.15) !important;
-    z-index: 1000 !important;
-}
+
+/* Cluster 特效 */
 .custom-photo-cluster::before, .custom-photo-cluster::after {
     content: '';
     position: absolute;
@@ -333,18 +330,6 @@
 .custom-photo-cluster::after {
     transform: rotate(-6deg);
     z-index: -2;
-}
-.custom-photo-cluster img {
-    position: absolute;
-    top: 0; left: 0;
-    border-radius: 4px;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    z-index: 1;
 }
 .cluster-badge {
     box-sizing: border-box;
@@ -365,6 +350,58 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     border: 2px solid #fff;
     z-index: 10;
+}
+
+/* Spiderifier Effects */
+.spider-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    z-index: 10;
+}
+.spider-leaf-wrapper {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 10;
+}
+.spider-leaf-wrapper:hover {
+    z-index: 100;
+}
+.spider-leaf-content {
+    box-sizing: border-box !important;
+    width: 50px; height: 50px;
+    position: absolute;
+    top: -25px; left: -25px;
+    border: 2px solid #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.spider-leaf-wrapper:hover .spider-leaf-content {
+    transform: scale(1.15);
+}
+.spider-leaf-content img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+.spider-line {
+    position: absolute;
+    top: 0; left: 0;
+    height: 2px;
+    background: rgba(103, 58, 183, 0.6);
+    transform-origin: 0 50%;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: 0;
+    z-index: 5;
+    pointer-events: none;
 }
 @media (max-width: 740px) {
     .grid-sizer, .grid-item { width: 100% !important; }
