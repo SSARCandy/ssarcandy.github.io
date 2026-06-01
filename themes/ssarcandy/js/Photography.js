@@ -101,8 +101,9 @@
     mapInstance.addControl(new ZoomControl(), 'top-left');
     mapInstance.addControl(new ResetViewControl(), 'top-left');
 
+    const isMobile = window.innerWidth < 600;
     superclusterIndex = new Supercluster({
-      radius: 20,
+      radius: isMobile ? 40 : 20,
       maxZoom: 20,
     });
 
@@ -244,7 +245,7 @@
   function handleSpiderLeafClick(e, props, coords, x, y) {
     e.stopPropagation();
     document.querySelectorAll('.maplibregl-popup').forEach(p => p.remove());
-    new maplibregl.Popup({ closeButton: true, offset: [x, y - 35] })
+    new maplibregl.Popup({ closeButton: false, offset: [x, y - 35] })
       .setLngLat(coords)
       .setHTML(createPopupHtml(props))
       .addTo(mapInstance);
@@ -275,7 +276,7 @@
   function handleClusterClick(e, clusterId, coords) {
     e.stopPropagation();
     const currentZoom = mapInstance.getZoom();
-    const expansionZoom = 3 + superclusterIndex.getClusterExpansionZoom(clusterId);
+    const expansionZoom = 1 + superclusterIndex.getClusterExpansionZoom(clusterId);
         
     if (currentZoom < 15.9) {
       // Set pending to true so we know to animate once moveend fires
