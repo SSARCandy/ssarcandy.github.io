@@ -7,22 +7,20 @@
     "build": "npm-run-all build:*",
     "build:flickr": "node ./helper/fetch_flickr_key.js",
     "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./helper/ga_pageview.js > pageview.json",
-    "build:webpack": "NODE_ENV=production webpack --mode production",
+    "build:vite": "vite build",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "lint": "./node_modules/.bin/eslint themes/ssarcandy/js",
-    "dev": "hexo server --debug"
+    "dev": "npm-run-all --parallel watch:assets dev:hexo",
+    "dev:hexo": "hexo server --debug",
+    "watch:assets": "vite build --watch"
   },
   "hexo": {
     "version": "7.3.0"
   },
   "dependencies": {
-    "@babel/core": "^7.21.4",
-    "@babel/preset-env": "^7.21.4",
     "@google-analytics/data": "^3.2.1",
-    "babel-loader": "^9.1.2",
-    "core-js": "^3.30.0",
     "hexo": "^7.3.0",
     "hexo-clean-css": "^2.0.0",
     "hexo-cli": "^4.3.2",
@@ -47,13 +45,12 @@
     "hexo-util": "^4.0.0",
     "lodash": "^4.17.21",
     "lunr": "^2.3.9",
-    "node-waves": "^0.7.6",
-    "webpack": "^5.78.0"
+    "node-waves": "^0.7.6"
   },
   "devDependencies": {
     "eslint": "^8.38.0",
     "hexo-browsersync": "^0.3.0",
     "npm-run-all": "^4.1.5",
-    "webpack-cli": "^5.0.1"
+    "vite": "^6.0.0"
   }
 }

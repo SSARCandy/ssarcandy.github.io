@@ -15,4 +15,4 @@
 window.SEARCH_INDEX = <%- lunr_index(site.data.works) %>;
 </script>
 
-<%- js('js/projectPage.bundle.js') %>
+<script src="<%- url_for('js/projectPage.bundle.js') %>" type="module"></script>
