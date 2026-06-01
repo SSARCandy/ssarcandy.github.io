@@ -85,8 +85,6 @@
     background: #fff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: opacity 0.4s ease-in, box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 400px;
 }
 .grid-item.skeleton {
     opacity: 1 !important;
@@ -96,8 +94,8 @@
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite, skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-/* .grid-sizer is the 1st child, so even children are the left column */
-.grid-item.skeleton:nth-child(even) {
+/* .grid-sizer is the 1st child, so 2n (even) children are in the left column */
+.grid-item:nth-child(even) {
     margin-right: 16px;
 }
 
