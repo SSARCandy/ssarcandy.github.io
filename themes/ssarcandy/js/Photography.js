@@ -245,10 +245,12 @@
   function handleSpiderLeafClick(e, props, coords, x, y) {
     e.stopPropagation();
     document.querySelectorAll('.maplibregl-popup').forEach(p => p.remove());
-    new maplibregl.Popup({ closeButton: false, offset: [x, y - 35] })
+    new maplibregl.Popup({ closeButton: false, anchor: 'bottom', offset: [x, y - 35] })
       .setLngLat(coords)
       .setHTML(createPopupHtml(props))
       .addTo(mapInstance);
+    // Center on the visual position of the popup
+    mapInstance.flyTo({ center: coords, offset: [-x, -y + 135], speed: 1.2 });
   }
 
   function applySpiderLeafAnimation(leafWrapper, line, x, y, radius, isNew) {
@@ -276,8 +278,9 @@
   function handleClusterClick(e, clusterId, coords) {
     e.stopPropagation();
     const currentZoom = mapInstance.getZoom();
-    const expansionZoom = 1 + superclusterIndex.getClusterExpansionZoom(clusterId);
-        
+    const extraExpansion = window.innerWidth < 600 ? 1 : 3; // Add extra zoom for desktop to better show spider leaves
+    const expansionZoom = extraExpansion + superclusterIndex.getClusterExpansionZoom(clusterId);
+
     if (currentZoom < 15.9) {
       // Set pending to true so we know to animate once moveend fires
       expandOrigin = { coords: coords, time: Date.now(), pending: true };
@@ -314,9 +317,12 @@
   }
 
   function attachPhotoPopup(marker, props) {
-    const popup = new maplibregl.Popup({ closeButton: false, offset: 35 })
+    const popup = new maplibregl.Popup({ closeButton: false, anchor: 'bottom', offset: 35 })
       .setHTML(createPopupHtml(props));
     marker.setPopup(popup);
+    popup.on('open', () => {
+      mapInstance.flyTo({ center: marker.getLngLat(), offset: [0, 100], speed: 1.2 });
+    });
   }
 
   function createPopupHtml(props) {
