@@ -387,39 +387,3 @@ hr,
 @import '_partial/about';
 @import '_partial/photography';
 @import '_partial/ads.less';
-
-.body-wrap {
-    view-transition-name: body-wrap;
-}
-
-// Material Design 3 Expressive Easing & Duration
-@view-transition-duration: 400ms;
-@view-transition-easing: cubic-bezier(0.2, 0.0, 0, 1.0); // Emphasized easing
-
-::view-transition-group(root),
-::view-transition-group(body-wrap) {
-    animation-duration: @view-transition-duration;
-    animation-timing-function: @view-transition-easing;
-}
-
-::view-transition-old(body-wrap) {
-    animation: fade-out @view-transition-duration @view-transition-easing forwards,
-               slide-out @view-transition-duration @view-transition-easing forwards;
-}
-
-::view-transition-new(body-wrap) {
-    animation: fade-in @view-transition-duration @view-transition-easing forwards,
-               slide-in @view-transition-duration @view-transition-easing forwards;
-}
-
-@keyframes slide-out {
-    to { transform: translateY(-30px); }
-}
-
-@keyframes slide-in {
-    from { transform: translateY(30px); }
-}
-
-@view-transition {
-    navigation: auto;
-}
