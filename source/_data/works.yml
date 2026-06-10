@@ -1,3 +1,14 @@
+- name: firstrade-api-node
+  title: Firstrade API (Node.js)
+  description: '📈 Unofficial Node.js version of Firstrade API, providing programmatic access to accounts, data, orders, and quotes.'
+  github: https://github.com/SSARCandy/firstrade-api-node
+  download: https://www.npmjs.com/package/firstrade-api-node
+  img_ext: .png
+  tags:
+    - Node.js
+    - TypeScript
+    - Finance
+
 - name: TWSE-eVoting
   title: TWSE Auto eVoting
   description: '🗳️ 股東會電子投票自動化小幫手'
