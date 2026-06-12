@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  publicDir: false,
   build: {
     outDir: resolve(__dirname, 'themes/ssarcandy/source/js'),
     emptyOutDir: false,
