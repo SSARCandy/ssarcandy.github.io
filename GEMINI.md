@@ -4,11 +4,11 @@ This is a personal blog powered by [Hexo](https://hexo.io/) and managed with Nod
 
 ## Project Overview
 
-- **Core Tech**: Hexo (v7+), JavaScript (ES6+), Webpack (v5+).
+- **Core Tech**: Hexo (v7+), JavaScript (ES6+), Vite.
 - **Theme**: Custom theme `ssarcandy` (modified from `hexo-theme-indigo`).
 - **Architecture**:
     - **Source Content**: Markdown posts reside in `source/_posts/`.
-    - **Theme Assets**: Theme-specific JavaScript is located in `themes/ssarcandy/js/` and bundled via Webpack.
+    - **Theme Assets**: Theme-specific JavaScript is located in `themes/ssarcandy/js/` and bundled via Vite.
     - **Styling**: Uses LESS and Stylus for theme styling.
     - **Integration**: Fetches Google Analytics data for pageview counts via `helper/ga_pageview.js`.
 
@@ -20,15 +20,20 @@ To run the blog locally with live reloading, you typically need two terminal ses
 
 1.  **Watch Assets**:
     ```sh
-    npx webpack --watch
+    npm run watch:assets
     ```
-    This bundles theme JavaScript and outputs it to `themes/ssarcandy/source/js/`.
+    This bundles theme JavaScript using Vite and outputs it to `themes/ssarcandy/source/js/`.
 
 2.  **Start Hexo Server**:
     ```sh
-    npm run dev
+    npm run dev:hexo
     ```
     This starts the Hexo server in debug mode (usually at `http://localhost:3080`).
+
+You can also run both simultaneously using:
+```sh
+npm run dev
+```
 
 ### Production Build
 
@@ -39,7 +44,7 @@ npm run build
 ```
 This command executes a multi-step process:
 1.  `build:pageview`: Fetches GA data (requires credentials).
-2.  `build:webpack`: Bundles theme assets in production mode.
+2.  `build:vite`: Bundles theme assets in production mode.
 3.  `build:hexo`: Runs `hexo generate` to create the final static files in `public/`.
 
 ### Deployment
@@ -62,6 +67,6 @@ npm run deploy
     - Global site settings: `_config.yml`
     - Theme-specific settings: `themes/ssarcandy/_config.yml`
 - **Assets Management**:
-    - Do not edit files in `themes/ssarcandy/source/js/` directly; they are overwritten by Webpack.
+    - Do not edit files in `themes/ssarcandy/source/js/` directly; they are overwritten by Vite.
     - Source assets are in `themes/ssarcandy/js/`.
 - **Environment**: Node.js v20+ is recommended as per the GitHub Actions configuration.

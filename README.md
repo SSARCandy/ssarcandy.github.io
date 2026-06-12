@@ -8,8 +8,7 @@
 **Development**
 
 ```sh
-# need two terminal
-$ webpack --watch
+# starts both vite and hexo
 $ npm run dev
 
 # release mode
