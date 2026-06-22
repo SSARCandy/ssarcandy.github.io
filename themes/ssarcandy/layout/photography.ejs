@@ -19,7 +19,7 @@
     </div>
     <div id="photography-grid" class="photography-grid"
         data-user-id="<%= theme.social_links.flickr.user_id %>"
-        data-api-key="<%= flickr_api_key() %>">
+        data-photos-url="<%- url_for('flickr_photos.json') %>">
         <div class="grid-sizer"></div>
         <div class="grid-item skeleton"></div>
         <div class="grid-item skeleton"></div>

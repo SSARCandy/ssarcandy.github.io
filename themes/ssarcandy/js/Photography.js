@@ -4,12 +4,10 @@
   const mapContainer = document.querySelector('#photography-map');
   if (!container) return;
 
-  const USER_ID = container.dataset.userId;
-  const API_KEY = container.dataset.apiKey;
-    
+  const PHOTOS_URL = container.dataset.photosUrl;
+
   let masterPhotos = []; // Keep original order
   let sortedPhotosList = [];
-  let currentIsRestApi = false;
   let currentSort = 'random'; // 'date', 'views', or 'random'
   let masonryInstance = null;
   
@@ -461,25 +459,14 @@
       const div = document.createElement('div');
       div.className = 'grid-item skeleton';
             
-      let imgUrl, thumbUrl, link, title, views;
-      let aspectRatioStyle = '';
-            
-      if (currentIsRestApi) {
-        imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
-        thumbUrl = item.url_t || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`;
-        link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
-        title = item.title;
-        views = item.views;
-        if (item.width_c && item.height_c) {
-          aspectRatioStyle = `aspect-ratio: ${item.width_c} / ${item.height_c};`;
-        }
-      } else {
-        imgUrl = item.media.m.replace('_m.jpg', '_c.jpg');
-        thumbUrl = item.media.m;
-        link = item.link;
-        title = item.title;
-        views = null;
-      }
+      const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
+      const thumbUrl = item.url_t || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`;
+      const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
+      const title = item.title;
+      const views = item.views;
+      const aspectRatioStyle = (item.width_c && item.height_c)
+        ? `aspect-ratio: ${item.width_c} / ${item.height_c};`
+        : '';
 
       const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
       const isPriority = renderedCount === 0 && index < 4;
@@ -534,18 +521,15 @@
     });
   }
 
-  function renderPhotos(photos, isRestApi, isInitialLoad = false) {
+  function renderPhotos(photos, isInitialLoad = false) {
     if (isInitialLoad) {
       masterPhotos = [...photos];
-      if (isRestApi) {
-        document.querySelector('#view-group').style.display = 'flex';
-        document.querySelector('#sort-views-btn').style.display = 'flex';
-        // Primary: Initialize markers if we have mapInstance
-        if (mapInstance) updateMarkers(masterPhotos);
-      }
+      document.querySelector('#view-group').style.display = 'flex';
+      document.querySelector('#sort-views-btn').style.display = 'flex';
+      // Initialize markers if we have mapInstance
+      if (mapInstance) updateMarkers(masterPhotos);
     }
-        
-    currentIsRestApi = isRestApi;
+
     sortedPhotosList = sortPhotos(masterPhotos, currentSort);
         
     container.innerHTML = '<div class="grid-sizer"></div>';
@@ -602,40 +586,22 @@
             
       currentSort = this.dataset.sort;
       if (masterPhotos.length === 0) return;
-      renderPhotos(masterPhotos, currentIsRestApi);
+      renderPhotos(masterPhotos);
     });
   });
 
-  // Fallback: Feed API
-  window.jsonFlickrFeed = function(data) {
-    console.log('Flickr: Using Feed API Fallback');
-    renderPhotos(data.items, false, true);
-  };
-
-  // Primary: REST API
-  window.jsonFlickrApi = function(data) {
-    if (data.stat !== 'ok') {
-      console.error('Flickr REST API failed:', data.message);
-      loadFeedApi();
-      return;
-    }
-    renderPhotos(data.photos.photo, true, true);
-  };
-
-  function loadFeedApi() {
-    const script = document.createElement('script');
-    script.src = `https://www.flickr.com/services/feeds/photos_public.gne?id=${USER_ID}&format=json`;
-    document.head.appendChild(script);
-  }
-
-  function loadRestApi() {
-    const script = document.createElement('script');
-    script.src = `https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=${API_KEY}&user_id=${USER_ID}&per_page=100&extras=views,geo,url_c,url_t&format=json&jsoncallback=jsonFlickrApi`;
-    script.onerror = loadFeedApi;
-    document.head.appendChild(script);
-  }
-
-  loadRestApi();
+  // Photo metadata is fetched and stored at build time (see helper/fetch_flickr_photos.js),
+  // so the page never depends on a live Flickr API key.
+  fetch(PHOTOS_URL)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(photos => {
+      if (!Array.isArray(photos) || photos.length === 0) throw new Error('empty photo data');
+      renderPhotos(photos, true);
+    })
+    .catch(err => console.error('Flickr: failed to load photos —', err.message));
 
   window.addEventListener('resize', () => {
     if (masonryInstance) masonryInstance.layout();

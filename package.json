@@ -5,7 +5,7 @@
   "scripts": {
     "start": "hexo server -s",
     "build": "npm-run-all build:*",
-    "build:flickr": "node ./helper/fetch_flickr_key.js",
+    "build:flickr": "node ./helper/fetch_flickr_photos.js",
     "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./helper/ga_pageview.js > pageview.json",
     "build:vite": "vite build",
     "build:hexo": "hexo generate",
