@@ -7,18 +7,17 @@
 
 <div class="photography-container">
     <div class="photography-toolbar">
-        <div class="view-group" id="view-group" style="display: none;">
+        <div class="view-group">
             <button class="view-btn waves-effect active" data-view="grid" aria-label="Grid View"><i class="icon icon-th-large"></i></button>
             <button class="view-btn waves-effect" data-view="map" aria-label="Map View"><i class="icon icon-map-marker"></i></button>
         </div>
         <div class="sort-group" id="sort-group">
             <button class="sort-btn waves-effect active" data-sort="random">Random</button>
             <button class="sort-btn waves-effect" data-sort="date">Latest</button>
-            <button class="sort-btn waves-effect" data-sort="views" id="sort-views-btn" style="display: none;">Popular</button>
+            <button class="sort-btn waves-effect" data-sort="views">Popular</button>
         </div>
     </div>
     <div id="photography-grid" class="photography-grid"
-        data-user-id="<%= theme.social_links.flickr.user_id %>"
         data-photos-url="<%- url_for('flickr_photos.json') %>">
         <div class="grid-sizer"></div>
         <div class="grid-item skeleton"></div>

@@ -524,8 +524,6 @@
   function renderPhotos(photos, isInitialLoad = false) {
     if (isInitialLoad) {
       masterPhotos = [...photos];
-      document.querySelector('#view-group').style.display = 'flex';
-      document.querySelector('#sort-views-btn').style.display = 'flex';
       // Initialize markers if we have mapInstance
       if (mapInstance) updateMarkers(masterPhotos);
     }
