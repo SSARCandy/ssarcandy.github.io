@@ -200,7 +200,9 @@
 }
 @media (max-width: 600px) {
     #photography-map {
-        height: 450px;
+        // 80% of the viewport — the .photography-container has no fixed height,
+        // so a percentage height wouldn't resolve; vh gives a tall map on phones.
+        height: 60vh;
     }
 }
 
