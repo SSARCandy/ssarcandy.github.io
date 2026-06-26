@@ -1,0 +1,20 @@
+<%
+// Native in-feed ad for the home post list (index.ejs). Shown only when an
+// In-feed ad unit (slot + layout_key) is configured. Reuses the .post-list-item
+// card chrome so it reads as another entry in the feed.
+var inFeed = theme.adsense && theme.adsense.in_feed && theme.adsense.in_feed.post_list;
+if (theme.adsense && theme.adsense.enable && inFeed && inFeed.slot && inFeed.layout_key) {
+%>
+<div class="post-list-item post-list-ad-item" aria-hidden="true">
+    <span class="ad-label">Sponsored</span>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="<%- inFeed.layout_key %>"
+        data-ad-client="<%- theme.adsense.client %>"
+        data-ad-slot="<%- inFeed.slot %>"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+<% } %>

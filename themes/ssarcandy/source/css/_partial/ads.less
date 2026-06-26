@@ -7,12 +7,6 @@
     flex-shrink: 0;   // stay pinned below the scrollable TOC list, always visible
 }
 
-/* Multiplex (autorelaxed) ad at the bottom of the home post list — same bottom
-   gap as a .post-list-item so it keeps the feed's rhythm. */
-.ads-post-list {
-    margin-bottom: 30px;
-}
-
 /* Multiplex (autorelaxed) ad at the bottom of the about page. */
 .ads-about-bottom {
     margin: 30px 0;
@@ -56,6 +50,12 @@
     min-height: 120px;
 }
 
+/* Home feed ad row: .post-list-item already supplies the white card chrome
+   (bg/radius/shadow/margin) — only add the positioning context for the label. */
+.post-list-ad-item {
+    position: relative;
+}
+
 /* Archive / tag list row: match the .archive-article chrome (white sheet, bottom
    divider, soft shadow) so the ad reads as another entry — minus the 140px date
    gutter the real rows use. No min-height: let the ad be as short as its in-feed
@@ -75,6 +75,7 @@
     }
 }
 
+.post-list-ad-item ins.adsbygoogle,
 .archive-ad-item ins.adsbygoogle,
 .project-ad-item ins.adsbygoogle,
 .ad-grid-item ins.adsbygoogle {
@@ -84,6 +85,7 @@
 
 /* No ad to show: drop the whole card (and its label) rather than leave an empty
    "Sponsored" box. AdSense marks unfilled slots with data-ad-status. */
+.post-list-ad-item:has(ins[data-ad-status="unfilled"]),
 .archive-ad-item:has(ins[data-ad-status="unfilled"]),
 .project-ad-item:has(ins[data-ad-status="unfilled"]),
 .ad-grid-item:has(ins[data-ad-status="unfilled"]) {
