@@ -8,6 +8,17 @@
     flex-shrink: 0;   // stay pinned below the scrollable TOC list, always visible
 }
 
+/* Multiplex (autorelaxed) ad at the bottom of the home post list — same bottom
+   gap as a .post-list-item so it keeps the feed's rhythm. */
+.ads-post-list {
+    margin-bottom: 30px;
+}
+
+/* Multiplex (autorelaxed) ad at the bottom of the about page. */
+.ads-about-bottom {
+    margin: 30px 0;
+}
+
 /* ---------- Native in-feed ads (blend into the post / projects / photo feeds) ---
    The ad cards reuse the surrounding card chrome — .post-list-item for the home
    article feed, .project-list-item for the projects waterfall, .grid-item for the

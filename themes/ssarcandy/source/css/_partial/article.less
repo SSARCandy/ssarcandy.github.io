@@ -55,6 +55,12 @@
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    // Keep it scrollable but hide the scrollbar.
+    scrollbar-width: none;        // Firefox
+    -ms-overflow-style: none;     // legacy Edge/IE
+    &::-webkit-scrollbar {        // Chromium / WebKit
+        display: none;
+    }
 }
 
 .post-toc-item {

@@ -67,3 +67,25 @@
         width: 50%;
     }
 }
+
+/* The about page is short, so let the content sheet fill the viewport and pin the
+   bottom (Multiplex) ad to the bottom of the page instead of floating under the
+   brief intro. html/body are height:100% and #main is min-height:100%, so this
+   flex chain has a viewport-tall box to distribute. Scoped to the about page only. */
+.about-page {
+    padding: 0 16px;
+}
+#main:has(.about-page) {
+    display: flex;
+    flex-direction: column;
+}
+#main:has(.about-page) > .body-wrap,
+#main:has(.about-page) > .body-wrap > .container,
+#main:has(.about-page) .about-page {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+.about-page .ads-about-bottom {
+    margin-top: auto;   // push the ad to the bottom of the page
+}

@@ -73,6 +73,8 @@ adsense:
   in_slot:
     post_bottom: '3786040804'   # in-article ad at the bottom of each post
     post_toc: '2383750630'      # long vertical (skyscraper) ad under the post table-of-contents
+    post_list: '1962902636'     # autorelaxed (Multiplex) ad at the bottom of the home post list
+    about_bottom: '4205922593'  # autorelaxed (Multiplex) ad at the bottom of the about page
   # Native "In-feed" ads that blend into the projects / photography grids.
   # Create an In-feed ad unit in AdSense for each grid, then paste that unit's
   # data-ad-slot and data-ad-layout-key below. Leave either field blank to

@@ -1,0 +1,12 @@
+<% if (theme.adsense.enable && theme.adsense.in_slot && theme.adsense.in_slot.about_bottom) { %>
+    <div class="ads-about-bottom">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-format="autorelaxed"
+            data-ad-client="<%- theme.adsense.client %>"
+            data-ad-slot="<%- theme.adsense.in_slot.about_bottom %>"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+<% } %>
