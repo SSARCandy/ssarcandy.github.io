@@ -8,17 +8,17 @@
   <link href="https://ssarcandy.tw/" rel="alternate"/>
   <link href="https://ssarcandy.tw/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, John Doe</rights>
-  <subtitle>ssarcandy's blog. There is always more than one solution.</subtitle>
+  <subtitle>Nothing special, just a blog for a nerdy software engineer. I write about programming, trashtalk, and other things that interest me.</subtitle>
   <title>SSARCandy's Blog</title>
-  <updated>2026-06-26T17:12:03.736Z</updated>
+  <updated>2026-06-26T17:41:42.048Z</updated>
   <entry>
     <author>
       <name>John Doe</name>
     </author>
     <category term="trashtalk" scheme="https://ssarcandy.tw/tags/trashtalk/"/>
     <category term="automation" scheme="https://ssarcandy.tw/tags/automation/"/>
-    <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     <category term="javascript" scheme="https://ssarcandy.tw/tags/javascript/"/>
+    <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     <content>
       <![CDATA[<p>自從去年開始，我們全家就展開了所謂的「大零股計畫」，為的就是把所有上市櫃公司有發放的紀念品給領好領滿。</p><p>不過台灣的零股領紀念品規則實在是有夠多細節：首先你必須要參加線上股東會，並且完成電子投票；最後還要親自到場去領實體紀念品…。</p><p>這些繁瑣的前置作業本來讓我有點卻步，幸好去年朋友告知，現在有很多專門「代領紀念品」的平台。就算扣掉代領手續費，整體算下來還是挺有賺頭的，這才讓整個計畫有了可執行性！</p>    <div>      <img src="/img/2026-04-19/02.jpg" alt="去年的股東會戰利品(其中一部分!)" data-action="zoom" class="photozoom">      <span class="zoom-initial-caption">去年的股東會戰利品(其中一部分!)</span>    </div><span id="more"></span><h1 id="零股領紀念品痛點"><a href="#零股領紀念品痛點" class="headerlink" title="零股領紀念品痛點?"></a>零股領紀念品痛點?</h1><p>但問題來了，想要讓代領平台幫你領紀念品，必須上傳「有參與股東會投票」的截圖證明。假設我一個人有 300 間公司的股票，家裡其他人也各有 300 間，加起來近 1000 間股東會要投… 如果全用人工去點，手真的會斷掉 QQ</p><p>身為一個非常懶惰的工程師，這種無聊的重複勞動當然要自動化啊！原本去年是因為有朋友的朋友提供了堪用的工具，就勉強度過了（絕對不是因為覺得寫爬蟲很麻煩 XD）。但今年隨著 AI 崛起，看著網路上各種 <code>vibe coding</code> 的討論，如果再不試試看用 AI 幫忙從頭尻出一個完整的 app，感覺自己就要被時代淘汰了。於是趁著股東會旺季來臨前，決定自己來動手做一個最適合我的「自動化電子投票小幫手」。</p><h1 id="Vibe-Coding-初體驗"><a href="#Vibe-Coding-初體驗" class="headerlink" title="Vibe Coding 初體驗"></a>Vibe Coding 初體驗</h1><blockquote><p>重點不是一開始就寫 Code，而是跟 AI 好好「聊天」。</p></blockquote><p>這一切的進展其實滿順利的，我也大概抓到了 <code>vibe coding</code> 的一些精髓。<br>基本上不要想著一開始就要 AI 吐出一個可用的雛形，正確的姿勢是：</p><ol><li>先跟 AI 好好聊一下，告訴他你的需求是什麼。</li><li>聊天的過程中，隨時請 AI 幫忙統整需求，轉換成具體的「工作項目列表 (To-Do list)」。</li><li>這樣來回討論幾輪後，再請他列出整個專案需要的技術棧 (Tech Stack)。</li><li>最後把這份確認好的「技術規格」作為最初始的 prompt。</li></ol><p>不過在製作過程中，還是難免會踩雷。有時候 AI 會遇到解不開的 bug，不知道是不是我用的便宜模型的關係，他有時候還會跟我說他遇到非常大的挫折，覺得很傷心 (AI 也反向情勒我？)。這個時候就不能強硬逼他繼續想，必須由我主動介入，告訴他哪邊邏輯出錯了應該換個方向做。</p><p>總結下來，工程師暫時應該還是很難被完全取代的。這次專案大概有 90% 的程式碼改動我不需要真的去 review，基本上都是對的；但剩下 10% 還是需要我來指出「這樣完全不對，你應該怎麼改」。</p><h1 id="解放繁瑣的環境建置"><a href="#解放繁瑣的環境建置" class="headerlink" title="解放繁瑣的環境建置"></a>解放繁瑣的環境建置</h1><blockquote><p>把最浪費生命的設境設定都丟給 AI 吧！</p></blockquote><p>有了 AI 幫忙寫 code 後，也很大程度解決了我一直以來的痛點 ——「環境設置與打包部署」。在以前，這些操作通常需要長時間的試錯，而且不同環境還可能跑出不同結果。但現在只要清楚下達指令，幾乎都不用介入，AI 就能馬上給我想要的設定了，真的非常舒服。</p><h1 id="專案開源"><a href="#專案開源" class="headerlink" title="專案開源"></a>專案開源</h1><p>總之，第一次的 <code>vibe coding</code> 體驗相當良好，讓我久違地找回了以前開發應用程式的成就感。畢竟能在短短一天之內，用以前不曾摸過的技術完成一個完整的應用程式，並且完美解決了自己的痛點，還是挺爽的！</p><p>如果各位跟我一樣正在執行「大零股計畫」，並且有太多股東會需要投票到手軟，歡迎來嘗試看看這套工具。目前已經整理好並發佈到 GitHub 上開源囉：</p><blockquote><p><a href="https://github.com/SSARCandy/TWSE-eVoting">TWSE Auto eVoting | 股東會電子投票自動化小幫手</a></p></blockquote>    <div>      <img src="/img/2026-04-19/01.png" alt="應用程式 v1.0.0 截圖" data-action="zoom" class="photozoom">      <span class="zoom-initial-caption">應用程式 v1.0.0 截圖</span>    </div><hr><p>雜談</p><ul><li>一天尻出一個專案，好像找回了一點當初剛學寫扣時的熱情 (?)</li><li>我現在連蝦皮評價都請 AI 寫了，感覺自己快變成廢人了。</li><li>當然本篇文章也是 AI 幫忙 review 過ㄏㄏ</li><li>好幾年沒發文了呢~表示我這幾年都沒有甚麼令我覺得值得記錄的進步QQ</li></ul>]]>
     </content>
@@ -36,7 +36,7 @@
     </div>]]>
     </summary>
     <title>股東會電子投票自動化小幫手</title>
-    <updated>2026-06-26T17:12:03.736Z</updated>
+    <updated>2026-06-26T17:41:42.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -58,7 +58,7 @@
     </div>]]>
     </summary>
     <title>Run Unix-like Server on Android</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
   <entry>
     <author>
@@ -76,7 +76,7 @@
       <![CDATA[<p>自從 Google Photos 養套殺，取消高畫質無限上傳以後<sup>[1]</sup>，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Google Photos，即使換了新手機，也應該想辦法由舊裝置來上傳相片。</p>]]>
     </summary>
     <title>把舊的 Pixel 改造成無限照片上傳機</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -99,7 +99,7 @@
     </div>]]>
     </summary>
     <title>Optimizing C++ Compile Time</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
   <entry>
     <author>
@@ -117,7 +117,7 @@
       <![CDATA[<p>Share storage，諸如家用 NAS 或工作站常有的網路硬碟(NFS)，是一個很方便又隨處可見的一種存儲空間，方便的點在於可以從不同機器存取或修改同樣的資料、避免需要維護重複的東西在不同的機器上；常見的使用情境像是會將 <code>/home</code> 家目錄放置於 Share storage 中，然後再掛載至所有工作站的機器上，這樣就可以讓使用者無論是登入哪一台工作站機器，都可以保持同樣的家目錄環境，十分方便。</p>]]>
     </summary>
     <title>Share Storage Comparison</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
   <entry>
     <author>
@@ -142,7 +142,7 @@
     </div>]]>
     </summary>
     <title>Setup CouchDB Cluster using Docker Swarm</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
   <entry>
     <author>
@@ -165,7 +165,7 @@
     </div>]]>
     </summary>
     <title>用手機拍攝日食到底可不可行</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -185,15 +185,15 @@
       <![CDATA[<p>敝司長久以來都是自建 Cluster 來做為日常運算資源使用的，長時間一直都被擴充性、I&#x2F;O 效能所卡住，若是卡在運算資源不夠光是採買新機器動輒要幾個月；被 share storage 的 I&#x2F;O 效能卡住更慘，整個系統會慢到爆 job 都卡住…<br>所以我就在想有沒有辦法在雲上建立這種高效能運算叢集，想動態擴張幾台就幾台，再加上我相信無論是 AWS, GCP 等等大平台所提供的 NFS 服務應該都差不到哪裡去吧…? </p>]]>
     </summary>
     <title>Build a High Performance Computing Cluster on GCP</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
       <name>John Doe</name>
     </author>
-    <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     <category term="hexo" scheme="https://ssarcandy.tw/tags/hexo/"/>
     <category term="javascript" scheme="https://ssarcandy.tw/tags/javascript/"/>
+    <category term="nodejs" scheme="https://ssarcandy.tw/tags/nodejs/"/>
     <content>
       <![CDATA[<p>這陣子心血來潮花了點時間整理敝部落格的原始碼，整理的過程發現其實可以把一些小工具獨立成模組，一方面可以讓 codebase 變精簡，另一方面則是抽出來的模組也可以給其他 Hexo 使用者使用。<br>一開始我以為只是搬移一下程式、剪剪貼貼就可以完成，後來越做越不對勁…原來要做一個 Hexo Plugin 也是滿多地方需要注意的。<br>最後的成品叫做 <a href="https://github.com/SSARCandy/hexo-tag-photozoom">hexo-tag-photozoom</a>，有興趣歡迎用用看～</p><span id="more"></span><h1 id="History-of-this-Feature"><a href="#History-of-this-Feature" class="headerlink" title="History of this Feature"></a>History of this Feature</h1><p>我這次要搬移的是我原本實作在 theme 裡面的功能，就是可以把內文圖片放大的功能，非常像 Medium 網站上按圖片會有的效果。效果如下：</p>    <div>      <img src="/img/2020-02-09/01.jpg" alt="按圖片會有跟 Medium 網站一樣的效果 (小螢幕裝置沒有)" data-action="zoom" class="photozoom">      <span class="zoom-initial-caption">按圖片會有跟 Medium 網站一樣的效果 (小螢幕裝置沒有)</span>    </div><p>原本我是直接在 theme 中使用 @nishanths 的 <a href="https://github.com/nishanths/zoom.js">zoom.js</a>，直接引用他的 sciprt，並自己註冊一個 Hexo tag：</p><figure class="highlight html"><figcaption><span>title: layout.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- in theme layout file include external resource --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./js/zoom.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css/zoom.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><figure class="highlight js"><figcaption><span>title: scripts/helper.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#123;% zoom /path/to/image [/path/to/thumbnail] [title] %&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">tag</span>.<span class="title function_">register</span>(<span class="string">&#x27;zoom&#x27;</span>, <span class="function">(<span class="params">args</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; thumbnail, original, title &#125; = <span class="title function_">parse</span>(args);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;img src=&quot;<span class="subst">$&#123;(thumbnail || original)&#125;</span>&quot; alt=&quot;<span class="subst">$&#123;title&#125;</span>&quot; data-action=&quot;zoom&quot; class=&quot;photozoom&quot;&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>透過 <code>hexo.extend.tag.register</code> 可以註冊新的 tag 語法，可以直接在文章 markdown 中使用，這個 tag 本身把 <code>{% zoom %}</code> 轉換成完整的 html 格式，並且由於已經在前端引用 <code>zoom.js</code> library，所以就可以正常運作。</p><h1 id="Move-to-Seperate-Module"><a href="#Move-to-Seperate-Module" class="headerlink" title="Move to Seperate Module"></a>Move to Seperate Module</h1><p>原本的作法是直接在 layout 中引用 <code>zoom.&#123;js,css&#125;</code> library，這當然可行，但當要把這功能模組化時，是沒辦法直接接觸 layout 的 (除非你要在 readme 裡面叫使用者自己引用…)，所以必須要有個方式把這些必要的外部資源塞進去使用者的 html 裡面。<br>關於這段「如何把外部資源塞到使用者的靜態檔中」，我參考了其他 plugin 的做法，發現大部份都是使用 <code>hexo.extend.generator</code> 來達成。不過我最後選擇其他做法來完成這件事。</p><h2 id="Use-Hexo-Generator"><a href="#Use-Hexo-Generator" class="headerlink" title="Use Hexo Generator"></a>Use Hexo Generator</h2><p>Hexo 在編譯資源時，提供多種方式註冊自己的程式，來達到高度客製化。<br>其中 <code>Generator</code> 是用來產生檔案對應的路由，所以 <code>Generator</code> 都是回傳 <code>&#123; path: &#39;foo&#39;, data: &#39;foo&#39; &#125;</code> 的格式，代表著 path 對應的 data 是什麼。<br>透過 <code>Generator</code> 可以做到 copy file 的功能，官方網站也有提供<a href="https://hexo.io/api/generator.html#Copy-Files">範例</a>，再搭配註冊 tag ，就可以達成動態插入必要的外部資源。</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// generator that create a virtual path to external file</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;asset&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">return</span> [&#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;zoom/zoom.js&#x27;</span>,</span><br><span class="line">    <span class="attr">data</span>: <span class="function">() =&gt;</span> fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;/path/to/zoom.js&#x27;</span>),</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;zoom/zoom.css&#x27;</span>,</span><br><span class="line">    <span class="attr">data</span>: <span class="function">() =&gt;</span> fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;/path/to/zoom.css&#x27;</span>),</span><br><span class="line">  &#125;];</span><br><span class="line">&#125;);</span><br><span class="line">  </span><br><span class="line"><span class="comment">// register tag that include generator&#x27;s path</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">tag</span>.<span class="title function_">register</span>(<span class="string">&#x27;zoom&#x27;</span>, <span class="function">(<span class="params">args</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; thumbnail, original, title &#125; = <span class="title function_">parse</span>(args);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;script src=&quot;/zoom/zoom.js&quot;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">  &lt;link rel=&quot;stylesheet&quot; href=&quot;/zoom/zoom.css&quot;&gt;</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    &lt;img src=&quot;<span class="subst">$&#123;(thumbnail || original)&#125;</span>&quot; alt=&quot;<span class="subst">$&#123;title&#125;</span>&quot; data-action=&quot;zoom&quot; class=&quot;photozoom&quot;&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>如此一來，每當使用者插入 <code>{% zoom %}</code> 時，就會被展開成包含 include 外部資源的 html code，來達成目的。</p><h2 id="Use-Hexo-Filter-Inject-Code"><a href="#Use-Hexo-Filter-Inject-Code" class="headerlink" title="Use Hexo Filter Inject Code"></a>Use Hexo Filter Inject Code</h2><p>然而剛剛的方式有些小缺點，比方說當使用者插入很多 <code>{% zoom %}</code> 的 tag 時，就會出現很多重複引用的程式碼，感覺也是怪怪的。<br>所以我最後利用另一種方式達到塞 code 的效果 － <code>Filter</code>。</p><p>Hexo Filter 提供很多 hook 的註冊點，比方說在渲染 html 之前執行註冊的 function …等等。<br>我這邊用的是 <code>after_generate</code>，就是在全部檔案產生完成之後執行，詳細 hook 名稱跟意義可參考<a href="https://hexo.io/api/filter#Filter-List">文件</a></p><p>透過 <code>after_generate filter</code> 我可以在最後決定是否要插入外部資源 <code>zoom.&#123;js,css&#125;</code>，實作如下：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">hexo.<span class="property">extend</span>.<span class="property">filter</span>.<span class="title function_">register</span>(<span class="string">&#x27;after_generate&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> route = hexo.<span class="property">route</span>;</span><br><span class="line">  <span class="keyword">const</span> routes = route.<span class="title function_">list</span>().<span class="title function_">filter</span>(<span class="function"><span class="params">path</span> =&gt;</span> path.<span class="title function_">endsWith</span>(<span class="string">&#x27;.html&#x27;</span>));</span><br><span class="line">  <span class="keyword">const</span> map = routes.<span class="title function_">map</span>(<span class="function"><span class="params">path</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> html = route.<span class="title function_">get</span>(path);</span><br><span class="line">      <span class="keyword">let</span> htmlTxt = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">      html.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="function"><span class="params">chunk</span> =&gt;</span> (htmlTxt += chunk));</span><br><span class="line">      html.<span class="title function_">on</span>(<span class="string">&#x27;end&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> $ = cheerio.<span class="title function_">load</span>(htmlTxt, &#123; <span class="attr">decodeEntities</span>: <span class="literal">true</span> &#125;);</span><br><span class="line">        <span class="keyword">if</span> ($(<span class="string">&#x27;.photozoom&#x27;</span>).<span class="property">length</span>) &#123;</span><br><span class="line">          $(<span class="string">&#x27;body&#x27;</span>).<span class="title function_">append</span>(<span class="string">`&lt;script type=&quot;text/javascript&quot;&gt;<span class="subst">$&#123;fetch_asset(ZOOMJS_PATH)&#125;</span>&lt;/script&gt;`</span>);</span><br><span class="line">          $(<span class="string">&#x27;body&#x27;</span>).<span class="title function_">append</span>(<span class="string">`&lt;style&gt;<span class="subst">$&#123;fetch_asset(ZOOMCSS_PATH)&#125;</span>&lt;/style&gt;`</span>);              </span><br><span class="line">          hexo.<span class="property">log</span>.<span class="title function_">info</span>(<span class="string">`[hexo-tag-photozoom] Injected assets to <span class="subst">$&#123;path&#125;</span>`</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title function_">resolve</span>(&#123; path, <span class="attr">html</span>: $.<span class="title function_">html</span>() &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// update route</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(map).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span></span><br><span class="line">    res.<span class="title function_">map</span>(<span class="function"><span class="params">obj</span> =&gt;</span> &#123; route.<span class="title function_">set</span>(obj.<span class="property">path</span>, obj.<span class="property">html</span>); &#125;),</span><br><span class="line">  );  </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>我去掃所有 html 檔案，並搜尋有沒有 <code>div</code> class name 是 <code>photozoom</code> 的，如果有那就直接在 html body 插入所需的 javascript 跟 css 程式碼，非常暴力但還不錯～<br>且這作法同時兼顧如果有使用者想在非文章內容的地方使用 <code>zoom.js</code> 的效果，只需要在 <code>&lt;img&gt;</code> 中加上 <code>photozoom</code> class name，在每次編譯時都會掃到並在需要的地方插入程式碼。</p><h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ol><li><a href="https://hexo.io/api/filter">Hexo Filter</a></li><li><a href="https://blog.gisonrg.me/2016/04/develop-hexo-github-card/">Develop a plugin for Hexo - Github Card</a></li></ol>  <style>  h1+ol {    list-style-type: none;    counter-reset: list-counter;    padding-left: 0;  }  h1+ol li {    position: relative;    padding-left: 3em;  }  h1+ol li::before {    counter-increment: list-counter;    content: "[" counter(list-counter) "] ";    position: absolute;    left: 0;    width: 25px;    text-align: right;  }  </style>]]>
     </content>
@@ -204,7 +204,7 @@
       <![CDATA[<p>這陣子心血來潮花了點時間整理敝部落格的原始碼，整理的過程發現其實可以把一些小工具獨立成模組，一方面可以讓 codebase 變精簡，另一方面則是抽出來的模組也可以給其他 Hexo 使用者使用。<br>一開始我以為只是搬移一下程式、剪剪貼貼就可以完成，後來越做越不對勁…原來要做一個 Hexo Plugin 也是滿多地方需要注意的。<br>最後的成品叫做 <a href="https://github.com/SSARCandy/hexo-tag-photozoom">hexo-tag-photozoom</a>，有興趣歡迎用用看～</p>]]>
     </summary>
     <title>Develop a Plugin for Hexo</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -222,7 +222,7 @@
       <![CDATA[<p>程式語言通常在執行的時候，為了要最佳化執行的速度，常常會利用所謂的 Early Return。<sup>[1]</sup><br>比如說條件式裡面 <code>if (a &amp;&amp; b)</code> 這種判斷式，假設已經知道 A == false，那其實就可以不需要知道 b 的值，如此就可以直接忽略 b 而達到更快的知道這個判斷式是否為真<sup>[2]</sup>。<br>同樣的這種作法其實會發生在很多地方，比方說像是比對兩個字串是否一樣：在很多程式語言中的實作其實就是遍歷兩個字串比對每一個字元，那只要過程中有一個字元不一樣那這兩個字串肯定就是不一樣，即可提早返回結果。</p>]]>
     </summary>
     <title>Timing Attack in String Compare</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
   <entry>
     <author>
@@ -243,7 +243,7 @@
 </blockquote>]]>
     </summary>
     <title>從奧客玩家視角看遊戲防禦性設計</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -261,7 +261,7 @@
       <![CDATA[<p>一般的公司或者實驗室都會隔離內部資源，只留一個統一的對外出口來達到比較高的安全性以及讓系統管理者較好控管。但是較高的安全性總是會帶來不便，這種隔離內部資源的架構導致我們無法直接存取內部資源，要透過一些拐彎抹角的方式來存取。</p>]]>
     </summary>
     <title>Ways to Access Internal Network</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -279,7 +279,7 @@
       <![CDATA[<p>身為一個系統管理者，時常要花時間確保系統正常運行，這時一個好的監控系統就很重要，將所有必要的資訊統整在一個畫面上一目瞭然，既能節省時間，當有問題時又能快速找出問題所在，好處多多。</p>]]>
     </summary>
     <title>Monitoring: from Handcraft to Prometheus</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -298,7 +298,7 @@
       <![CDATA[<p>Slurm 是一個專門拿來做分散式平行運算的平台，已被各式超級運算電腦群集採用<sup>[1]</sup>。跟 Hadoop 其實有點像，但是我個人感覺是 Slurm 好用太多，更穩定更快速，而且不用會 Java…XD<br>最近剛好有機會需要建立以及管理一個 Slurm Cluster，就想說來記錄一下過程以及一些雷。</p>]]>
     </summary>
     <title>Setup Slurm Cluster</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -316,7 +316,7 @@
 <p>後來稍微多重開機試幾次發現這種狀況有時候會消失，查一下網路發現大概有幾種可能，一是主機板壞了，二是鍵盤跟滑鼠的連接到主機板的排線壞了。但是這兩種壞法修的價格可差距不少，所以我就堅信只是排線壞了（Ｘ</p>]]>
     </summary>
     <title>Mac 維修小記</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -339,7 +339,7 @@
 <p>不過有狂人就把這當作分類問題，用 tensorflow 來解這個問題，原文<a href="http://joelgrus.com/2016/05/23/fizz-buzz-in-tensorflow/">在此</a>，是篇很有趣的文章 XD</p>]]>
     </summary>
     <title>Use PyTorch to solve FizzBuzz</title>
-    <updated>2026-06-26T17:12:03.736Z</updated>
+    <updated>2026-06-26T17:41:42.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -356,7 +356,7 @@
       <![CDATA[<p>最近突然看到許多關於 js 原型鍊的介紹，這東西我從來沒搞懂過也沒認真想要搞懂過 XD<br>說真的好像不懂也不會影響甚麼，畢竟實戰上基本用不到這些比較底層的東西…<br>但是當作是邊緣冷知識來看看也是挺不錯的~</p>]]>
     </summary>
     <title>搞懂 JavaScript 原型鍊</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -377,7 +377,7 @@
 <p>這篇論文<sup>[1]</sup> (Deep CORAL: Correlation Alignment for Deep Domain Adaptation, B Sun, K Saenko, ECCV 2016) 提出一個 CORAL loss，通過對 source domain 和 target domain 進行線性變換來將他們各自的的二階統計量對齊 (minimizing the difference between source/target correlations).</p>]]>
     </summary>
     <title>Deep CORAL: Correlation Alignment for Deep Domain Adaptation</title>
-    <updated>2026-06-26T17:12:03.734Z</updated>
+    <updated>2026-06-26T17:41:42.046Z</updated>
   </entry>
   <entry>
     <author>
@@ -398,7 +398,7 @@
 <p>但是我的桌機都是 Windows，在可以用桌機的環境下卻必須使用小小的 Mac 打字真的不是很高興…<br>正好最近從學長那邊得知有個方法可以讓 Windows 使用 PyTorch ，就趕緊來試試！</p>]]>
     </summary>
     <title>Using PyTorch in Windows 10</title>
-    <updated>2026-06-26T17:12:03.736Z</updated>
+    <updated>2026-06-26T17:41:42.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -418,6 +418,6 @@
 <p>於是 <a href="https://www.cmlab.csie.ntu.edu.tw/status-gpu/">CMLab GPU Status</a> 就誕生拉~</p>]]>
     </summary>
     <title>Multi-server GPU status monitor</title>
-    <updated>2026-06-26T17:12:03.735Z</updated>
+    <updated>2026-06-26T17:41:42.047Z</updated>
   </entry>
 </feed>
