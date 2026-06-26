@@ -283,14 +283,19 @@
     bottom: 0;
     z-index: 88;
     width: 100%;
-    background: #000;
+    // Translucent black, NOT solid #000 dimmed via opacity. iOS Safari tints its
+    // bottom toolbar from the topmost element's declared background colour; a solid
+    // #000 made the toolbar go black while the rail was open. A genuinely
+    // semi-transparent background composites to grey over the light page instead,
+    // so the toolbar no longer turns black. The visible dim is identical.
+    background: rgba(0, 0, 0, .5);
     // Fade the scrim in/out instead of snapping display (kills the expand flash).
     opacity: 0;
     pointer-events: none;
     .transition(.25s);
 
     &.in {
-        opacity: .5;
+        opacity: 1;
         pointer-events: auto;
     }
 
