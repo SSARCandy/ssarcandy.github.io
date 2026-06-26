@@ -7,6 +7,9 @@
 
 .post-toc-wrap {
     position: fixed;
+    // Sit above the full-width body-wrap (and its corner cap) so the TOC in the
+    // right gutter isn't painted over by the content sheet's background.
+    z-index: 26;
     overflow-x: hidden;
     width: 20%;
     margin-top: 20px;
@@ -22,68 +25,53 @@
         margin: 0;
     }
 
+    // Quiet overline-style section label.
     h4 {
-        padding: 0 0 10px 20px;
-        font-size: 15px;
-        font-weight: 600;
-        color: #727272;
+        margin: 0 0 8px;
+        padding: 0 16px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: @secondaryTextColor;
     }
 }
 
 .post-toc-child {
-    padding-left: 10px;
+    padding-left: 12px;
 }
 
 .post-toc {
-    display: inline-block;
+    display: block;
     padding: 0;
     font-size: 13px;
-    > .post-toc-item {
-        position: relative
-    }
 }
 
 .post-toc-item {
     font-weight: 400;
     color: @secondaryTextColor;
 
-    &.active {
-        > .post-toc-link {
-            font-weight: 600;
-            color: @primaryColor;
-            &:before {
-                background: rgba(0, 0, 0, .06);
-            }
-
-            &:after {
-                border-left: 3px solid @primaryColor;
-            }
-        }
+    // Active section: filled purple-tinted pill, echoing the nav rail's indicator.
+    &.active > .post-toc-link {
+        color: @primaryColor;
+        font-weight: 600;
+        background: fade(@primaryColor, 12%);
     }
 }
 
+// Rounded "pill" rows with a soft hover, matching the rail + card visual language.
 .post-toc-link {
-    position: relative;
-    z-index: 2;
     display: block;
-    padding: 3px 20px;
-    line-height: 1.5rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    line-height: 1.4;
     color: inherit;
-    word-break: break-all;
+    overflow-wrap: break-word;
+    transition: background-color .2s cubic-bezier(0.4, 0, 0.2, 1), color .2s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-        opacity: .8;
-    }
-
-    &:before,
-    &:after {
-        content: '';
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
+        color: @primaryColor;
+        background: fade(@primaryColor, 6%);
     }
 }
 
