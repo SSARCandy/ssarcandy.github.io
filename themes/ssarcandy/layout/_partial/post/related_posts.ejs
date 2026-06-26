@@ -1,15 +1,24 @@
-<% 
-var kw = post.tags.data.map(t => t.name).join(' '); 
-var related_posts = lunr_related_posts(site.posts.data, kw, 5);
-related_posts = JSON.parse(related_posts);
+<%
+var kw = post.tags.data.map(function(t) { return t.name; }).join(' ');
+var related_posts = JSON.parse(lunr_related_posts(site.posts.data, kw, 5));
+// lunr's result includes the current post — drop it, then cap to a tidy grid.
+related_posts = related_posts.filter(function(p) { return p.title !== post.title; }).slice(0, 4);
 %>
-<div class="article related-post-label"><%- __('post.related_post') %></div>
-<ul style="padding: 0px;">
-<% for (var i=0; i < related_posts.length; i++) { %>
-  <% if (related_posts[i].title !== post.title) { %>
-    <li class="related-post-list">
-      <a href="<%- url_for(related_posts[i].path) %>" class="post-title related-post"><%= related_posts[i].title %></a>
-    </li>
-  <% } %>
+<% if (related_posts.length) { %>
+<section class="related-posts">
+    <h2 class="related-posts-label"><%- __('post.related_post') %></h2>
+    <div class="related-posts-grid">
+    <% related_posts.forEach(function(rp) { %>
+        <a class="related-post-card" href="<%- url_for(rp.path) %>">
+            <span class="related-post-card-title"><%= rp.title %></span>
+            <% if (rp.tags && rp.tags.length) { %>
+            <span class="related-post-card-tags">
+                <% rp.tags.slice(0, 3).forEach(function(tag) { %><span class="related-post-tag"><%= tag %></span><% }); %>
+            </span>
+            <% } %>
+            <i class="material-icons related-post-card-arrow" aria-hidden="true">arrow_forward</i>
+        </a>
+    <% }); %>
+    </div>
+</section>
 <% } %>
-</ul>

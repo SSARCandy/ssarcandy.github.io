@@ -382,18 +382,104 @@
     }
 }
 
-.related-post {
-    font-size: 13px;
+/* ---------- Related posts (bottom of each article) -------------------------------
+   A card grid that echoes the site's card + pill language: white sheets with the
+   same soft shadow as the feed cards, a purple-tinted hover lift, and small tag
+   chips. */
+.related-posts {
+    margin: 32px 0 8px;
 }
 
-.related-post-list {
-    width: 95%;
+// Quiet uppercase overline, matching the TOC's section heading.
+.related-posts-label {
+    margin: 0 0 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: @secondaryTextColor;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+// One related post. Reuses the feed-card chrome and lifts toward @primaryColor on
+// hover; padding-right leaves room for the chevron that slides in.
+.related-post-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 44px 16px 18px;
+    background: #fff;
+    border: 1px solid @borderColor;
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
+    .transition(.2s, cubic-bezier(0.4, 0, 0.2, 1));
+
+    &:hover {
+        .transform(translateY(-2px));
+        border-color: fade(@primaryColor, 40%);
+        box-shadow: 0 6px 16px fade(@primaryColor, 16%);
+
+        .related-post-card-title {
+            color: @primaryColor;
+        }
+
+        .related-post-card-arrow {
+            color: @primaryColor;
+            opacity: 1;
+            .transform(translateX(0));
+        }
+    }
+}
+
+.related-post-card-title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: @primaryTextColor;
+    .transition(.2s);
+    // Single line; truncate with an ellipsis when it overflows.
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    list-style-position: inside;
-    padding-left: 20px;
-    height: 20px;
+}
+
+.related-post-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+// Small purple-tinted chip, same pill language as the active TOC row.
+.related-post-tag {
+    font-size: 11px;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 20px;
+    color: @primaryColor;
+    background: fade(@primaryColor, 8%);
+
+    &::before {
+        content: "#";
+        opacity: .6;
+    }
+}
+
+// Hover affordance: a chevron that fades and slides in from the right edge.
+.related-post-card-arrow {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    font-size: 20px;
+    color: @lightPrimaryColor;
+    opacity: 0;
+    .transform(translateX(-4px));
+    .transition(.2s, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 @media screen and (max-width:820px) {
@@ -424,14 +510,10 @@
         }
     }
     
-    .post-nav, #comments {
+    .post-nav, #comments, .related-posts {
         margin-left: 16px;
         margin-right: 16px;
     }
-
-    .related-post-label {
-        margin-left: 11px;
-    }    
 }
 
 .image-caption {
