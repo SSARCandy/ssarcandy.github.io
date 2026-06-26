@@ -1,10 +1,10 @@
 <ul class="post-list project-list">
   <input type="search" id="plugin-search-input" placeholder="Search">
 
-  <% for (i in site.data.works) { %>
+  <% for (i in site.data.projects) { %>
     <li class="project-list-item plugin on">
-        <%- partial('_partial/works/work-item', {
-            project: site.data.works[i]
+        <%- partial('_partial/projects/project-item', {
+            project: site.data.projects[i]
         }) %>
     </li>
   <% } %>
@@ -12,7 +12,7 @@
 </ul>
 
 <script>
-window.SEARCH_INDEX = <%- lunr_index(site.data.works) %>;
+window.SEARCH_INDEX = <%- lunr_index(site.data.projects) %>;
 </script>
 
 <script src="<%- url_for('js/projectPage.bundle.js') %>" type="module"></script>

@@ -15,12 +15,12 @@ hexo.extend.helper.register('post_pv', (slug) => {
   return pageview.pv_map[slug.toLowerCase()] || 0;
 });
 
-// Unique, sorted set of every tag used across projects (works.yml), for the
+// Unique, sorted set of every tag used across projects (projects.yml), for the
 // /projects filter buttons. Derived at render time so there's no data file to
 // keep in sync.
 hexo.extend.helper.register('project_tags', () => {
-  const works = (hexo.locals.get('data') || {}).works || [];
-  return [...new Set(works.flatMap((project) => project.tags || []))].sort();
+  const projects = (hexo.locals.get('data') || {}).projects || [];
+  return [...new Set(projects.flatMap((project) => project.tags || []))].sort();
 });
 
 /**

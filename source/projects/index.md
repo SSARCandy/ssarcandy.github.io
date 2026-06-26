@@ -1,7 +1,7 @@
 ---
 title: Projects
-layout: works
-data: works
+layout: projects
+data: projects
 noDate: true
 comments: false
 ---
