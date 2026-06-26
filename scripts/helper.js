@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+
 let pageview = { visitor_count: 0, pv_map: {} };
 try {
   pageview = require('../pageview.json');
@@ -21,6 +24,20 @@ hexo.extend.helper.register('post_pv', (slug) => {
 hexo.extend.helper.register('project_tags', () => {
   const projects = (hexo.locals.get('data') || {}).projects || [];
   return [...new Set(projects.flatMap((project) => project.tags || []))].sort();
+});
+
+// Flickr photo metadata captured at build time (helper/fetch_flickr_photos.js),
+// read here so /photography renders as static HTML instead of being built
+// client-side after a runtime fetch. Read fresh each call (the file is
+// regenerated per build); on a missing/invalid file return an empty list so the
+// grid is simply empty rather than the build failing.
+hexo.extend.helper.register('flickr_photos', () => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, '../source/flickr_photos.json'), 'utf8'));
+  } catch (e) {
+    console.warn('flickr_photos.json not found or invalid; photography grid will be empty.');
+    return [];
+  }
 });
 
 /**

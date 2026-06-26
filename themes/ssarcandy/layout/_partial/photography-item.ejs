@@ -1,0 +1,24 @@
+<%
+// One photo card for the /photography masonry grid, rendered as static HTML at
+// build time. `item` is a Flickr photo record; `index` is its natural (newest-
+// first) position so the client "Latest" sort can restore order without data;
+// `priority` flags the first few cards for eager/high-priority loading.
+var imgUrl = item.url_c || ('https://live.staticflickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_c.jpg');
+var thumbUrl = item.url_t || ('https://live.staticflickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_t.jpg');
+var link = 'https://www.flickr.com/photos/' + item.owner + '/' + item.id;
+// Reserve each card's height before its image loads so Masonry can lay out
+// immediately (no reflow) and the browser paints a stable, content-filled page.
+var aspect = (item.width_c && item.height_c) ? ('aspect-ratio: ' + item.width_c + ' / ' + item.height_c + ';') : '';
+%>
+<div class="grid-item revealed" data-id="<%= item.id %>" data-index="<%= index %>" data-views="<%= item.views || '' %>" data-lat="<%= item.latitude || '' %>" data-lng="<%= item.longitude || '' %>">
+    <a href="<%= link %>" target="_blank" rel="noopener">
+        <div class="blur-up" style="<%= aspect %>">
+            <img src="<%= thumbUrl %>" class="img-small" decoding="async" alt=""<% if (!priority) { %> loading="lazy"<% } %>>
+            <img src="<%= imgUrl %>" class="img-large" decoding="async" alt="<%= item.title %>"<% if (priority) { %> fetchpriority="high"<% } else { %> loading="lazy"<% } %> onload="this.parentElement.classList.add('loaded')">
+            <div class="photo-title">
+                <span class="photo-name"><%= item.title %></span>
+                <% if (item.views) { %><span class="photo-views"><i class="icon icon-eye"></i> <%= item.views %></span><% } %>
+            </div>
+        </div>
+    </a>
+</div>

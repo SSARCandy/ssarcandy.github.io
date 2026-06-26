@@ -1,0 +1,22 @@
+<%
+// Native in-feed ad card for the /photography grid, interleaved as just another
+// .grid-item so Masonry lays it out with the photos. Rendered only when an
+// In-feed unit (slot + layout_key) is configured. Self-initialises via the inline
+// push(); Photography.js only watches it to re-run the masonry layout once it
+// fills, and ads.less hides it if AdSense returns no fill.
+var inFeed = theme.adsense && theme.adsense.in_feed && theme.adsense.in_feed.photography;
+if (theme.adsense && theme.adsense.enable && inFeed && inFeed.slot && inFeed.layout_key) {
+%>
+<div class="grid-item ad-grid-item revealed" aria-hidden="true">
+    <span class="ad-label">Sponsored</span>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="<%- inFeed.layout_key %>"
+        data-ad-client="<%- theme.adsense.client %>"
+        data-ad-slot="<%- inFeed.slot %>"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+<% } %>

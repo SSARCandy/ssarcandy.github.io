@@ -4,23 +4,19 @@
   const mapContainer = document.querySelector('#photography-map');
   if (!container) return;
 
-  const PHOTOS_URL = container.dataset.photosUrl;
+  // Photo cards are rendered as static HTML at build time (see photography.ejs).
+  // This script only *enhances* that DOM: it runs the masonry layout, re-orders
+  // the existing cards for the sort buttons, and builds the map from the cards'
+  // data attributes. There is no runtime fetch and no client-built grid markup.
 
-  // Native in-feed ad config (set on #photography-grid by photography.ejs).
-  // Null when no In-feed unit is configured, so no ads are injected.
-  const AD_CONFIG = (container.dataset.adSlot && container.dataset.adLayoutKey) ? {
-    client: container.dataset.adClient,
-    slot: container.dataset.adSlot,
-    layoutKey: container.dataset.adLayoutKey,
-    every: parseInt(container.dataset.adEvery, 10) || 8,
-  } : null;
+  // In-feed ad cadence, mirrored from photography.ejs so re-sorting can re-space
+  // the ad cards the same way the server interleaved them. 0 = no ads.
+  const AD_EVERY = parseInt(container.dataset.adEvery, 10) || 0;
   let adObserver = null;
 
-  let masterPhotos = []; // Keep original order
-  let sortedPhotosList = [];
-  let currentSort = 'random'; // 'date', 'views', or 'random'
+  let mapPhotos = []; // Coords/title/link for the map, read once from the cards.
   let masonryInstance = null;
-  
+
   let mapInstance = null;
   let superclusterIndex = null;
   let currentMarkers = {};
@@ -29,17 +25,12 @@
   let newlyExpanded = false;
   let expandOrigin = null;
 
-  let renderedCount = 0;
-  const CHUNK_SIZE = 12;
-  let observer = null;
-  let sentinel = null;
-
   class ZoomControl {
     onAdd(map) {
       this._map = map;
       this._container = document.createElement('div');
       this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-            
+
       const zoomIn = document.createElement('button');
       zoomIn.className = 'maplibregl-ctrl-icon';
       zoomIn.type = 'button';
@@ -94,11 +85,11 @@
     mapInstance = new maplibregl.Map({
       container: 'photography-map',
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [121, 23.5], 
+      center: [121, 23.5],
       zoom: 7,
-      maxZoom: 16, 
+      maxZoom: 16,
       attributionControl: false,
-      dragRotate: false, 
+      dragRotate: false,
     });
 
     mapInstance.scrollZoom.disable();
@@ -122,7 +113,7 @@
       renderClusters(true);
       if (expandOrigin) expandOrigin.pending = false;
     });
-        
+
     mapInstance.on('click', () => {
       if (expandedClusterId === null) return;
 
@@ -213,40 +204,40 @@
     const allLeaves = superclusterIndex.getLeaves(clusterId, 100);
     const total = allLeaves.length;
     const radius = 40;
-        
+
     const spiderContainer = document.createElement('div');
     spiderContainer.className = 'spider-container';
-        
+
     const isNew = newlyExpanded;
     if (isNew) newlyExpanded = false;
-        
+
     allLeaves.forEach((leaf, i) => {
       const angle = (i / total) * Math.PI * 2;
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
       const props = leaf.properties;
-            
+
       const leafWrapper = document.createElement('div');
       leafWrapper.className = 'spider-leaf-wrapper';
-            
+
       const leafContent = document.createElement('div');
       leafContent.className = 'spider-leaf-content';
       leafContent.innerHTML = `<img src="${props.imgUrl}" alt="${props.title}" loading="lazy">`;
-            
+
       leafContent.addEventListener('click', (e) => handleSpiderLeafClick(e, props, coords, x, y));
-            
+
       leafWrapper.appendChild(leafContent);
-            
+
       const line = document.createElement('div');
       line.className = 'spider-line';
       line.style.transform = `rotate(${angle}rad)`;
-            
+
       spiderContainer.appendChild(line);
       spiderContainer.appendChild(leafWrapper);
-            
+
       applySpiderLeafAnimation(leafWrapper, line, x, y, radius, isNew);
     });
-        
+
     wrapper.appendChild(spiderContainer);
   }
 
@@ -297,24 +288,24 @@
     }
 
     const prevExpanded = expandedClusterId;
-        
+
     if (expandedClusterId === clusterId) {
       expandedClusterId = null;
     } else {
       expandedClusterId = clusterId;
       newlyExpanded = true;
     }
-        
+
     if (prevExpanded !== null && currentMarkers['cluster-' + prevExpanded]) {
       currentMarkers['cluster-' + prevExpanded].remove();
       delete currentMarkers['cluster-' + prevExpanded];
     }
-        
+
     if (expandedClusterId !== null && currentMarkers['cluster-' + expandedClusterId]) {
       currentMarkers['cluster-' + expandedClusterId].remove();
       delete currentMarkers['cluster-' + expandedClusterId];
     }
-        
+
     renderClusters();
   }
 
@@ -360,15 +351,15 @@
     const currentPx = mapInstance.project(coords);
     const dx = originPx.x - currentPx.x;
     const dy = originPx.y - currentPx.y;
-        
+
     el.style.transform = `translate(${dx}px, ${dy}px)`;
     el.style.transition = 'none';
-        
+
     requestAnimationFrame(() => {
       setTimeout(() => {
         el.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
         el.style.transform = 'translate(0px, 0px)';
-                
+
         setTimeout(() => {
           el.style.transition = el.style.transform = '';
         }, 650);
@@ -387,13 +378,11 @@
 
       const lat = parseFloat(item.latitude);
       const lng = parseFloat(item.longitude);
-      const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_q.jpg`;
-      const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
 
       bounds.extend([lng, lat]);
       features.push({
         type: 'Feature',
-        properties: { id: item.id, title: item.title, imgUrl: imgUrl, link: link },
+        properties: { id: item.id, title: item.title, imgUrl: item.imgUrl, link: item.link },
         geometry: { type: 'Point', coordinates: [lng, lat] },
       });
     });
@@ -414,159 +403,76 @@
     }
   }
 
-  function sortPhotos(photos, type) {
-    if (type === 'random') {
-      const sorted = [...photos];
-      for (let i = sorted.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
-      }
-      return sorted;
-    }
+  // ----- Static-grid enhancement -------------------------------------------
 
+  // Read what the map needs straight from the server-rendered cards, so the page
+  // carries no separate JSON payload. The image URL and Flickr link are already
+  // in each card (the <img> src and the <a> href), so we reuse them directly.
+  function readPhotosFromDom() {
+    return [...container.querySelectorAll('.grid-item:not(.ad-grid-item)')].map(node => {
+      const anchor = node.querySelector('a');
+      const large = node.querySelector('.img-large');
+      const name = node.querySelector('.photo-name');
+      return {
+        id: node.dataset.id,
+        title: name ? name.textContent.trim() : (large ? large.alt : ''),
+        latitude: node.dataset.lat,
+        longitude: node.dataset.lng,
+        imgUrl: large ? large.getAttribute('src') : '',
+        link: anchor ? anchor.getAttribute('href') : '',
+      };
+    });
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Re-order the existing photo cards in place (no markup rebuilt) and re-space
+  // the ad cards at the same cadence the server used, then re-run the layout.
+  function applySort(type) {
+    const photoNodes = [...container.querySelectorAll('.grid-item:not(.ad-grid-item)')];
+    const adNodes = [...container.querySelectorAll('.grid-item.ad-grid-item')];
+
+    let ordered;
     if (type === 'views') {
-      return [...photos].sort((a, b) => (parseInt(b.views) || 0) - (parseInt(a.views) || 0));
+      ordered = photoNodes.slice().sort((a, b) => (parseInt(b.dataset.views, 10) || 0) - (parseInt(a.dataset.views, 10) || 0));
+    } else if (type === 'date') {
+      ordered = photoNodes.slice().sort((a, b) => (parseInt(a.dataset.index, 10) || 0) - (parseInt(b.dataset.index, 10) || 0));
+    } else {
+      ordered = shuffle(photoNodes.slice());
     }
 
-    // Default: newest first (restore from master list order)
-    return [...masterPhotos];
-  }
-
-  function initSentinel() {
-    if (sentinel) {
-      observer.observe(sentinel);
-      return;
-    }
-
-    sentinel = document.createElement('div');
-    sentinel.className = 'sentinel';
-    sentinel.style.width = '100%';
-    sentinel.style.height = '10px';
-    sentinel.style.clear = 'both';
-    container.parentNode.insertBefore(sentinel, container.nextSibling);
-        
-    observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        loadMorePhotos();
-      }
-    }, { rootMargin: '400px' });
-    observer.observe(sentinel);
-  }
-
-  function loadMorePhotos() {
-    if (renderedCount >= sortedPhotosList.length) {
-      if (sentinel && observer) observer.unobserve(sentinel);
-      return;
-    }
-
-    const nextChunk = sortedPhotosList.slice(renderedCount, renderedCount + CHUNK_SIZE);
-    if (nextChunk.length === 0) return;
+    // Detach the cards (the .grid-sizer stays), then re-append photos with the
+    // ad cards interleaved every Nth position, reusing the same ad nodes.
+    photoNodes.forEach(n => n.remove());
+    adNodes.forEach(n => n.remove());
 
     const fragment = document.createDocumentFragment();
-    const newItems = [];
-    const adItems = [];
-
-    nextChunk.forEach((item, index) => {
-      const globalIndex = renderedCount + index; // 0-based position across all photos
-      const div = document.createElement('div');
-      div.className = 'grid-item skeleton';
-            
-      const imgUrl = item.url_c || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_c.jpg`;
-      const thumbUrl = item.url_t || `https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`;
-      const link = `https://www.flickr.com/photos/${item.owner}/${item.id}`;
-      const title = item.title;
-      const views = item.views;
-      const aspectRatioStyle = (item.width_c && item.height_c)
-        ? `aspect-ratio: ${item.width_c} / ${item.height_c};`
-        : '';
-
-      const viewsHtml = views ? `<span class="photo-views"><i class="icon icon-eye"></i> ${views}</span>` : '';
-      const isPriority = renderedCount === 0 && index < 4;
-      const fetchPriority = isPriority ? 'fetchpriority="high"' : 'loading="lazy"';
-
-      div.innerHTML = `
-                <a href="${link}" target="_blank">
-                    <div class="blur-up" style="${aspectRatioStyle}">
-                        <img src="${thumbUrl}" class="img-small" decoding="async" alt="${title}" onload="this.closest('.grid-item').classList.remove('skeleton')">
-                        <img src="${imgUrl}" class="img-large" decoding="async" alt="${title}" ${fetchPriority} onload="this.parentElement.classList.add('loaded')">
-                        <div class="photo-title">
-                            <span class="photo-name">${title}</span>
-                            ${viewsHtml}
-                        </div>
-                    </div>
-                </a>
-            `;
-      fragment.appendChild(div);
-      newItems.push(div);
-
-      // After every Nth photo, drop in a native ad card (Masonry treats it as
-      // just another grid item).
-      if (AD_CONFIG && (globalIndex + 1) % AD_CONFIG.every === 0) {
-        const adDiv = buildAdItem();
-        fragment.appendChild(adDiv);
-        newItems.push(adDiv);
-        adItems.push(adDiv);
+    let adIdx = 0;
+    ordered.forEach((node, i) => {
+      fragment.appendChild(node);
+      if (AD_EVERY && (i + 1) % AD_EVERY === 0 && adIdx < adNodes.length) {
+        fragment.appendChild(adNodes[adIdx++]);
       }
     });
-
+    while (adIdx < adNodes.length) fragment.appendChild(adNodes[adIdx++]);
     container.appendChild(fragment);
-    renderedCount += nextChunk.length;
 
-    if (!masonryInstance) {
-      masonryInstance = new Masonry(container, {
-        itemSelector: '.grid-item',
-        columnWidth: '.grid-sizer',
-        percentPosition: true,
-        gutter: 16,
-        transitionDuration: 0,
-      });
-    } else {
-      masonryInstance.appended(newItems);
-    }
-
-    // Layout immediately. Images with aspect-ratio will take correct space.
-    masonryInstance.layout();
-    revealItems(newItems);
-
-    // Ads are in the DOM and positioned now — request fill + relayout on settle.
-    adItems.forEach(activateAd);
-
-    // For images without aspect-ratio or delayed loading, update layout on progress
-    imagesLoaded(container).on('progress', function() {
-      if (!masonryInstance) return;
+    if (masonryInstance) {
+      masonryInstance.reloadItems();
       masonryInstance.layout();
-    });
+    }
   }
 
-  function revealItems(items) {
-    if (!items || items.length === 0) return;
-    requestAnimationFrame(() => {
-      items.forEach(item => item.classList.add('revealed'));
-    });
-  }
-
-  // Build a native in-feed ad styled as a grid card. AdSense fills the <ins>
-  // asynchronously, so it starts at ~0 height and grows once filled.
-  function buildAdItem() {
-    const div = document.createElement('div');
-    div.className = 'grid-item ad-grid-item';
-    div.innerHTML = `
-                <span class="ad-label">Sponsored</span>
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-format="fluid"
-                    data-ad-layout-key="${AD_CONFIG.layoutKey}"
-                    data-ad-client="${AD_CONFIG.client}"
-                    data-ad-slot="${AD_CONFIG.slot}"></ins>
-            `;
-    return div;
-  }
-
-  // Request a fill and re-run masonry whenever the ad's height settles, so the
+  // The ad <ins> self-initialises via its inline push() in the partial; here we
+  // only re-run the masonry layout once the ad fills and changes height, so the
   // surrounding photos reflow around its final size instead of leaving a gap.
-  function activateAd(adDiv) {
-    window.adsbygoogle = window.adsbygoogle || [];
-    window.adsbygoogle.push({});
+  function observeAd(adDiv) {
     if (typeof ResizeObserver === 'undefined') return;
     if (!adObserver) {
       adObserver = new ResizeObserver(() => {
@@ -576,28 +482,27 @@
     adObserver.observe(adDiv);
   }
 
-  function renderPhotos(photos, isInitialLoad = false) {
-    if (isInitialLoad) {
-      masterPhotos = [...photos];
-      // Initialize markers if we have mapInstance
-      if (mapInstance) updateMarkers(masterPhotos);
-    }
+  function init() {
+    mapPhotos = readPhotosFromDom();
 
-    sortedPhotosList = sortPhotos(masterPhotos, currentSort);
-        
-    container.innerHTML = '<div class="grid-sizer"></div>';
-    if (masonryInstance) {
-      masonryInstance.destroy();
-      masonryInstance = null;
-    }
-    if (adObserver) {
-      adObserver.disconnect();
-      adObserver = null;
-    }
-    renderedCount = 0;
-        
-    initSentinel();
-    loadMorePhotos();
+    // Lay out the server-rendered cards. Each card reserves its height via an
+    // aspect-ratio, so the Masonry constructor positions everything correctly on
+    // the initial paint (before any image loads, no reflow).
+    masonryInstance = new Masonry(container, {
+      itemSelector: '.grid-item',
+      columnWidth: '.grid-sizer',
+      percentPosition: true,
+      gutter: 16,
+      transitionDuration: 0,
+    });
+
+    // Safety net for any card lacking intrinsic dimensions: relayout as images
+    // decode so the masonry never overlaps.
+    imagesLoaded(container).on('progress', () => {
+      if (masonryInstance) masonryInstance.layout();
+    });
+
+    container.querySelectorAll('.ad-grid-item').forEach(observeAd);
   }
 
   // View toggle event listeners
@@ -606,11 +511,10 @@
       if (this.classList.contains('active')) return;
       document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-            
+
       const view = this.dataset.view;
       if (view === 'grid') {
         container.style.display = 'block';
-        if (sentinel) sentinel.style.display = 'block';
         mapContainer.style.display = 'none';
         document.querySelector('#sort-group').style.display = 'flex';
         if (masonryInstance) masonryInstance.layout();
@@ -618,47 +522,35 @@
       }
 
       container.style.display = 'none';
-      if (sentinel) sentinel.style.display = 'none';
       mapContainer.style.display = 'block';
       document.querySelector('#sort-group').style.display = 'none';
-      
+
       requestAnimationFrame(() => {
         initMap();
-        if (mapInstance) mapInstance.resize(); 
-            
-        setTimeout(() => { 
-          if (mapInstance) mapInstance.resize(); 
-          if (masterPhotos.length > 0) updateMarkers(masterPhotos);
+        if (mapInstance) mapInstance.resize();
+
+        setTimeout(() => {
+          if (mapInstance) mapInstance.resize();
+          if (mapPhotos.length > 0) updateMarkers(mapPhotos);
         }, 50);
       });
     });
   });
 
-  // Sort event listeners
+  // Sort event listeners — reorder the rendered cards in place.
   document.querySelectorAll('.sort-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       if (this.classList.contains('active')) return;
       document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-            
-      currentSort = this.dataset.sort;
-      if (masterPhotos.length === 0) return;
-      renderPhotos(masterPhotos);
+      applySort(this.dataset.sort);
     });
   });
 
-  // Photo metadata is fetched and stored at build time (see helper/fetch_flickr_photos.js),
-  // so the page never depends on a live Flickr API key.
-  fetch(PHOTOS_URL)
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .then(photos => {
-      if (!Array.isArray(photos) || photos.length === 0) throw new Error('empty photo data');
-      renderPhotos(photos, true);
-    })
-    .catch(err => console.error('Flickr: failed to load photos —', err.message));
+  // The grid is already in the page; enhance it once the libraries are ready.
+  if (container.querySelector('.grid-item:not(.ad-grid-item)')) {
+    init();
+  }
 
   window.addEventListener('resize', () => {
     if (masonryInstance) masonryInstance.layout();
