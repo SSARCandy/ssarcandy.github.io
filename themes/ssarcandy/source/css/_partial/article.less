@@ -455,19 +455,12 @@
     gap: 6px;
 }
 
-// Small purple-tinted chip, same pill language as the active TOC row.
+// Small purple-tinted chip, shared with the post / project tag links.
 .related-post-tag {
+    .tagChip();
     font-size: 11px;
     line-height: 1;
     padding: 4px 8px;
-    border-radius: 20px;
-    color: @primaryColor;
-    background: fade(@primaryColor, 8%);
-
-    &::before {
-        content: "#";
-        opacity: .6;
-    }
 }
 
 // Hover affordance: a chevron that fades and slides in from the right edge.

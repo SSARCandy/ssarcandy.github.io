@@ -75,23 +75,26 @@
 
 .active-tag {
     color: @textPrimaryColor !important;
-    background: @accentColor !important;
+    background: @primaryColor !important;
 }
 
+// Tag chip (post + project tags). Soft purple pill with a "#" prefix; fills solid
+// on hover or when selected (.active-tag). See .tagChip() in variable.less.
 .article-tag-list-link {
-    display: inline-block;
-    padding: 0px 10px;
-    line-height: 20px;
-    font-size: 13px;
-    color: @primaryTextColor;
-    background: @borderColor;
-    border-radius: 5px;
+    .tagChip();
+    padding: 4px 12px;
+    line-height: 1.4;
+    font-size: 12px;
+    .transition(.2s);
 
+    // Subtle darken on hover — no solid fill / "pop". The solid look is reserved
+    // for the selected state (.active-tag). Re-assert font-size: Waves attaches
+    // `.waves-button` at runtime, and its `.waves-button:hover { font-size: 1em }`
+    // otherwise out-specifies the base size and enlarges the text on hover.
     &:hover,
     &:active {
-        font-size: 13px;
-        color: @textPrimaryColor;
-        background: @accentColor;
+        font-size: 12px;
+        background: fade(@primaryColor, 16%);
     }
 }
 

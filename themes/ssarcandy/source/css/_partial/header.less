@@ -79,6 +79,26 @@
         color: lighten(@accentColor, 10%);
     }
 
+    // Tag chips on the purple hero (projects filter + archive / tag lists). The
+    // default purple-on-purple chip would vanish here, so invert it: a translucent
+    // white pill that fills solid white (purple text) on hover / when active.
+    .article-tag-list-link {
+        color: #fff;
+        background: rgba(255, 255, 255, .15);
+
+        // Subtle brighten on hover — no solid fill / "pop". The solid white look is
+        // reserved for the selected state (.active-tag).
+        &:hover,
+        &:active {
+            background: rgba(255, 255, 255, .3);
+        }
+    }
+
+    .active-tag {
+        color: @primaryColor !important;
+        background: #fff !important;
+    }
+
 }
 
 /* Rail is persistent on desktop/tablet: hide the phone-only hamburger, and

@@ -68,6 +68,21 @@
 
 }
 
+// Tag/keyword chip: a soft purple-tinted pill with a leading "#". Shared by the
+// related-post chips and the post / project tag links so they stay in sync; the
+// caller sets size (font-size / padding) and any interactive (hover/active) states.
+.tagChip() {
+    display: inline-block;
+    border-radius: 20px;
+    color: @primaryColor;
+    background: fade(@primaryColor, 8%);
+
+    &::before {
+        content: "#";
+        opacity: .6;
+    }
+}
+
 .tip() {
     position: relative;
 
