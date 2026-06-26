@@ -1,13 +1,15 @@
-<ul class="post-list project-list">
+<%
+// Insert a native in-feed ad after every N cards, but only when an In-feed unit is
+// configured (slot + layout_key). 0 disables interleaving entirely. Exposed as
+// data-ad-every so ProjectTags.js can re-interleave a proportional number of ads
+// when the tag filter narrows the grid (instead of stranding them at fixed spots).
+var __pad = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && theme.adsense.in_feed.projects;
+var __every = (__pad && __pad.slot && __pad.layout_key) ? (__pad.every || 6) : 0;
+var __n = 0;
+%>
+<ul class="post-list project-list"<% if (__every) { %> data-ad-every="<%= __every %>"<% } %>>
   <input type="search" id="plugin-search-input" placeholder="Search">
 
-  <%
-  // Insert a native in-feed ad after every N cards, but only when an In-feed
-  // unit is configured (slot + layout_key). 0 disables interleaving entirely.
-  var __pad = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && theme.adsense.in_feed.projects;
-  var __every = (__pad && __pad.slot && __pad.layout_key) ? (__pad.every || 6) : 0;
-  var __n = 0;
-  %>
   <% for (i in site.data.projects) { %>
     <li class="project-list-item plugin on">
         <%- partial('_partial/projects/project-item', {
