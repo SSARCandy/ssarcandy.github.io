@@ -40,6 +40,13 @@
     font-size: 16px;
     text-align: center;
     white-space: nowrap;
+    // This is a flex child (.flex-col → flex:1) carrying the .ellipsis util. A flex
+    // item won't shrink below its content's intrinsic width while min-width is auto,
+    // so on narrow (mobile) viewports a long title overgrew its track and overlapped
+    // the icons instead of truncating. Desktop hid the bug — the title fit, so there
+    // was nothing to overflow. Setting min-width:0 explicitly lets it shrink and
+    // ellipsis (overflow:hidden's implicit auto-min-size is unreliable on iOS Safari).
+    min-width: 0;
 }
 
 .content-header {
