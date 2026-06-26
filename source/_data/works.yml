@@ -56,7 +56,7 @@
   tags:
     - Python
     - PyTorch
-    - Machine_Learning
+    - MachineLearning
 
 - name: Coherent-Line-Drawing
   title: Coherent Line Drawing
@@ -86,7 +86,7 @@
   preview: https://ssarcandy.tw/colorblocks-react-native/
   download: https://play.google.com/store/apps/details?id=com.colorblocksrn
   tags:
-    - React_Native
+    - ReactNative
     - Game
 
 - name: colorblocks-react
@@ -96,7 +96,7 @@
   preview: https://ssarcandy.tw/colorblocks-react/
   tags:
     - React.js
-    - Responsive_Web
+    - ResponsiveWeb
     - Game
 
 - name: ssarcandy-vim
@@ -124,7 +124,7 @@
 #   github: https://github.com/SSARCandy/nccu30
 #   preview: http://140.119.24.86/
 #   tags:
-#     - Responsive_Web
+#     - ResponsiveWeb
 
 # - name: ExchangeWorld
 #   title: ExchangeWorld
@@ -132,7 +132,7 @@
 #   github: https://github.com/ExchangeWorld/ExchangeWorld
 #   preview: http://exwd.csie.org/
 #   tags:
-#     - Responsive_Web
+#     - ResponsiveWeb
 #     - Angular.js
 
 - name: Ultimate-Shooting-Flappy-Bird
@@ -164,7 +164,7 @@
   tags:
     - C++
     - OpenCV
-    - Computer_Vision
+    - ComputerVision
 
 # - name: slack-for-APOD
 #   title: slack-bot for APOD
@@ -218,7 +218,7 @@
   github: https://github.com/SSARCandy/nccugo12
   preview: http://ssarcandy.tw/nccugo12
   tags:
-    - Responsive_Web
+    - ResponsiveWeb
 
 - name: ssarcandy
   title: ssarcandy.tw
@@ -226,4 +226,4 @@
   github: https://github.com/SSARCandy/ssarcandy.github.io
   preview: http://ssarcandy.tw/
   tags:
-    - Responsive_Web
+    - ResponsiveWeb

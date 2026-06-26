@@ -1,9 +1,31 @@
-#plugin-search-input{
+#plugin-search-input {
     display: none;
 }
 
+/* ---------- Projects: 2-column waterfall (CSS multi-column) ----------
+   Cards are vertical (image on top, details below) and kept whole within a
+   column via break-inside. Collapses to a single column on small screens.
+   The fixed-aspect image box reserves height before images load, so the
+   columns don't reflow as images arrive — no JS masonry needed. */
+.project-list {
+    column-count: 2;
+    column-gap: 20px;
+}
+
+.project-list-item {
+    margin: 0 0 20px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    // No overflow:hidden here: the click-to-zoom (zoom.js transforms the image
+    // to viewport center in place) must not be clipped by the card. The image
+    // rounds its own top corners instead.
+}
+
 .project-item {
-    display: flex;
+    display: block;
 }
 
 .preview {
@@ -11,48 +33,9 @@
     height: auto;
 }
 
-.project-item-details {
-    margin: 10px 20px;
-    width: 55%;
-}
-
-.project-list-item {
-    margin-bottom: 20px;
-    background: #fff;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
-}
-
-.project-links {
-    font-size: 20px;
-    margin-top: 5px;
-}
-
-.project-link:hover {
-    color: @accentColor;
-}
-
-.project-meta {
-    margin: 10px 0;   
-}
-
-.project-description {
-    margin: 20px 0;
-}
-
-.plugin {
-    display: none;
-}
-
-.on {
-    display: block;
-    animation: fade-in .25s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
 .project-responsive-container {
     position: relative;
-    width: 55%;
+    width: 100%;
 }
 
 .project-dummy {
@@ -65,8 +48,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    
-    text-align:center; /* Align center inline elements */
+
+    text-align: center; /* Align center inline elements */
     font: 0/0 a;
 }
 
@@ -81,20 +64,52 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* fill the container by width; crop overflow */
+    border-radius: 4px 4px 0 0; /* match the card's rounded top (card has no overflow:hidden) */
+
+    // Drop the rounding while zoomed so the enlarged image has clean corners.
+    &.zoom-img {
+        border-radius: 0;
+    }
+}
+
+.project-item-details {
+    padding: 16px 20px 20px;
+
+    // Drop the .article heading anchor-offset hack for the card title.
+    h3 {
+        margin: 0 0 8px;
+        padding-top: 0;
+    }
+}
+
+.project-links {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.project-link:hover {
+    color: @accentColor;
+}
+
+.project-meta {
+    margin: 12px 0 0;
+}
+
+.project-description {
+    margin: 12px 0;
+}
+
+.plugin {
+    display: none;
+}
+
+.on {
+    display: block;
+    animation: fade-in .25s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 @media screen and (max-width:760px) {
-    .project-responsive-container {
-        position: relative;
-        width: 100%;
-    }
-
-    .project-item {
-        display: initial;
-    }
-    
-    .project-item-details {
-        width: initial;
-        margin: 20px 10px;
+    .project-list {
+        column-count: 1;
     }
 }
