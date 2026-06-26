@@ -5,11 +5,10 @@ const d = document;
 const body = d.body;
 const $ = d.querySelector.bind(d);
 const menu = d.getElementById('menu');
-const main = d.getElementById('main');
 const header = d.getElementById('header');
 const mask = d.getElementById('mask');
 const menuToggle = d.getElementById('menu-toggle');
-const menuOff = d.getElementById('menu-off');
+const railToggle = d.getElementById('rail-toggle');
 const loading = d.getElementById('loading');
 const ua = navigator.userAgent;
 const isMD = ua.indexOf('Mobile') !== -1 || ua.indexOf('Android') !== -1 || ua.indexOf('iPhone') !== -1 || ua.indexOf('iPad') !== -1 || ua.indexOf('KFAPWI') !== -1;
@@ -36,20 +35,18 @@ class Blog {
     this.share();
   }
 
-  toggleMenu(flag) {
-    if (flag) {
-      menu.classList.remove('hide');
-      main.classList.add('offset-main');
+  setExpanded(expanded) {
+    menu.classList.toggle('expanded', expanded);
+    // Expand is modal on every screen size: dim the content behind a scrim.
+    mask.classList.toggle('in', expanded);
 
-      if (w.innerWidth < 1241) {
-        mask.classList.add('in');
-        menu.classList.add('show');
-      }
-    } else {
-      menu.classList.add('hide');
-      menu.classList.remove('show');
-      mask.classList.remove('in');
-      main.classList.remove('offset-main');
+    if (railToggle) {
+      railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      const icon = railToggle.querySelector('i');
+      if (icon) { icon.textContent = expanded ? 'menu_open' : 'menu'; }
+    }
+    if (menuToggle) {
+      menuToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     }
   }
 
@@ -142,21 +139,23 @@ w.addEventListener('load', function () {
 });
 
 w.addEventListener('resize', function () {
-  blog.toggleMenu();
+  blog.setExpanded(false);
 });
 
-menuToggle.addEventListener(even, function (e) {
-  blog.toggleMenu(true);
+// Rail menu button: toggle collapsed <-> expanded.
+railToggle.addEventListener(even, function (e) {
+  blog.setExpanded(!menu.classList.contains('expanded'));
   e.preventDefault();
 }, false);
 
-menuOff.addEventListener(even, function () {
-  menu.classList.add('hide');
-  main.classList.remove('offset-main');
+// Top app-bar hamburger (phones only): open the expanded modal drawer.
+menuToggle.addEventListener(even, function (e) {
+  blog.setExpanded(true);
+  e.preventDefault();
 }, false);
 
 mask.addEventListener(even, function () {
-  blog.toggleMenu();
+  blog.setExpanded(false);
 }, false);
 
 d.addEventListener('scroll', function () {

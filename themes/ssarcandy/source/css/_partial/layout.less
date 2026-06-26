@@ -3,11 +3,86 @@
     position: relative;
 }
 
-#menu-off {
-    position: absolute;
-    top: 0;
-    left: 100%;
-    .transition(.2s, cubic-bezier(0.4, 0.0, 0.2, 1));
+/* ---------- M3 Expressive navigation rail ----------
+   Collapsed (96px, icons only) is the persistent default on desktop/tablet.
+   The rail-menu button toggles the Expanded state (240px, icon + label), a modal
+   overlay (scrim) on every screen size; on phones the collapsed rail is hidden
+   until opened. The rail is themed purple (@railBg) so it reads as one chrome with
+   the purple top bar + content hero; foreground tones are white at varying opacity.
+   Items are a uniform 56px tall in both states so the icons never shift vertically. */
+
+// Shared layout for the Expanded rail + the phone drawer (same visual treatment).
+.rail-expanded() {
+    width: @railExpandedWidth;
+
+    .rail-menu {
+        width: auto;
+        margin: 2px 8px 4px;
+        padding-left: 20px;
+        padding-right: 8px;
+        justify-content: flex-start;
+    }
+
+    .nav {
+        padding: 8px;
+
+        .nav-item {
+            a {
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 0 16px 0 20px;
+                border-radius: 28px;
+            }
+
+            .nav-indicator {
+                flex: 0 0 auto;
+                width: 40px;
+                height: 40px;
+                margin-right: 16px;
+                border-radius: 50%;
+                background: transparent;
+            }
+
+            // Labels are hidden in the collapsed rail; bring them back here.
+            .nav-label {
+                display: block;
+                margin-top: 0;
+                font-size: 14px;
+                text-align: left;
+            }
+
+            &:hover {
+                a {
+                    background: fade(#fff, 12%);
+                }
+
+                .nav-indicator {
+                    background: transparent;
+                }
+            }
+
+            &.active {
+                a {
+                    background: fade(#fff, 22%);
+                }
+
+                .nav-indicator {
+                    background: transparent;
+                }
+
+                .icon,
+                .nav-label {
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    // Reveal the visitor-count footer alongside the labels when expanded.
+    .rail-footer {
+        display: block;
+    }
 }
 
 #menu {
@@ -16,130 +91,179 @@
     left: 0;
     bottom: 0;
     z-index: 66;
-    width: @menuWidth;
+    width: @railWidth;
     min-height: 100%;
-    background: #fff;
-    box-shadow: @boxShadow;
+    background: @railBg;
+    // Transparent placeholder shadow so the modal elevation fades in (no snap).
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
     .transition(.25s, cubic-bezier(0.4, 0.0, 0.2, 1));
     view-transition-name: menu;
-
-    &.hide {
-        .transform(translateX(-100%));
-        #menu-off {
-            .transform(scale(0));
-        }
-        + #main {
-            padding-left: 0;
-        }
-    }
 
     .inner {
         position: relative;
         height: 100%;
     }
 
-    .brand-wrap {
-        background: url(../img/brand.png);
-        background-size: 100% 100%;
-    }
+    // Menu button that toggles collapsed <-> expanded. Its icon sits in a
+    // 40px box so it lines up with the nav icons in both states.
+    .rail-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        margin: 2px 0 4px 20px;
+        border-radius: 28px;
+        color: fade(#fff, 75%);
+        cursor: pointer;
 
-    .brand {
-        padding: 40px @menuPadding 2em;
-        background: fade(@primaryColor, 50%);
-    }
+        i {
+            display: inline-block;
+            width: 40px;
+            text-align: center;
+        }
 
-    .avatar {
-        display: block;
-        width: 80px;
-        height: 80px;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        overflow: hidden;
-        box-shadow: @boxShadow;
+        &:hover {
+            background: fade(#fff, 12%);
+            color: #fff;
+        }
     }
-
-    .introduce {
-        margin: 1em 0 0;
-        color: @textPrimaryColor;
-    }
-
-    .mail {
-        display: inline-block;
-        padding-top: 4px;
-        color: @lightPrimaryColor;
-        font-size: 13px;
-    }
-
 
     .nav {
         margin: 0;
-        padding: 12px 0;
+        padding: 8px 0;
         list-style: none;
-        line-height: @navH;
         overflow-y: auto;
+        overflow-x: hidden;
 
-        li {
-            padding: 0 @menuPadding;
+        .nav-item {
             display: block;
 
-            .icon {
-                position: absolute;
-                top: 0;
-                left: @menuPadding;
-                line-height: @navH;
+            // Uniform 56px tall item -> identical icon rhythm collapsed vs expanded.
+            a {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                height: 56px;
+                padding-left: 20px;
+                color: fade(#fff, 75%);
+                font-weight: 500;
+                white-space: nowrap;
+                transition: background-color .2s cubic-bezier(0.4, 0.0, 0.2, 1), color .2s cubic-bezier(0.4, 0.0, 0.2, 1);
             }
 
-            &:hover,
-            &.active {
-                background: rgba(0, 0, 0, 0.05);
+            .nav-indicator {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 56px;
+                height: 32px;
+                border-radius: 16px;
+                // Only the active-pill background animates; size/shape snap with
+                // the layout so the icon doesn't jitter while the rail widens.
+                transition: background-color .2s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+                .icon {
+                    line-height: 1;
+                }
+            }
+
+            // Collapsed rail is icons only.
+            .nav-label {
+                display: none;
+            }
+
+            &:hover {
+                .nav-indicator {
+                    background: fade(#fff, 12%);
+                }
 
                 a,
                 .icon {
-                    color: @primaryColor;
+                    color: #fff;
                 }
-
             }
 
-        }
+            &.active {
+                .nav-indicator {
+                    background: fade(#fff, 22%);
+                }
 
-        a {
-            display: block;
-            padding-left: @menuPadding*3;
-            height: @navH;
-            font-weight: 500;
-            color: @secondaryTextColor;
-        }
+                .icon {
+                    color: #fff;
+                }
 
+                .nav-label {
+                    color: #fff;
+                    font-weight: 700;
+                }
+            }
+        }
     }
 
-    .footer {
-        position: relative;
-        width: 100%;
-        font-size: 12px;
-        font-family: inherit;
-        padding: 10px @menuPadding;
-        border-top: 1px solid @borderColor;
+    // Visitor count footer pinned to the rail bottom. Hidden in the collapsed
+    // rail (no room for the text); revealed only when expanded (and in the
+    // phone drawer, which shares .rail-expanded). The flex-col nav above it
+    // grows to fill the height, pushing this to the bottom.
+    .rail-footer {
+        display: none;
+        // Match the expanded item content inset: .nav padding (8px) + link
+        // padding-left (20px) = 28px, so the count lines up with the icons.
+        padding: 16px 28px;
+        color: fade(#fff, 75%);
+        font-size: 13px;
+        line-height: 1.3;
+        white-space: nowrap;
 
-        .rss {
-            position: absolute;
-            right: @menuPadding;
-            bottom: 20px;
-            color: #E64A19;
+        .rail-visitor-count {
+            font-weight: 400;
+            color: #fff;
         }
-
     }
 
+    // Expanded state: modal overlay above the scrim, elevated, icon + label.
+    &.expanded {
+        z-index: 99;
+        box-shadow: @boxShadow;
+        .rail-expanded();
+    }
 }
 
 #main {
-    padding-left: 240px;
+    padding-left: @railWidth;
     min-height: 100%;
     background: @backColor;
     .transition(.4s);
 }
 
+// Full-width content sheet that lifts over the purple hero with rounded top
+// corners; the inner .container keeps the content itself at a readable width,
+// so the rounded corners always sit at the content-area edges (any viewport).
 .body-wrap {
+    position: relative;
+    margin-top: -24px;
     padding: 30px 0 40px;
+    background: @backColor;
+    border-radius: 24px 24px 0 0;
+}
+
+// Fixed cap that keeps the content's concave rounded top visible just below the
+// fixed top bar at any scroll position: purple is painted only in the two corner
+// notches (revealing the rounded content top). Invisible over the purple hero
+// when not scrolled; the body-wrap's own corners cover that state.
+.body-wrap::before {
+    content: "";
+    position: fixed;
+    top: @headerH;
+    left: @railWidth;
+    right: 0;
+    height: 24px;
+    z-index: 25;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at bottom right, transparent 24px, @railBg 25px) top left / 24px 24px no-repeat,
+        radial-gradient(circle at bottom left, transparent 24px, @railBg 25px) top right / 24px 24px no-repeat;
 }
 
 .container {
@@ -156,12 +280,16 @@
     width: 100%;
     height: 100%;
     background: #000;
-    opacity: .5;
-    filter: alpha(opacity=50);
-    display: none;
+    // Fade the scrim in/out instead of snapping display (kills the expand flash).
+    opacity: 0;
+    pointer-events: none;
+    .transition(.25s);
+
     &.in {
-        display: block;
+        opacity: .5;
+        pointer-events: auto;
     }
+
     &.hide {
         opacity: 0;
     }
@@ -171,60 +299,39 @@ a[title="站长统计"] {
     display: none;
 }
 
-@media screen and (min-width:1680px) {
-    #main {
-        padding-left: 0px !important;
-    }    
-}
-
+/* ---------- Tablet / narrow desktop: keep the rail, content goes fluid ---------- */
 @media screen and (max-width:1240px) {
     .container {
-        width: 760px;
+        width: 100%;
+        max-width: 760px;
+        padding-left: 16px;
+        padding-right: 16px;
     }
+}
 
-    #menu-off {
-        display: none;
-    }
-
+/* ---------- Phone: rail is hidden until opened, then a modal drawer ---------- */
+@media screen and (max-width:760px) {
     #menu {
         z-index: 99;
-        box-shadow: none;
+        .rail-expanded();
         .transform(translateX(-100%));
 
-        &.show {
+        &.expanded {
             .transform(translateX(0));
         }
-
     }
 
     #main {
         padding-left: 0;
     }
 
-}
-
-@media screen and (max-width:760px) {
     .container {
         width: 100%;
-        padding: 20px 0px;
+        max-width: none;
         overflow-x: hidden;
     }
 
-    #menu {
-        .brand {
-            padding-top: 20px;
-            padding-bottom: 1em;
-        }
-
-        .nav {
-            line-height: @mNavH;
-
-            a {
-                height: @mNavH;
-            }
-
-        }
-
+    .body-wrap::before {
+        left: 0;
     }
-
 }

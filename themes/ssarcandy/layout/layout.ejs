@@ -1,7 +1,7 @@
 <%- partial('_partial/head') %>
 <body>
   <div id="loading" class="active" <% if (theme.turbolinks) { %> style="display:none;" <% } %> ></div>
-  <nav id="menu" <% if(is_post() || page.layout === 'aboutMe' && theme.hideMenu){ %>class="hide"<% } %> >
+  <nav id="menu">
    <%- partial('_partial/menu') %>
   </nav>
   <main id="main">
@@ -22,8 +22,10 @@
           </aside>
       <% } %>
     <% } %>
-    <div class="container body-wrap" id="body-wrap">
-      <%- body %>
+    <div class="body-wrap" id="body-wrap">
+      <div class="container">
+        <%- body %>
+      </div>
     </div>
   </main>
 <%- partial('_partial/script') %>

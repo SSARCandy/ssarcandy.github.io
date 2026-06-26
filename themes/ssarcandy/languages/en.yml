@@ -4,8 +4,7 @@ menu:
     archive: Archives
     photography: Photography
     project: Projects
-    github: Github
-    total_visitor: Total visitors
+    total_visitor: 'Visitors:'
 
 about:
     introduction: Introduction

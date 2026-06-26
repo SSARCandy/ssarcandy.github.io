@@ -1,34 +1,12 @@
 <%
     var posts = [];
-    page.posts.each(function(post){
-        posts.push(post);
-    });
-    const sortBy = (key) => {
-        return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
-    };
-    var sortPosts = posts.concat().sort(sortBy("date"));
-    sortPosts.reverse();
-
+    page.posts.each(function(post){ posts.push(post); });
+    posts.sort(function(a, b){ return b.date - a.date; });
 %>
 
-<%
-  var y = 0, m = 0;
-  sortPosts.forEach(function(post, i){
-      var dt = post.date;
-      var ny = post.date.year();
-      var nm = post.date.month();
-
-      if(ny !== y) {
-
-          y = ny;
-          m = nm;
-%>
-        <h3 class="archive-separator"><%=dt.format('YYYY')%></h3>
-        <%- partial('_partial/ads/archive-list') %>
-<%    } %>
-
-     <%- partial('_partial/archive', {post: post}) %>
-<%})%>
+<% posts.forEach(function(post){ %>
+    <%- partial('_partial/archive', { post: post }) %>
+<% }); %>
 
 <% if (page.total > 1){ %>
 <nav id="page-nav">

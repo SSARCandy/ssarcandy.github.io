@@ -1,11 +1,3 @@
-.archive-separator {
-    margin: 35px 0 13px;
-    color: @primaryColor;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
 .archive-article {
     position: relative;
     padding: 15px 25px 15px 140px;
@@ -28,8 +20,9 @@
     }
 
     .post-time {
-        line-height: 24px;
-        font-weight: bold;
+        color: @secondaryTextColor;
+        font-size: 13px;
+        line-height: 1.3;
     }
 
     .article-tag-list-item {
@@ -39,36 +32,39 @@
 
 }
 
+.archive-article-year {
+    color: @secondaryTextColor;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
 .archive-article-inner {
     display: block;
 }
 
 .archive-article-date {
     position: absolute;
-    top: 25px;
+    top: 50%;
     left: 25px;
-    
+    transform: translateY(-50%);
 }
 
 @media screen and (max-width:760px) {
     .archive-article {
         margin: 0 16px;
-        padding: 20px 20px 20px 80px;
-    }
-
-    .archive-separator {
-        margin-left: 16px;
-    }
-
-}
-
-@media screen and (max-width:420px) {
-    .archive-article {
         padding: 20px;
-        padding-left: 30px;
     }
+
+    // On mobile the date sits above the content, year + month/day on one line.
     .archive-article-date {
         position: static;
+        transform: none;
+        margin-bottom: 4px;
     }
 
+    .archive-article-year {
+        display: inline;
+        margin-right: 6px;
+    }
 }

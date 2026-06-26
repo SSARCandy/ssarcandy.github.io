@@ -12,8 +12,6 @@
     view-transition-name: top-header;
 
     &.fixed {
-        box-shadow: @boxShadow;
-
         .header-title {
             visibility: visible;
         }
@@ -38,15 +36,16 @@
 .header-title {
     visibility: hidden;
     font-weight: 400;
-    line-height: 56px;
+    line-height: @headerH;
     font-size: 16px;
     text-align: center;
     white-space: nowrap;
 }
 
 .content-header {
-    margin-left: -240px;
-    padding: 104px 16px 48px 256px;
+    margin-left: -@railWidth;
+    // Extra bottom padding so the hero text clears the body-wrap's -24px lift.
+    padding: 104px 16px 56px (@railWidth + 16px);
     color: @textPrimaryColor;
     background: @primaryColor;
 
@@ -62,6 +61,18 @@
 
 }
 
+/* Rail is persistent on desktop/tablet: hide the phone-only hamburger, and
+   start the top bar after the rail so its title isn't covered by it. */
+@media screen and (min-width:761px) {
+    #menu-toggle {
+        display: none;
+    }
+
+    .top-header {
+        padding-left: @railWidth;
+    }
+}
+
 @media screen and (max-width:1240px) {
 
     .header-title {
@@ -73,7 +84,7 @@
 @media screen and (max-width:760px) {
     .content-header {
         margin: 0;
-        padding: 72px 16px 20px;
+        padding: 72px 16px 44px;
 
         .author {
             font-size: 24px;

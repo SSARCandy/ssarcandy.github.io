@@ -1,15 +1,7 @@
 <div class="inner flex-row-vertical">
-  <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-      <i class="icon icon-lg material-icons">close</i>
+  <a href="javascript:;" class="rail-menu" id="rail-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <i class="material-icons icon icon-lg">menu</i>
   </a>
-  <div class="brand-wrap">
-    <div class="brand">
-      <a href="/about" class="avatar"><img alt="ssarcandy" src="<%= theme.avatar %>"></a>
-      <hgroup class="introduce">
-        <div class="mail"><%- theme.motto %></div>
-      </hgroup>
-    </div>
-  </div>
   <ul class="nav flex-col">
     <%
       var menuItem, isActive = function(item) {
@@ -19,18 +11,18 @@
       for (var i in theme.menu) {
         menuItem = theme.menu[i];
       %>
-        <li class="waves-block waves-effect<% if (isActive(menuItem)) { %> active<% } %>" style="line-height:44px;height:44px;padding:0 0px;">
+        <li class="nav-item<% if (isActive(menuItem)) { %> active<% } %>">
           <a href="<%- url_for(menuItem.url) %>" <% if (menuItem.target) { %> target="_blank" rel="noopener" <% } if (menuItem.turbo === false ) { %> data-turbolinks="false" <% } %> >
-            <% if (menuItem.type === 'ml') { %>
+            <span class="nav-indicator">
               <i class="material-icons icon icon-lg"><%= i %></i>
-            <% } else { %>
-              <i class="icon icon-lg icon-<%= i %>"></i>
-            <% } %>
-            <span><%- (__(menuItem.text) || i) %></span>
+            </span>
+            <span class="nav-label"><%- (__(menuItem.text) || i) %></span>
           </a>
         </li>
     <% } %>
   </ul>
-
-  <%- partial('footer') %>
+  <div class="rail-footer">
+    <span class="rail-visitor-label"><%- __('menu.total_visitor') %></span>
+    <span class="rail-visitor-count"><%- number_format(visitor_count()) %></span>
+  </div>
 </div>

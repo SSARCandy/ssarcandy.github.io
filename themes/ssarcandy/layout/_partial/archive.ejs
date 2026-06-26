@@ -1,5 +1,6 @@
 <article to="<%- url_for(post.path) %>" class="archive-article waves-effect waves-block">
   <div class="archive-article-date">
+    <div class="archive-article-year"><%= post.date.format('YYYY') %></div>
     <%- partial('post/date', { post: post, date_format: 'MMM D'}) %>
   </div>
   <div class="archive-article-inner">

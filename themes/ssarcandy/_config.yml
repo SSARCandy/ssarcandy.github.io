@@ -1,36 +1,25 @@
 # menu:
-#  link:               fontawesome or material-icon.
-#    type: 'fa' / 'ml' Icon set. fa => font-awesome, ml => material design
+#  link:               Material Icons ligature name (https://fonts.google.com/icons).
 #    text: About       The label show on menu (using :lang.yml file).
 #    url: /about       Link url
 #    target: _blank    Open new tab or not
 menu:
   person:
-    type: ml
     text: menu.about
     url: /about
   description:
-    type: ml
     text: menu.post
     url: /
     # turbo: false
   view_list:
-    type: ml
     text: menu.archive
     url: /archives
   photo_camera:
-    type: ml
     text: menu.photography
     url: /photography
   code:
-    type: ml
     text: menu.project
     url: /projects
-  github:
-    type: fa
-    text: menu.github
-    url: https://github.com/SSARCandy
-    target: _blank
 
 social_links:
   email:
@@ -46,6 +35,10 @@ social_links:
     icon: icon-flickr
     target: _blank
     user_id: 200681089@N06
+  rss:
+    url: /atom.xml
+    icon: icon-rss-square
+    target: _blank
 
 rss: /atom.xml
 avatar: /img/logo.png

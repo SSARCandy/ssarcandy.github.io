@@ -18,9 +18,9 @@
 
 .project-list-item {
     margin-bottom: 20px;
-    border-bottom: 1px solid #DADADA;
     background: #fff;
-    border-bottom: 1px solid #dadada;
+    border-radius: 4px;
+    overflow: hidden;
     box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
 }
 
@@ -77,10 +77,10 @@
 }
 
 .project-img-container img {
-    vertical-align: middle;
-    display: inline-block;
-    max-height: 100%;  /* <-- Set maximum height to 100% of its parent */
-    max-width: 100%;   /* <-- Set maximum width to 100% of its parent */
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fill the container by width; crop overflow */
 }
 
 @media screen and (max-width:760px) {

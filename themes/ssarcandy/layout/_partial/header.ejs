@@ -53,10 +53,8 @@
         <% } else if (page.layout === 'photography') { %>
             <%- __('photography.intro') %>
         <% } else if (is_archive() || is_tag()) { %>
-            <% if (is_archive() && !is_tag()) { %>
-                <div style="margin-bottom: 8px;"><%- __('archive.intro') %></div>
-            <% } %>
-            <%- list_tags({ show_count: false, class: 'article-tag' }) %> 
+            <div style="margin-bottom: 8px;"><%- __('archive.intro') %></div>
+            <%- list_tags({ show_count: false, class: 'article-tag' }) %>
         <% } else if (is_home()) { %>
             <%- __('post.intro') %>
         <% } else { %>
