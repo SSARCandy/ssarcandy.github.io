@@ -1,1 +1,1 @@
-{"name":"ssarcandy","start_url":"/","display":"standalone","orientation":"natural"}
+{"name":"ssarcandy","short_name":"ssarcandy","start_url":"/","display":"standalone","orientation":"natural","theme_color":"#673AB7","background_color":"#ffffff","icons":[{"src":"/img/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/img/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}]}
