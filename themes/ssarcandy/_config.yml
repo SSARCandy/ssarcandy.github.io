@@ -23,19 +23,22 @@ menu:
 
 social_links:
   email:
+    name: Email
     url: mailto:ssarcandy@gmail.com
     icon: icon-envelope-square
-    target: 
+    target:
   github:
+    name: GitHub
     url: https://github.com/SSARCandy
     icon: icon-github-square
     target: _blank
   flickr:
+    name: Flickr
     url: https://www.flickr.com/photos/200681089@N06/
     icon: icon-flickr
     target: _blank
-    user_id: 200681089@N06
   rss:
+    name: RSS feed
     url: /atom.xml
     icon: icon-rss-square
     target: _blank

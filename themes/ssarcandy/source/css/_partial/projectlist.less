@@ -73,6 +73,12 @@
 }
 
 .project-item-details {
+    // The image lives in a position:absolute .project-img-container, so its whole
+    // subtree paints in the positioned layer — above this static block. Make the
+    // details positioned too so they paint *after* (above) the image and stay
+    // clickable. (z-index left auto: the zoom wrap is z-index:666, so zoom still
+    // wins over this.)
+    position: relative;
     padding: 16px 20px 20px;
 
     // Drop the .article heading anchor-offset hack for the card title.
@@ -106,6 +112,15 @@
 .on {
     display: block;
     animation: fade-in .25s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Side gutter below 860px, matching the photography page (.photography-container
+   gets `padding: 0 16px` at ≤860). The shared .post-list only adds this at ≤760,
+   which left the 760–860 band flush against the container's own padding. */
+@media screen and (max-width:860px) {
+    .project-list {
+        padding: 0 16px;
+    }
 }
 
 @media screen and (max-width:760px) {
