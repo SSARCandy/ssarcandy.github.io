@@ -272,38 +272,22 @@
 }
 
 .mask {
+    // Invisible click-catcher behind the expanded rail — tap outside the rail to
+    // close it. Deliberately NO dim/scrim: a dark overlay made iOS Safari's
+    // translucent bottom toolbar pick up the darkness and turn grey/black, and the
+    // only CSS that avoided it (fading the scrim's bottom) looked off. So the
+    // expanded rail now stands out via its own elevation (shadow) instead of dimming
+    // the page. (.hide is still toggled by the share menu's JS — now a harmless no-op.)
     position: fixed;
-    // Start below the fixed top bar, not at y=0. A black scrim painted over the very
-    // top of the viewport makes macOS Safari sample it for the tab / bookmarks-bar
-    // tint and turn that bar black while the rail is expanded. Leaving the purple top
-    // bar as the topmost strip keeps Safari's chrome correct — and it matches the
-    // intent of dimming the content, not the app bar.
     top: @headerH;
     left: 0;
-    // Cap the scrim at the *visible* viewport bottom (dvh) so it never paints behind
-    // iOS Safari's bottom toolbar. iOS tints that bar from the page content under it,
-    // so a scrim sitting there dragged the bar to grey/black; leaving that strip
-    // uncovered lets the bar sample the light page instead. bottom:0 is the pre-dvh
-    // fallback (older engines keep the original full-height behaviour).
     bottom: 0;
-    height: calc(~"100dvh - @{headerH}");
     z-index: 88;
     width: 100%;
-    // Translucent black (not solid #000 dimmed via opacity) so nothing the bar might
-    // still sample reads as pure black.
-    background: rgba(0, 0, 0, .5);
-    // Fade the scrim in/out instead of snapping display (kills the expand flash).
-    opacity: 0;
     pointer-events: none;
-    .transition(.25s);
 
     &.in {
-        opacity: 1;
         pointer-events: auto;
-    }
-
-    &.hide {
-        opacity: 0;
     }
 }
 
