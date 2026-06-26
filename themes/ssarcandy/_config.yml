@@ -80,7 +80,7 @@ adsense:
   in_feed:
     archive:            # native ad in the archive / tag listings (replaces the old archive_list banner)
       slot: '9607634530'
-      layout_key: '-i2-7+2w-11-86'
+      layout_key: '-hx-7+2w-11-86'
       every: 5  # show one ad after every N entries (pages hold per_page:5, so keep <=5)
     projects:
       slot: '7350539224'

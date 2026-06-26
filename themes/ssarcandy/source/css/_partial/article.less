@@ -11,13 +11,18 @@
     // right gutter isn't painted over by the content sheet's background.
     z-index: 26;
     overflow-x: hidden;
-    width: 20%;
+    // Match the .post-widget gutter width — 20vw is wider than the gutter below
+    // ~1650px, which pushed the fixed TOC (and its ad) off the right screen edge.
+    width: calc(~"(100vw - 960px)/2 - 15px");
     margin-top: 20px;
-    
+
     &.fixed {
         top: @headerH;
         bottom: 140px;
-        overflow-y: auto;
+        // Column layout: the TOC list scrolls on its own (below) while the ad
+        // stays pinned at the bottom, instead of the whole column scrolling.
+        display: flex;
+        flex-direction: column;
     }
 
     ol, ul {
@@ -45,6 +50,11 @@
     display: block;
     padding: 0;
     font-size: 13px;
+    // Scrollable region inside the fixed TOC's flex column; min-height:0 lets this
+    // flex child shrink below its content height so it actually scrolls.
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .post-toc-item {
