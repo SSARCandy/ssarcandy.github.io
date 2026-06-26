@@ -1,13 +1,18 @@
 <% if (theme.adsense.enable) { %>
-    <% if (theme.adsense.slot.post_toc) { %>
-        <ins class="adsbygoogle"
-            style="display:block"
-            data-ad-client="ca-pub-1532347766435780"
-            data-ad-slot="7006883287"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+    <% if (theme.adsense.in_slot && theme.adsense.in_slot.post_toc) { %>
+        <div class="ads-post-toc">
+            <!-- Long vertical (skyscraper) ad sized to the narrow TOC gutter.
+                 data-ad-format="vertical" makes AdSense serve tall creatives and
+                 scale them to the column width, which varies with the viewport. -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="<%- theme.adsense.client %>"
+                data-ad-slot="<%- theme.adsense.in_slot.post_toc %>"
+                data-ad-format="vertical"
+                data-full-width-responsive="false"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     <% } %>
 <% } %>

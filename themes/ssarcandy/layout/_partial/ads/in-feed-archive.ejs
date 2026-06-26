@@ -1,0 +1,20 @@
+<%
+// Native in-feed ad for the archive / tag / category listings (all rendered by
+// archive.ejs). Shown only when an In-feed ad unit (slot + layout_key) is
+// configured. Blends in as an extra row in the list.
+var inFeed = theme.adsense && theme.adsense.in_feed && theme.adsense.in_feed.archive;
+if (theme.adsense && theme.adsense.enable && inFeed && inFeed.slot && inFeed.layout_key) {
+%>
+<div class="archive-ad-item" aria-hidden="true">
+    <span class="ad-label">Sponsored</span>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="<%- inFeed.layout_key %>"
+        data-ad-client="<%- theme.adsense.client %>"
+        data-ad-slot="<%- inFeed.slot %>"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+<% } %>

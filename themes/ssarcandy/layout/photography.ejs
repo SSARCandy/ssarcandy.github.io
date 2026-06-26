@@ -17,8 +17,19 @@
             <button class="sort-btn waves-effect" data-sort="views">Popular</button>
         </div>
     </div>
+    <%
+    // Native in-feed ad config for the photo grid — read by Photography.js and
+    // injected as .grid-item cards into the masonry layout. Only emitted when an
+    // In-feed unit (slot + layout_key) is configured.
+    var __pad = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && theme.adsense.in_feed.photography;
+    var __adOn = __pad && __pad.slot && __pad.layout_key;
+    %>
     <div id="photography-grid" class="photography-grid"
-        data-photos-url="<%- url_for('flickr_photos.json') %>">
+        data-photos-url="<%- url_for('flickr_photos.json') %>"<% if (__adOn) { %>
+        data-ad-client="<%- theme.adsense.client %>"
+        data-ad-slot="<%- __pad.slot %>"
+        data-ad-layout-key="<%- __pad.layout_key %>"
+        data-ad-every="<%- __pad.every || 8 %>"<% } %>>
         <div class="grid-sizer"></div>
         <div class="grid-item skeleton"></div>
         <div class="grid-item skeleton"></div>

@@ -1,0 +1,22 @@
+<%
+// Native in-feed ad card for the /projects grid. Rendered only when an In-feed
+// ad unit (slot + layout_key) is configured. NOTE: no `plugin` class here — the
+// project filter (ProjectTags.js) maps the lunr search index to .plugin items by
+// position, so an extra .plugin element would misalign every result. This card is
+// outside that set and simply stays visible.
+var inFeed = theme.adsense && theme.adsense.in_feed && theme.adsense.in_feed.projects;
+if (theme.adsense && theme.adsense.enable && inFeed && inFeed.slot && inFeed.layout_key) {
+%>
+<li class="project-list-item project-ad-item on" aria-hidden="true">
+    <span class="ad-label">Sponsored</span>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="<%- inFeed.layout_key %>"
+        data-ad-client="<%- theme.adsense.client %>"
+        data-ad-slot="<%- inFeed.slot %>"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</li>
+<% } %>

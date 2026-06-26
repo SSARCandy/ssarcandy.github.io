@@ -6,6 +6,16 @@
 
   const PHOTOS_URL = container.dataset.photosUrl;
 
+  // Native in-feed ad config (set on #photography-grid by photography.ejs).
+  // Null when no In-feed unit is configured, so no ads are injected.
+  const AD_CONFIG = (container.dataset.adSlot && container.dataset.adLayoutKey) ? {
+    client: container.dataset.adClient,
+    slot: container.dataset.adSlot,
+    layoutKey: container.dataset.adLayoutKey,
+    every: parseInt(container.dataset.adEvery, 10) || 8,
+  } : null;
+  let adObserver = null;
+
   let masterPhotos = []; // Keep original order
   let sortedPhotosList = [];
   let currentSort = 'random'; // 'date', 'views', or 'random'
@@ -454,8 +464,10 @@
 
     const fragment = document.createDocumentFragment();
     const newItems = [];
+    const adItems = [];
 
     nextChunk.forEach((item, index) => {
+      const globalIndex = renderedCount + index; // 0-based position across all photos
       const div = document.createElement('div');
       div.className = 'grid-item skeleton';
             
@@ -486,6 +498,15 @@
             `;
       fragment.appendChild(div);
       newItems.push(div);
+
+      // After every Nth photo, drop in a native ad card (Masonry treats it as
+      // just another grid item).
+      if (AD_CONFIG && (globalIndex + 1) % AD_CONFIG.every === 0) {
+        const adDiv = buildAdItem();
+        fragment.appendChild(adDiv);
+        newItems.push(adDiv);
+        adItems.push(adDiv);
+      }
     });
 
     container.appendChild(fragment);
@@ -507,6 +528,9 @@
     masonryInstance.layout();
     revealItems(newItems);
 
+    // Ads are in the DOM and positioned now — request fill + relayout on settle.
+    adItems.forEach(activateAd);
+
     // For images without aspect-ratio or delayed loading, update layout on progress
     imagesLoaded(container).on('progress', function() {
       if (!masonryInstance) return;
@@ -519,6 +543,37 @@
     requestAnimationFrame(() => {
       items.forEach(item => item.classList.add('revealed'));
     });
+  }
+
+  // Build a native in-feed ad styled as a grid card. AdSense fills the <ins>
+  // asynchronously, so it starts at ~0 height and grows once filled.
+  function buildAdItem() {
+    const div = document.createElement('div');
+    div.className = 'grid-item ad-grid-item';
+    div.innerHTML = `
+                <span class="ad-label">Sponsored</span>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-format="fluid"
+                    data-ad-layout-key="${AD_CONFIG.layoutKey}"
+                    data-ad-client="${AD_CONFIG.client}"
+                    data-ad-slot="${AD_CONFIG.slot}"></ins>
+            `;
+    return div;
+  }
+
+  // Request a fill and re-run masonry whenever the ad's height settles, so the
+  // surrounding photos reflow around its final size instead of leaving a gap.
+  function activateAd(adDiv) {
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adsbygoogle.push({});
+    if (typeof ResizeObserver === 'undefined') return;
+    if (!adObserver) {
+      adObserver = new ResizeObserver(() => {
+        if (masonryInstance) masonryInstance.layout();
+      });
+    }
+    adObserver.observe(adDiv);
   }
 
   function renderPhotos(photos, isInitialLoad = false) {
@@ -534,6 +589,10 @@
     if (masonryInstance) {
       masonryInstance.destroy();
       masonryInstance = null;
+    }
+    if (adObserver) {
+      adObserver.disconnect();
+      adObserver = null;
     }
     renderedCount = 0;
         

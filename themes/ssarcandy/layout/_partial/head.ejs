@@ -48,7 +48,7 @@
   <%- favicon_tag(theme.favicon) %>
   <%- css('css/style') %>
   <% if (theme.adsense.enable) { %>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1532347766435780" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%- theme.adsense.client %>" crossorigin="anonymous"></script>
   <% } %>
   
   <link async href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

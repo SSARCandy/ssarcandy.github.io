@@ -2,10 +2,18 @@
     var posts = [];
     page.posts.each(function(post){ posts.push(post); });
     posts.sort(function(a, b){ return b.date - a.date; });
+
+    // Interleave a native in-feed ad after every N entries, only when an In-feed
+    // unit (slot + layout_key) is configured. 0 disables interleaving.
+    var __pad = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && theme.adsense.in_feed.archive;
+    var __every = (__pad && __pad.slot && __pad.layout_key) ? (__pad.every || 3) : 0;
 %>
 
-<% posts.forEach(function(post){ %>
+<% posts.forEach(function(post, idx){ %>
     <%- partial('_partial/archive', { post: post }) %>
+    <% if (__every && (idx + 1) % __every === 0) { %>
+        <%- partial('_partial/ads/in-feed-archive') %>
+    <% } %>
 <% }); %>
 
 <% if (page.total > 1){ %>

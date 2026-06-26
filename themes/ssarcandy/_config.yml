@@ -68,10 +68,28 @@ hideMenu: true
 
 adsense:
   enable: true
-  slot:
-    post_bottom: true
-    post_toc: false
-    archive_list: false
+  client: 'ca-pub-1532347766435780'   # AdSense publisher ID (data-ad-client)
+  # Standalone display ad units — paste each unit's data-ad-slot here. Blank disables it.
+  in_slot:
+    post_bottom: '3786040804'   # in-article ad at the bottom of each post
+    post_toc: '2383750630'      # long vertical (skyscraper) ad under the post table-of-contents
+  # Native "In-feed" ads that blend into the projects / photography grids.
+  # Create an In-feed ad unit in AdSense for each grid, then paste that unit's
+  # data-ad-slot and data-ad-layout-key below. Leave either field blank to
+  # disable that grid's ad (nothing is rendered until both are filled in).
+  in_feed:
+    archive:            # native ad in the archive / tag listings (replaces the old archive_list banner)
+      slot: '9607634530'
+      layout_key: '-i2-7+2w-11-86'
+      every: 5  # show one ad after every N entries (pages hold per_page:5, so keep <=5)
+    projects:
+      slot: '7350539224'
+      layout_key: '-6b+dr+a-e9+f0'
+      every: 6  # show one ad after every N project cards
+    photography:
+      slot: '8252557356'
+      layout_key: '-6t+ed+2i-1n-4w'
+      every: 8  # show one ad after every N photos
 
 #toc: true
 toc:

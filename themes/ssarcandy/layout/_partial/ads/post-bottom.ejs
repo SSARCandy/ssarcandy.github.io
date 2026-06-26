@@ -1,11 +1,11 @@
 <% if (theme.adsense.enable) { %>
-    <% if (theme.adsense.slot.post_bottom) { %>
+    <% if (theme.adsense.in_slot && theme.adsense.in_slot.post_bottom) { %>
         <ins class="adsbygoogle"
             style="display:block; text-align:center;"
             data-ad-layout="in-article"
             data-ad-format="fluid"
-            data-ad-client="ca-pub-1532347766435780"
-            data-ad-slot="3786040804"></ins>
+            data-ad-client="<%- theme.adsense.client %>"
+            data-ad-slot="<%- theme.adsense.in_slot.post_bottom %>"></ins>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>

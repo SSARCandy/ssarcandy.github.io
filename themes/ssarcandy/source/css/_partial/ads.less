@@ -1,19 +1,80 @@
-.ads-archive-list-desktop {
-    display: none;
+/* Long vertical (skyscraper) ad under the post table-of-contents. The TOC gutter
+   is narrow and fixed-width, so just give the ad some breathing room and align it
+   with the TOC's 16px side padding. */
+.ads-post-toc {
+    margin-top: 16px;
+    padding: 0 16px;
+    text-align: center;
 }
 
-.ads-archive-list-tablet {
-    display: none;
+/* ---------- Native in-feed ads (blend into the post / projects / photo feeds) ---
+   The ad cards reuse the surrounding card chrome — .post-list-item for the home
+   article feed, .project-list-item for the projects waterfall, .grid-item for the
+   photo masonry — so they read as part of the feed. A small "Sponsored" tag keeps
+   them distinguishable (AdSense policy), and unfilled units hide themselves so
+   there's never an empty card. */
+.ad-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #9e9e9e;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    pointer-events: none;
 }
 
-@media screen and (min-width: 1240px) {
-    .ads-archive-list-desktop {
-        display: block;
+/* Projects card: .project-list-item already gives bg/radius/shadow; add the
+   positioning context for the label, clip to the rounded corners, and a small
+   inset so the ad isn't edge-to-edge against the card border. */
+.project-ad-item {
+    position: relative;
+    overflow: hidden;
+    padding: 8px;
+    min-height: 120px;
+}
+
+/* Photo card: .grid-item already supplies bg/radius/shadow/overflow and
+   position:relative — only a placeholder height is needed before the ad fills. */
+.ad-grid-item {
+    min-height: 120px;
+}
+
+/* Archive / tag list row: match the .archive-article chrome (white sheet, bottom
+   divider, soft shadow) so the ad reads as another entry — minus the 140px date
+   gutter the real rows use. No min-height: let the ad be as short as its in-feed
+   layout renders, so a compact/horizontal unit can sit at row height. */
+.archive-ad-item {
+    position: relative;
+    padding: 15px 25px;
+    background: #fff;
+    border-bottom: 1px solid @borderColor;
+    box-shadow: 0 1px 2px rgba(151, 151, 151, 0.58);
+}
+
+@media screen and (max-width: 760px) {
+    .archive-ad-item {
+        margin: 0 16px;
+        padding: 20px;
     }
 }
 
-@media screen and (min-width: 760px) and (max-width: 1240px) {
-    .ads-archive-list-tablet {
-        display: block;
-    }
+.archive-ad-item ins.adsbygoogle,
+.project-ad-item ins.adsbygoogle,
+.ad-grid-item ins.adsbygoogle {
+    display: block;
+    width: 100%;
+}
+
+/* No ad to show: drop the whole card (and its label) rather than leave an empty
+   "Sponsored" box. AdSense marks unfilled slots with data-ad-status. */
+.archive-ad-item:has(ins[data-ad-status="unfilled"]),
+.project-ad-item:has(ins[data-ad-status="unfilled"]),
+.ad-grid-item:has(ins[data-ad-status="unfilled"]) {
+    display: none;
 }
