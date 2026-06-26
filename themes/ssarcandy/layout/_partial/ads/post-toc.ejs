@@ -1,15 +1,13 @@
 <% if (theme.adsense.enable) { %>
     <% if (theme.adsense.in_slot && theme.adsense.in_slot.post_toc) { %>
         <div class="ads-post-toc">
-            <!-- Long vertical (skyscraper) ad sized to the narrow TOC gutter.
-                 data-ad-format="vertical" makes AdSense serve tall creatives and
-                 scale them to the column width, which varies with the viewport. -->
+            <!-- Fixed 200x600 skyscraper, per the AdSense unit spec. The TOC gutter
+                 is always >=225px when the widget shows, so the fixed width fits;
+                 .ads-post-toc centers it. -->
             <ins class="adsbygoogle"
-                style="display:block"
+                style="display:inline-block;width:200px;height:600px"
                 data-ad-client="<%- theme.adsense.client %>"
-                data-ad-slot="<%- theme.adsense.in_slot.post_toc %>"
-                data-ad-format="vertical"
-                data-full-width-responsive="false"></ins>
+                data-ad-slot="<%- theme.adsense.in_slot.post_toc %>"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>

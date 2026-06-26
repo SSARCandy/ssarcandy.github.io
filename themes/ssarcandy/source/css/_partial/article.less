@@ -10,7 +10,11 @@
     // Sit above the full-width body-wrap (and its corner cap) so the TOC in the
     // right gutter isn't painted over by the content sheet's background.
     z-index: 26;
-    overflow-x: hidden;
+    // Clip both axes. With only overflow-x set, the spec computes overflow-y to
+    // `auto`, which made the whole column a scroll container and showed a
+    // scrollbar. The inner .post-toc owns the (hidden-scrollbar) scrolling, so
+    // the wrap should simply clip.
+    overflow: hidden;
     // Match the .post-widget gutter width — 20vw is wider than the gutter below
     // ~1650px, which pushed the fixed TOC (and its ad) off the right screen edge.
     width: calc(~"(100vw - 960px)/2 - 15px");
