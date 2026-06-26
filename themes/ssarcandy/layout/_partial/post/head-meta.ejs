@@ -1,3 +1,16 @@
-<time datetime="<%= date_xml(page.date) %>" itemprop="datePublished" class="page-time">
-  <%= page.date.format(config.date_format) %>
-</time>
+<span class="page-meta">
+  <span class="page-meta-item" title="publish date">
+    <i class="material-icons" aria-hidden="true">calendar_today</i>
+    <time datetime="<%= date_xml(page.date) %>" itemprop="datePublished" class="page-time">
+      <%= page.date.format(config.date_format) %>
+    </time>
+  </span>
+  <% if (is_post()) { %>
+    <span class="page-meta-item" title="page views">
+      <i class="material-icons" aria-hidden="true">bar_chart</i><%- number_format(post_pv(page.slug)) %>
+    </span>
+    <span class="page-meta-item" title="reading time">
+      <i class="material-icons" aria-hidden="true">schedule</i><%- readingTime(page.content, 'min.', 150) %>
+    </span>
+  <% } %>
+</span>

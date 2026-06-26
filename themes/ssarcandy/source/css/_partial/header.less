@@ -55,6 +55,26 @@
         color: @lightPrimaryColor;
     }
 
+    // Post meta (date + views + reading time) on one row, wrapping on narrow screens.
+    .page-meta {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px 18px;
+        font-size: 14px;
+
+        .page-meta-item {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        // Material Icons share a uniform grid, so views + read-time icons match.
+        .material-icons {
+            margin-right: 4px;
+            font-size: 16px;
+        }
+    }
+
     .article-category-list-link {
         color: lighten(@accentColor, 10%);
     }
