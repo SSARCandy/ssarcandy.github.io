@@ -127,6 +127,13 @@
             background: fade(#fff, 12%);
             color: #fff;
         }
+
+        // Drop the focus ring that lingered after a click/tap on the toggle.
+        // :focus-visible keeps a ring for keyboard users, so only pointer focus
+        // is cleared (accessibility preserved).
+        &:focus:not(:focus-visible) {
+            outline: none;
+        }
     }
 
     .nav {
