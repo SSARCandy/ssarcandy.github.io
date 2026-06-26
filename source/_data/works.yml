@@ -118,22 +118,22 @@
     - OpenCV
     - Rendering
 
-- name: nccu30
-  title: 政大三十大講堂
-  description: '「政大三十大講堂」宣傳網站。'
-  github: https://github.com/SSARCandy/nccu30
-  preview: http://140.119.24.86/
-  tags:
-    - Responsive_Web
+# - name: nccu30
+#   title: 政大三十大講堂
+#   description: '「政大三十大講堂」宣傳網站。'
+#   github: https://github.com/SSARCandy/nccu30
+#   preview: http://140.119.24.86/
+#   tags:
+#     - Responsive_Web
 
-- name: ExchangeWorld
-  title: ExchangeWorld
-  description: '"Exchange your preloved with people locally and personally." A location based social-website built with Angularjs and Nodejs.'
-  github: https://github.com/ExchangeWorld/ExchangeWorld
-  preview: http://exwd.csie.org/
-  tags:
-    - Responsive_Web
-    - Angular.js
+# - name: ExchangeWorld
+#   title: ExchangeWorld
+#   description: '"Exchange your preloved with people locally and personally." A location based social-website built with Angularjs and Nodejs.'
+#   github: https://github.com/ExchangeWorld/ExchangeWorld
+#   preview: http://exwd.csie.org/
+#   tags:
+#     - Responsive_Web
+#     - Angular.js
 
 - name: Ultimate-Shooting-Flappy-Bird
   title: Ultimate Shooting Flappy Bird
@@ -166,14 +166,14 @@
     - OpenCV
     - Computer_Vision
 
-- name: slack-for-APOD
-  title: slack-bot for APOD
-  description: 'A Slack-bot that can post "Astronomy Picture of the Day" article into Slack channel.'
-  github: https://github.com/SSARCandy/slack-for-APOD
-  preview: http://ssarcandy.tw/slack-for-APOD/
-  download: https://github.com/SSARCandy/slack-for-APOD/archive/v1.0.0.zip
-  tags:
-    - Node.js
+# - name: slack-for-APOD
+#   title: slack-bot for APOD
+#   description: 'A Slack-bot that can post "Astronomy Picture of the Day" article into Slack channel.'
+#   github: https://github.com/SSARCandy/slack-for-APOD
+#   preview: http://ssarcandy.tw/slack-for-APOD/
+#   download: https://github.com/SSARCandy/slack-for-APOD/archive/v1.0.0.zip
+#   tags:
+#     - Node.js
 
 - name: node-apod
   title: node-apod
@@ -193,14 +193,14 @@
     - C#
     - Game
 
-- name: 3D-Hits-the-mole
-  title: 3D 打地鼠
-  description: '將可愛又堪稱經典的打地鼠遊戲擴展到三維空間，並且在不失其易上手性的前提下豐富遊戲內容。使用 Unity 開發，能夠快速發佈至 Desktop, Android, iOS 三平台。'
-  github: https://github.com/seal789ie/3D-Hits-the-mole
-  tags:
-    - C#
-    - Unity
-    - Game
+# - name: 3D-Hits-the-mole
+#   title: 3D 打地鼠
+#   description: '將可愛又堪稱經典的打地鼠遊戲擴展到三維空間，並且在不失其易上手性的前提下豐富遊戲內容。使用 Unity 開發，能夠快速發佈至 Desktop, Android, iOS 三平台。'
+#   github: https://github.com/seal789ie/3D-Hits-the-mole
+#   tags:
+#     - C#
+#     - Unity
+#     - Game
 
 - name: colorblocks-console
   title: ColorBlocks
