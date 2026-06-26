@@ -1,11 +1,21 @@
 'use strict';
+const fs = require('fs');
+const path = require('path');
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
+
+// Service-account key at the repo root (gitignored). Pass it to the client
+// explicitly so this runs cross-platform — no bash-only `GOOGLE_APPLICATION_
+// CREDENTIALS=... node` env prefix (which fails in Windows cmd). Falls back to
+// Application Default Credentials (e.g. the env var on CI) if the file is absent.
+const keyFile = path.resolve(__dirname, '../hexo-pv-c7938b2e210b.json');
 
 const property = 'properties/323014967';
 const startDate = '2016-07-20';
 
 async function runReport() {
-  const analyticsDataClient = new BetaAnalyticsDataClient();
+  const analyticsDataClient = new BetaAnalyticsDataClient(
+    fs.existsSync(keyFile) ? { keyFilename: keyFile } : {}
+  );
   const [response] = await analyticsDataClient.runReport({
     property,
     dateRanges: [{

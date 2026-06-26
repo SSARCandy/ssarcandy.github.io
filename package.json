@@ -6,7 +6,7 @@
     "start": "hexo server -s",
     "build": "npm-run-all build:*",
     "build:flickr": "node ./helper/fetch_flickr_photos.js",
-    "build:pageview": "GOOGLE_APPLICATION_CREDENTIALS='./hexo-pv-c7938b2e210b.json' node ./helper/ga_pageview.js > pageview.json",
+    "build:pageview": "node ./helper/ga_pageview.js > pageview.json",
     "build:vite": "vite build",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
@@ -20,14 +20,12 @@
     "version": "7.3.0"
   },
   "dependencies": {
-    "@google-analytics/data": "^3.2.1",
+    "@google-analytics/data": "^6.1.0",
     "hexo": "^7.3.0",
     "hexo-clean-css": "^2.0.0",
     "hexo-cli": "^4.3.2",
-    "hexo-deployer-git": "4.0.0",
     "hexo-filter-mathjax": "0.9.0",
     "hexo-generator-archive": "2.0.0",
-    "hexo-generator-category": "2.0.0",
     "hexo-generator-feed": "^4.0.0",
     "hexo-generator-index": "^4.0.0",
     "hexo-generator-json-content": "4.2.3",
@@ -38,17 +36,15 @@
     "hexo-renderer-ejs": "2.0.0",
     "hexo-renderer-less": "4.0.0",
     "hexo-renderer-marked": "^7.0.1",
-    "hexo-renderer-stylus": "^3.0.1",
-    "hexo-server": "3.0.0",
     "hexo-tag-photozoom": "^1.0.2",
-    "hexo-util": "^4.0.0",
-    "lodash": "^4.17.21",
     "lunr": "^2.3.9",
     "node-waves": "^0.7.6"
   },
   "devDependencies": {
     "eslint": "^8.38.0",
     "hexo-browsersync": "^0.3.0",
+    "hexo-deployer-git": "4.0.0",
+    "hexo-server": "3.0.0",
     "npm-run-all": "^4.1.5",
     "vite": "^6.0.0"
   }
