@@ -102,6 +102,16 @@
     - ResponsiveWeb
     - Game
 
+- name: telescope-model
+  title: 3D Telescope Simulator
+  description: A complete 3D Telescope (with equatorial) simulator written in OpenGL. Also port to WebGL with three.js.
+  github: https://github.com/SSARCandy/Telescope-Simulator
+  preview: https://ssarcandy.tw/Telescope-Simulator/web/
+  youtube: https://www.youtube.com/watch?v=4K1NK4ALQOY
+  tags:
+    - C++
+    - Rendering
+
 - name: ssarcandy-vim
   title: ssarcandy-vim
   description: 'My vim settings and plugins, compatible with MacVim in OSX.'
@@ -147,15 +157,6 @@
   tags:
     - C++
     - Game
-
-- name: telescope-model
-  title: 3D Telescope Simulator
-  description: A complete 3D Telescope (with equatorial) simulator written in OpenGL.
-  github: https://github.com/SSARCandy/openGL_Telescope_Model
-  youtube: https://www.youtube.com/watch?v=4K1NK4ALQOY
-  tags:
-    - C++
-    - Rendering
 
 - name: n-puzzle-solver-with-CV
   title:  N-puzzle Solver with CV
