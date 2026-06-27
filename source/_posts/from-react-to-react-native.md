@@ -3,7 +3,6 @@ title: From React to React Native
 date: 2017-02-02 11:04:00
 tags:
 - react
-- react native
 image: /img/2017-02-02/03.png
 ---
 

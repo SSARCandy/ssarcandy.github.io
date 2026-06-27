@@ -4,7 +4,6 @@ date: 2017-10-31 21:18:50
 tags:
 - paper
 - python
-- pytorch
 - machine learning
 mathjax: true
 ---

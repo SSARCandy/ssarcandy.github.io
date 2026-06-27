@@ -2,7 +2,7 @@
 title: vdb - Debugging visual programs
 date: 2016-10-13 20:34:53
 tags:
-- pbrt
+- rendering
 - c++
 image: /img/2016-10-13/2.png
 ---

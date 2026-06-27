@@ -2,7 +2,6 @@
 title: Setup CouchDB Cluster using Docker Swarm
 date: 2021-01-26 03:36:10
 tags:
-- docker
 - unix
 ---
 

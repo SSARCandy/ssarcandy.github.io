@@ -2,7 +2,7 @@
 title: 用 Facebook 聊天機器人當通知系統
 date: 2016-11-17 19:57:17
 tags: 
-- nodejs
+- javascript
 - unix
 - automation
 image: /img/2016-11-17/1.png

@@ -4,7 +4,6 @@ date: 2016-07-23 00:46:45
 tags: 
 - note
 - opencv
-- cmake
 image: /img/2016-07-23/2.png
 ---
 

@@ -2,7 +2,6 @@
 title: Light Field Camera
 date: 2017-01-18 19:04:29
 tags:
-- pbrt
 - rendering
 - python
 - c++

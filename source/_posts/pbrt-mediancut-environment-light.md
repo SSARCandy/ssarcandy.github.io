@@ -3,7 +3,6 @@ title: pbrt - 用多點光源模擬環境光
 date: 2016-12-18 01:45:08
 tags:
 - rendering
-- pbrt
 - c++
 image: /img/2016-12-18/2.jpg
 ---

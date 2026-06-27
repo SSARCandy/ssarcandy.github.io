@@ -3,7 +3,6 @@ title: Realistic camera in pbrt
 date: 2016-11-9 13:14:41
 tags:
 - rendering
-- pbrt
 - c++
 image: /img/2016-11-09/07.png
 mathjax: true

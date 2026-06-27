@@ -4,7 +4,7 @@ date: 2017-09-27 22:17:32
 tags:
 - unix
 - python
-- pytorch
+- machine learning
 - note
 ---
 
