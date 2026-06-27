@@ -1,5 +1,10 @@
+<%
+// Reserve the image's height before it loads (build-time intrinsic ratio) so the
+// client-side Masonry grid lays out with no reflow, mirroring the photography card.
+var __aspect = project_image_aspect(project.name, project.img_ext);
+%>
 <article class="article project-item" itemprop="blogPost">
-    <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
+    <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom"<% if (__aspect) { %> style="aspect-ratio: <%= __aspect %>;"<% } %>>
 
     <div class="project-item-details">
         <%- partial('./project-title') %>
