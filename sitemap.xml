@@ -20,15 +20,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/photography/index.html</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/projects/index.html</loc>
     
     <lastmod>2026-06-27</lastmod>
@@ -38,34 +29,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
+    <loc>https://ssarcandy.tw/photography/index.html</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -75,6 +39,15 @@
   
   <url>
     <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -101,15 +74,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2020/01/29/timing-attack/</loc>
     
     <lastmod>2026-06-27</lastmod>
@@ -128,16 +92,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
+    <loc>https://ssarcandy.tw/2026/04/18/twse-auto-evoting/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -147,6 +102,15 @@
   
   <url>
     <loc>https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/08/17/vim-plugin-manager/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -182,7 +146,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
+    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -191,7 +155,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/12/25/MSAuto/</loc>
+    <loc>https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -227,7 +191,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/03/19/Setup-x11-forwarding-on-Debian/</loc>
+    <loc>https://ssarcandy.tw/2019/03/16/Setup-Slurm-Cluster/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -236,7 +200,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2019/03/16/Setup-Slurm-Cluster/</loc>
+    <loc>https://ssarcandy.tw/2017/03/19/Setup-x11-forwarding-on-Debian/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -326,15 +290,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
-    
-    <lastmod>2026-06-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2019/10/02/game-design-from-perspective-of-hacker/</loc>
     
     <lastmod>2026-06-27</lastmod>
@@ -344,7 +299,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/</loc>
+    <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -362,7 +317,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2018/08/17/mbpr2015-repair/</loc>
+    <loc>https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -380,6 +335,15 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2018/08/17/mbpr2015-repair/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
     
     <lastmod>2026-06-27</lastmod>
@@ -389,7 +353,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</loc>
+    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -398,7 +362,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
+    <loc>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -426,6 +390,42 @@
   
   <url>
     <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
+    
+    <lastmod>2026-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
     
     <lastmod>2026-06-27</lastmod>
     
@@ -508,13 +508,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/tags/python/</loc>
-    <lastmod>2026-06-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/tags/trashtalk/</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -523,6 +516,13 @@
   
   <url>
     <loc>https://ssarcandy.tw/tags/automation/</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/tags/python/</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
