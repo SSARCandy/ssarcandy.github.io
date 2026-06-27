@@ -5,8 +5,6 @@
   img_ext: .gif
   tags:
     - Lua
-    - RIME
-    - iOS
 
 - name: firstrade-api-node
   title: Firstrade API (Node.js)
@@ -16,8 +14,6 @@
   img_ext: .png
   tags:
     - Node.js
-    - TypeScript
-    - Finance
 
 - name: TWSE-eVoting
   title: TWSE Auto eVoting
@@ -27,8 +23,6 @@
   img_ext: .png
   tags:
     - Node.js
-    - Electron
-    - Automation
 
 - name: ini-cpp
   title: INI C++ Parser
@@ -65,7 +59,6 @@
   preview: https://ssarcandy.tw/DeepCORAL/
   tags:
     - Python
-    - PyTorch
     - MachineLearning
 
 - name: Coherent-Line-Drawing
@@ -96,7 +89,7 @@
   preview: https://ssarcandy.tw/colorblocks-react-native/
   download: https://play.google.com/store/apps/details?id=com.colorblocksrn
   tags:
-    - ReactNative
+    - React
     - Game
 
 - name: colorblocks-react
@@ -105,7 +98,7 @@
   github: https://github.com/SSARCandy/colorblocks-react
   preview: https://ssarcandy.tw/colorblocks-react/
   tags:
-    - React.js
+    - React
     - ResponsiveWeb
     - Game
 
@@ -153,7 +146,6 @@
   download: https://github.com/SSARCandy/Ultimate-Shooting-Flappy-Bird/releases/download/v1.0.0/windows_executable.zip
   tags:
     - C++
-    - OpenGL
     - Game
 
 - name: telescope-model
@@ -163,7 +155,6 @@
   youtube: https://www.youtube.com/watch?v=4K1NK4ALQOY
   tags:
     - C++
-    - OpenGL
     - Rendering
 
 - name: n-puzzle-solver-with-CV
@@ -174,7 +165,6 @@
   tags:
     - C++
     - OpenCV
-    - ComputerVision
 
 # - name: slack-for-APOD
 #   title: slack-bot for APOD
