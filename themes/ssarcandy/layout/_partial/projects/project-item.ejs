@@ -1,12 +1,5 @@
 <article class="article project-item" itemprop="blogPost">
-    <div class="project-responsive-container">
-        <div class="project-dummy"></div>
-
-        <div class="project-img-container">
-            <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
-            <div class="project-centerer"></div>
-        </div>
-    </div>
+    <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom">
 
     <div class="project-item-details">
         <%- partial('./project-title') %>
