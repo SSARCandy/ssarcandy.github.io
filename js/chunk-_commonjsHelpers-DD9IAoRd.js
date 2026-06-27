@@ -1,0 +1,1 @@
+function l(e){for(const t of document.getElementsByClassName("article-tag-list-link"))t.classList.toggle("active-tag",t.innerText===e)}var o=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{};function n(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}export{o as c,n as g,l as h};
