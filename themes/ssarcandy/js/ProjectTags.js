@@ -1,90 +1,116 @@
 import lunr from 'lunr';
-import { addClass, removeClass,highlightActiveTag } from './Helper';
+import { highlightActiveTag } from './Helper';
 
-const elements = document.getElementsByClassName('plugin');
+const VISIBLE_CLASS = 'on';
+// Single source of truth for the column-count breakpoint (mirrors projectlist.less).
+const MOBILE_QUERY = window.matchMedia('(max-width: 760px)');
+
 const $input = document.getElementById('plugin-search-input');
-const elementLen = elements.length;
 const index = lunr.Index.load(window.SEARCH_INDEX);
 
-// In-feed ads are interleaved every N project cards. They aren't `.plugin` items
-// (the lunr index maps to .plugin by position), so the filter can't manage them.
-// After each filter we re-interleave a proportional number of ads — one per N
-// visible projects, capped by how many ad units exist — among the results, instead
-// of leaving every ad stranded at its original fixed position.
+// Stable, original-order snapshot of the project cards. Captured ONCE, before the
+// masonry below reshuffles the DOM, so a lunr ref (an index into site.data.projects)
+// keeps mapping to cards[ref]. getElementsByClassName is live + document-order, so it
+// must be frozen to an array before any node moves.
+const cards = [...document.getElementsByClassName('plugin')];
+
+// In-feed ads sit outside the .plugin filter set (the lunr index maps to .plugin by
+// position). We show a proportional number — one per AD_EVERY visible cards, capped
+// by how many ad units were actually rendered.
 const projectList = document.querySelector('.project-list');
-const AD_EVERY = parseInt(projectList && projectList.dataset.adEvery, 10) || 0;
-const adNodes = [...document.getElementsByClassName('project-ad-item')];
+const AD_EVERY = parseInt(projectList.dataset.adEvery, 10) || 0;
+const ads = [...document.getElementsByClassName('project-ad-item')];
 
-function layoutAds() {
-  if (!AD_EVERY || !adNodes.length) return;
+const tagFromHash = () => decodeURIComponent(location.hash.slice(1));
 
-  const visible = [];
-  for (let i = 0; i < elementLen; i++) {
-    if (elements[i].classList.contains('on')) visible.push(elements[i]);
-  }
-
-  const wanted = Math.min(Math.floor(visible.length / AD_EVERY), adNodes.length);
-  for (let k = 0; k < adNodes.length; k++) {
-    const ad = adNodes[k];
-    if (k < wanted) {
-      // Move the ad right after every AD_EVERY-th visible project. Reordering ads
-      // (not .plugin items) keeps the lunr index → element mapping intact.
-      const anchor = visible[(k + 1) * AD_EVERY - 1];
-      anchor.parentNode.insertBefore(ad, anchor.nextSibling);
-      ad.style.display = '';
-    } else {
-      ad.style.display = 'none';
-    }
-  }
+function createDiv(className) {
+  const node = document.createElement('div');
+  node.className = className;
+  return node;
 }
 
-function search(value) {
-  const result = index.search(value);
-  const len = result.length;
-  const selected = {};
-  let i = 0;
+// Masonry scaffold: a flex row of columns, plus an off-screen attic that holds
+// whatever isn't currently placed (filtered-out cards, unused ads) so stale nodes
+// don't linger in the layout.
+const masonry = createDiv('project-masonry');
+const attic = createDiv('project-attic');
+attic.style.display = 'none';
+projectList.append(masonry, attic);
 
-  for (i = 0; i < len; i++) {
-    selected[result[i].ref] = true;
-  }
+let columns = [];
 
-  for (i = 0; i < elementLen; i++) {
-    if (selected[i]) {
-      addClass(elements[i], 'on');
-    } else {
-      removeClass(elements[i], 'on');
-    }
-  }
-
-  layoutAds();
+function ensureColumns(count) {
+  if (columns.length === count) return;
+  masonry.textContent = '';
+  columns = Array.from({ length: count }, () => {
+    const col = createDiv('project-column');
+    masonry.appendChild(col);
+    return col;
+  });
 }
 
-function displayAll() {
-  for (let i = 0; i < elementLen; i++) {
-    addClass(elements[i], 'on');
-  }
+// Lay out the visible cards. They're streamed in source order (ads spliced in after
+// every AD_EVERY-th card) and dealt round-robin across the columns, so reading
+// row-by-row follows source order (1 2 / 3 4 / …) while each column still packs as a
+// tight waterfall.
+function render() {
+  ensureColumns(MOBILE_QUERY.matches ? 1 : 2);
 
-  layoutAds();
+  const visible = cards.filter((card) => card.classList.contains(VISIBLE_CLASS));
+  const adQuota = AD_EVERY ? Math.min(Math.floor(visible.length / AD_EVERY), ads.length) : 0;
+
+  const stream = [];
+  let adsPlaced = 0;
+  visible.forEach((card, i) => {
+    stream.push(card);
+    if (adsPlaced < adQuota && (i + 1) % AD_EVERY === 0) {
+      stream.push(ads[adsPlaced++]);
+    }
+  });
+  stream.forEach((node, i) => columns[i % columns.length].appendChild(node));
+
+  // Park whatever wasn't placed so it leaves the layout cleanly.
+  cards.forEach((card) => {
+    if (!card.classList.contains(VISIBLE_CLASS)) attic.appendChild(card);
+  });
+  ads.slice(adsPlaced).forEach((ad) => attic.appendChild(ad));
+}
+
+// Show the cards matching `query` (a lunr search term or a tag); an empty query shows
+// all. Then re-lay out the columns.
+function applyFilter(query) {
+  const term = query.trim();
+  const matches = term ? new Set(index.search(term).map((hit) => Number(hit.ref))) : null;
+  cards.forEach((card, i) => {
+    card.classList.toggle(VISIBLE_CLASS, !matches || matches.has(i));
+  });
+  render();
 }
 
 function hashchange() {
-  const hash = location.hash.substring(1);
-  $input.value = hash;
-
-  if (hash) {
-    highlightActiveTag(hash);
-    search(hash);
-  } else {
-    displayAll();
-  }
+  const tag = tagFromHash();
+  $input.value = tag;
+  highlightActiveTag(tag); // '' clears every active-tag
+  applyFilter(tag);
 }
 
-$input.addEventListener('input', function () {
-  const value = this.value;
+// Toggle behaviour: clicking the already-active tag clears the filter. Its href
+// equals the current hash, so the click wouldn't fire `hashchange` on its own —
+// intercept it, drop the hash (without leaving a stray `#`) and re-render.
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('.article-tag-list-link');
+  if (!link) return;
 
-  if (!value) return displayAll();
-  search(value);
+  const tag = decodeURIComponent(link.getAttribute('href').slice(1));
+  if (tag !== tagFromHash()) return;
+
+  e.preventDefault();
+  history.pushState('', document.title, location.pathname + location.search);
+  hashchange();
 });
 
+$input.addEventListener('input', () => applyFilter($input.value));
 window.addEventListener('hashchange', hashchange);
+MOBILE_QUERY.addEventListener('change', render); // re-deal when the column count flips
+
 hashchange();

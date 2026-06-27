@@ -2,14 +2,23 @@
     display: none;
 }
 
-/* ---------- Projects: 2-column waterfall (CSS multi-column) ----------
-   Cards are vertical (image on top, details below) and kept whole within a
-   column via break-inside. Collapses to a single column on small screens.
-   The fixed-aspect image box reserves height before images load, so the
-   columns don't reflow as images arrive — no JS masonry needed. */
-.project-list {
-    column-count: 2;
-    column-gap: 20px;
+/* ---------- Projects: horizontal-order waterfall (JS masonry) ----------
+   CSS multi-column fills *vertically* (1 4 7 / 2 5 8 …). To read in source
+   order across rows (1 2 / 3 4 / …) while still packing each column tightly,
+   ProjectTags.js builds the `.project-masonry` flex row below and distributes
+   cards round-robin (card i → column i % N). Pre-JS fallback: cards stack in a
+   single column as direct children of `.project-list`.
+   The fixed-aspect image box reserves height before images load, so columns
+   don't reflow as images arrive. */
+.project-masonry {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start; /* let columns size to their own content */
+}
+
+.project-column {
+    flex: 1 1 0;
+    min-width: 0; /* allow columns to shrink below content's intrinsic width */
 }
 
 .project-list-item {
@@ -17,8 +26,6 @@
     background: @cardBg;
     border-radius: 4px;
     box-shadow: @cardShadow;
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
     // No overflow:hidden here: the click-to-zoom (zoom.js transforms the image
     // to viewport center in place) must not be clipped by the card. The image
     // rounds its own top corners instead.
@@ -123,8 +130,3 @@
     }
 }
 
-@media screen and (max-width:760px) {
-    .project-list {
-        column-count: 1;
-    }
-}
