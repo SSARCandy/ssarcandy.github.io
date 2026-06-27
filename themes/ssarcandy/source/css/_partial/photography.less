@@ -44,7 +44,7 @@
 }
 .sort-label {
     font-size: 13px;
-    color: #727272;
+    color: @secondaryTextColor;
 }
 .sort-btn {
     background: #f5f5f5;
@@ -64,9 +64,9 @@
     background: #eeeeee;
 }
 .view-btn.active, .sort-btn.active {
-    background: #673AB7;
+    background: @primaryColor;
     color: #fff !important;
-    border-color: #673AB7;
+    border-color: @primaryColor;
 }
 .photography-grid {
     margin: 0 auto;
@@ -82,7 +82,7 @@
     overflow: hidden;
     border-radius: 4px;
     opacity: 0;
-    background: #fff;
+    background: @cardBg;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: opacity 0.4s ease-in, box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -256,7 +256,7 @@
 .material-popup-content {
     padding: 12px;
     text-align: center;
-    background: #fff;
+    background: @cardBg;
 }
 .material-popup-title {
     text-decoration: none;
@@ -273,7 +273,7 @@
     transition: color 0.2s ease;
 }
 .material-popup-title:hover {
-    color: #673AB7;
+    color: @primaryColor;
 }
 
 /* ---------------------------------------------------
@@ -344,7 +344,7 @@
     position: absolute;
     top: -8px;
     right: -8px;
-    background: #673AB7;
+    background: @primaryColor;
     color: white;
     font-size: 12px;
     font-weight: 700;
@@ -404,7 +404,7 @@
     position: absolute;
     top: 0; left: 0;
     height: 2px;
-    background: rgba(103, 58, 183, 0.6);
+    background: fade(@primaryColor, 60%);
     transform-origin: 0 50%;
     transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     width: 0;
