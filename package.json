@@ -36,7 +36,7 @@
     "hexo-renderer-ejs": "2.0.0",
     "hexo-renderer-less": "4.0.0",
     "hexo-renderer-marked": "^7.0.1",
-    "hexo-tag-photozoom": "^1.0.2",
+    "hexo-tag-photozoom": "^1.0.3",
     "lunr": "^2.3.9",
     "node-waves": "^0.7.6"
   },
