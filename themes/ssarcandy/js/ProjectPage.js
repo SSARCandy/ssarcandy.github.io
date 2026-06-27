@@ -1,2 +1,1 @@
-import './Helper';
 import './ProjectTags';
