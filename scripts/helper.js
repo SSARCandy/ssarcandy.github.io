@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { imageSize } = require('image-size');
 
 let pageview = { visitor_count: 0, pv_map: {} };
 try {
@@ -38,6 +39,29 @@ hexo.extend.helper.register('flickr_photos', () => {
     console.warn('flickr_photos.json not found or invalid; photography grid will be empty.');
     return [];
   }
+});
+
+// Intrinsic dimensions of a local /projects card image, returned as a CSS
+// `aspect-ratio` value ("640 / 480") so the card can reserve the image's height
+// before it loads — letting the client-side Masonry on /projects lay out on the
+// first paint with no reflow (the same height-reservation the photography grid
+// already gets from Flickr's width/height). Read once per file and cached (the
+// images are static build inputs). Degrades to '' on a missing/unreadable file
+// so the card simply gets no reservation rather than the build failing.
+const PROJECT_IMG_DIR = path.join(__dirname, '../source/img/projects');
+const aspectCache = new Map();
+hexo.extend.helper.register('project_image_aspect', (name, ext) => {
+  const file = name + (ext || '.jpg');
+  if (aspectCache.has(file)) return aspectCache.get(file);
+  let ratio = '';
+  try {
+    const { width, height } = imageSize(fs.readFileSync(path.join(PROJECT_IMG_DIR, file)));
+    if (width && height) ratio = `${width} / ${height}`;
+  } catch (e) {
+    console.warn(`project image ${file} not found or unreadable; card will have no aspect-ratio.`);
+  }
+  aspectCache.set(file, ratio);
+  return ratio;
 });
 
 /**

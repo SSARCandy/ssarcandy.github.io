@@ -9,6 +9,7 @@ var __n = 0;
 %>
 <ul class="post-list project-list"<% if (__every) { %> data-ad-every="<%= __every %>"<% } %>>
   <input type="search" id="plugin-search-input" placeholder="Search">
+  <li class="project-grid-sizer"></li>
 
   <% for (i in site.data.projects) { %>
     <li class="project-list-item plugin on">
@@ -28,4 +29,6 @@ var __n = 0;
 window.SEARCH_INDEX = <%- lunr_index(site.data.projects) %>;
 </script>
 
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
 <script src="<%- url_for('js/projectPage.bundle.js') %>" type="module"></script>

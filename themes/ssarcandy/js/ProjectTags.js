@@ -1,17 +1,16 @@
+/* global Masonry, imagesLoaded */
 import lunr from 'lunr';
 import { highlightActiveTag } from './Helper';
 
 const VISIBLE_CLASS = 'on';
-// Single source of truth for the column-count breakpoint (mirrors projectlist.less).
-const MOBILE_QUERY = window.matchMedia('(max-width: 760px)');
 
 const $input = document.getElementById('plugin-search-input');
 const index = lunr.Index.load(window.SEARCH_INDEX);
 
 // Stable, original-order snapshot of the project cards. Captured ONCE, before the
-// masonry below reshuffles the DOM, so a lunr ref (an index into site.data.projects)
-// keeps mapping to cards[ref]. getElementsByClassName is live + document-order, so it
-// must be frozen to an array before any node moves.
+// masonry below reorders the DOM, so a lunr ref (an index into site.data.projects)
+// keeps mapping to cards[ref]. getElementsByClassName is live + document-order, so
+// it must be frozen to an array before any node moves.
 const cards = [...document.getElementsByClassName('plugin')];
 
 // In-feed ads sit outside the .plugin filter set (the lunr index maps to .plugin by
@@ -23,39 +22,35 @@ const ads = [...document.getElementsByClassName('project-ad-item')];
 
 const tagFromHash = () => decodeURIComponent(location.hash.slice(1));
 
-function createDiv(className) {
-  const node = document.createElement('div');
-  node.className = className;
-  return node;
-}
-
-// Masonry scaffold: a flex row of columns, plus an off-screen attic that holds
-// whatever isn't currently placed (filtered-out cards, unused ads) so stale nodes
-// don't linger in the layout.
-const masonry = createDiv('project-masonry');
-const attic = createDiv('project-attic');
+// Off-screen attic holding whatever isn't currently placed (filtered-out cards,
+// unused ads) so stale nodes don't linger in the masonry layout.
+const attic = document.createElement('div');
 attic.style.display = 'none';
-projectList.append(masonry, attic);
+projectList.parentNode.appendChild(attic);
 
-let columns = [];
+// Masonry over the rendered cards. Each card reserves its image height via the
+// build-time aspect-ratio (project-item.ejs) and its text is already in the DOM,
+// so the grid lays out correctly on the first paint — the same approach the
+// photography grid uses. Built below once the libraries are ready.
+let masonry = null;
 
-function ensureColumns(count) {
-  if (columns.length === count) return;
-  masonry.textContent = '';
-  columns = Array.from({ length: count }, () => {
-    const col = createDiv('project-column');
-    masonry.appendChild(col);
-    return col;
-  });
+function relayout() {
+  if (masonry) masonry.layout();
 }
 
-// Lay out the visible cards. They're streamed in source order (ads spliced in after
-// every AD_EVERY-th card) and dealt round-robin across the columns, so reading
-// row-by-row follows source order (1 2 / 3 4 / …) while each column still packs as a
-// tight waterfall.
-function render() {
-  ensureColumns(MOBILE_QUERY.matches ? 1 : 2);
+// Re-run the layout once an in-feed ad fills and changes height, so the cards
+// around it reflow to its final size instead of leaving a gap.
+let adObserver = null;
+function observeAd(adNode) {
+  if (typeof ResizeObserver === 'undefined') return;
+  if (!adObserver) adObserver = new ResizeObserver(() => relayout());
+  adObserver.observe(adNode);
+}
 
+// Lay out the visible cards in source order — ads spliced in after every
+// AD_EVERY-th card — then re-run masonry so it packs them as a tight waterfall.
+// Anything filtered out is parked in the attic so it leaves the layout cleanly.
+function render() {
   const visible = cards.filter((card) => card.classList.contains(VISIBLE_CLASS));
   const adQuota = AD_EVERY ? Math.min(Math.floor(visible.length / AD_EVERY), ads.length) : 0;
 
@@ -63,21 +58,23 @@ function render() {
   let adsPlaced = 0;
   visible.forEach((card, i) => {
     stream.push(card);
-    if (adsPlaced < adQuota && (i + 1) % AD_EVERY === 0) {
-      stream.push(ads[adsPlaced++]);
-    }
+    if (adsPlaced < adQuota && (i + 1) % AD_EVERY === 0) stream.push(ads[adsPlaced++]);
   });
-  stream.forEach((node, i) => columns[i % columns.length].appendChild(node));
 
-  // Park whatever wasn't placed so it leaves the layout cleanly.
-  cards.forEach((card) => {
-    if (!card.classList.contains(VISIBLE_CLASS)) attic.appendChild(card);
-  });
+  // Re-append in the new order (the .grid-sizer stays put as the first child),
+  // then park whatever wasn't placed.
+  stream.forEach((node) => projectList.appendChild(node));
+  cards.forEach((card) => { if (!card.classList.contains(VISIBLE_CLASS)) attic.appendChild(card); });
   ads.slice(adsPlaced).forEach((ad) => attic.appendChild(ad));
+
+  if (masonry) {
+    masonry.reloadItems();
+    masonry.layout();
+  }
 }
 
-// Show the cards matching `query` (a lunr search term or a tag); an empty query shows
-// all. Then re-lay out the columns.
+// Show the cards matching `query` (a lunr search term or a tag); an empty query
+// shows all. Then re-lay out the grid.
 function applyFilter(query) {
   const term = query.trim();
   const matches = term ? new Set(index.search(term).map((hit) => Number(hit.ref))) : null;
@@ -111,6 +108,22 @@ document.addEventListener('click', (e) => {
 
 $input.addEventListener('input', () => applyFilter($input.value));
 window.addEventListener('hashchange', hashchange);
-MOBILE_QUERY.addEventListener('change', render); // re-deal when the column count flips
+window.addEventListener('resize', relayout); // re-pack when the column width flips
 
+// Build the grid, lay out the initial (hash-driven) filter, then watch the ads.
+masonry = new Masonry(projectList, {
+  itemSelector: '.project-list-item',
+  columnWidth: '.project-grid-sizer',
+  percentPosition: true,
+  gutter: 20,
+  transitionDuration: 0,
+});
 hashchange();
+ads.forEach(observeAd);
+
+// Safety nets for heights that settle after the first paint and would otherwise
+// leave the masonry overlapping: images decoding (any card lacking a reserved
+// aspect-ratio) and the self-hosted Roboto webfont swapping in, which can change
+// the description text's height. Both just trigger a relayout.
+imagesLoaded(projectList).on('progress', relayout);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);

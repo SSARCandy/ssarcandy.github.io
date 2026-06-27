@@ -2,23 +2,30 @@
     display: none;
 }
 
-/* ---------- Projects: horizontal-order waterfall (JS masonry) ----------
-   CSS multi-column fills *vertically* (1 4 7 / 2 5 8 …). To read in source
-   order across rows (1 2 / 3 4 / …) while still packing each column tightly,
-   ProjectTags.js builds the `.project-masonry` flex row below and distributes
-   cards round-robin (card i → column i % N). Pre-JS fallback: cards stack in a
-   single column as direct children of `.project-list`.
-   Card images keep their natural aspect ratio, so column heights pack
-   organically (and may shift as images load). */
-.project-masonry {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start; /* let columns size to their own content */
+/* ---------- Projects: Masonry waterfall ----------
+   ProjectTags.js runs Masonry over these cards (itemSelector `.project-list-item`,
+   columnWidth `.project-grid-sizer`), the same library the photography grid uses —
+   but on project-specific class names, NOT photography's `.grid-item` (whose
+   opacity:0 reveal and overflow:hidden would hide these cards and clip the
+   click-to-zoom). Each card reserves its image height via a build-time
+   `aspect-ratio` (project-item.ejs) and its text is server-rendered, so the grid
+   packs correctly on the first paint. Two columns above 760px, one below; pre-JS
+   the floated cards still flow two-up before Masonry takes over. */
+.project-list .project-grid-sizer,
+.project-list .project-list-item {
+    width: calc(50% - 10px); /* 2 columns with a 20px gutter (Masonry gutter: 20) */
 }
 
-.project-column {
-    flex: 1 1 0;
-    min-width: 0; /* allow columns to shrink below content's intrinsic width */
+.project-list .project-list-item {
+    float: left;
+}
+
+@media screen and (max-width:760px) {
+    .project-list .project-grid-sizer,
+    .project-list .project-list-item {
+        width: 100%;
+        float: none;
+    }
 }
 
 .project-list-item {
