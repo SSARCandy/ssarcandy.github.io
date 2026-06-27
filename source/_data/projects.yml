@@ -1,3 +1,13 @@
+- name: hamster-bopomofo_t9
+  title: iOS T9 注音模糊輸入法
+  description: '⌨️ 九宮格注音輸入法，支援模糊注音輸入。使用 RIME 輸入法框架，並以 Lua 撰寫輸入法引擎。適用於 iOS Hamster 輸入法。'
+  github: https://github.com/SSARCandy/hamster-bopomofo_t9
+  img_ext: .gif
+  tags:
+    - Lua
+    - RIME
+    - iOS
+
 - name: firstrade-api-node
   title: Firstrade API (Node.js)
   description: '📈 Unofficial Node.js version of Firstrade API, providing programmatic access to accounts, data, orders, and quotes.'
