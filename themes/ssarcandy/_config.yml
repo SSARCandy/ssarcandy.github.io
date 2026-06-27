@@ -81,7 +81,7 @@ adsense:
   in_feed:
     post_list:          # native ad in the home post list (index)
       slot: '9564236655'
-      layout_key: '-59+c5-1d-6f+vm'
+      layout_key: '-5l+cv+1h-cb+ei'
       every: 5  # show one ad after every N posts (pages hold per_page:5, so keep <=5)
     archive:            # native ad in the archive / tag listings (replaces the old archive_list banner)
       slot: '9607634530'
