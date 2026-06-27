@@ -12,7 +12,7 @@
         menuItem = theme.menu[i];
       %>
         <li class="nav-item<% if (isActive(menuItem)) { %> active<% } %>">
-          <a href="<%- url_for(menuItem.url) %>" <% if (menuItem.target) { %> target="_blank" rel="noopener" <% } if (menuItem.turbo === false ) { %> data-turbolinks="false" <% } %> >
+          <a href="<%- url_for(menuItem.url) %>" <% if (menuItem.target) { %> target="_blank" rel="noopener" <% } %> >
             <span class="nav-indicator">
               <i class="material-icons icon icon-lg"><%= i %></i>
             </span>

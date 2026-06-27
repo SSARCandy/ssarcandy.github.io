@@ -60,9 +60,6 @@ archive_yearly: true
 share: true
 search: true
 
-# Use turbolinks.js (issue #21)
-turbolinks: false 
-
 # Hide menus when screen width is wide
 hideMenu: true
 
