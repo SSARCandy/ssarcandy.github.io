@@ -90,12 +90,20 @@
     animation: fade-in .25s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-/* Side gutter below 860px, matching the photography page (.photography-container
-   gets `padding: 0 16px` at ≤860). The shared .post-list only adds this at ≤760,
-   which left the 760–860 band flush against the container's own padding. */
+/* Side gutter below 860px, matching the photography page. Use MARGIN, not
+   padding: .project-list is the Masonry container, and Masonry's percentPosition
+   positions the absolute cards from the padding box while sizing them from the
+   content box — so horizontal padding makes the cards overflow the right gutter
+   and collapses the column gap. Margin sits outside the box Masonry measures, so
+   the gutter stays symmetric. (Photography sidesteps this by padding an ancestor,
+   .photography-container, never the grid element itself.) */
 @media screen and (max-width:860px) {
     .project-list {
-        padding: 0 16px;
+        margin: 0 16px;
+        /* Cancel the horizontal padding .post-list adds at ≤760 — on the Masonry
+           container it overflows the cards (see above); the gutter is the margin. */
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
