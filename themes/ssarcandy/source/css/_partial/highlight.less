@@ -25,8 +25,8 @@
 
 .line-numbers() {
     // Line numbers sit on the dark code background (@h-background), where
-    // @secondaryTextColor is only 2.9:1. This lighter grey clears WCAG AA (4.5:1).
-    color: #969696;
+    // @secondaryTextColor is only 2.9:1 (see @codeMutedColor for the AA-safe grey).
+    color: @codeMutedColor;
     font-size: 0.85em;
 }
 
