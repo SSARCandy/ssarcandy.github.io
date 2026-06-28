@@ -96,24 +96,20 @@ class Blog {
     };
   }
 
+  // The app-bar share button fires the native share sheet directly (no menu). Bound on
+  // 'click' — not the touchstart in `even` — because navigator.share() needs transient
+  // user activation, which touchstart doesn't grant. Falls back to copying the URL.
   share() {
-    const share = d.getElementById('global-share');
-    const menuShare = d.getElementById('menu-share');
+    const btn = d.getElementById('menu-share');
+    if (!btn) { return; }
 
-    function show() {
-      mask.classList.add('in');
-      mask.classList.add('hide');
-      share.classList.add('in');
-    }
-
-    function hide() {
-      share.classList.remove('in');
-      mask.classList.remove('in');
-      mask.classList.remove('hide');
-    }
-
-    menuShare.addEventListener(even, show, false);
-    mask.addEventListener(even, hide, false);
+    btn.addEventListener('click', function () {
+      if (navigator.share) {
+        navigator.share({ title: d.title, url: w.location.href }).catch(noop);
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(w.location.href);
+      }
+    }, false);
   }
 }
 

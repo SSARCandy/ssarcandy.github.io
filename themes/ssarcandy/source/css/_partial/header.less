@@ -33,6 +33,19 @@
 
 }
 
+// The share icon is a <button> (it fires the native share sheet, an action, not
+// navigation) — strip the native chrome so it matches the sibling <a> header icons.
+// Sizing and colour come from .header-icon above.
+#menu-share {
+    top: 2px;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
 .header-title {
     visibility: hidden;
     font-weight: 400;
