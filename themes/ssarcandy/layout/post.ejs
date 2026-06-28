@@ -18,26 +18,28 @@
     </div>
 </article>
 
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Article",
-  "mainEntityOfPage": "<%- post.permalink %>",
-  "headline": "<%- post.title %>",
-  "datePublished": "<%- new Date(post.date) %>",
-  "dateModified": "<%- new Date(post.date) %>",
-  "author": "SSARCandy",
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://ssarcandy.tw<%- post.image %>"
-  },
-  "publisher":{ 
-    "@type" : "Organization",
-    "name": "SSARCandy's Blog",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://ssarcandy.tw/img/logo.png"
-    }
-  }     
-}
-</script>
+<%
+// Build the structured data as an object and JSON.stringify it, so dates are valid
+// ISO 8601, the title/description can't break JSON quoting, and the image is a real
+// URL (first content image, falling back to the site logo) rather than the bare
+// domain. https://schema.org/Article
+var __ldImg = (page_images(post, []) || [])[0] || theme.avatar || '/img/logo.png';
+var __ldImgUrl = /^https?:\/\//.test(__ldImg) ? __ldImg : full_url_for(__ldImg);
+var __ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  mainEntityOfPage: post.permalink,
+  headline: post.title,
+  description: strip_html(post.excerpt || post.content || '').replace(/\s+/g, ' ').trim().substring(0, 200),
+  datePublished: new Date(post.date).toISOString(),
+  dateModified: new Date(post.updated || post.date).toISOString(),
+  author: { '@type': 'Person', name: 'SSARCandy' },
+  image: { '@type': 'ImageObject', url: __ldImgUrl },
+  publisher: {
+    '@type': 'Organization',
+    name: config.title,
+    logo: { '@type': 'ImageObject', url: full_url_for('/img/logo.png') }
+  }
+};
+%>
+<script type="application/ld+json"><%- JSON.stringify(__ld) %></script>

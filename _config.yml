@@ -7,7 +7,9 @@ title: SSARCandy's Blog
 subtitle: ''
 description: Nothing special, just a blog for a nerdy software engineer. I write about programming, trashtalk, and other things that interest me.
 timezone: Asia/Taipei
-language: en
+# Content is Traditional Chinese (Taiwan). Drives <html lang> and og:locale
+# (zh-TW -> zh_TW), so the page's language is consistent for search engines.
+language: zh-TW
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -15,6 +17,11 @@ url: https://ssarcandy.tw
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
+# Drop the trailing "index.html" from generated URLs (og:url, canonical, internal
+# links) so each page has one clean canonical form instead of both /foo/ and
+# /foo/index.html.
+pretty_urls:
+  trailing_index: false
 
 # Directory
 source_dir: source
