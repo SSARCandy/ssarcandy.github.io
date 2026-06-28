@@ -42,8 +42,10 @@
     "image-size": "^2.0.2",
     "imagesloaded": "^5.0.0",
     "lunr": "^2.3.9",
+    "maplibre-gl": "^3.6.2",
     "masonry-layout": "^4.2.2",
-    "sharp": "^0.35.2"
+    "sharp": "^0.35.2",
+    "supercluster": "^8.0.1"
   },
   "devDependencies": {
     "eslint": "^8.38.0",

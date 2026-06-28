@@ -1,5 +1,17 @@
-/* global maplibregl, Supercluster */
+import maplibregl from 'maplibre-gl';
+import Supercluster from 'supercluster';
+// Inline MapLibre's stylesheet into the bundle (no extra request, same-origin) and
+// inject it once on load. ?inline yields the CSS as a string instead of emitting a
+// separate, orphaned asset file (Hexo serves the HTML, so Vite can't inject a link).
+import maplibreCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
 import { msIcon } from './icon';
+
+if (typeof document !== 'undefined' && !document.getElementById('maplibre-gl-css')) {
+  const style = document.createElement('style');
+  style.id = 'maplibre-gl-css';
+  style.textContent = maplibreCss;
+  document.head.appendChild(style);
+}
 
 // MapLibre "map" view for /photography: clustering (supercluster), the spiderfy
 // expansion, marker fly-in animation and popups. Lazily fetches its own data from
