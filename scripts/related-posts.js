@@ -15,10 +15,6 @@ function build_index(data) {
   return index;
 }
 
-hexo.extend.helper.register('lunr_index', data => {
-  return JSON.stringify(build_index(data).toJSON());
-});
-
 hexo.extend.helper.register('lunr_related_posts', (data, kw, result_len = 5) => {
   const filtered_data = data.map(({ title, path, _id, tags }) => {
     const tags_list = tags.data.map(t => t.name);

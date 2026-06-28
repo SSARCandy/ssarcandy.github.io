@@ -1,21 +1,15 @@
 /* global Masonry, imagesLoaded */
-import lunr from 'lunr';
 import { highlightActiveTag } from './Helper';
 
 const VISIBLE_CLASS = 'on';
 
-const $input = document.getElementById('plugin-search-input');
-const index = lunr.Index.load(window.SEARCH_INDEX);
-
-// Stable, original-order snapshot of the project cards. Captured ONCE, before the
-// masonry below reorders the DOM, so a lunr ref (an index into site.data.projects)
-// keeps mapping to cards[ref]. getElementsByClassName is live + document-order, so
-// it must be frozen to an array before any node moves.
+// Stable snapshot of the project cards. getElementsByClassName is live +
+// document-order, and the masonry below reorders the DOM, so freeze it to an
+// array up front to keep iteration order steady.
 const cards = [...document.getElementsByClassName('plugin')];
 
-// In-feed ads sit outside the .plugin filter set (the lunr index maps to .plugin by
-// position). We show a proportional number — one per AD_EVERY visible cards, capped
-// by how many ad units were actually rendered.
+// In-feed ads sit outside the .plugin filter set. We show a proportional number —
+// one per AD_EVERY visible cards, capped by how many ad units were rendered.
 const projectList = document.querySelector('.project-list');
 const AD_EVERY = parseInt(projectList.dataset.adEvery, 10) || 0;
 const ads = [...document.getElementsByClassName('project-ad-item')];
@@ -73,20 +67,21 @@ function render() {
   }
 }
 
-// Show the cards matching `query` (a lunr search term or a tag); an empty query
-// shows all. Then re-lay out the grid.
-function applyFilter(query) {
-  const term = query.trim();
-  const matches = term ? new Set(index.search(term).map((hit) => Number(hit.ref))) : null;
-  cards.forEach((card, i) => {
-    card.classList.toggle(VISIBLE_CLASS, !matches || matches.has(i));
+// Show the cards carrying `tag` (an empty tag shows all), then re-lay out the
+// grid. Tags come from each card's data-tags (emitted at build time), so the
+// match is exact set-membership — no search engine, and punctuated tags like
+// C++, C# and Node.js compare verbatim instead of being mangled by a tokenizer.
+function applyFilter(tag) {
+  const term = tag.trim();
+  cards.forEach((card) => {
+    const tags = card.dataset.tags ? card.dataset.tags.split('|') : [];
+    card.classList.toggle(VISIBLE_CLASS, !term || tags.includes(term));
   });
   render();
 }
 
 function hashchange() {
   const tag = tagFromHash();
-  $input.value = tag;
   highlightActiveTag(tag); // '' clears every active-tag
   applyFilter(tag);
 }
@@ -106,7 +101,6 @@ document.addEventListener('click', (e) => {
   hashchange();
 });
 
-$input.addEventListener('input', () => applyFilter($input.value));
 window.addEventListener('hashchange', hashchange);
 window.addEventListener('resize', relayout); // re-pack when the column width flips
 
