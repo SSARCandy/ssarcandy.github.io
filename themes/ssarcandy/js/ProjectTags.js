@@ -1,4 +1,5 @@
-/* global Masonry, imagesLoaded */
+import Masonry from 'masonry-layout';
+import imagesLoaded from 'imagesloaded';
 import { highlightActiveTag } from './Helper';
 
 const VISIBLE_CLASS = 'on';

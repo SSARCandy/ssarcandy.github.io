@@ -1,4 +1,5 @@
-/* global Masonry, imagesLoaded */
+import Masonry from 'masonry-layout';
+import imagesLoaded from 'imagesloaded';
 
 // Enhances the server-rendered photo cards in #photography-grid: runs the Masonry
 // layout and re-orders the cards in place for the sort buttons, re-spacing the
