@@ -51,8 +51,9 @@ async function runReport() {
   pageviews_sum.visitor_count += pageviews_v4.visitor_count;
   for (const [k, v] of Object.entries(pageviews_v4.pv_map)) {
     pageviews_sum.pv_map[k] = pageviews_sum.pv_map[k]
-      ? pageviews_sum.pv_map[k] + v
-      : v;
+    ? pageviews_sum.pv_map[k] + v
+    : v;
   }
-  console.log(JSON.stringify(pageviews_sum))
+  const outFile = path.resolve(__dirname, '../pageview.json');
+  fs.writeFileSync(outFile, JSON.stringify(pageviews_sum));
 })();

@@ -6,7 +6,7 @@
     "start": "hexo server -s",
     "build": "npm-run-all build:*",
     "build:flickr": "node ./helper/fetch_flickr_photos.js",
-    "build:pageview": "node ./helper/ga_pageview.js > pageview.json",
+    "build:pageview": "node ./helper/ga_pageview.js",
     "build:images": "node ./helper/build_images.js",
     "build:font": "node ./helper/build_font.js",
     "build:vite": "vite build",
