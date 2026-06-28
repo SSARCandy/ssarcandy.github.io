@@ -81,6 +81,18 @@
     opacity: 1;
 }
 
+/* Restore the click-to-zoom transition. zoom.js animates the image via a `transform`
+   transition and tears its overlay down on the image's `transitionend`. The blur-up
+   rule above (`.project-thumb .preview { transition: opacity .5s }`, specificity 0-2-0)
+   outspecifies zoom.js's own `.zoom-img { transition: all .3s }` (0-1-0), so while
+   zoomed the image had NO transform transition — it could zoom, but the closing
+   `transitionend` never fired, leaving the overlay stuck open (which then blocks every
+   later click). Re-add a transform transition for the zoomed state at specificity 0-3-0
+   so it outranks the blur-up rule; now open + close animate and dispose cleanly. */
+.project-thumb .preview.zoom-img {
+    transition: transform .3s;
+}
+
 .project-item-details {
     padding: 16px 20px 20px;
 
