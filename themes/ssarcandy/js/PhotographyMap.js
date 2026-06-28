@@ -1,4 +1,5 @@
 /* global maplibregl, Supercluster */
+import { msIcon } from './icon';
 
 // MapLibre "map" view for /photography: clustering (supercluster), the spiderfy
 // expansion, marker fly-in animation and popups. Lazily fetches its own data from
@@ -28,7 +29,7 @@ export function createMap(mapContainer) {
       zoomIn.ariaLabel = 'Zoom In';
       zoomIn.title = 'Zoom In';
       zoomIn.style = 'display: flex; justify-content: center; align-items: center; cursor: pointer;';
-      zoomIn.innerHTML = '<i class="icon material-symbols-outlined">add</i>';
+      zoomIn.innerHTML = msIcon('add');
       zoomIn.onclick = () => map.zoomIn();
 
       const zoomOut = document.createElement('button');
@@ -37,7 +38,7 @@ export function createMap(mapContainer) {
       zoomOut.ariaLabel = 'Zoom Out';
       zoomOut.title = 'Zoom Out';
       zoomOut.style = 'display: flex; justify-content: center; align-items: center; cursor: pointer;';
-      zoomOut.innerHTML = '<i class="icon material-symbols-outlined">remove</i>';
+      zoomOut.innerHTML = msIcon('remove');
       zoomOut.onclick = () => map.zoomOut();
 
       this._container.appendChild(zoomIn);
@@ -55,7 +56,7 @@ export function createMap(mapContainer) {
       this._map = map;
       this._container = document.createElement('div');
       this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
-      this._container.innerHTML = '<button class="maplibregl-ctrl-icon" type="button" aria-label="Reset View" title="Reset View" style="display: flex; justify-content: center; align-items: center; cursor: pointer;"><i class="icon material-symbols-outlined">refresh</i></button>';
+      this._container.innerHTML = `<button class="maplibregl-ctrl-icon" type="button" aria-label="Reset View" title="Reset View" style="display: flex; justify-content: center; align-items: center; cursor: pointer;">${msIcon('refresh')}</button>`;
       this._container.onclick = (e) => {
         e.preventDefault();
         if (masterBounds) {

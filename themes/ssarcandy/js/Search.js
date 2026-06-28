@@ -1,3 +1,5 @@
+import { msIcon } from './icon';
+
 const searchIco = document.getElementById('search');
 const searchWrap = document.getElementById('search-wrap');
 const keyInput = document.getElementById('key');
@@ -51,7 +53,7 @@ const Control = {
 
 function render(data) {
   if (!data.length) {
-    searchResult.innerHTML = '<li class="tips"><i class="icon material-symbols-outlined">search_off</i><p>Results not found!</p></li>';
+    searchResult.innerHTML = `<li class="tips">${msIcon('search_off')}<p>Results not found!</p></li>`;
     return;
   }
 

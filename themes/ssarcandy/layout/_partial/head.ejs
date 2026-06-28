@@ -86,23 +86,20 @@
     style.less). On navigation, the browser captures the incoming page's snapshot at
     its first paint; if a web font isn't decoded yet, that snapshot freezes a
     fallback-font frame which then reflows when the real font swaps in mid-animation
-    (the "jitter"), and Material Symbols ligatures briefly flash as the literal words.
-    Preconnect warms the Google font origins; preload the two most-used self-hosted
-    Roboto weights (400 body / 500 nav+headings) so they're ready before that snapshot.
-    Font fetches are always CORS-mode, so `crossorigin` is required even same-origin —
-    without it the preload doesn't match the @font-face request and the file is fetched
-    twice.
+    (the "jitter"). Every font is self-hosted now — Roboto plus the subset Material
+    Symbols icon font (see helper/build_font.js) — so preload the ones above the fold
+    so they decode before that snapshot: the two most-used Roboto weights (400 body /
+    500 nav+headings) and the icon subset. Font fetches are always CORS-mode, so
+    `crossorigin` is required even same-origin — without it the preload doesn't match
+    the @font-face request and the file is fetched twice.
   %>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Regular.woff2') %>">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Medium.woff2') %>">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/material-symbols/material-symbols-outlined.woff2') %>">
   <%- css('css/style') %>
   <% if (theme.adsense.enable) { %>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%- theme.adsense.client %>" crossorigin="anonymous"></script>
   <% } %>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
   <link rel='manifest' href='/web-app-manifest.json'/>
 
   <meta name="apple-mobile-web-app-capable" content="yes">

@@ -46,6 +46,7 @@ jobs:
         npm run build:flickr
         npm run build:pageview
         npm run build:images
+        npm run build:font
         npm run build:vite
         npm run build:hexo
     - name: Deploy

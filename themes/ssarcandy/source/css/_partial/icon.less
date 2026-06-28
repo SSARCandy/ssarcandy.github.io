@@ -1,16 +1,44 @@
-/* Generic icon utilities.
+/* Icon system — all self-hosted, no CDN, no full icon webfont.
 
-   Replaces the old Font Awesome partial. The site no longer ships an icon
-   webfont: glyphs are Material Symbols Outlined ligatures (loaded in head.ejs),
-   and the handful of brand logos Material Symbols omits (GitHub, Flickr) are
-   inline SVGs rendered by `_partial/icon.ejs`.
+   Two kinds of icons:
+   - Material Symbols Outlined, subset to only the icons we use (~20 KB, built by
+     helper/build_font.js). The subset is keyed by codepoint, not ligature, so the
+     readable `<i ...>name</i>` markup is rewritten to the glyph's PUA codepoint at
+     render time (scripts/material-symbols.js) / inject time (js/icon.js).
+   - Brand logos Material Symbols omits (GitHub, Flickr) are inline SVGs from
+     `_partial/icon.ejs`.
 
-   `.icon` stays as the generic hook the theme's CSS targets (nav rail, header,
-   search tips, map controls, …) so those rules keep working regardless of
-   whether the element is a Material Symbols `<i>` or a brand-logo `<span><svg>`.
-   The hosted `.material-symbols-outlined` class already sets font-size:24px /
-   display / line-height, so `.icon-lg` is mostly there to size the inline SVGs
-   (which scale to 1em). */
+   `.icon` is the generic hook the theme's CSS targets (nav rail, header, search
+   tips, map controls, …) so those rules work whether the element is a Material
+   Symbols `<i>` or a brand-logo `<span><svg>`. `.icon-lg` sizes both (the inline
+   SVGs scale to 1em). */
+
+// Self-hosted Material Symbols subset. Kept as a variable font so the FILL
+// fill/outline axis can still be toggled via font-variation-settings. `block`
+// avoids a flash of tofu before the (preloaded) subset decodes.
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url('fonts/material-symbols/material-symbols-outlined.woff2') format('woff2');
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+
 .icon {
     display: inline-block;
     line-height: 1;

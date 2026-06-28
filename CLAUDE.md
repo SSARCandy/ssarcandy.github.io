@@ -15,7 +15,7 @@ The source for [ssarcandy.tw](https://ssarcandy.tw/) — a personal blog built w
 ## Commands
 
 ```sh
-npm run dev      # vite --watch + hexo server --debug in parallel (live theme dev)
+npm run dev      # build:font, then vite --watch + hexo server --debug in parallel (live theme dev)
 npm start        # hexo server only (no JS rebuild)
 npm run build    # full pipeline via npm-run-all build:* (see ordering below)
 npm run clean    # hexo clean (clears db.json + public/)
@@ -26,15 +26,16 @@ There are **no automated tests** — `lint` is the only check, and it's the gate
 
 ### Build pipeline ordering matters
 
-CI runs these five steps **individually and in order** (not `npm run build`), because `build:pageview` needs a GA credential injected between steps:
+CI runs these six steps **individually and in order** (not `npm run build`), because `build:pageview` needs a GA credential injected between steps:
 
 1. `build:flickr` — `helper/fetch_flickr_photos.js` → writes `source/flickr_photos.json`
 2. `build:pageview` — `helper/ga_pageview.js` → writes `pageview.json` (repo root)
 3. `build:images` — `helper/build_images.js` → writes `source/image_meta.json` (`{ w, h, lqip }` per image under `source/img`, via `image-size` + `sharp`)
-4. `build:vite` — bundles JS → `themes/ssarcandy/source/js/*.bundle.js`
-5. `build:hexo` — `hexo generate` assembles everything into `public/`
+4. `build:font` — `helper/build_font.js` → scans the codebase for the icons actually used, (re)generates `themes/ssarcandy/material-symbols-codepoints.json`, and subsets Material Symbols to just those glyphs → `source/css/fonts/material-symbols/material-symbols-outlined.woff2` (~20 KB vs Google's ~312 KB). Runs **before** `build:vite` so the bundled JSON is fresh.
+5. `build:vite` — bundles JS → `themes/ssarcandy/source/js/*.bundle.js`
+6. `build:hexo` — `hexo generate` assembles everything into `public/`
 
-`build:hexo` must run **last**: Hexo copies `themes/ssarcandy/source/` (including the Vite bundles) and the data JSON into `public/`. If you change JS, re-run `build:vite` before `build:hexo` or the site serves a stale bundle. Likewise re-run `build:images` after adding/replacing images under `source/img` or content images render with no reservation/placeholder (it degrades gracefully, never failing the build).
+`build:hexo` must run **last**: Hexo copies `themes/ssarcandy/source/` (including the Vite bundles + the icon-font subset) and the data JSON into `public/`. If you change JS, re-run `build:vite` before `build:hexo` or the site serves a stale bundle. Likewise re-run `build:images` after adding/replacing images under `source/img` or content images render with no reservation/placeholder (it degrades gracefully, never failing the build).
 
 ## Architecture
 
@@ -59,6 +60,8 @@ CI runs these five steps **individually and in order** (not `npm run build`), be
 - `project_image_aspect(name, ext)` / `project_lqip(name, ext)` ← the `/projects` card's intrinsic dimensions as a CSS `aspect-ratio` (so the Masonry grid reserves each card's height and lays out with no reflow) and its inlined blurred base64 placeholder (blur-up).
 - an `after_render:html` filter that rewrites **post content images** (dated `/img/YYYY-MM-DD/…` paths): adds `loading=lazy`/`decoding=async`, the inlined LQIP as the image's own `background-image` (blur-up), and an inline `width`+`aspect-ratio` that reserves the box with no layout shift. The width reproduces the `.article img { max-height: 600px }` cap (article.less) with the ratio preserved, computed from the build-time dimensions — keep `MAX_IMG_HEIGHT` in `image-meta.js` in sync with that LESS value. Deliberately **no wrapper element**: the click-to-zoom (`hexo-tag-photozoom` + `zoom.js`) transforms the `<img>` in place and must not be boxed.
 
+`scripts/material-symbols.js` is the icon system's render-time glue. Icons are authored as readable names — in templates (`<i class="material-symbols-outlined">search</i>`, plus the `_partial/icon.ejs` fallback) and in JS (`msIcon('search')` from `themes/ssarcandy/js/icon.js`) — but the self-hosted `build:font` subset is keyed by **codepoint, not ligature** (a ligature-name subset balloons to ~2.8 MB; the codepoint subset is ~20 KB). So this `after_render:html` filter (for server HTML) and `icon.js` (for client-injected icons) both convert each name → its `&#xCODE;` via `themes/ssarcandy/material-symbols-codepoints.json`. That map is **generated** by `build:font` — it scans the codebase (template markup, `msIcon()` calls, and the config `menu:` keys), resolves each name's codepoint from the font, and rewrites the JSON — so **don't hand-edit it**. **Adding an icon:** just use it in a template or `msIcon('name')` and re-run `build:font`; the map and the subset regenerate automatically (a name that isn't a real Material Symbols icon resolves to nothing and is skipped with a warning). Brand logos Material Symbols omits (GitHub, Flickr) stay inline SVGs in `_partial/icon.ejs`.
+
 `image_meta.json` degrades gracefully to `{}` when missing (no reservation / no placeholder), like the other build-time data files, so a local `hexo generate` without a prior `build:images` never fails. `sharp` is optional: if its native binary is unavailable the `lqip` fields are just empty. `scripts/related-posts.js` registers the related-posts logic.
 
 ### Structured content vs. posts
@@ -82,5 +85,5 @@ CI runs these five steps **individually and in order** (not `npm run build`), be
 
 - **Windows lint:** `npm run lint` fails on a Windows checkout because `.eslintrc` enforces `linebreak-style: unix` against CRLF files. Use `npx eslint themes/ssarcandy/js --rule 'linebreak-style: 0'` locally; CI (Linux) runs the unmodified `npm run lint`.
 - **No caching service worker.** `hexo-pwa` was removed (it caused permanent post-deploy staleness). `source/sw.js` is now a **self-destruct tombstone** that clears caches and unregisters itself on existing visitors' browsers — it must keep being served at `/sw.js`. Do not re-introduce a caching SW without content-hashed asset names.
-- **Secrets:** the GA service-account key `hexo-pv-c7938b2e210b.json` is gitignored and injected by CI from a secret; `pageview.json`, `source/flickr_photos.json` and `source/image_meta.json` are gitignored build artifacts. Keep them out of commits.
+- **Secrets:** the GA service-account key `hexo-pv-c7938b2e210b.json` is gitignored and injected by CI from a secret; `pageview.json`, `source/flickr_photos.json`, `source/image_meta.json`, and the generated icon files (`themes/ssarcandy/material-symbols-codepoints.json` + `source/css/fonts/material-symbols/`) are gitignored build artifacts. Keep them out of commits.
 - **Cross-platform helpers:** build helpers must run on Windows and Linux. `ga_pageview.js` passes the key via `{ keyFilename }` (no bash-only env prefix) and falls back to Application Default Credentials on CI. When writing build scripts, avoid `lessc <in> /dev/null`-style redirects — on Windows that leaves a stray `nul` file.
