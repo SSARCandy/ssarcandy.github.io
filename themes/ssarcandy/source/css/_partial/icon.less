@@ -1,0 +1,31 @@
+/* Generic icon utilities.
+
+   Replaces the old Font Awesome partial. The site no longer ships an icon
+   webfont: glyphs are Material Symbols Outlined ligatures (loaded in head.ejs),
+   and the handful of brand logos Material Symbols omits (GitHub, Flickr) are
+   inline SVGs rendered by `_partial/icon.ejs`.
+
+   `.icon` stays as the generic hook the theme's CSS targets (nav rail, header,
+   search tips, map controls, …) so those rules keep working regardless of
+   whether the element is a Material Symbols `<i>` or a brand-logo `<span><svg>`.
+   The hosted `.material-symbols-outlined` class already sets font-size:24px /
+   display / line-height, so `.icon-lg` is mostly there to size the inline SVGs
+   (which scale to 1em). */
+.icon {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.icon-lg {
+    font-size: 24px;
+}
+
+// Inline-SVG brand logos scale with font-size like a glyph and inherit text
+// color, so the same `.icon` / `.icon-lg` sizing + hover-color rules apply.
+.brand-icon svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}

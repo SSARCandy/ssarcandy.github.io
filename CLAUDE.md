@@ -76,7 +76,7 @@ CI runs these five steps **individually and in order** (not `npm run build`), be
 
 ### Theme config
 
-`themes/ssarcandy/_config.yml` drives the nav menu (Material Icons ligature → label/url), social links, AdSense slots, and feature flags (`search`, `share`, etc.). Site-wide config (title, permalink, deploy target) is the root `_config.yml`.
+`themes/ssarcandy/_config.yml` drives the nav menu (Material Symbols ligature → label/url), social links, AdSense slots, and feature flags (`search`, `share`, etc.). Site-wide config (title, permalink, deploy target) is the root `_config.yml`. Icons are **Material Symbols Outlined** (loaded in `head.ejs`); the few brand logos Material Symbols omits (GitHub, Flickr) are inline SVGs from `_partial/icon.ejs`. There is no icon webfont — Font Awesome was removed.
 
 ## Conventions & gotchas
 

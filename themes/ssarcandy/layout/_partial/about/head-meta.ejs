@@ -15,7 +15,7 @@
         var label = icon.name || i;
       %>
       <a class="about-social-icon" title="<%- label %>" aria-label="<%- label %>" href="<%- icon.url %>" target="<%- icon.target %>" rel="noopener">
-        <i class="icon icon-lg <%- icon.icon %>" aria-hidden="true"></i>
+        <%- partial('_partial/icon', { name: icon.icon, cls: 'icon-lg' }) %>
       </a>
       <%}%>
     </hgroup>

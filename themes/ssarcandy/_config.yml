@@ -1,5 +1,5 @@
 # menu:
-#  link:               Material Icons ligature name (https://fonts.google.com/icons).
+#  link:               Material Symbols ligature name (https://fonts.google.com/icons).
 #    text: About       The label show on menu (using :lang.yml file).
 #    url: /about       Link url
 #    target: _blank    Open new tab or not
@@ -21,26 +21,29 @@ menu:
     text: menu.project
     url: /projects
 
+# icon: a Material Symbols ligature (https://fonts.google.com/icons), or an
+#       inline-SVG key (github, github-square, flickr, envelope-square,
+#       rss-square) rendered from the Font Awesome glyph by _partial/icon.ejs.
 social_links:
   email:
     name: Email
     url: mailto:ssarcandy@gmail.com
-    icon: icon-envelope-square
+    icon: envelope-square
     target:
   github:
     name: GitHub
     url: https://github.com/SSARCandy
-    icon: icon-github-square
+    icon: github-square
     target: _blank
   flickr:
     name: Flickr
     url: https://www.flickr.com/photos/200681089@N06/
-    icon: icon-flickr
+    icon: flickr
     target: _blank
   rss:
     name: RSS feed
     url: /atom.xml
-    icon: icon-rss-square
+    icon: rss-square
     target: _blank
 
 rss: /atom.xml

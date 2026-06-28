@@ -1,6 +1,6 @@
 <div class="inner flex-row-vertical">
   <a href="javascript:;" class="rail-menu" id="rail-toggle" aria-label="Toggle navigation" aria-expanded="false">
-    <i class="material-icons icon icon-lg">menu</i>
+    <i class="icon icon-lg material-symbols-outlined">menu</i>
   </a>
   <ul class="nav flex-col">
     <%
@@ -14,7 +14,7 @@
         <li class="nav-item<% if (isActive(menuItem)) { %> active<% } %>">
           <a href="<%- url_for(menuItem.url) %>" <% if (menuItem.target) { %> target="_blank" rel="noopener" <% } %> >
             <span class="nav-indicator">
-              <i class="material-icons icon icon-lg"><%= i %></i>
+              <i class="icon icon-lg material-symbols-outlined"><%= i %></i>
             </span>
             <span class="nav-label"><%- (__(menuItem.text) || i) %></span>
           </a>

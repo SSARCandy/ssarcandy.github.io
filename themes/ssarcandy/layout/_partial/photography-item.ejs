@@ -17,7 +17,7 @@ var aspect = (item.width_c && item.height_c) ? ('aspect-ratio: ' + item.width_c 
             <img src="<%= imgUrl %>" class="img-large" decoding="async" alt="<%= item.title %>"<% if (priority) { %> fetchpriority="high"<% } else { %> loading="lazy"<% } %> onload="this.parentElement.classList.add('loaded')">
             <div class="photo-title">
                 <span class="photo-name"><%= item.title %></span>
-                <% if (item.views) { %><span class="photo-views"><i class="icon icon-eye"></i> <%= item.views %></span><% } %>
+                <% if (item.views) { %><span class="photo-views"><i class="icon material-symbols-outlined">visibility</i> <%= item.views %></span><% } %>
             </div>
         </div>
     </a>

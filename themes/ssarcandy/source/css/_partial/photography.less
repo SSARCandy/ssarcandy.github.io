@@ -36,6 +36,11 @@
     cursor: pointer;
     color: #444 !important;
     transition: all 0.2s ease;
+
+    // Material Symbols default to 24px, too big for the 32px-tall toggle.
+    .icon {
+        font-size: 20px;
+    }
 }
 .sort-group {
     display: flex;
@@ -164,6 +169,11 @@
     font-weight: 500;
     white-space: nowrap;
     flex-shrink: 0;
+
+    // Material Symbols default to 24px; keep the views eye scaled to the label.
+    .icon {
+        font-size: 14px;
+    }
 }
 #photography-map {
     display: none;
@@ -195,6 +205,7 @@
 .maplibregl-ctrl-group button.maplibregl-ctrl-icon .icon {
     color: #444 !important;
     -webkit-text-fill-color: #444 !important;
+    font-size: 20px;
 }
 .maplibregl-popup {
     filter: drop-shadow(0 3px 6px rgba(0,0,0,0.16)) drop-shadow(0 3px 6px rgba(0,0,0,0.23));
