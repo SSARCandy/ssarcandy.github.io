@@ -41,7 +41,7 @@ CI runs these six steps **individually and in order** (not `npm run build`), bec
 
 ### Two toolchains, one output
 
-- **Vite** owns JavaScript only. Source lives in `themes/ssarcandy/js/`; Vite bundles three page-specific entry points into `themes/ssarcandy/source/js/` (`vite.config.js`). That output dir is **gitignored** — it's a build artifact.
+- **Vite** owns JavaScript only. Source lives in `themes/ssarcandy/js/`; Vite bundles three page-specific entry points into `themes/ssarcandy/source/js/` (`vite.config.mjs`). That output dir is **gitignored** — it's a build artifact.
   - `app.bundle.js` — loaded on every page (`after-footer.ejs`): nav rail, header, scroll/TOC, share, client-side search.
   - `projectPage.bundle.js` — `/projects` only; `photography.bundle.js` — `/photography` only.
 - **Hexo** owns everything else: Markdown rendering, EJS templates (`themes/ssarcandy/layout/`), LESS (`themes/ssarcandy/source/css/`), and copying `source/` → `public/`.
