@@ -39,7 +39,43 @@
   %>
   <meta name="keywords" content="<%= keyWords %>">
   <link rel="canonical" href="<%= full_url_for(page.path) %>">
-  <%- open_graph({ image: page_images(page, [theme.avatar]) }) %>
+  <%
+    // Representative preview image(s) for og:image / twitter:image. Posts scrape
+    // their own content images (page_images). The data-driven landing pages have
+    // no inline images, so they'd fall back to the logo — instead surface real
+    // content: an explicit `og_image` front-matter wins, otherwise pick the first
+    // item from the page's data. Always end with the avatar as a final fallback.
+    var ogImgs = [];
+    if (page.og_image) {
+      ogImgs.push(page.og_image);
+    } else if (page.layout === 'projects') {
+      var projs = site.data.projects || [];
+      // Skip animated GIFs — a static frame makes the cleaner social card.
+      var rep = projs.find(function(p){ return (p.img_ext || '.jpg') !== '.gif'; }) || projs[0];
+      if (rep) ogImgs.push('/img/projects/' + rep.name + (rep.img_ext || '.jpg'));
+    } else if (page.layout === 'photography') {
+      var photos = flickr_photos();
+      if (photos.length) {
+        var f = photos[0];
+        ogImgs.push(f.url_c || ('https://live.staticflickr.com/' + f.server + '/' + f.id + '_' + f.secret + '_c.jpg'));
+      }
+    }
+    ogImgs.push(theme.avatar);
+
+    // Description fallback: a page's own description / excerpt / content first,
+    // then the header subtitle for this page type (the same intro shown in the
+    // <h5 class="subtitle">), and only then the generic site description — so the
+    // landing/list pages that have no body still get a meaningful, page-specific
+    // description instead of the catch-all site blurb.
+    var pageIntro = '';
+    if (is_home()) pageIntro = __('post.intro');
+    else if (page.layout === 'projects') pageIntro = __('project.intro');
+    else if (page.layout === 'photography') pageIntro = __('photography.intro');
+    else if (is_archive() || is_tag()) pageIntro = __('archive.intro');
+    else if (config.subtitle) pageIntro = config.subtitle;
+    var metaDesc = page.description || page.excerpt || page.content || pageIntro || config.description;
+  %>
+  <%- open_graph({ image: page_images(page, ogImgs), description: metaDesc }) %>
 
   <% if (theme.rss){ %>
     <link rel="alternative" href="<%- theme.rss %>" title="<%= config.title %>" type="application/atom+xml">
