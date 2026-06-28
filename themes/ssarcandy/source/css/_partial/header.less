@@ -75,7 +75,13 @@
 
     .subtitle {
         padding-top: 6px;
-        color: @lightPrimaryColor;
+        // Pin the size the <h5> used to inherit from heading styles, now that this
+        // is a <div> (changed to fix the h1→h5 heading-order a11y violation).
+        font-size: 16px;
+        line-height: 24px;
+        // AA-safe muted text on the purple header (see @onPrimaryMutedColor);
+        // raw @lightPrimaryColor lands at 4.46:1.
+        color: @onPrimaryMutedColor;
     }
 
     // Post meta (date + views + reading time) on one row, wrapping on narrow screens.
