@@ -42,6 +42,24 @@
     display: block;
 }
 
+/* Blur-up: a tiny inlined placeholder (project_lqip) sits behind the real image
+   and the real image fades in over it once decoded. Deliberately NO overflow:hidden
+   on .project-thumb — the click-to-zoom transforms .preview in place and must not be
+   clipped; the placeholder is a non-blurring background sized to the box, so nothing
+   spills past the card to need clipping. */
+.project-thumb {
+    position: relative;
+}
+
+.project-thumb-lqip {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px 4px 0 0; /* match the card's rounded top */
+}
+
 .preview {
     display: block;
     width: 100%;
@@ -52,6 +70,19 @@
     &.zoom-img {
         border-radius: 0;
     }
+}
+
+/* Paint the real image above the placeholder and fade it in. Scoped to
+   .project-thumb so the opacity never affects any other `.preview`. */
+.project-thumb .preview {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.project-thumb.loaded .preview {
+    opacity: 1;
 }
 
 .project-item-details {
