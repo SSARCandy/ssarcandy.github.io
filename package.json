@@ -7,6 +7,7 @@
     "build": "npm-run-all build:*",
     "build:flickr": "node ./helper/fetch_flickr_photos.js",
     "build:pageview": "node ./helper/ga_pageview.js > pageview.json",
+    "build:images": "node ./helper/build_images.js",
     "build:vite": "vite build",
     "build:hexo": "hexo generate",
     "clean": "hexo clean",
