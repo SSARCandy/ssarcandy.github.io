@@ -53,17 +53,21 @@ hexo.extend.helper.register('project_lqip', (name, ext) => {
   return m ? m.lqip : '';
 });
 
-// ---- post content images: blur-up + box reservation + lazy load ---------------
-// Rewrite every <img> whose src is a dated post-image path (/img/YYYY-MM-DD/...).
-// We add, computed from the build-time metadata:
-//   - width + aspect-ratio + height:auto, so the browser reserves the exact box
-//     (capped at 600px tall, ratio preserved — matching the existing CSS) and the
-//     page doesn't jump as images decode;
-//   - loading=lazy / decoding=async;
-//   - the inlined LQIP as the image's own background, so a blurred preview shows
-//     until the photo paints over it.
-// No wrapper element: the click-to-zoom (hexo-tag-photozoom + zoom.js) transforms
-// the <img> in place and must not be boxed/clipped.
+// ---- <img> rewriting: WebP everywhere + blur-up/reservation for content --------
+// One pass over every <img> in the rendered HTML, driven by the build-time metadata:
+//   - WebP (all local /img images): swap the src to the smaller `.webp` derivative.
+//     Originals stay on disk as the fallback, and social/OG scrapers fetch them via
+//     <meta property="og:image"> (not <img>), so those keep the original format.
+//   - Box reservation + blur-up (dated /img/YYYY-MM-DD/ content images only): add,
+//     computed from the metadata:
+//       * width + aspect-ratio + height:auto, so the browser reserves the exact box
+//         (capped at 600px tall, ratio preserved — matching the existing CSS) and
+//         the page doesn't jump as images decode;
+//       * loading=lazy / decoding=async;
+//       * the inlined LQIP as the image's own background, so a blurred preview shows
+//         until the photo paints over it.
+//     No wrapper element: the click-to-zoom (hexo-tag-photozoom + zoom.js) transforms
+//     the <img> in place and must not be boxed/clipped.
 const CONTENT_IMG = /^\/img\/\d{4}-\d{2}-\d{2}\//;
 
 function reserveStyle(m) {
@@ -86,20 +90,35 @@ hexo.extend.filter.register('after_render:html', (str) => {
     const srcMatch = tag.match(/\ssrc=(["'])(.*?)\1/i);
     if (!srcMatch) return tag;
 
-    const urlPath = srcMatch[2].split(/[?#]/)[0];
-    if (!CONTENT_IMG.test(urlPath)) return tag;
+    const quote = srcMatch[1];
+    const rawSrc = srcMatch[2];
+    const urlPath = rawSrc.split(/[?#]/)[0];
 
     const m = lookup(urlPath);
     if (!m) return tag;
 
     let out = tag;
-    // Leave any image that already carries these alone (idempotent / authored).
-    if (!/\sstyle=/i.test(out)) {
-      const style = reserveStyle(m);
-      if (style) out = out.replace(/^<img\b/i, `<img style="${style}"`);
+
+    // Serve the WebP derivative when one exists (any local /img image), preserving
+    // any ?query/#hash on the original src.
+    if (m.webp && m.webp !== urlPath) {
+      const suffix = rawSrc.slice(urlPath.length);
+      out = out.replace(
+        /(\ssrc=)(["']).*?\2/i,
+        (_match, attr) => `${attr}${quote}${m.webp}${suffix}${quote}`
+      );
     }
-    if (!/\sloading=/i.test(out)) {
-      out = out.replace(/^<img\b/i, '<img loading="lazy" decoding="async"');
+
+    // Dated post-content images additionally get box reservation + blur-up + lazy.
+    if (CONTENT_IMG.test(urlPath)) {
+      // Leave any image that already carries these alone (idempotent / authored).
+      if (!/\sstyle=/i.test(out)) {
+        const style = reserveStyle(m);
+        if (style) out = out.replace(/^<img\b/i, `<img style="${style}"`);
+      }
+      if (!/\sloading=/i.test(out)) {
+        out = out.replace(/^<img\b/i, '<img loading="lazy" decoding="async"');
+      }
     }
     return out;
   });

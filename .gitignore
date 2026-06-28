@@ -10,6 +10,7 @@ public/
 pageview.json
 source/flickr_photos.json
 source/image_meta.json
+source/img/**/*.webp
 hexo-pv-c7938b2e210b.json
 
 /themes/ssarcandy/source/js/
