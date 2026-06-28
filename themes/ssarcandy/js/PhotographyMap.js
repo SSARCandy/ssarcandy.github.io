@@ -8,6 +8,7 @@ export function createMap(mapContainer) {
   let mapPhotos = null; // Map points, lazy-fetched from /flickr_photos.json and cached.
 
   let mapInstance = null;
+  let mapLoaded = false; // one-shot: flipped true the moment the 'load' event fires
   let superclusterIndex = null;
   let currentMarkers = {};
   let masterBounds = null;
@@ -81,6 +82,11 @@ export function createMap(mapContainer) {
       attributionControl: false,
       dragRotate: false,
     });
+
+    // Latch the load state once. Don't poll mapInstance.loaded() later: it also
+    // reports false while tiles/sources are mid-load (e.g. right after a resize),
+    // so a post-load updateMarkers would wrongly wait on a 'load' that already fired.
+    mapInstance.on('load', () => { mapLoaded = true; });
 
     mapInstance.scrollZoom.disable();
     mapContainer.setAttribute('tabindex', '0');
@@ -382,15 +388,16 @@ export function createMap(mapContainer) {
 
     if (features.length === 0) return;
 
-    if (mapInstance.loaded()) {
+    const fitAndRender = () => {
       mapInstance.fitBounds(bounds, { padding: 50 });
       renderClusters();
-    } else {
-      mapInstance.once('load', () => {
-        mapInstance.fitBounds(bounds, { padding: 50 });
-        renderClusters();
-      });
-    }
+    };
+
+    // Use the latched flag, not mapInstance.loaded(): if 'load' already fired,
+    // once('load', …) would be a dead callback and we'd never fit/render — leaving
+    // the map stuck on its default Taiwan view with no markers.
+    if (mapLoaded) fitAndRender();
+    else mapInstance.once('load', fitAndRender);
   }
 
   // Map a raw Flickr record (from /flickr_photos.json) to the point the map needs.
