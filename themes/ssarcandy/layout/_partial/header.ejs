@@ -45,7 +45,10 @@
             <%= page.title %> 
         <% } %>
     </h1>
-    <h5 class="subtitle">
+    <%# Not a section heading — it holds the page intro/meta (and block content like
+        the archive tag list), so a heading element here breaks the h1→h5 outline
+        order (a11y). A div keeps the identical styling via the .subtitle class. %>
+    <div class="subtitle">
         <% if (page.date && !page.noDate) { %>
             <%- partial('post/head-meta') %>
         <% } else if (page.layout === 'projects') { %>
@@ -60,7 +63,7 @@
         <% } else { %>
             <%= config.subtitle %>
         <% } %>
-    </h5>
+    </div>
   </div>
   <% } else { %>
       <%- partial('about/head-meta') %>
