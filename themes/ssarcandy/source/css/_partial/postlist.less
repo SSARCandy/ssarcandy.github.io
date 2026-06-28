@@ -168,6 +168,17 @@
         padding-right: 16px;
     }
 
+    /* Disable click-to-zoom for post-list excerpt images on mobile: tapping a
+       thumbnail in the feed shouldn't open the zoom overlay (it competes with
+       scrolling and tapping through to the post). zoom.min.js binds a click
+       listener per img[data-action='zoom']; pointer-events:none keeps the tap
+       from ever reaching it. Scoped to .post-list, so full post pages — and
+       desktop — stay zoomable. */
+    .post-list .photozoom {
+        pointer-events: none;
+        cursor: default;
+    }
+
 }
 
 .read-more {
