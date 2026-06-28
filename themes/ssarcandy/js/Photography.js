@@ -17,12 +17,12 @@ if (container) {
   // out the grid until the whole bundle parses (~1s of float fallback "holes" on
   // first paint). Cached after the first import.
   let mapPromise = null;
-  function getMap() {
+  const getMap = () => {
     if (!mapPromise) {
       mapPromise = import('./PhotographyMap').then(({ createMap }) => createMap(mapContainer));
     }
     return mapPromise;
-  }
+  };
 
   // Warm the map chunk in the background once the page is idle (well after the grid
   // has painted): the 800 KB download + parse happens off the critical path, so when
