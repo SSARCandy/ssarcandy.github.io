@@ -81,6 +81,22 @@
     <link rel="alternative" href="<%- theme.rss %>" title="<%= config.title %>" type="application/atom+xml">
   <% } %>
   <%- favicon_tag(theme.favicon) %>
+  <%#
+    Font resource hints — these exist for the cross-document View Transitions (see
+    style.less). On navigation, the browser captures the incoming page's snapshot at
+    its first paint; if a web font isn't decoded yet, that snapshot freezes a
+    fallback-font frame which then reflows when the real font swaps in mid-animation
+    (the "jitter"), and Material Icons ligatures briefly flash as the literal words.
+    Preconnect warms the Google font origins; preload the two most-used self-hosted
+    Roboto weights (400 body / 500 nav+headings) so they're ready before that snapshot.
+    Font fetches are always CORS-mode, so `crossorigin` is required even same-origin —
+    without it the preload doesn't match the @font-face request and the file is fetched
+    twice.
+  %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Regular.woff2') %>">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Medium.woff2') %>">
   <%- css('css/style') %>
   <% if (theme.adsense.enable) { %>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%- theme.adsense.client %>" crossorigin="anonymous"></script>

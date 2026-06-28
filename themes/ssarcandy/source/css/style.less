@@ -378,3 +378,47 @@ hr,
 @import '_partial/about';
 @import '_partial/photography';
 @import '_partial/ads.less';
+
+/* ---------- Cross-document View Transitions (MD3 blended page change) ----------
+   Opt the whole site into the MPA View Transitions API: on same-origin navigation the
+   incoming content blends in while the purple top bar and the nav rail stay pinned
+   (they carry persistent `view-transition-name`s — see header.less and layout.less).
+   Each Hexo page is a full document load, so zoom.js (hexo-tag-photozoom) still re-binds
+   per page exactly as before.
+
+   Motion = a BLEND, not a plain opacity fade. A naive cross-fade composites the two
+   snapshots as (1 - alpha)*old + alpha*new, which dips/darkens when both are ~50% opaque.
+   `mix-blend-mode: plus-lighter` ADDS the two premultiplied layers instead; the UA already
+   fades old 1->0 and new 0->1 on the same easing, so they sum to full opacity at every
+   frame — a clean blend with no muddy midpoint and no movement. We keep the UA's opacity
+   keyframes and only retime + blend them. The UA gives ::view-transition-image-pair
+   `isolation: isolate`, so the blend stays scoped to this transition.
+
+   DO NOT give `.body-wrap` a `view-transition-name`. A named element forms a stacking
+   context at ALL times (not only mid-transition); that traps the click-to-zoom image
+   (`.zoom-img-wrap`, z-index:666, which lives inside .body-wrap) beneath zoom.js's fixed
+   white `.zoom-overlay` (z-index:420, appended to <body>), so zooming an image showed a
+   blank white screen. That is exactly what broke photozoom last time (added in 64c5b48e,
+   reverted in 73e04eeb). Animating `root` instead blends the content — the pinned header +
+   rail are already lifted out of the root snapshot — without boxing the content, so
+   photozoom keeps working. */
+@vt-duration: 300ms;
+@vt-easing: cubic-bezier(0.2, 0.0, 0, 1.0); // MD3 emphasized-decelerate
+
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-group(root) {
+    animation-duration: @vt-duration;
+    animation-timing-function: @vt-easing;
+}
+
+// Keep the UA's opacity cross-fade (animation-name cascades from the UA sheet);
+// only retime it and blend with plus-lighter so old + new sum to full opacity.
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: @vt-duration;
+    animation-timing-function: @vt-easing;
+    mix-blend-mode: plus-lighter;
+}
