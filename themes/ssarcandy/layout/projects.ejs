@@ -13,7 +13,8 @@ var __n = 0;
   <% for (i in site.data.projects) { %>
     <li class="project-list-item plugin on" data-tags="<%= (site.data.projects[i].tags || []).join('|') %>">
         <%- partial('_partial/projects/project-item', {
-            project: site.data.projects[i]
+            project: site.data.projects[i],
+            index: __n
         }) %>
     </li>
     <% __n++; %>
@@ -24,6 +25,4 @@ var __n = 0;
 
 </ul>
 
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
 <script src="<%- url_for('js/projectPage.bundle.js') %>" type="module"></script>

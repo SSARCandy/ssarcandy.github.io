@@ -4,11 +4,16 @@
 var __aspect = project_image_aspect(project.name, project.img_ext);
 // Tiny inlined blurred placeholder shown until the real image decodes (blur-up).
 var __lqip = project_lqip(project.name, project.img_ext);
+// Only the first row of cards is above the fold; eager-load those (the first is
+// the LCP candidate, so flag it high priority) and lazy-load the rest so the
+// 20+ below-the-fold thumbnails don't contend for bandwidth on first paint.
+var __i = (typeof index !== 'undefined') ? index : 0;
+var __eager = __i < 4;
 %>
 <article class="article project-item" itemprop="blogPost">
     <div class="project-thumb">
         <% if (__lqip) { %><span class="project-thumb-lqip" style="background-image: url('<%= __lqip %>');"></span><% } %>
-        <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom"<% if (__aspect) { %> style="aspect-ratio: <%= __aspect %>;"<% } %> onload="this.parentNode.classList.add('loaded')">
+        <img src="<%- url_for('img/projects/' + project.name + (project.img_ext || '.jpg')) %>" alt='<%- project.description.replace(/"/g, "") %>' class="preview photozoom" data-action="zoom"<% if (__aspect) { %> style="aspect-ratio: <%= __aspect %>;"<% } %><% if (__eager) { %> decoding="async"<% if (__i === 0) { %> fetchpriority="high"<% } %><% } else { %> loading="lazy" decoding="async"<% } %> onload="this.parentNode.classList.add('loaded')">
     </div>
 
     <div class="project-item-details">
