@@ -1,7 +1,7 @@
 /* Build a tiny self-hosted Material Symbols subset — and generate its codepoint map.
 
    Scans the codebase for the Material Symbols icons actually used — template markup
-   (`<i ...>name</i>`), `msIcon('name')` calls in JS, and the nav-rail icons from the
+   (`<i ...>name</i>`), `msIcon()`/`msChar()` calls in JS, and the nav-rail icons from the
    theme config `menu:` keys — resolves each name to its glyph codepoint from the full
    font, and then:
      1. writes themes/ssarcandy/material-symbols-codepoints.json — the map shared by
@@ -29,7 +29,7 @@ const OUT = path.join(OUT_DIR, 'material-symbols-outlined.woff2');
 function collectUsedNames() {
   const names = new Set();
   const reMarkup = /material-symbols-outlined[^>]*>([a-z0-9_]+)/g; // <i ...>name</i>
-  const reJs = /msIcon\(\s*['"]([a-z0-9_]+)['"]/g; // msIcon('name')
+  const reJs = /ms(?:Icon|Char)\(\s*['"]([a-z0-9_]+)['"]/g; // msIcon('name') / msChar('name')
   const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, e.name);

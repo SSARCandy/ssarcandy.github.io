@@ -1,4 +1,5 @@
 import { highlightActiveTag } from './Helper';
+import { msChar } from './icon';
 
 const w = window;
 const d = document;
@@ -43,7 +44,7 @@ class Blog {
     if (railToggle) {
       railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
       const icon = railToggle.querySelector('i');
-      if (icon) { icon.textContent = expanded ? 'menu_open' : 'menu'; }
+      if (icon) { icon.textContent = expanded ? msChar('menu_open') : msChar('menu'); }
     }
     if (menuToggle) {
       menuToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
