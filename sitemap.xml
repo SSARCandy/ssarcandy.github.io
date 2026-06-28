@@ -38,69 +38,6 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://ssarcandy.tw/2021/05/10/share-storage-comparison/</loc>
     
     <lastmod>2026-06-28</lastmod>
@@ -164,6 +101,132 @@
   </url>
   
   <url>
+    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/12/23/policyd/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2016/09/09/python-note/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/</loc>
+    
+    <lastmod>2026-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/</loc>
     
     <lastmod>2026-06-28</lastmod>
@@ -200,7 +263,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
+    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
     
     <lastmod>2026-06-28</lastmod>
     
@@ -209,7 +272,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/</loc>
+    <loc>https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/</loc>
     
     <lastmod>2026-06-28</lastmod>
     
@@ -326,7 +389,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
+    <loc>https://ssarcandy.tw/2019/10/02/game-design-from-perspective-of-hacker/</loc>
     
     <lastmod>2026-06-28</lastmod>
     
@@ -335,7 +398,7 @@
   </url>
   
   <url>
-    <loc>https://ssarcandy.tw/2019/10/02/game-design-from-perspective-of-hacker/</loc>
+    <loc>https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/</loc>
     
     <lastmod>2026-06-28</lastmod>
     
@@ -363,69 +426,6 @@
   
   <url>
     <loc>https://ssarcandy.tw/2018/08/17/mbpr2015-repair/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2022/06/11/optimizing-compile-time/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/05/25/panorama-image-stitching/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2016/10/10/pbrt-heightfield/</loc>
-    
-    <lastmod>2026-06-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/</loc>
     
     <lastmod>2026-06-28</lastmod>
     
