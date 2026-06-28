@@ -88,6 +88,58 @@
 
 }
 
+// MD3 state layer — a translucent overlay that fades in on hover / focus / press,
+// replacing the old Waves (MD2) ripple. https://m3.material.io/foundations/interaction/states
+// @color defaults to currentColor, so the layer auto-adapts to the element's text
+// colour (white icons on the purple bar get a white layer, dark rows a dark one).
+//   .stateLayer()        fills the host, inheriting its corner radius (rows, sheets).
+//   .stateLayerCircle()  a centred disc, for icon buttons.
+.stateLayer(@color: currentColor) {
+    position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background-color: @color;
+        opacity: 0;
+        pointer-events: none;
+        .transition(.15s);
+    }
+
+    &:hover::after { opacity: .08; }
+    &:focus-visible::after { opacity: .10; }
+    &:active::after { opacity: .12; }
+}
+
+.stateLayerCircle(@color: currentColor; @size: 40px) {
+    position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: @size;
+        height: @size;
+        .transform(translate(-50%, -50%));
+        border-radius: 50%;
+        background-color: @color;
+        opacity: 0;
+        pointer-events: none;
+        .transition(.15s);
+    }
+
+    &:hover::after { opacity: .08; }
+    &:focus-visible::after { opacity: .10; }
+    &:active::after { opacity: .12; }
+}
+
 // Tag/keyword chip: a soft purple-tinted pill with a leading "#". Shared by the
 // related-post chips and the post / project tag links so they stay in sync; the
 // caller sets size (font-size / padding) and any interactive (hover/active) states.

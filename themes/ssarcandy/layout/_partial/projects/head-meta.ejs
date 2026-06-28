@@ -6,7 +6,7 @@ var tags = project_tags();
 for (var i in tags) {
 %>
     <li class="article-tag-list-item">
-        <a class="article-tag-list-link waves-effect waves-button" href="#<%-tags[i]%>"><%- tags[i] %></a>
+        <a class="article-tag-list-link" href="#<%-tags[i]%>"><%- tags[i] %></a>
     </li>
 <% } %>
 </ul>

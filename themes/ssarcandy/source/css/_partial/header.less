@@ -26,6 +26,9 @@
     line-height: @headerH;
     text-align: center;
     color: @textPrimaryColor;
+    // MD3 state layer — a white disc (currentColor is the icon colour) for hover /
+    // focus / press feedback, replacing the old Waves ripple on the app-bar icons.
+    .stateLayerCircle();
 
     &:hover {
         color: @textPrimaryColor;

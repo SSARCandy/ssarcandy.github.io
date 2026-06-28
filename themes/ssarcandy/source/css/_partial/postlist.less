@@ -92,12 +92,9 @@
     .transition(.2s);
 
     // Subtle darken on hover — no solid fill / "pop". The solid look is reserved
-    // for the selected state (.active-tag). Re-assert font-size: Waves attaches
-    // `.waves-button` at runtime, and its `.waves-button:hover { font-size: 1em }`
-    // otherwise out-specifies the base size and enlarges the text on hover.
+    // for the selected state (.active-tag).
     &:hover,
     &:active {
-        font-size: 12px;
         background: fade(@primaryColor, 16%);
     }
 }

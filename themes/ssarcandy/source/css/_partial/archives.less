@@ -4,6 +4,9 @@
     background: @cardBg;
     border-bottom: 1px solid @borderColor;
     box-shadow: @cardShadow;
+    // The whole row is JS-clickable (see MainUI.js), so it needs its own affordance:
+    // a purple MD3 state layer + pointer cursor, replacing the old Waves ripple.
+    .stateLayer(@primaryColor);
 
     .post-title,
     .article-tag-list {

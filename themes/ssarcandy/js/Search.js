@@ -8,7 +8,7 @@ const searchResult = document.getElementById('search-result');
 function searchItem({ path, title, tags, date }) {
   return `
 <li class="item">
-  <a href="/${path}" class="waves-block waves-effect">
+  <a href="/${path}">
       <div class="title ellipsis" title="${title}">${title}</div>
       <div class="flex-row flex-middle">
           <div class="tags ellipsis">
