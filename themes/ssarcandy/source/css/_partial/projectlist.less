@@ -5,22 +5,40 @@
    opacity:0 reveal and overflow:hidden would hide these cards and clip the
    click-to-zoom). Each card reserves its image height via a build-time
    `aspect-ratio` (project-item.ejs) and its text is server-rendered, so the grid
-   packs correctly on the first paint. Two columns above 760px, one below; pre-JS
-   the floated cards still flow two-up before Masonry takes over. */
+   packs correctly on the first paint. Two columns above 760px, one below.
+
+   Pre-JS (before projectPage.bundle.js loads) the list is a plain flex 2-up grid
+   at the SAME 50%-10px column width + 20px gutter Masonry will use, so the two
+   columns don't sit flush ("stuck together") during the flash before Masonry
+   takes over. Masonry then sets each item position:absolute — removing it from
+   the flex flow — and drives the waterfall; the flex container is inert once all
+   its children are absolutely positioned. */
+.project-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;             /* 20px column gutter == Masonry gutter:20; rows are spaced by each item's margin-bottom */
+    align-items: flex-start; /* keep a short card its own height instead of stretching to its row's tallest neighbour */
+}
+
 .project-list .project-grid-sizer,
 .project-list .project-list-item {
     width: calc(50% - 10px); /* 2 columns with a 20px gutter (Masonry gutter: 20) */
 }
 
-.project-list .project-list-item {
-    float: left;
+/* The sizer is only Masonry's column-width probe, not a real cell. Pull it out of
+   the flex flow so it never eats the first grid slot; it stays measurable because
+   Masonry sets .project-list position:relative before reading its width. */
+.project-list .project-grid-sizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
 }
 
 @media screen and (max-width:760px) {
     .project-list .project-grid-sizer,
     .project-list .project-list-item {
         width: 100%;
-        float: none;
     }
 }
 
