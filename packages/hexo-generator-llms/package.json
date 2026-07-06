@@ -1,7 +1,7 @@
 {
   "name": "hexo-generator-llms",
   "version": "0.1.0",
-  "description": "GEO / LLMO for Hexo: generate a Markdown (.md) twin of every page plus llms.txt so AI/LLM crawlers get clean, token-efficient content (generative engine optimization).",
+  "description": "GEO for Hexo: generate a Markdown (.md) twin of every page plus llms.txt so AI/LLM crawlers get clean, token-efficient content (generative engine optimization).",
   "main": "index.js",
   "files": [
     "index.js",
@@ -15,8 +15,6 @@
     "generator",
     "geo",
     "generative-engine-optimization",
-    "llmo",
-    "llm-optimization",
     "llms",
     "llms.txt",
     "markdown",
