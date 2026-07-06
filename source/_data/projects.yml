@@ -8,6 +8,16 @@
     - ResponsiveWeb
     - Game
 
+- name: flighty-web-viewer
+  title: Flighty Web Viewer
+  description: '🛫 A visualization and statistics tool for your flight history. Compatible with the data exported from Flighty.'
+  github: https://github.com/SSARCandy/flighty-web-viewer
+  preview: https://ssarcandy.tw/flighty-web-viewer/
+  img_ext: .png
+  tags:
+    - React
+    - ResponsiveWeb
+
 - name: hamster-bopomofo_t9
   title: iOS T9 注音模糊輸入法
   description: '⌨️ 九宮格注音輸入法，支援模糊注音輸入。使用 RIME 輸入法框架，並以 Lua 撰寫輸入法引擎。適用於 iOS Hamster 輸入法。'
@@ -52,6 +62,7 @@
   img_ext: .gif
   tags:
     - Node.js
+    - Hexo
 
 - name: Breakout_env
   title: Breakout environment
@@ -213,23 +224,23 @@
 #     - Unity
 #     - Game
 
-- name: colorblocks-console
-  title: ColorBlocks
-  description: 'A fun puzzle game implemented in terminal(console) using C++'
-  github: https://github.com/SSARCandy/colorblocks-console
-  preview: http://ssarcandy.tw/colorblocks-console
-  download: https://github.com/SSARCandy/colorblocks-console/releases/download/v1.0/colorblock-windows-executable.exe
-  tags:
-    - C++
-    - Game
+# - name: colorblocks-console
+#   title: ColorBlocks
+#   description: 'A fun puzzle game implemented in terminal(console) using C++'
+#   github: https://github.com/SSARCandy/colorblocks-console
+#   preview: http://ssarcandy.tw/colorblocks-console
+#   download: https://github.com/SSARCandy/colorblocks-console/releases/download/v1.0/colorblock-windows-executable.exe
+#   tags:
+#     - C++
+#     - Game
 
-- name: nccugo12
-  title: 第十二屆政大盃圍棋錦標賽宣傳網站
-  description: 以棋會友，以智取勝。第十二屆政大盃全國圍棋團體錦標賽宣傳網站。
-  github: https://github.com/SSARCandy/nccugo12
-  preview: http://ssarcandy.tw/nccugo12
-  tags:
-    - ResponsiveWeb
+# - name: nccugo12
+#   title: 第十二屆政大盃圍棋錦標賽宣傳網站
+#   description: 以棋會友，以智取勝。第十二屆政大盃全國圍棋團體錦標賽宣傳網站。
+#   github: https://github.com/SSARCandy/nccugo12
+#   preview: http://ssarcandy.tw/nccugo12
+#   tags:
+#     - ResponsiveWeb
 
 - name: ssarcandy
   title: ssarcandy.tw
@@ -238,3 +249,4 @@
   preview: http://ssarcandy.tw/
   tags:
     - ResponsiveWeb
+    - Hexo
