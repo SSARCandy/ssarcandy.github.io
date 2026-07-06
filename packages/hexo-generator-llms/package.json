@@ -1,0 +1,33 @@
+{
+  "name": "hexo-generator-llms",
+  "version": "0.1.0",
+  "description": "Generate a Markdown (.md) copy of every Hexo page plus llms.txt for AI crawlers (GEO).",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "hexo",
+    "generator",
+    "llms",
+    "llms.txt",
+    "markdown",
+    "geo",
+    "ai",
+    "seo"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "turndown": "^7.2.0",
+    "turndown-plugin-gfm": "^1.0.2"
+  },
+  "peerDependencies": {
+    "hexo": ">=5"
+  },
+  "license": "MIT"
+}
