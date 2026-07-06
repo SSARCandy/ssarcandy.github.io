@@ -10,7 +10,7 @@
 
 - name: flighty-web-viewer
   title: Flighty Web Viewer
-  description: '🛫 A visualization and statistics tool for your flight history. Compatible with the data exported from Flighty.'
+  description: '🛫 Personal flight-log visualization and statistics. Compatible with the data exported from Flighty.'
   github: https://github.com/SSARCandy/flighty-web-viewer
   preview: https://ssarcandy.tw/flighty-web-viewer/
   img_ext: .png
