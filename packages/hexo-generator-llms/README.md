@@ -1,6 +1,8 @@
 # hexo-generator-llms
 
-Generate a clean **Markdown (`.md`) copy of every Hexo page** for AI crawlers, advertise it
+**GEO / LLMO (Generative Engine Optimization) for Hexo.**
+
+Generate a clean **Markdown (`.md`) copy of every Hexo page** for AI/LLM crawlers, advertise it
 with `<link rel="alternate" type="text/markdown">`, and emit an **`llms.txt`** index — the
 static-site equivalent of Cloudflare's "serve Markdown to AI" content-negotiation, done at
 build time (works on GitHub Pages and any static host).
