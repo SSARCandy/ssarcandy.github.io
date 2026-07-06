@@ -58,7 +58,8 @@ All optional — sensible defaults, works with no config:
 # _config.yml
 llms:
   enable: true
-  types: [post, page, projects, photography]  # which sources to emit
+  types: [post, page]     # which sources to emit a .md for
+  exclude: []             # paths to skip, e.g. [projects, photography]
   llms_txt: true          # /llms.txt index
   llms_full_txt: false    # /llms-full.txt (all bodies concatenated)
   alternate_link: true    # inject <link rel="alternate"> into <head>
@@ -66,8 +67,9 @@ llms:
   absolute_urls: true      # rewrite links/images to absolute URLs
 ```
 
-`projects` and `photography` are project-specific synthesized pages built from
-`source/_data/projects.yml` and a Flickr JSON; drop them from `types` on other sites.
+Data-driven pages (e.g. a portfolio or gallery whose content is rendered from a template/data
+file rather than a Markdown body) have no meaningful body to convert — list their paths in
+`exclude` to skip them.
 
 ## Note on GitHub Pages
 

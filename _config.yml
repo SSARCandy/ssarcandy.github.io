@@ -99,3 +99,9 @@ browsersync:
   port: 3080
   ui:
     port: 3081
+# hexo-generator-llms: emit a Markdown twin of every page for AI crawlers.
+# Skip the data-driven pages — their real content is template-rendered, not a body.
+llms:
+  exclude:
+    - projects
+    - photography
