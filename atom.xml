@@ -10,7 +10,7 @@
   <rights>All rights reserved 2026, John Doe</rights>
   <subtitle>Nothing special, just a blog for a nerdy software engineer. I write about programming, trashtalk, and other things that interest me.</subtitle>
   <title>SSARCandy's Blog</title>
-  <updated>2026-07-05T01:57:34.020Z</updated>
+  <updated>2026-07-06T02:03:41.050Z</updated>
   <entry>
     <author>
       <name>John Doe</name>
@@ -35,7 +35,7 @@
     </div>]]>
     </summary>
     <title>股東會電子投票自動化小幫手</title>
-    <updated>2026-07-05T01:57:34.020Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -57,7 +57,7 @@
     </div>]]>
     </summary>
     <title>Run Unix-like Server on Android</title>
-    <updated>2026-07-05T01:57:34.019Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -75,7 +75,7 @@
       <![CDATA[<p>自從 Google Photos 養套殺，取消高畫質無限上傳以後<sup>[1]</sup>，對於我這種習慣使用 Google Photos 的人無疑是重大悲劇，空間用完指日可待。目前 Google Photos 的高畫質無限免費上傳是專門給 Pixel 2~5 的優待，只要是由這些型號的裝置上傳的照片，就可以享有這項福利，並不限制照片需使用這些裝置拍攝所得。為了蹭 Pixel 舊裝置可以以“高畫質”無限免費上傳 Google Photos，即使換了新手機，也應該想辦法由舊裝置來上傳相片。</p>]]>
     </summary>
     <title>把舊的 Pixel 改造成無限照片上傳機</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.049Z</updated>
   </entry>
   <entry>
     <author>
@@ -97,7 +97,7 @@
     </div>]]>
     </summary>
     <title>Optimizing C++ Compile Time</title>
-    <updated>2026-07-05T01:57:34.019Z</updated>
+    <updated>2026-07-06T02:03:41.049Z</updated>
   </entry>
   <entry>
     <author>
@@ -115,7 +115,7 @@
       <![CDATA[<p>Share storage，諸如家用 NAS 或工作站常有的網路硬碟(NFS)，是一個很方便又隨處可見的一種存儲空間，方便的點在於可以從不同機器存取或修改同樣的資料、避免需要維護重複的東西在不同的機器上；常見的使用情境像是會將 <code>/home</code> 家目錄放置於 Share storage 中，然後再掛載至所有工作站的機器上，這樣就可以讓使用者無論是登入哪一台工作站機器，都可以保持同樣的家目錄環境，十分方便。</p>]]>
     </summary>
     <title>Share Storage Comparison</title>
-    <updated>2026-07-05T01:57:34.019Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -139,7 +139,7 @@
     </div>]]>
     </summary>
     <title>Setup CouchDB Cluster using Docker Swarm</title>
-    <updated>2026-07-05T01:57:34.019Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -162,7 +162,7 @@
     </div>]]>
     </summary>
     <title>用手機拍攝日食到底可不可行</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -182,7 +182,7 @@
       <![CDATA[<p>敝司長久以來都是自建 Cluster 來做為日常運算資源使用的，長時間一直都被擴充性、I&#x2F;O 效能所卡住，若是卡在運算資源不夠光是採買新機器動輒要幾個月；被 share storage 的 I&#x2F;O 效能卡住更慘，整個系統會慢到爆 job 都卡住…<br>所以我就在想有沒有辦法在雲上建立這種高效能運算叢集，想動態擴張幾台就幾台，再加上我相信無論是 AWS, GCP 等等大平台所提供的 NFS 服務應該都差不到哪裡去吧…? </p>]]>
     </summary>
     <title>Build a High Performance Computing Cluster on GCP</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -200,7 +200,7 @@
       <![CDATA[<p>這陣子心血來潮花了點時間整理敝部落格的原始碼，整理的過程發現其實可以把一些小工具獨立成模組，一方面可以讓 codebase 變精簡，另一方面則是抽出來的模組也可以給其他 Hexo 使用者使用。<br>一開始我以為只是搬移一下程式、剪剪貼貼就可以完成，後來越做越不對勁…原來要做一個 Hexo Plugin 也是滿多地方需要注意的。<br>最後的成品叫做 <a href="https://github.com/SSARCandy/hexo-tag-photozoom">hexo-tag-photozoom</a>，有興趣歡迎用用看～</p>]]>
     </summary>
     <title>Develop a Plugin for Hexo</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -218,7 +218,7 @@
       <![CDATA[<p>程式語言通常在執行的時候，為了要最佳化執行的速度，常常會利用所謂的 Early Return。<sup>[1]</sup><br>比如說條件式裡面 <code>if (a &amp;&amp; b)</code> 這種判斷式，假設已經知道 A == false，那其實就可以不需要知道 b 的值，如此就可以直接忽略 b 而達到更快的知道這個判斷式是否為真<sup>[2]</sup>。<br>同樣的這種作法其實會發生在很多地方，比方說像是比對兩個字串是否一樣：在很多程式語言中的實作其實就是遍歷兩個字串比對每一個字元，那只要過程中有一個字元不一樣那這兩個字串肯定就是不一樣，即可提早返回結果。</p>]]>
     </summary>
     <title>Timing Attack in String Compare</title>
-    <updated>2026-07-05T01:57:34.020Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -239,7 +239,7 @@
 </blockquote>]]>
     </summary>
     <title>從奧客玩家視角看遊戲防禦性設計</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -257,7 +257,7 @@
       <![CDATA[<p>一般的公司或者實驗室都會隔離內部資源，只留一個統一的對外出口來達到比較高的安全性以及讓系統管理者較好控管。但是較高的安全性總是會帶來不便，這種隔離內部資源的架構導致我們無法直接存取內部資源，要透過一些拐彎抹角的方式來存取。</p>]]>
     </summary>
     <title>Ways to Access Internal Network</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -275,7 +275,7 @@
       <![CDATA[<p>身為一個系統管理者，時常要花時間確保系統正常運行，這時一個好的監控系統就很重要，將所有必要的資訊統整在一個畫面上一目瞭然，既能節省時間，當有問題時又能快速找出問題所在，好處多多。</p>]]>
     </summary>
     <title>Monitoring: from Handcraft to Prometheus</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -294,7 +294,7 @@
       <![CDATA[<p>Slurm 是一個專門拿來做分散式平行運算的平台，已被各式超級運算電腦群集採用<sup>[1]</sup>。跟 Hadoop 其實有點像，但是我個人感覺是 Slurm 好用太多，更穩定更快速，而且不用會 Java…XD<br>最近剛好有機會需要建立以及管理一個 Slurm Cluster，就想說來記錄一下過程以及一些雷。</p>]]>
     </summary>
     <title>Setup Slurm Cluster</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -312,7 +312,7 @@
 <p>後來稍微多重開機試幾次發現這種狀況有時候會消失，查一下網路發現大概有幾種可能，一是主機板壞了，二是鍵盤跟滑鼠的連接到主機板的排線壞了。但是這兩種壞法修的價格可差距不少，所以我就堅信只是排線壞了（Ｘ</p>]]>
     </summary>
     <title>Mac 維修小記</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.049Z</updated>
   </entry>
   <entry>
     <author>
@@ -334,7 +334,7 @@
 <p>不過有狂人就把這當作分類問題，用 tensorflow 來解這個問題，原文<a href="http://joelgrus.com/2016/05/23/fizz-buzz-in-tensorflow/">在此</a>，是篇很有趣的文章 XD</p>]]>
     </summary>
     <title>Use PyTorch to solve FizzBuzz</title>
-    <updated>2026-07-05T01:57:34.020Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -351,7 +351,7 @@
       <![CDATA[<p>最近突然看到許多關於 js 原型鍊的介紹，這東西我從來沒搞懂過也沒認真想要搞懂過 XD<br>說真的好像不懂也不會影響甚麼，畢竟實戰上基本用不到這些比較底層的東西…<br>但是當作是邊緣冷知識來看看也是挺不錯的~</p>]]>
     </summary>
     <title>搞懂 JavaScript 原型鍊</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.049Z</updated>
   </entry>
   <entry>
     <author>
@@ -371,7 +371,7 @@
 <p>這篇論文<sup>[1]</sup> (Deep CORAL: Correlation Alignment for Deep Domain Adaptation, B Sun, K Saenko, ECCV 2016) 提出一個 CORAL loss，通過對 source domain 和 target domain 進行線性變換來將他們各自的的二階統計量對齊 (minimizing the difference between source/target correlations).</p>]]>
     </summary>
     <title>Deep CORAL: Correlation Alignment for Deep Domain Adaptation</title>
-    <updated>2026-07-05T01:57:34.018Z</updated>
+    <updated>2026-07-06T02:03:41.048Z</updated>
   </entry>
   <entry>
     <author>
@@ -392,7 +392,7 @@
 <p>但是我的桌機都是 Windows，在可以用桌機的環境下卻必須使用小小的 Mac 打字真的不是很高興…<br>正好最近從學長那邊得知有個方法可以讓 Windows 使用 PyTorch ，就趕緊來試試！</p>]]>
     </summary>
     <title>Using PyTorch in Windows 10</title>
-    <updated>2026-07-05T01:57:34.020Z</updated>
+    <updated>2026-07-06T02:03:41.050Z</updated>
   </entry>
   <entry>
     <author>
@@ -412,6 +412,6 @@
 <p>於是 <a href="https://www.cmlab.csie.ntu.edu.tw/status-gpu/">CMLab GPU Status</a> 就誕生拉~</p>]]>
     </summary>
     <title>Multi-server GPU status monitor</title>
-    <updated>2026-07-05T01:57:34.019Z</updated>
+    <updated>2026-07-06T02:03:41.049Z</updated>
   </entry>
 </feed>
