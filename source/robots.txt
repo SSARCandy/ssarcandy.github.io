@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# SEO-friendly index:
 Sitemap: https://ssarcandy.tw/sitemap.xml
+
+# LLM-friendly Markdown index:
+LLM-Content: https://ssarcandy.tw/llms.txt
