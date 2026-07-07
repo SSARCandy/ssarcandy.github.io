@@ -114,6 +114,14 @@ masonry = new Masonry(projectList, {
   transitionDuration: 0,
 });
 hashchange();
+
+// Masonry has now positioned every card (the layout is synchronous — heights are
+// reserved), so reveal the finished waterfall. Until this class lands the grid is
+// held at opacity:0 (projectlist.less) so the pre-JS flex-row fallback — whose
+// short cards leave a tall gap until the next row — never flashes before snapping
+// into the staggered packing.
+projectList.classList.add('masonry-ready');
+
 ads.forEach(observeAd);
 
 // Safety nets for heights that settle after the first paint and would otherwise

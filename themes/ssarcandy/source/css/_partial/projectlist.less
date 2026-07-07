@@ -12,12 +12,28 @@
    columns don't sit flush ("stuck together") during the flash before Masonry
    takes over. Masonry then sets each item position:absolute — removing it from
    the flex flow — and drives the waterfall; the flex container is inert once all
-   its children are absolutely positioned. */
+   its children are absolutely positioned.
+
+   But that flex fallback lays cards out in ROWS: each row advances by its tallest
+   card, so a short card leaves a tall gap beneath it until the next row — a gappy
+   layout that would flash and then snap into the independently-packed (staggered)
+   waterfall the moment Masonry runs. So the grid starts transparent and only fades
+   in once Masonry has positioned everything: `.masonry-ready` is added by
+   ProjectTags.js right after the first layout(). Gating on OPACITY (not display/
+   visibility) keeps the list measurable while hidden — Masonry still reads the
+   .project-grid-sizer column width and the item widths — and a <noscript> in
+   projects.ejs forces it visible so the fallback still shows when JS is off. */
 .project-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0 20px;             /* 20px column gutter == Masonry gutter:20; rows are spaced by each item's margin-bottom */
     align-items: flex-start; /* keep a short card its own height instead of stretching to its row's tallest neighbour */
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.project-list.masonry-ready {
+    opacity: 1;
 }
 
 .project-list .project-grid-sizer,

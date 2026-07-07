@@ -7,6 +7,9 @@ var __pad = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && th
 var __every = (__pad && __pad.slot && __pad.layout_key) ? (__pad.every || 6) : 0;
 var __n = 0;
 %>
+<%# The grid is held at opacity:0 until Masonry lays it out (projectPage.bundle.js
+    adds .masonry-ready); with JS off that class never lands, so force it visible. %>
+<noscript><style>.project-list{opacity:1 !important;}</style></noscript>
 <ul class="post-list project-list"<% if (__every) { %> data-ad-every="<%= __every %>"<% } %>>
   <li class="project-grid-sizer"></li>
 
