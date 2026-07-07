@@ -85,6 +85,9 @@ photozoom:
 
 sitemap:
   path: sitemap.xml
+  # Custom template (copy of the plugin default) that also lists /llms.txt so the
+  # LLM content index is discoverable via the sitemap, not only robots.txt.
+  template: sitemap-template.xml
 
 hide_posts:
   filter: hidden

@@ -39,6 +39,15 @@
   %>
   <meta name="keywords" content="<%= keyWords %>">
   <link rel="canonical" href="<%= full_url_for(page.path) %>">
+  <%#
+    Advertise the site-wide LLM content index to AI crawlers that read the <head>.
+    hexo-generator-llms already injects a per-page `<link rel="alternate"
+    type="text/markdown">` pointing at this page's own index.md — do NOT reuse
+    type="text/markdown" here or the plugin's after_render:html filter sees the
+    string and skips its per-page injection (it's idempotent on that substring).
+    So this points at the /llms.txt index with a distinct type/title instead.
+  %>
+  <link rel="alternate" type="text/plain" title="LLM content index (llms.txt)" href="<%- url_for('llms.txt') %>">
   <%
     // Representative preview image(s) for og:image / twitter:image. Posts scrape
     // their own content images (page_images). The data-driven landing pages have
