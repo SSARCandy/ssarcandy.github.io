@@ -2,7 +2,7 @@
 title: "一些 Python 筆記"
 source: https://ssarcandy.tw/2016/09/09/python-note/
 date: 2016-09-09
-updated: 2026-07-07
+updated: 2026-07-08
 tags: [note, opencv, python]
 ---
 

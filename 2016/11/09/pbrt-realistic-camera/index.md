@@ -2,7 +2,7 @@
 title: "Realistic camera in pbrt"
 source: https://ssarcandy.tw/2016/11/09/pbrt-realistic-camera/
 date: 2016-11-09
-updated: 2026-07-07
+updated: 2026-07-08
 tags: [c++, rendering]
 ---
 

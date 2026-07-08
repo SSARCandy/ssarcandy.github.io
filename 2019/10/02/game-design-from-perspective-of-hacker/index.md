@@ -2,7 +2,7 @@
 title: "從奧客玩家視角看遊戲防禦性設計"
 source: https://ssarcandy.tw/2019/10/02/game-design-from-perspective-of-hacker/
 date: 2019-10-02
-updated: 2026-07-07
+updated: 2026-07-08
 tags: [trashtalk]
 ---
 
