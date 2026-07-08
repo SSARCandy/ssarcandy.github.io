@@ -86,7 +86,7 @@
   title: Coherent Line Drawing
   description: 'An implementation of "Coherent Line Drawing" by Kang et al, Proc. NPAR 2007. With an easy-to-use, real-time interactive graphic user interface system.'
   github: https://github.com/SSARCandy/Coherent-Line-Drawing
-  preview: http://ssarcandy.tw/Coherent-Line-Drawing/
+  preview: https://ssarcandy.tw/Coherent-Line-Drawing/webgl/
   download: https://github.com/SSARCandy/Coherent-Line-Drawing/releases
   youtube: https://www.youtube.com/watch?v=48fTXKUTM-8
   tags:
