@@ -112,6 +112,13 @@ Or download pre-build version [here](https://github.com/SSARCandy/Coherent-Line-
 
 ![Screenshot of my system user interface](https://ssarcandy.tw/img/2017-06-26/10.jpg) 
 
+**2026/07/08 更新：**
+
+多虧了 AI 時代，現在寫扣十分容易，所以我也幫這個專案寫了一個新的 WebGL 版本。  
+功能上完全一模一樣，差別只在使用了 GPU 技術，所以比這個 C++ 的版本還要更快。  
+這樣子對於其他有興趣的朋友們也比較方便，因為大家都有瀏覽器，不用下載直接就可以在瀏覽器上面跑。  
+[Coherent Line Drawing - WebGL](https://ssarcandy.tw/Coherent-Line-Drawing/webgl/)
+
 # References
 
 1.  Image from ‘Coherent Line Drawing’ by Kang et al, Proc. NPAR 2007
