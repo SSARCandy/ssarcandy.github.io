@@ -39,7 +39,7 @@
     "hexo-renderer-ejs": "2.0.0",
     "hexo-renderer-less": "4.0.0",
     "hexo-renderer-marked": "^7.0.1",
-    "hexo-tag-photozoom": "^1.0.3",
+    "hexo-tag-photozoom": "^1.0.4",
     "image-size": "^2.0.2",
     "imagesloaded": "^5.0.0",
     "lunr": "^2.3.9",
