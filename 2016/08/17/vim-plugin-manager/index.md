@@ -2,7 +2,7 @@
 title: "談談 vim plugin-manager"
 source: https://ssarcandy.tw/2016/08/17/vim-plugin-manager/
 date: 2016-08-17
-updated: 2026-07-09
+updated: 2026-07-10
 tags: [vim]
 ---
 
