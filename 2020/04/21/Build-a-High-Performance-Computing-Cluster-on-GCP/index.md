@@ -2,7 +2,7 @@
 title: "Build a High Performance Computing Cluster on GCP"
 source: https://ssarcandy.tw/2020/04/21/Build-a-High-Performance-Computing-Cluster-on-GCP/
 date: 2020-04-21
-updated: 2026-07-12
+updated: 2026-07-13
 tags: [unix, slurm, note, cloud]
 ---
 

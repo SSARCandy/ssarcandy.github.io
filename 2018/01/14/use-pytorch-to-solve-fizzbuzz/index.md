@@ -2,7 +2,7 @@
 title: "Use PyTorch to solve FizzBuzz"
 source: https://ssarcandy.tw/2018/01/14/use-pytorch-to-solve-fizzbuzz/
 date: 2018-01-14
-updated: 2026-07-12
+updated: 2026-07-13
 tags: [python, machine learning]
 ---
 

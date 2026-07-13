@@ -2,7 +2,7 @@
 title: "把舊的 Pixel 改造成無限照片上傳機"
 source: https://ssarcandy.tw/2023/04/08/make-old-pixel-as-photo-uploader/
 date: 2023-04-08
-updated: 2026-07-12
+updated: 2026-07-13
 tags: [trashtalk, automation]
 ---
 
