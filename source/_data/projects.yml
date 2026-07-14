@@ -1,13 +1,3 @@
-- name: kandlequiz
-  title: Kandlequiz - Daily challenge for traders
-  description: '📈 A Wordle-style daily trading challenge. Every day, everyone gets the same charts and one attempt. You are shown the real candles with the symbol and dates hidden. Read the price action, commit to a call, then see how you did!'
-  preview: https://kandlequiz.trade
-  img_ext: .png
-  tags:
-    - React
-    - ResponsiveWeb
-    - Game
-
 - name: flighty-web-viewer
   title: Flighty Web Viewer
   description: '🛫 Personal flight-log visualization and statistics. Compatible with the data exported from Flighty.'
@@ -18,9 +8,19 @@
     - React
     - ResponsiveWeb
 
+- name: kandlequiz
+  title: Kandlequiz - Daily challenge for traders
+  description: '📈 A Wordle-style daily trading challenge. Every day, everyone gets the same charts and one attempt. You are shown the real candles with the symbol and dates hidden. Read the price action, commit to a call, then see how you did!'
+  preview: https://kandlequiz.trade
+  img_ext: .png
+  tags:
+    - React
+    - ResponsiveWeb
+    - Game
+
 - name: hamster-bopomofo_t9
-  title: iOS T9 注音模糊輸入法
-  description: '⌨️ 九宮格注音輸入法，支援模糊注音輸入。使用 RIME 輸入法框架，並以 Lua 撰寫輸入法引擎。適用於 iOS Hamster 輸入法。'
+  title: iOS T9 注音輸入法
+  description: '⌨️ 九宮格注音輸入法，支援模糊注音輸入、字典學習、預測字詞。使用 RIME 輸入法框架，並以 Lua 撰寫輸入法引擎。'
   github: https://github.com/SSARCandy/hamster-bopomofo_t9
   img_ext: .gif
   tags:
