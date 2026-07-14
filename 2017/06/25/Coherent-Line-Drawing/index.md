@@ -2,7 +2,7 @@
 title: "Coherent Line Drawing"
 source: https://ssarcandy.tw/2017/06/25/Coherent-Line-Drawing/
 date: 2017-06-25
-updated: 2026-07-13
+updated: 2026-07-14
 tags: [c++, opencv, rendering, paper]
 ---
 

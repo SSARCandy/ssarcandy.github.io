@@ -2,7 +2,7 @@
 title: "自動分享每日天文圖(APOD)到 Dcard"
 source: https://ssarcandy.tw/2016/07/26/bot-battle/
 date: 2016-07-26
-updated: 2026-07-13
+updated: 2026-07-14
 tags: [trashtalk, automation]
 ---
 
