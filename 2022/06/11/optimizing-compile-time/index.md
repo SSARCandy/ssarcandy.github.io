@@ -2,7 +2,7 @@
 title: "Optimizing C++ Compile Time"
 source: https://ssarcandy.tw/2022/06/11/optimizing-compile-time/
 date: 2022-06-11
-updated: 2026-07-14
+updated: 2026-07-15
 tags: [c++]
 ---
 
