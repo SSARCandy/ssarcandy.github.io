@@ -2,7 +2,7 @@
 title: "Panorama image stitching"
 source: https://ssarcandy.tw/2017/05/25/panorama-image-stitching/
 date: 2017-05-25
-updated: 2026-07-15
+updated: 2026-07-16
 tags: [opencv, python]
 ---
 
