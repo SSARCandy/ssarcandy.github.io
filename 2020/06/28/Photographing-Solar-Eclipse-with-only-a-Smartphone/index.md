@@ -2,7 +2,7 @@
 title: "用手機拍攝日食到底可不可行"
 source: https://ssarcandy.tw/2020/06/28/Photographing-Solar-Eclipse-with-only-a-Smartphone/
 date: 2020-06-28
-updated: 2026-07-17
+updated: 2026-07-18
 tags: [trashtalk]
 ---
 
