@@ -2,7 +2,7 @@
 title: "MSAuto - 玩遊戲也要自動化"
 source: https://ssarcandy.tw/2016/12/25/MSAuto/
 date: 2016-12-25
-updated: 2026-07-18
+updated: 2026-07-19
 tags: [trashtalk, automation]
 ---
 
