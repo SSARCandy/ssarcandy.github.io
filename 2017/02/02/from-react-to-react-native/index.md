@@ -2,7 +2,7 @@
 title: "From React to React Native"
 source: https://ssarcandy.tw/2017/02/02/from-react-to-react-native/
 date: 2017-02-02
-updated: 2026-07-26
+updated: 2026-07-27
 tags: [react]
 ---
 
