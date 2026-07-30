@@ -2,7 +2,7 @@
 title: "Develop a Plugin for Hexo"
 source: https://ssarcandy.tw/2020/02/09/develop-hexo-plugin/
 date: 2020-02-09
-updated: 2026-07-29
+updated: 2026-07-30
 tags: [javascript, hexo]
 ---
 
