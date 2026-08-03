@@ -2,7 +2,7 @@
 title: "搞懂 JavaScript 原型鍊"
 source: https://ssarcandy.tw/2017/12/06/javascript-prototype-chain/
 date: 2017-12-06
-updated: 2026-08-02
+updated: 2026-08-03
 tags: [javascript]
 ---
 
