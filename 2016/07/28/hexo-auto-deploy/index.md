@@ -2,7 +2,7 @@
 title: "用 Travis CI 自動部屬 hexo 到 GitHub"
 source: https://ssarcandy.tw/2016/07/28/hexo-auto-deploy/
 date: 2016-07-28
-updated: 2026-08-03
+updated: 2026-08-04
 tags: [automation, hexo]
 ---
 
