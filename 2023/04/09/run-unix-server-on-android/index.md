@@ -2,7 +2,7 @@
 title: "Run Unix-like Server on Android"
 source: https://ssarcandy.tw/2023/04/09/run-unix-server-on-android/
 date: 2023-04-09
-updated: 2026-08-05
+updated: 2026-08-06
 tags: [unix, note, trashtalk]
 ---
 

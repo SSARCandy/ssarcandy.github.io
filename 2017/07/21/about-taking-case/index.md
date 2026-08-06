@@ -2,7 +2,7 @@
 title: "接案三兩事"
 source: https://ssarcandy.tw/2017/07/21/about-taking-case/
 date: 2017-07-21
-updated: 2026-08-05
+updated: 2026-08-06
 tags: [trashtalk]
 ---
 

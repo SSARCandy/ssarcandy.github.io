@@ -2,7 +2,7 @@
 title: "Share Storage Comparison"
 source: https://ssarcandy.tw/2021/05/10/share-storage-comparison/
 date: 2021-05-10
-updated: 2026-08-05
+updated: 2026-08-06
 tags: [unix, cloud]
 ---
 
