@@ -2,7 +2,7 @@
 title: "Setup CouchDB Cluster using Docker Swarm"
 source: https://ssarcandy.tw/2021/01/25/setup-couchdb-using-docker-swarm/
 date: 2021-01-25
-updated: 2026-08-08
+updated: 2026-08-09
 tags: [unix]
 ---
 
