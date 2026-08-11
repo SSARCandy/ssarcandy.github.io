@@ -2,7 +2,7 @@
 title: "Multi-server GPU status monitor"
 source: https://ssarcandy.tw/2017/08/25/multi-server-gpu-status-monitor/
 date: 2017-08-25
-updated: 2026-08-10
+updated: 2026-08-11
 tags: [unix]
 ---
 

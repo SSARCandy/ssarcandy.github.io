@@ -2,7 +2,7 @@
 title: "High Dynamic Range Imaging"
 source: https://ssarcandy.tw/2017/04/15/High-Dynamic-Range-Imaging/
 date: 2017-04-15
-updated: 2026-08-10
+updated: 2026-08-11
 tags: [opencv, paper, python]
 ---
 
