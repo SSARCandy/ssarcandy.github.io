@@ -2,7 +2,7 @@
 title: "Mac 維修小記"
 source: https://ssarcandy.tw/2018/08/17/mbpr2015-repair/
 date: 2018-08-17
-updated: 2026-08-25
+updated: 2026-08-26
 tags: [trashtalk]
 ---
 

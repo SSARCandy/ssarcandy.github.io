@@ -2,7 +2,7 @@
 title: "Ways to Access Internal Network"
 source: https://ssarcandy.tw/2019/08/11/Ways-to-Access-Internal-Network/
 date: 2019-08-11
-updated: 2026-08-25
+updated: 2026-08-26
 tags: [unix, note]
 ---
 

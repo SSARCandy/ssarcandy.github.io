@@ -2,7 +2,7 @@
 title: "Migrate mail server to Gmail - migration strategy"
 source: https://ssarcandy.tw/2017/04/29/migrate-to-gmail-migration-strategy/
 date: 2017-04-29
-updated: 2026-08-25
+updated: 2026-08-26
 tags: [unix, note]
 ---
 
