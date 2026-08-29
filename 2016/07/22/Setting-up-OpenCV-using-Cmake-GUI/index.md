@@ -2,7 +2,7 @@
 title: "Setting up OpenCV using Cmake GUI"
 source: https://ssarcandy.tw/2016/07/22/Setting-up-OpenCV-using-Cmake-GUI/
 date: 2016-07-22
-updated: 2026-08-28
+updated: 2026-08-29
 tags: [note, opencv]
 ---
 
