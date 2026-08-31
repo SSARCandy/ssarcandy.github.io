@@ -2,7 +2,7 @@
 title: "Migrate mail server to Gmail - using migration tool"
 source: https://ssarcandy.tw/2017/04/23/migrate-to-gmail-using-migration-tool/
 date: 2017-04-23
-updated: 2026-08-30
+updated: 2026-08-31
 tags: [unix, note]
 ---
 
