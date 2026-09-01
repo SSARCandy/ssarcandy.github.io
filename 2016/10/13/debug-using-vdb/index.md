@@ -2,7 +2,7 @@
 title: "vdb - Debugging visual programs"
 source: https://ssarcandy.tw/2016/10/13/debug-using-vdb/
 date: 2016-10-13
-updated: 2026-08-31
+updated: 2026-09-01
 tags: [c++, rendering]
 ---
 

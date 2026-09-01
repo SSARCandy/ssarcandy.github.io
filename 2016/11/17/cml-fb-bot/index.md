@@ -2,7 +2,7 @@
 title: "用 Facebook 聊天機器人當通知系統"
 source: https://ssarcandy.tw/2016/11/17/cml-fb-bot/
 date: 2016-11-17
-updated: 2026-08-31
+updated: 2026-09-01
 tags: [unix, automation, javascript]
 ---
 
