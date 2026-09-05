@@ -2,7 +2,7 @@
 title: "pbrt - 用多點光源模擬環境光"
 source: https://ssarcandy.tw/2016/12/17/pbrt-mediancut-environment-light/
 date: 2016-12-17
-updated: 2026-09-04
+updated: 2026-09-05
 tags: [c++, rendering]
 ---
 
