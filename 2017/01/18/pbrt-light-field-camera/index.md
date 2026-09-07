@@ -2,7 +2,7 @@
 title: "Light Field Camera"
 source: https://ssarcandy.tw/2017/01/18/pbrt-light-field-camera/
 date: 2017-01-18
-updated: 2026-09-06
+updated: 2026-09-07
 tags: [c++, rendering, python]
 ---
 
