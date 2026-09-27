@@ -2,7 +2,7 @@
 title: "Monitoring: from Handcraft to Prometheus"
 source: https://ssarcandy.tw/2019/06/10/Monitoring-from-Handcraft-to-Prometheus/
 date: 2019-06-10
-updated: 2026-09-26
+updated: 2026-09-27
 tags: [unix, trashtalk]
 ---
 
