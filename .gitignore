@@ -9,6 +9,7 @@ public/
 .vscode/
 pageview.json
 source/flickr_photos.json
+flickr_lqip.json
 source/image_meta.json
 source/img/**/*.webp
 hexo-pv-c7938b2e210b.json

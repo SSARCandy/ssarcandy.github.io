@@ -1,11 +1,10 @@
-import Masonry from 'masonry-layout';
-import imagesLoaded from 'imagesloaded';
 import { highlightActiveTag } from './Helper';
+import { lazyInitAds } from './lazyAds';
 
 const VISIBLE_CLASS = 'on';
 
 // Stable snapshot of the project cards. getElementsByClassName is live +
-// document-order, and the masonry below reorders the DOM, so freeze it to an
+// document-order, and render() below reorders the DOM, so freeze it to an
 // array up front to keep iteration order steady.
 const cards = [...document.getElementsByClassName('plugin')];
 
@@ -18,33 +17,21 @@ const ads = [...document.getElementsByClassName('project-ad-item')];
 const tagFromHash = () => decodeURIComponent(location.hash.slice(1));
 
 // Off-screen attic holding whatever isn't currently placed (filtered-out cards,
-// unused ads) so stale nodes don't linger in the masonry layout.
+// unused ads) so stale nodes don't linger in the waterfall layout.
 const attic = document.createElement('div');
 attic.style.display = 'none';
 projectList.parentNode.appendChild(attic);
 
-// Masonry over the rendered cards. Each card reserves its image height via the
-// build-time aspect-ratio (project-item.ejs) and its text is already in the DOM,
-// so the grid lays out correctly on the first paint — the same approach the
-// photography grid uses. Built below once the libraries are ready.
-let masonry = null;
-
+// The grid itself is already packed: _partial/waterfall.ejs inlines the shared
+// packer (js/waterfall.js) right after the list, and it re-packs on its own when
+// the width or a card's height changes. Here we only re-pack after filtering.
 function relayout() {
-  if (masonry) masonry.layout();
-}
-
-// Re-run the layout once an in-feed ad fills and changes height, so the cards
-// around it reflow to its final size instead of leaving a gap.
-let adObserver = null;
-function observeAd(adNode) {
-  if (typeof ResizeObserver === 'undefined') return;
-  if (!adObserver) adObserver = new ResizeObserver(() => relayout());
-  adObserver.observe(adNode);
+  if (window.waterfall) window.waterfall(projectList);
 }
 
 // Lay out the visible cards in source order — ads spliced in after every
-// AD_EVERY-th card — then re-run masonry so it packs them as a tight waterfall.
-// Anything filtered out is parked in the attic so it leaves the layout cleanly.
+// AD_EVERY-th card — then re-pack them as a tight waterfall. Anything filtered
+// out is parked in the attic so it leaves the layout cleanly.
 function render() {
   const visible = cards.filter((card) => card.classList.contains(VISIBLE_CLASS));
   const adQuota = AD_EVERY ? Math.min(Math.floor(visible.length / AD_EVERY), ads.length) : 0;
@@ -62,10 +49,7 @@ function render() {
   cards.forEach((card) => { if (!card.classList.contains(VISIBLE_CLASS)) attic.appendChild(card); });
   ads.slice(adsPlaced).forEach((ad) => attic.appendChild(ad));
 
-  if (masonry) {
-    masonry.reloadItems();
-    masonry.layout();
-  }
+  relayout();
 }
 
 // Show the cards carrying `tag` (an empty tag shows all), then re-lay out the
@@ -103,30 +87,7 @@ document.addEventListener('click', (e) => {
 });
 
 window.addEventListener('hashchange', hashchange);
-window.addEventListener('resize', relayout); // re-pack when the column width flips
 
-// Build the grid, lay out the initial (hash-driven) filter, then watch the ads.
-masonry = new Masonry(projectList, {
-  itemSelector: '.project-list-item',
-  columnWidth: '.project-grid-sizer',
-  percentPosition: true,
-  gutter: 20,
-  transitionDuration: 0,
-});
+// Apply the initial (hash-driven) filter, then request the ads that render() placed.
 hashchange();
-
-// Masonry has now positioned every card (the layout is synchronous — heights are
-// reserved), so reveal the finished waterfall. Until this class lands the grid is
-// held at opacity:0 (projectlist.less) so the pre-JS flex-row fallback — whose
-// short cards leave a tall gap until the next row — never flashes before snapping
-// into the staggered packing.
-projectList.classList.add('masonry-ready');
-
-ads.forEach(observeAd);
-
-// Safety nets for heights that settle after the first paint and would otherwise
-// leave the masonry overlapping: images decoding (any card lacking a reserved
-// aspect-ratio) and the self-hosted Roboto webfont swapping in, which can change
-// the description text's height. Both just trigger a relayout.
-imagesLoaded(projectList).on('progress', relayout);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+lazyInitAds(ads);

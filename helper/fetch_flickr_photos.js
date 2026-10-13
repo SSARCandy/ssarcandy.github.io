@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const { buildLqip } = require('./lqip');
 
 const PROFILE_URL = 'https://www.flickr.com/people/ssarcandy/';
 const USER_ID = '200681089@N06';
 const LIVE_FALLBACK_URL = 'https://ssarcandy.tw/flickr_photos.json';
 const OUTPUT_PATH = path.join(__dirname, '../source/flickr_photos.json');
+const LQIP_PATH = path.join(__dirname, '../flickr_lqip.json');
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -54,33 +56,99 @@ async function fetchLiveFallback() {
   return photos;
 }
 
-async function main() {
-  let photos;
+function readJson(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (e) {
+    return fallback;
+  }
+}
+
+// Run fn over items with at most `limit` in flight.
+async function mapLimit(items, limit, fn) {
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++;
+      await fn(items[i], i);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+}
+
+// Inlined blur-up placeholders for the /photography cards, so each card needs one
+// image request (the real photo) instead of two (a `_t` thumbnail + the photo).
+// Written to its own file rather than into flickr_photos.json, which the map view
+// fetches at runtime and doesn't need ~45 KB of base64. Entries from a previous run
+// are reused by id; any failure just leaves that card on its flat background.
+async function writeLqip(photos) {
+  const previous = readJson(LQIP_PATH, {});
+  const lqip = {};
+  let fetched = 0;
+  await mapLimit(photos, 8, async (photo) => {
+    if (previous[photo.id]) {
+      lqip[photo.id] = previous[photo.id];
+      return;
+    }
+    const url = photo.url_t || `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_t.jpg`;
+    try {
+      const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT }, signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await buildLqip(Buffer.from(await response.arrayBuffer()));
+      if (data) {
+        lqip[photo.id] = data;
+        fetched++;
+      }
+    } catch (err) {
+      console.warn(`LQIP for photo ${photo.id} failed: ${err.message}`);
+    }
+  });
+  fs.writeFileSync(LQIP_PATH, JSON.stringify(lqip));
+  console.log(`Wrote ${Object.keys(lqip).length}/${photos.length} LQIP placeholders (${fetched} new) to ${LQIP_PATH}`);
+}
+
+async function loadPhotos() {
   try {
     const apiKey = await scrapeApiKey();
     console.log(`Scraped Flickr site_key: ${apiKey}`);
-    photos = await fetchPhotos(apiKey);
+    const photos = await fetchPhotos(apiKey);
     console.log(`Fetched ${photos.length} photos from Flickr REST API.`);
+    return photos;
   } catch (err) {
     console.error(`Primary fetch failed: ${err.message}`);
-    try {
-      photos = await fetchLiveFallback();
-      console.log(`Recovered ${photos.length} photos from live fallback.`);
-    } catch (fallbackErr) {
-      console.error(`Live fallback failed: ${fallbackErr.message}`);
-      // Keep an existing local copy if we have one; otherwise emit an empty list.
-      if (fs.existsSync(OUTPUT_PATH)) {
-        console.warn('Keeping existing local flickr_photos.json.');
-        return;
-      }
-      console.warn('No data available, writing empty flickr_photos.json.');
-      photos = [];
-    }
+  }
+  try {
+    const photos = await fetchLiveFallback();
+    console.log(`Recovered ${photos.length} photos from live fallback.`);
+    return photos;
+  } catch (fallbackErr) {
+    console.error(`Live fallback failed: ${fallbackErr.message}`);
+  }
+  return null;
+}
+
+async function main() {
+  let photos = await loadPhotos();
+  if (photos) {
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify(photos));
+    console.log(`Wrote ${photos.length} photos to ${OUTPUT_PATH}`);
+  } else if (fs.existsSync(OUTPUT_PATH)) {
+    // Keep an existing local copy if we have one; otherwise emit an empty list.
+    console.warn('Keeping existing local flickr_photos.json.');
+    photos = readJson(OUTPUT_PATH, []);
+  } else {
+    console.warn('No data available, writing empty flickr_photos.json.');
+    photos = [];
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify(photos));
   }
 
-  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(photos));
-  console.log(`Wrote ${photos.length} photos to ${OUTPUT_PATH}`);
+  try {
+    await writeLqip(photos);
+  } catch (err) {
+    console.warn(`LQIP generation skipped: ${err.message}`);
+  }
 }
 
 main();

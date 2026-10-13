@@ -1,6 +1,3 @@
-<link rel="preconnect" href="https://live.staticflickr.com" crossorigin>
-<link rel="dns-prefetch" href="https://live.staticflickr.com">
-
 <div class="photography-container">
     <div class="photography-toolbar">
         <div class="view-group">
@@ -40,8 +37,8 @@
     var __inFeed = theme.adsense && theme.adsense.enable && theme.adsense.in_feed && theme.adsense.in_feed.photography;
     var __adEvery = (__inFeed && __inFeed.slot && __inFeed.layout_key) ? (__inFeed.every || 8) : 0;
     %>
-    <div id="photography-grid" class="photography-grid"<% if (__adEvery) { %> data-ad-every="<%= __adEvery %>"<% } %>>
-        <div class="grid-sizer"></div>
+    <div id="photography-grid" class="photography-grid waterfall" data-gutter="16"<% if (__adEvery) { %> data-ad-every="<%= __adEvery %>"<% } %>>
+        <div class="grid-sizer" data-waterfall-sizer></div>
         <% __display.forEach(function(item, i) { %>
             <%- partial('_partial/photography-item', { item: item, index: __naturalIndex[item.id], priority: i < 4 }) %>
             <% if (__adEvery && (i + 1) % __adEvery === 0) { %>
@@ -49,6 +46,7 @@
             <% } %>
         <% }); %>
     </div>
+    <%- partial('_partial/waterfall', { id: 'photography-grid' }) %>
     <div id="photography-map" style="display: none;"></div>
 </div>
 

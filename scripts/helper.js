@@ -31,13 +31,31 @@ hexo.extend.helper.register('project_tags', () => {
 // client-side after a runtime fetch. Read fresh each call (the file is
 // regenerated per build); on a missing/invalid file return an empty list so the
 // grid is simply empty rather than the build failing.
+//
+// Each record also gets its inlined blur-up placeholder (`lqip`) from the sibling
+// flickr_lqip.json; a missing file just means no placeholders.
 hexo.extend.helper.register('flickr_photos', () => {
+  let photos;
   try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname, '../source/flickr_photos.json'), 'utf8'));
+    photos = JSON.parse(fs.readFileSync(path.join(__dirname, '../source/flickr_photos.json'), 'utf8'));
   } catch (e) {
     console.warn('flickr_photos.json not found or invalid; photography grid will be empty.');
     return [];
   }
+  let lqip = {};
+  try {
+    lqip = JSON.parse(fs.readFileSync(path.join(__dirname, '../flickr_lqip.json'), 'utf8'));
+  } catch (e) {
+    // No placeholders; cards fall back to their flat background.
+  }
+  return photos.map((photo) => Object.assign({}, photo, { lqip: lqip[photo.id] || '' }));
+});
+
+// Inline a theme JS file (themes/ssarcandy/js/) into the page as-is, for the few
+// scripts that must run during HTML parsing instead of waiting for the bundles.
+// Read per call (not cached) so `hexo server` picks up edits.
+hexo.extend.helper.register('inline_script', (file) => {
+  return `<script>${fs.readFileSync(path.join(hexo.theme_dir, 'js', file), 'utf8')}</script>`;
 });
 
 // project_image_aspect / project_lqip live in scripts/image-meta.js now, reading
