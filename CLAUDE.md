@@ -28,7 +28,7 @@ There are **no automated tests** — `lint` is the only check, and it's the gate
 
 CI runs these six steps **individually and in order** (not `npm run build`), because `build:pageview` needs a GA credential injected between steps:
 
-1. `build:flickr` — `helper/fetch_flickr_photos.js` → writes `source/flickr_photos.json`
+1. `build:flickr` — `helper/fetch_flickr_photos.js` → writes `source/flickr_photos.json`, plus `flickr_lqip.json` (repo root: an inlined blur-up placeholder per photo, from its `_t` thumbnail via the shared `helper/lqip.js`; reused by id across runs, never fails the build)
 2. `build:pageview` — `helper/ga_pageview.js` → writes `pageview.json` (repo root)
 3. `build:images` — `helper/build_images.js` → writes `source/image_meta.json` (`{ w, h, lqip, webp }` per image under `source/img`, via `image-size` + `sharp`) **and** encodes a sibling WebP for every raster image (`foo.png` → `foo.png.webp`; the original ext is kept in the name so two images differing only by format don't collide; animated GIFs → animated WebP). The `.webp` files are gitignored artifacts copied to `public/` by `build:hexo`; originals are kept (fallback + OG). `.webp` sources are skipped for re-encoding so the daily cron never recompresses a webp.
 4. `build:font` — `helper/build_font.js` → scans the codebase for the icons actually used, (re)generates `themes/ssarcandy/material-symbols-codepoints.json`, and subsets Material Symbols to just those glyphs → `source/css/fonts/material-symbols/material-symbols-outlined.woff2` (~20 KB vs Google's ~312 KB). Runs **before** `build:vite` so the bundled JSON is fresh.
@@ -44,6 +44,7 @@ CI runs these six steps **individually and in order** (not `npm run build`), bec
 - **Vite** owns JavaScript only. Source lives in `themes/ssarcandy/js/`; Vite bundles three page-specific entry points into `themes/ssarcandy/source/js/` (`vite.config.mjs`). That output dir is **gitignored** — it's a build artifact.
   - `app.bundle.js` — loaded on every page (`after-footer.ejs`): nav rail, header, scroll/TOC, share, client-side search.
   - `projectPage.bundle.js` — `/projects` only; `photography.bundle.js` — `/photography` only.
+- **Exception — `themes/ssarcandy/js/waterfall.js` is NOT bundled.** Both waterfall grids (`/projects`, `/photography`) share this tiny shortest-column packer. `_partial/waterfall.ejs` inlines it (`inline_script` helper) directly after the grid markup, so the grid is packed while the HTML parses and is in its final layout on first paint, instead of waiting for the page bundle. It re-packs itself via a `ResizeObserver` (width changes, ads filling, font swaps); the bundles call `window.waterfall(container)` after a sort/filter. Container contract: `.waterfall` + `data-gutter` + a `[data-waterfall-sizer]` child (see `waterfall.less`). In-feed ads on both grids are requested lazily near the viewport (`js/lazyAds.js`; partials render `ins.adsbygoogle-lazy`, no inline `push()`).
 - **Hexo** owns everything else: Markdown rendering, EJS templates (`themes/ssarcandy/layout/`), LESS (`themes/ssarcandy/source/css/`), and copying `source/` → `public/`.
 
 ### `scripts/` — the glue between build-time data and templates
@@ -51,13 +52,13 @@ CI runs these six steps **individually and in order** (not `npm run build`), bec
 `scripts/` is Hexo's auto-loaded init directory (site-level, runs on every `hexo generate`). `scripts/helper.js` registers the EJS helpers that bridge the gitignored data files into templates:
 
 - `visitor_count()` / `post_pv(slug)` ← read `pageview.json`
-- `flickr_photos()` ← reads `source/flickr_photos.json` (so `/photography` is static HTML, not a client fetch)
+- `flickr_photos()` ← reads `source/flickr_photos.json` (so `/photography` is static HTML, not a client fetch), merging each photo's `lqip` from `flickr_lqip.json`
 - `project_tags()` ← derived from `source/_data/projects.yml` at render time
 - `page_images(page, extra)` ← scrapes `<img>` from content for Open Graph tags
 
 `scripts/image-meta.js` is the single consumer of `source/image_meta.json` (built by `npm run build:images` — see pipeline below; a gitignored artifact keyed by URL path → `{ w, h, lqip, webp }` for every image under `source/img`). It provides:
 
-- `project_image_aspect(name, ext)` / `project_lqip(name, ext)` ← the `/projects` card's intrinsic dimensions as a CSS `aspect-ratio` (so the Masonry grid reserves each card's height and lays out with no reflow) and its inlined blurred base64 placeholder (blur-up).
+- `project_image_aspect(name, ext)` / `project_lqip(name, ext)` ← the `/projects` card's intrinsic dimensions as a CSS `aspect-ratio` (so the waterfall grid reserves each card's height and lays out with no reflow) and its inlined blurred base64 placeholder (blur-up).
 - an `after_render:html` filter over **every `<img>`** in the rendered HTML. Two things, driven by the metadata:
   - **WebP everywhere:** any local `/img/…` image whose entry has a `webp` derivative gets its `src` rewritten to that smaller `.webp` (~73 MB of originals → ~13 MB webp site-wide). Originals stay on disk as the fallback, and social/OG scrapers fetch them via `<meta property="og:image">` (not `<img>`), so OG tags keep the original `.png`/`.jpg`.
   - **Blur-up + box reservation (dated `/img/YYYY-MM-DD/…` content images only):** adds `loading=lazy`/`decoding=async`, the inlined LQIP as the image's own `background-image` (blur-up), and an inline `width`+`aspect-ratio` that reserves the box with no layout shift. The width reproduces the `.article img { max-height: 600px }` cap (article.less) with the ratio preserved, computed from the build-time dimensions — keep `MAX_IMG_HEIGHT` in `image-meta.js` in sync with that LESS value. Deliberately **no wrapper element**: the click-to-zoom (`hexo-tag-photozoom` + `zoom.js`) transforms the `<img>` in place and must not be boxed.
@@ -87,5 +88,5 @@ CI runs these six steps **individually and in order** (not `npm run build`), bec
 
 - **Windows lint:** `npm run lint` fails on a Windows checkout because `.eslintrc` enforces `linebreak-style: unix` against CRLF files. Use `npx eslint themes/ssarcandy/js --rule 'linebreak-style: 0'` locally; CI (Linux) runs the unmodified `npm run lint`.
 - **No caching service worker.** `hexo-pwa` was removed (it caused permanent post-deploy staleness). `source/sw.js` is now a **self-destruct tombstone** that clears caches and unregisters itself on existing visitors' browsers — it must keep being served at `/sw.js`. Do not re-introduce a caching SW without content-hashed asset names.
-- **Secrets:** the GA service-account key `hexo-pv-c7938b2e210b.json` is gitignored and injected by CI from a secret; `pageview.json`, `source/flickr_photos.json`, `source/image_meta.json`, the WebP derivatives (`source/img/**/*.webp`), and the generated icon files (`themes/ssarcandy/material-symbols-codepoints.json` + `source/css/fonts/material-symbols/`) are gitignored build artifacts. Keep them out of commits.
+- **Secrets:** the GA service-account key `hexo-pv-c7938b2e210b.json` is gitignored and injected by CI from a secret; `pageview.json`, `source/flickr_photos.json`, `flickr_lqip.json`, `source/image_meta.json`, the WebP derivatives (`source/img/**/*.webp`), and the generated icon files (`themes/ssarcandy/material-symbols-codepoints.json` + `source/css/fonts/material-symbols/`) are gitignored build artifacts. Keep them out of commits.
 - **Cross-platform helpers:** build helpers must run on Windows and Linux. `ga_pageview.js` passes the key via `{ keyFilename }` (no bash-only env prefix) and falls back to Application Default Credentials on CI. When writing build scripts, avoid `lessc <in> /dev/null`-style redirects — on Windows that leaves a stray `nul` file.

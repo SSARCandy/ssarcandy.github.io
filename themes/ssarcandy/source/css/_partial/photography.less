@@ -98,26 +98,20 @@
 
 .grid-item.revealed {
     opacity: 1;
-}
+}/* Blur-up: the card's own background is the inlined, pre-blurred ~24px LQIP
+   (photography-item.ejs, from flickr_lqip.json) — upscaled by the browser it stays
+   soft with no CSS filter and no extra request — and the real photo fades in
+   over it once decoded. The box is reserved by an inline aspect-ratio. */
 .blur-up {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #f6f7f8;
-}
-.blur-up .img-small {
-    filter: blur(20px);
-    transform: scale(1.1);
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: opacity 0.4s ease;
+    background-color: #f6f7f8;
+    background-size: cover;
+    background-position: center;
 }
 .blur-up .img-large {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: auto;
     opacity: 0;
@@ -126,9 +120,6 @@
 }
 .blur-up.loaded .img-large {
     opacity: 1;
-}
-.blur-up.loaded .img-small {
-    opacity: 0;
 }
 .grid-item:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);

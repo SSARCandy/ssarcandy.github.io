@@ -105,6 +105,12 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Regular.woff2') %>">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/roboto/Roboto-Medium.woff2') %>">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="<%- url_for('css/fonts/material-symbols/material-symbols-outlined.woff2') %>">
+  <% if (page.layout === 'photography') { %>
+    <%# Warm the Flickr CDN connection for the photo grid. NO `crossorigin`: the
+        <img> requests are no-CORS, which use a different connection pool than a
+        CORS preconnect, so a crossorigin preconnect would never be reused. %>
+    <link rel="preconnect" href="https://live.staticflickr.com">
+  <% } %>
   <%- css('css/style') %>
   <% if (theme.adsense.enable) { %>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%- theme.adsense.client %>" crossorigin="anonymous"></script>

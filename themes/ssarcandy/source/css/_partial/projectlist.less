@@ -1,49 +1,30 @@
-/* ---------- Projects: Masonry waterfall ----------
-   ProjectTags.js runs Masonry over these cards (itemSelector `.project-list-item`,
-   columnWidth `.project-grid-sizer`), the same library the photography grid uses —
-   but on project-specific class names, NOT photography's `.grid-item` (whose
-   opacity:0 reveal and overflow:hidden would hide these cards and clip the
-   click-to-zoom). Each card reserves its image height via a build-time
-   `aspect-ratio` (project-item.ejs) and its text is server-rendered, so the grid
-   packs correctly on the first paint. Two columns above 760px, one below.
+/* ---------- Projects: waterfall ----------
+   The shared waterfall packer (js/waterfall.js + waterfall.less, the same one the
+   photography grid uses) lays these cards out as soon as the list is parsed. Each
+   card reserves its image height via a build-time `aspect-ratio`
+   (project-item.ejs) and its text is server-rendered, so the grid packs correctly
+   on the first paint. Two columns above 760px, one below. Project-specific class
+   names, NOT photography's `.grid-item` (whose opacity:0 reveal and
+   overflow:hidden would hide these cards and clip the click-to-zoom).
 
-   Pre-JS (before projectPage.bundle.js loads) the list is a plain flex 2-up grid
-   at the SAME 50%-10px column width + 20px gutter Masonry will use, so the two
-   columns don't sit flush ("stuck together") during the flash before Masonry
-   takes over. Masonry then sets each item position:absolute — removing it from
-   the flex flow — and drives the waterfall; the flex container is inert once all
-   its children are absolutely positioned.
-
-   But that flex fallback lays cards out in ROWS: each row advances by its tallest
-   card, so a short card leaves a tall gap beneath it until the next row — a gappy
-   layout that would flash and then snap into the independently-packed (staggered)
-   waterfall the moment Masonry runs. So the grid starts transparent and only fades
-   in once Masonry has positioned everything: `.masonry-ready` is added by
-   ProjectTags.js right after the first layout(). Gating on OPACITY (not display/
-   visibility) keeps the list measurable while hidden — Masonry still reads the
-   .project-grid-sizer column width and the item widths — and a <noscript> in
-   projects.ejs forces it visible so the fallback still shows when JS is off. */
+   No-JS fallback: a plain flex 2-up grid at the SAME 50%-10px column width + 20px
+   gutter the packer uses. Once packed, every card is position:absolute, so the
+   flex container is inert. */
 .project-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 20px;             /* 20px column gutter == Masonry gutter:20; rows are spaced by each item's margin-bottom */
+    gap: 0 20px;             /* 20px column gutter == data-gutter="20"; rows are spaced by each item's margin-bottom */
     align-items: flex-start; /* keep a short card its own height instead of stretching to its row's tallest neighbour */
-    opacity: 0;
-    transition: opacity .3s ease;
-}
-
-.project-list.masonry-ready {
-    opacity: 1;
 }
 
 .project-list .project-grid-sizer,
 .project-list .project-list-item {
-    width: calc(50% - 10px); /* 2 columns with a 20px gutter (Masonry gutter: 20) */
+    width: calc(50% - 10px); /* 2 columns with a 20px gutter */
 }
 
-/* The sizer is only Masonry's column-width probe, not a real cell. Pull it out of
-   the flex flow so it never eats the first grid slot; it stays measurable because
-   Masonry sets .project-list position:relative before reading its width. */
+/* The sizer is only the packer's column-width probe, not a real cell. Pull it out
+   of the flex flow so it never eats the first grid slot; it stays measurable
+   because .waterfall is position:relative. */
 .project-list .project-grid-sizer {
     position: absolute;
     top: 0;
@@ -172,16 +153,15 @@
 }
 
 /* Side gutter below 860px, matching the photography page. Use MARGIN, not
-   padding: .project-list is the Masonry container, and Masonry's percentPosition
-   positions the absolute cards from the padding box while sizing them from the
-   content box — so horizontal padding makes the cards overflow the right gutter
-   and collapses the column gap. Margin sits outside the box Masonry measures, so
-   the gutter stays symmetric. (Photography sidesteps this by padding an ancestor,
-   .photography-container, never the grid element itself.) */
+   padding: .project-list is the waterfall container, and its absolute cards are
+   sized from the padding box (calc(50% - 10px)) — so horizontal padding makes the
+   cards overflow the right gutter. Margin sits outside the box the packer
+   measures, so the gutter stays symmetric. (Photography sidesteps this by padding
+   an ancestor, .photography-container, never the grid element itself.) */
 @media screen and (max-width:860px) {
     .project-list {
         margin: 0 16px;
-        /* Cancel the horizontal padding .post-list adds at ≤760 — on the Masonry
+        /* Cancel the horizontal padding .post-list adds at ≤760 — on the waterfall
            container it overflows the cards (see above); the gutter is the margin. */
         padding-left: 0;
         padding-right: 0;

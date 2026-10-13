@@ -1,7 +1,8 @@
 import { createGrid } from './PhotographyGrid';
 
 // /photography entry. Photo cards are rendered as static HTML at build time (see
-// photography.ejs). The grid module enhances that DOM (masonry + sort); the map
+// photography.ejs) and packed by the inline waterfall script. The grid module
+// enhances that DOM (sort + lazy ads); the map
 // module lazily fetches its data (/flickr_photos.json) the first time the map view
 // opens. This entry only wires the view toggle and window resize between the two —
 // they share nothing else.
@@ -12,10 +13,8 @@ if (container) {
   const grid = createGrid(container);
 
   // The map module statically pulls in MapLibre GL + supercluster (~800 KB). Import
-  // it dynamically so Vite splits it into its own chunk that loads only when needed —
-  // otherwise that heavy library blocks the entry from running and Masonry can't lay
-  // out the grid until the whole bundle parses (~1s of float fallback "holes" on
-  // first paint). Cached after the first import.
+  // it dynamically so Vite splits it into its own chunk that loads only when needed,
+  // keeping this entry tiny. Cached after the first import.
   let mapPromise = null;
   const getMap = () => {
     if (!mapPromise) {
@@ -24,14 +23,25 @@ if (container) {
     return mapPromise;
   };
 
-  // Warm the map chunk in the background once the page is idle (well after the grid
-  // has painted): the 800 KB download + parse happens off the critical path, so when
-  // the user actually opens the map view it's already loaded and switches instantly.
-  const warmMap = () => getMap();
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(warmMap, { timeout: 3000 });
-  } else {
-    setTimeout(warmMap, 2000);
+  // Warm the map chunk so opening the map view is instant — but never at the
+  // expense of the photos: only after the page has fully loaded and the browser
+  // is idle (no forced deadline), and not at all on a data-saver / slow
+  // connection. Hovering, focusing or touching the map button fetches it on demand.
+  const conn = navigator.connection;
+  const slowNet = conn && (conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType || ''));
+  if (!slowNet) {
+    const warmMap = () => {
+      if ('requestIdleCallback' in window) requestIdleCallback(() => getMap());
+      else setTimeout(getMap, 2000);
+    };
+    if (document.readyState === 'complete') warmMap();
+    else window.addEventListener('load', warmMap, { once: true });
+  }
+  const mapBtn = document.querySelector('.view-btn[data-view="map"]');
+  if (mapBtn) {
+    ['pointerenter', 'touchstart', 'focus'].forEach((type) => {
+      mapBtn.addEventListener(type, () => getMap(), { once: true, passive: true });
+    });
   }
 
   // View toggle: swap which surface is visible, then hand off to the right module.
@@ -56,8 +66,8 @@ if (container) {
     });
   });
 
+  // The grid re-packs itself on resize (waterfall.js); only the map needs telling.
   window.addEventListener('resize', () => {
-    grid.relayout();
     if (mapContainer.style.display !== 'none' && mapPromise) mapPromise.then((map) => map.resize());
   });
 }

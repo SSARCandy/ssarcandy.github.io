@@ -1,16 +1,16 @@
-import Masonry from 'masonry-layout';
-import imagesLoaded from 'imagesloaded';
+import { lazyInitAds } from './lazyAds';
 
-// Enhances the server-rendered photo cards in #photography-grid: runs the Masonry
-// layout and re-orders the cards in place for the sort buttons, re-spacing the
-// in-feed ad cards at the server's cadence. Reads only its own DOM/data-attributes;
-// it knows nothing about the map. createGrid() returns { relayout } for the entry.
+// Enhances the server-rendered photo cards in #photography-grid: re-orders the
+// cards in place for the sort buttons, re-spacing the in-feed ad cards at the
+// server's cadence, and lazily requests those ads. The layout itself is the shared
+// waterfall packer (js/waterfall.js), already run inline right after the grid
+// markup and self-re-packing on resize; here we only re-pack after a sort. Reads
+// only its own DOM/data-attributes; it knows nothing about the map. createGrid()
+// returns { relayout } for the entry.
 export function createGrid(container) {
   // In-feed ad cadence, mirrored from photography.ejs so re-sorting can re-space
   // the ad cards the same way the server interleaved them. 0 = no ads.
   const AD_EVERY = parseInt(container.dataset.adEvery, 10) || 0;
-  let masonryInstance = null;
-  let adObserver = null;
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -20,8 +20,12 @@ export function createGrid(container) {
     return arr;
   }
 
+  function relayout() {
+    if (window.waterfall) window.waterfall(container);
+  }
+
   // Re-order the existing photo cards in place (no markup rebuilt) and re-space
-  // the ad cards at the same cadence the server used, then re-run the layout.
+  // the ad cards at the same cadence the server used, then re-pack.
   function applySort(type) {
     const photoNodes = [...container.querySelectorAll('.grid-item:not(.ad-grid-item)')];
     const adNodes = [...container.querySelectorAll('.grid-item.ad-grid-item')];
@@ -51,27 +55,7 @@ export function createGrid(container) {
     while (adIdx < adNodes.length) fragment.appendChild(adNodes[adIdx++]);
     container.appendChild(fragment);
 
-    if (masonryInstance) {
-      masonryInstance.reloadItems();
-      masonryInstance.layout();
-    }
-  }
-
-  // The ad <ins> self-initialises via its inline push() in the partial; here we
-  // only re-run the masonry layout once the ad fills and changes height, so the
-  // surrounding photos reflow around its final size instead of leaving a gap.
-  function observeAd(adDiv) {
-    if (typeof ResizeObserver === 'undefined') return;
-    if (!adObserver) {
-      adObserver = new ResizeObserver(() => {
-        if (masonryInstance) masonryInstance.layout();
-      });
-    }
-    adObserver.observe(adDiv);
-  }
-
-  function relayout() {
-    if (masonryInstance) masonryInstance.layout();
+    relayout();
   }
 
   // Sort event listeners — reorder the rendered cards in place.
@@ -84,24 +68,7 @@ export function createGrid(container) {
     });
   });
 
-  // The grid is already in the page; lay it out once the libraries are ready. Each
-  // card reserves its height via an aspect-ratio, so Masonry positions everything
-  // correctly on the initial paint (before any image loads, no reflow).
-  if (container.querySelector('.grid-item:not(.ad-grid-item)')) {
-    masonryInstance = new Masonry(container, {
-      itemSelector: '.grid-item',
-      columnWidth: '.grid-sizer',
-      percentPosition: true,
-      gutter: 16,
-      transitionDuration: 0,
-    });
-
-    // Safety net for any card lacking intrinsic dimensions: relayout as images
-    // decode so the masonry never overlaps.
-    imagesLoaded(container).on('progress', () => relayout());
-
-    container.querySelectorAll('.ad-grid-item').forEach(observeAd);
-  }
+  lazyInitAds(container.querySelectorAll('.ad-grid-item'));
 
   return { relayout };
 }

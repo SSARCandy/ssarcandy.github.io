@@ -1,0 +1,23 @@
+/* ---------- Shared waterfall grid (/photography + /projects) ----------
+   Packed by js/waterfall.js, which _partial/waterfall.ejs inlines right after the
+   grid markup so the layout happens while the HTML parses. Column widths and the
+   pre-JS fallback (photography: floats, projects: flex rows) stay in each page's
+   own stylesheet; this file only holds the shared mechanics.
+
+   The grid starts transparent and fades in once packed (.waterfall-ready), so the
+   gappy fallback never flashes before snapping into the staggered waterfall.
+   Gating on OPACITY (not display/visibility) keeps the grid measurable, and the
+   partial's <noscript> forces it visible when JS is off. */
+.waterfall {
+    position: relative;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.waterfall.waterfall-ready {
+    opacity: 1;
+}
+
+.waterfall.waterfall-ready > :not([data-waterfall-sizer]) {
+    position: absolute;
+}

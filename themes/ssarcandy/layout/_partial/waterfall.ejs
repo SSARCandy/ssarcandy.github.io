@@ -1,0 +1,9 @@
+<%
+// Packs the waterfall grid `id` (see js/waterfall.js + waterfall.less). Include it
+// DIRECTLY after the grid's closing tag: the inline script runs as soon as the
+// grid has been parsed, so it's laid out on first paint instead of after the page
+// bundle loads. The bundles re-pack via window.waterfall after a sort/filter.
+%>
+<noscript><style>.waterfall{opacity:1 !important;}</style></noscript>
+<%- inline_script('waterfall.js') %>
+<script>waterfall(document.getElementById('<%= id %>'));</script>
