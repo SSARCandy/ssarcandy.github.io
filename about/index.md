@@ -1,8 +1,8 @@
 ---
 title: "About"
 source: https://ssarcandy.tw/about/
-date: 2026-10-13
-updated: 2026-10-13
+date: 2026-10-14
+updated: 2026-10-14
 ---
 
 # About
