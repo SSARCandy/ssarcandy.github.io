@@ -1,8 +1,8 @@
 ---
 title: "Projects"
 source: https://ssarcandy.tw/projects/
-date: 2026-10-18
-updated: 2026-10-18
+date: 2026-10-19
+updated: 2026-10-19
 ---
 
 # Projects
