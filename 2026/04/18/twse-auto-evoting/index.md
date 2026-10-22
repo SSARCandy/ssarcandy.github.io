@@ -2,7 +2,7 @@
 title: "股東會電子投票自動化小幫手"
 source: https://ssarcandy.tw/2026/04/18/twse-auto-evoting/
 date: 2026-04-18
-updated: 2026-10-21
+updated: 2026-10-22
 tags: [trashtalk, automation, javascript]
 ---
 
