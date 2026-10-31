@@ -2,7 +2,7 @@
 title: "Timing Attack in String Compare"
 source: https://ssarcandy.tw/2020/01/29/timing-attack/
 date: 2020-01-29
-updated: 2026-10-30
+updated: 2026-10-31
 tags: [note, c++]
 ---
 
