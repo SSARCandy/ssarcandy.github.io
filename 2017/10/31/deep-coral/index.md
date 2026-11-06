@@ -2,7 +2,7 @@
 title: "Deep CORAL: Correlation Alignment for Deep Domain Adaptation"
 source: https://ssarcandy.tw/2017/10/31/deep-coral/
 date: 2017-10-31
-updated: 2026-11-05
+updated: 2026-11-06
 tags: [paper, python, machine learning]
 ---
 

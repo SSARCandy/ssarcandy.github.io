@@ -2,7 +2,7 @@
 title: "Setup Slurm Cluster"
 source: https://ssarcandy.tw/2019/03/16/Setup-Slurm-Cluster/
 date: 2019-03-16
-updated: 2026-11-05
+updated: 2026-11-06
 tags: [unix, slurm, note]
 ---
 
