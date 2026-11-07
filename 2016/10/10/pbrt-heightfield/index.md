@@ -2,7 +2,7 @@
 title: "改善 pbrt 中的 heightfield shape"
 source: https://ssarcandy.tw/2016/10/10/pbrt-heightfield/
 date: 2016-10-10
-updated: 2026-11-06
+updated: 2026-11-07
 tags: [c++, rendering]
 ---
 
