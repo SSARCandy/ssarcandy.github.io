@@ -2,7 +2,7 @@
 title: "Travian 對人類行為的影響"
 source: https://ssarcandy.tw/2008/10/28/Travian-Article-Submission/
 date: 2008-10-28
-updated: 2026-11-12
+updated: 2026-11-13
 tags: [trashtalk]
 ---
 
