@@ -2,8 +2,8 @@
 title: "防止 mail server 大量寄信的手段"
 source: https://ssarcandy.tw/2017/02/26/prevent-mail-server-sending-spam/
 date: 2017-02-26
-updated: 2026-11-15
-tags: [unix, note]
+updated: 2026-11-17
+tags: [note, unix]
 ---
 
 # 防止 mail server 大量寄信的手段

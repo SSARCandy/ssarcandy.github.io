@@ -2,8 +2,8 @@
 title: "Setup x11 forwarding on Debian"
 source: https://ssarcandy.tw/2017/03/19/Setup-x11-forwarding-on-Debian/
 date: 2017-03-19
-updated: 2026-11-15
-tags: [unix, note]
+updated: 2026-11-17
+tags: [note, unix]
 ---
 
 # Setup x11 forwarding on Debian
