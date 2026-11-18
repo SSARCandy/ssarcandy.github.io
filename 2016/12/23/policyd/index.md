@@ -2,8 +2,8 @@
 title: "安裝 Policyd 並設定外寄 Quota"
 source: https://ssarcandy.tw/2016/12/23/policyd/
 date: 2016-12-23
-updated: 2026-11-17
-tags: [note, unix]
+updated: 2026-11-18
+tags: [unix, note]
 ---
 
 # 安裝 Policyd 並設定外寄 Quota

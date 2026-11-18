@@ -2,8 +2,8 @@
 title: "Using PyTorch in Windows 10"
 source: https://ssarcandy.tw/2017/09/27/using-pytorch-in-windows/
 date: 2017-09-27
-updated: 2026-11-17
-tags: [python, note, unix, machine learning]
+updated: 2026-11-18
+tags: [unix, note, python, machine learning]
 ---
 
 # Using PyTorch in Windows 10
